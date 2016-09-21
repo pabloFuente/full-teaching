@@ -1,0 +1,13 @@
+#navigation-bar {
+  top: 0;
+  transition: top 0.2s ease-in-out;
+}
+
+.nav-up {
+  top: -64px !important;
+}
+
+a {
+  color: #333;
+  text-decoration: none !important;
+}
