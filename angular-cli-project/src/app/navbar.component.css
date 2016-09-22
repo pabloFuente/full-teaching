@@ -9,5 +9,9 @@
 
 a {
   color: #333;
-  text-decoration: none !important;
+}
+
+.navbar-button {
+  padding-left: 25px;
+  padding-right: 25px;
 }

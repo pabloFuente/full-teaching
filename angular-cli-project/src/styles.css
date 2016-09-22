@@ -1,10 +1,68 @@
-/* You can add global styles to this file, and also import other style files */+html,
-body {
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/materialize-css/dist/css/materialize.css";
+
++html, body {
   margin: 0;
   padding: 0;
-  background:#3498db;
 }
 
+body {
+  background-color: #DCEDC8 !important;
+}
+
+a {
+  color: #FFFFFF !important;
+  text-decoration: none !important;
+}
+
+.app-title-header{
+  font-family: 'Molle', cursive;
+}
+
+/*Color palette*/
+.primaryColor-back {
+  background-color: #8BC34A !important;
+}
+
+.secondaryColor-back {
+  background-color: #375646 !important;
+}
+
+.backColor-back {
+  background-color: #DCEDC8 !important;
+}
+
+.accentColor1-back {
+  background-color: #795548 !important;
+}
+
+.accentColor2-back {
+  background-color: #E91E63 !important;
+}
+
+.primaryColor-color {
+  color: #8BC34A !important;
+}
+
+.secondaryColor-color {
+  color: #375646 !important;
+}
+
+.backColor-color {
+  color: #DCEDC8 !important;
+}
+
+.accentColor1-color {
+  color: #795548 !important;
+}
+
+.accentColor2-color {
+  background-color: #E91E63 !important;
+}
+/*End color palette*/
+
+
+/*Loader*/
 .cs-loader {
   position: absolute;
   top: 0;
@@ -26,7 +84,7 @@ body {
 .cs-loader-inner label {
   font-size: 20px;
   opacity: 0;
-  display:inline-block;
+  display: inline-block;
 }
 
 @keyframes lol {
@@ -96,3 +154,4 @@ body {
   -webkit-animation: lol 3s 500ms infinite ease-in-out;
   animation: lol 3s 500ms infinite ease-in-out;
 }
+/*End Loader*/
