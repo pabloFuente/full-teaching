@@ -1,5 +1,7 @@
 <navbar></navbar>
 
+<login-modal></login-modal>
+
 <div id="index-banner" class="parallax-container fixed-navbar-gap">
   <div class="section no-pad-bot">
     <div class="container">
@@ -9,80 +11,63 @@
         <h5 class="header col s12 light">Rediscover the joy of learning</h5>
       </div>
       <div class="row center">
-        <a href="#" id="download-button" class="btn-large waves-effect lighten-1 accentColor1-back">Get Started</a>
+        <a href="#modal" id="download-button" class="btn-large waves-effect lighten-1 accentColor1-back modal-trigger">Get Started</a>
       </div>
       <br><br>
 
     </div>
   </div>
-  <div class="parallax"><img src="./../assets/images/background1.jpg" alt="Unsplashed background img 1"></div>
+  <div class="parallax"><img class="welcome-image" src="./../assets/images/background1.jpg" alt="Unsplashed background img 1"></div>
 </div>
 
-
+<!--Slider-->
 <div class="container">
   <div class="section">
 
     <!--   Icon Section   -->
     <div class="row">
-      <div class="col s12 m4">
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="./../assets/images/presentation1.jpg">
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4">Do not limit yourself</span>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4">Do not limit yourself<i class="material-icons right">close</i></span>
-            <p>Whenever you want<br/>Wherever you are<br/>Whatever you need<br/>Learning should have no limits</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col s12 m4">
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="./../assets/images/presentation2.jpg">
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4">Connect with your partners</span>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4">Connect with your partners<i class="material-icons right">close</i></span>
-            <p>Teamwork is the cornerstone of an excellent education<br/>Do not give up a productive experience</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col s12 m4">
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="./../assets/images/presentation3.jpg">
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4">Easy to use web app</span>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4">Connect with your partners<i class="material-icons right">close</i></span>
-            <p>FullTeaching lives on the Internet<br/>No need of apps or any kind of download</p>
-          </div>
-        </div>
+      <div class="slider">
+        <ul class="slides">
+          <li>
+            <img class="slider-images" src="./../assets/images/slider1.jpg">
+            <!-- first image -->
+            <div class="caption center-align">
+              <h3>Do not limit yourself</h3>
+              <h5 class="light text-lighten-3">Whenever you want. Wherever you are.<br/>Learning should have no limits</h5>
+            </div>
+          </li>
+          <li>
+            <img class="slider-images" src="./../assets/images/slider2.jpg">
+            <!-- second image -->
+            <div class="caption left-align">
+              <h3>Connect with your partners</h3>
+              <h5 class="light text-lighten-3">Teamwork is the cornerstone of an excellent education</h5>
+            </div>
+          </li>
+          <li>
+            <img class="slider-images" src="./../assets/images/slider3.jpg">
+            <!-- third image -->
+            <div class="caption left-align">
+              <h3 class="white-text">All on the web</h3>
+              <h5 class="light text-lighten-3 white-text">FullTeaching lives on the Internet.<br/>No need of apps or any kind of download</h5>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-
   </div>
 </div>
-
+<!--End Slider-->
 
 <div class="parallax-container valign-wrapper">
   <div class="section no-pad-bot">
     <div class="container">
       <div class="row center">
-        <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
+        <h5 class="header col s12 light">An educational web application for teaching and learning</h5>
       </div>
     </div>
   </div>
-  <div class="parallax"><img src="./../assets/images/background2.jpg" alt="Unsplashed background img 2"></div>
+  <div class="parallax"><img class="welcome-image" src="./../assets/images/background2.jpg" alt="Unsplashed background img 2"></div>
 </div>
 
 <div class="container">
@@ -91,8 +76,8 @@
     <div class="row">
       <div class="col s12 center">
         <h3><i class="mdi-content-send brown-text"></i></h3>
-        <h4>What makes FullTeaching special?</h4>
-        <p class="light">FullTeaching makes your online studies much more easier and simpler. Whether you are a teacher or student, FullTeaching provides a powerfull full-web-based platform that allows you to be in class no matter where you are. And how can you do it?
+        <h4>What makes <a class="app-title-header secondaryColor-color">FullTeaching</a> special?</h4>
+        <p class="light">FullTeaching makes your online studies much more easier and simpler. Whether you are a teacher or student, FullTeaching provides a powerfull fully web-based platform that allows you to be in class no matter where you are. And how can you do it?
           <br/><br/>And all to get what really matters: that you can focus on your studies.
         </p>
       </div>
@@ -100,7 +85,6 @@
 
   </div>
 </div>
-
 
 <div class="parallax-container valign-wrapper">
   <div class="section no-pad-bot">
@@ -110,7 +94,7 @@
       </div>
     </div>
   </div>
-  <div class="parallax"><img src="./../assets/images/background3.jpg" alt="Unsplashed background img 3"></div>
+  <div class="parallax"><img class="welcome-image" src="./../assets/images/background3.jpg" alt="Unsplashed background img 3"></div>
 </div>
 
 <footer class="page-footer secondaryColor-back">
@@ -118,29 +102,29 @@
     <div class="row">
       <div class="col l6 s12">
         <h5 class="white-text">About this project</h5>
-        <p class="grey-text text-lighten-4">This application is a final degree project in Universidad Rey Juan Carlos.</p>
+        <p class="grey-text text-lighten-4">This application is a final degree project in <a class="hover-link grey-color" href="http://www.urjc.es/en/?id=147" target="_blank"> Universidad Rey Juan Carlos</a><br/>Pablo Fuente Pérez</p>
 
 
       </div>
       <div class="col l3 s12">
         <h5 class="white-text">Technologies</h5>
         <ul>
-          <li><a class="white-text" href="https://angular.io/">Angular</a></li>
-          <li><a class="white-text" href="https://www.kurento.org/">Kurento</a></li>
+          <li><a class="white-text hover-link" href="https://angular.io/" target="_blank">Angular</a></li>
+          <li><a class="white-text hover-link" href="https://www.kurento.org/" target="_blank">Kurento</a></li>
         </ul>
       </div>
       <div class="col l3 s12">
         <h5 class="white-text">Connect</h5>
         <ul>
-          <li><a class="white-text" href="https://github.com/pabloFuente/full-teaching">GitHub repository</a></li>
-          <li><a class="white-text" href="https://es.linkedin.com/in/pablofuenteperez">LinkedIn</a></li>
+          <li><a class="white-text hover-link" href="https://github.com/pabloFuente/full-teaching" target="_blank">GitHub repository</a></li>
+          <li><a class="white-text hover-link" href="https://es.linkedin.com/in/pablofuenteperez" target="_blank">LinkedIn</a></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="footer-copyright">
     <div class="container">
-      Frame by <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      Frame by <a class="brown-text text-lighten-3" href="http://materializecss.com" target="_blank">Materialize</a>
     </div>
   </div>
 </footer>

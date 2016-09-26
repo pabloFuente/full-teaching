@@ -15,7 +15,8 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "styles.css",
+        "color-palette.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",

@@ -1,0 +1,56 @@
+/*Color palette*/
+
+.primaryColor-back {
+  background-color: #8BC34A !important;
+}
+
+.secondaryColor-back {
+  background-color: #375646 !important;
+}
+
+.backColor-back {
+  background-color: #DCEDC8 !important;
+}
+
+.accentColor1-back {
+  background-color: #795548 !important;
+}
+
+.accentColor2-back {
+  background-color: #E91E63 !important;
+}
+
+.acceptColor-back {
+  background-color: #375646;
+}
+
+.cancelColor-back {
+  background-color: #A73841;
+}
+
+.primaryColor-color {
+  color: #8BC34A !important;
+}
+
+.secondaryColor-color {
+  color: #375646 !important;
+}
+
+.backColor-color {
+  color: #DCEDC8 !important;
+}
+
+.accentColor1-color {
+  color: #795548 !important;
+}
+
+.accentColor2-color {
+  background-color: #E91E63 !important;
+}
+
+.grey-color {
+  color: #f5f5f5 !important
+}
+
+
+/*End color palette*/

@@ -46,6 +46,7 @@ p {
   }
 }
 
+
 /*@media only screen and (max-width: 600px) {
   #index-banner .section {
     top: 20%;
@@ -67,4 +68,29 @@ footer.page-footer {
 .fixed-navbar-gap {
   top: -64px;
   min-height: 444px;
+}
+
+.welcome-image {
+  -webkit-filter: grayscale(0.25);
+  filter: grayscale(0.25);
+}
+
+.slider-images {
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
+}
+.slider .slides li .caption {
+  color: #375646 !important;
+}
+
+.indicator-item.active {
+  background-color: #375646 !important;
+}
+
+.modal-buttons-accept-hover:hover {
+  background-color: rgb(55, 86, 70, 0.5) !important;
+}
+
+.modal-buttons-accept-hover:hover {
+  background-color: rgb(167, 56, 65, 0.5) !important;
 }

@@ -7,60 +7,22 @@
 }
 
 body {
-  background-color: #DCEDC8 !important;
+  overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
+  background-color: #FFFFFF !important;
 }
 
 a {
-  color: #FFFFFF !important;
   text-decoration: none !important;
 }
 
 .app-title-header{
   font-family: 'Molle', cursive;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.71);
 }
 
-/*Color palette*/
-.primaryColor-back {
-  background-color: #8BC34A !important;
+.hover-link:hover {
+  color: #b5c1a6 !important;
 }
-
-.secondaryColor-back {
-  background-color: #375646 !important;
-}
-
-.backColor-back {
-  background-color: #DCEDC8 !important;
-}
-
-.accentColor1-back {
-  background-color: #795548 !important;
-}
-
-.accentColor2-back {
-  background-color: #E91E63 !important;
-}
-
-.primaryColor-color {
-  color: #8BC34A !important;
-}
-
-.secondaryColor-color {
-  color: #375646 !important;
-}
-
-.backColor-color {
-  color: #DCEDC8 !important;
-}
-
-.accentColor1-color {
-  color: #795548 !important;
-}
-
-.accentColor2-color {
-  background-color: #E91E63 !important;
-}
-/*End color palette*/
-
 
 /*Loader*/
 .cs-loader {
@@ -155,3 +117,9 @@ a {
   animation: lol 3s 500ms infinite ease-in-out;
 }
 /*End Loader*/
+
+
+/* Library overwrite*/
+.slider .indicators .indicator-item.active{
+  background-color: #375646 !important;
+}

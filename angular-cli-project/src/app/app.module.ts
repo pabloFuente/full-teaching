@@ -7,11 +7,13 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar.component';
+import { LoginModalComponent } from './login-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginModalComponent
   ],
   imports: [
     BrowserModule,

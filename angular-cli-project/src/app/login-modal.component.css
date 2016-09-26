@@ -1,0 +1,19 @@
+.modal-footer-button {
+  float: none !important;
+}
+
+.acceptColor-back:hover {
+  background-color: rgba(55,86,70,0.5);
+}
+
+.cancelColor-back:hover {
+  background-color: rgba(167,56,65,0.5);
+}
+
+.signInColor {
+  background-color: #2196f3;
+}
+
+.signInColor:hover {
+  background-color: rgba(33, 150, 244, 0.5);
+}

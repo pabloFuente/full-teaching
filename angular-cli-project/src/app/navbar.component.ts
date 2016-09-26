@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'navbar',
@@ -6,4 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 
-export class NavbarComponent  {}
+export class NavbarComponent  {
+
+  @Output() signNavButtonEvent = new EventEmitter();
+
+  signNavButton(){
+    this.signNavButtonEvent.emit(null);
+  }
+
+}
