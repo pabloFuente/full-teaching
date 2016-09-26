@@ -3,11 +3,11 @@
 }
 
 .acceptColor-back:hover {
-  background-color: rgba(55,86,70,0.5);
+  background-color: rgba(55,86,70,0.7);
 }
 
 .cancelColor-back:hover {
-  background-color: rgba(167,56,65,0.5);
+  background-color: rgba(167,56,65,0.7);
 }
 
 .signInColor {
@@ -15,5 +15,5 @@
 }
 
 .signInColor:hover {
-  background-color: rgba(33, 150, 244, 0.5);
+  background-color: rgba(33, 150, 244, 0.7);
 }

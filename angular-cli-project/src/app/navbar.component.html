@@ -2,14 +2,18 @@
   <nav id="navigation-bar" class="nav-down secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo app-title-header white-text">FullTeaching</a>
-      <ul class="right hide-on-med-and-down">
+      <ul *ngIf="true" class="right hide-on-med-and-down">
         <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Sign in</a></li>
         <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Log in</a></li>
       </ul>
+      <ul *ngIf="true" class="right hide-on-med-and-down">
+        <li><a class="navbar-button waves-effect white-text">My classes</a></li>
+        <li><a class="navbar-button waves-effect white-text">My settings</a></li>
+      </ul>
 
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Sign in</a></li>
-        <li><a href="#">Log in</a></li>
+      <ul *ngIf="true" id="nav-mobile" class="side-nav">
+        <li><a href="#">My classes</a></li>
+        <li><a href="#">My settings</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>

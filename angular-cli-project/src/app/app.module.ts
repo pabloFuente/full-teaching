@@ -5,6 +5,10 @@ import { HttpModule } from '@angular/http';
 
 import { routing } from './app.routing';
 
+// Imports for loading & configuring the in-memory web api
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService }  from './in-memory-data.service';
+
 import { MaterializeModule } from 'angular2-materialize';
 
 import { AppComponent } from './app.component';
@@ -25,6 +29,7 @@ import { DashboardComponent } from './dashboard.component';
     BrowserModule,
     FormsModule,
     HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
     MaterializeModule,
     routing
   ],

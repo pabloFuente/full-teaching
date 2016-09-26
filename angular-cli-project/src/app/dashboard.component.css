@@ -1,0 +1,13 @@
+span.title {
+  font-weight: bold;
+}
+
+.margins-top-bottom {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.lesson-list-item {
+  margin-top:15px;
+  margin-bottom: 15px;
+}
