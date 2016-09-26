@@ -26,9 +26,9 @@
       </div>
     </div>
     <div class="row center">
-      <a *ngIf="loginView" href="#!" class="waves-effect waves-light btn-flat acceptColor-back white-text modal-buttons-cancel-hover">Log in</a>
-      <a *ngIf="!loginView" href="#!" class="waves-effect waves-light btn-flat Color-back white-text modal-buttons-cancel-hover signInColor">Sign in</a>
-      <a href="#!" (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat cancelColor-back white-text modal-buttons-accept-hover">Close</a>
+      <a routerLink="/dashboard" *ngIf="loginView" class="modal-action modal-close waves-effect waves-light btn-flat acceptColor-back white-text modal-buttons-cancel-hover">Log in</a>
+      <a *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat Color-back white-text modal-buttons-cancel-hover signInColor">Sign in</a>
+      <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat cancelColor-back white-text modal-buttons-accept-hover">Close</a>
     </div>
     <div class="modal-footer">
       <div *ngIf="loginView" class="right-align">Not registered yet?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Sign in</a></div>
