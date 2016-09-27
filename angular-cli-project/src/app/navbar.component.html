@@ -1,28 +1,30 @@
 <div class="navbar-fixed">
+
   <ul id="dropdown1" class="dropdown-content">
-    <li><a href="#!">LOGOUT</a></li>
     <li class="divider"></li>
-    <li><a href="#!">CONTACT</a></li>
+    <li class="dropdown-menu-button"><a class="waves-effect">LOGOUT</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-menu-button"><a class="waves-effect">CONTACT</a></li>
   </ul>
+
   <nav id="navigation-bar" class="nav-down secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo app-title-header white-text">FullTeaching</a>
       <ul *ngIf="!this.loginService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Sign in</a></li>
-        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Log in</a></li>
-        <!-- Dropdown Trigger -->
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
+        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Sign in</a></li>
+        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
       </ul>
       <ul *ngIf="this.loginService.isLoggedIn()" class="right hide-on-med-and-down">
         <li><a class="navbar-button waves-effect white-text">My classes</a></li>
         <li><a class="navbar-button waves-effect white-text">My settings</a></li>
+        <!-- Dropdown Trigger -->
+        <li><a class="navbar-button"><i materialize="dropdown" data-beloworigin="true" class="material-icons white-text right  dropdown-button"  data-activates="dropdown1">arrow_drop_down</i></a></li>
       </ul>
-
       <ul *ngIf="true" id="nav-mobile" class="side-nav">
         <li><a href="#">My classes</a></li>
         <li><a href="#">My settings</a></li>
       </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      <a href="#" data-activates="nav-mobile" class="button-collapse" materialize="sideNav"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 </div>

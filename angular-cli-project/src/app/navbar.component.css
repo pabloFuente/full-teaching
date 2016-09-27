@@ -16,3 +16,19 @@ a {
   padding-right: 25px;
   text-transform: uppercase;
 }
+
+.dropdown-menu-button {
+  background-color: #375646;
+}
+
+.dropdown-menu-button:hover {
+  background-color: #324e3f !important;
+}
+
+.dropdown-menu-button a {
+  color: white;
+}
+
+li.divider {
+  background-color: #96a19b !important;
+}
