@@ -4,10 +4,9 @@
       <!--<img src="images/yuna.jpg" alt="" class="circle">-->
       <div class="row lesson-list-item">
         <div class="col l11 s9">
-          <i class="material-icons circle materialboxed" data-caption="Teacher's name">account_circle</i>
+          <img class="circle" src="../assets/images/default_lesson_image.png">
           <span class="title">{{lesson.title}}</span>
-          <p>{{ lesson.description }} <br> {{ lesson.date | date }} - {{ lesson.date | date:'H:mm' }}
-          </p>
+          <p>{{ lesson.description }} <br> {{ lesson.date | date }} - {{ lesson.date | date:'H:mm' }}</p>
         </div>
         <div class="col l1 s3">
           <a href="#" class="secondary-content "><i class="material-icons">grade</i></a>

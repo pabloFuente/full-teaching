@@ -1,12 +1,19 @@
 <div class="navbar-fixed">
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="#!">LOGOUT</a></li>
+    <li class="divider"></li>
+    <li><a href="#!">CONTACT</a></li>
+  </ul>
   <nav id="navigation-bar" class="nav-down secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo app-title-header white-text">FullTeaching</a>
-      <ul *ngIf="true" class="right hide-on-med-and-down">
+      <ul *ngIf="!this.loginService.isLoggedIn()" class="right hide-on-med-and-down">
         <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Sign in</a></li>
         <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal">Log in</a></li>
+        <!-- Dropdown Trigger -->
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
       </ul>
-      <ul *ngIf="true" class="right hide-on-med-and-down">
+      <ul *ngIf="this.loginService.isLoggedIn()" class="right hide-on-med-and-down">
         <li><a class="navbar-button waves-effect white-text">My classes</a></li>
         <li><a class="navbar-button waves-effect white-text">My settings</a></li>
       </ul>

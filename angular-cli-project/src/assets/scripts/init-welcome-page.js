@@ -14,4 +14,5 @@ $(document).ready(function(){
       complete: function() { } // Callback for Modal close
     }
   );
+  $(".dropdown-button").dropdown();
 });

@@ -16,6 +16,7 @@ import { NavbarComponent } from './navbar.component';
 import { LoginModalComponent } from './login-modal.component';
 import { PresentationComponent } from './presentation.component';
 import { DashboardComponent } from './dashboard.component';
+import { LoginService } from './login.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { DashboardComponent } from './dashboard.component';
     MaterializeModule,
     routing
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

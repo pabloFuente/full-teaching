@@ -1,39 +1,45 @@
 <div id="modal" class="modal">
 
-    <div class="modal-content">
-      <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="email" type="email" class="validate">
-              <label for="email" data-error="Not an e-mail format!">Email</label>
-            </div>
+  <div class="modal-content">
+    <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
+    <div class="row">
+
+      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value)" #loginForm="ngForm">
+        <div class="row">
+          <div class="input-field col s12">
+            <input #email id="email" type="email" class="validate">
+            <label for="email" data-error="Not an e-mail format!">Email</label>
           </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="password" type="password" class="validate">
-              <label for="password">Password</label>
-            </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input #password id="password" type="password" class="validate">
+            <label for="password">Password</label>
           </div>
-          <div *ngIf="!loginView" class="row">
-            <div class="input-field col s12">
-              <input id="confirmPassword" type="password" class="validate">
-              <label for="confirmPassword">Confirm password</label>
-            </div>
+        </div>
+
+        <div *ngIf="!loginView" class="row">
+          <div class="input-field col s12">
+            <input id="confirmPassword" type="password" class="validate">
+            <label for="confirmPassword">Confirm password</label>
           </div>
-        </form>
-      </div>
-    </div>
-    <div class="row center">
-      <a routerLink="/dashboard" *ngIf="loginView" class="modal-action modal-close waves-effect waves-light btn-flat acceptColor-back white-text modal-buttons-cancel-hover">Log in</a>
-      <a *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat Color-back white-text modal-buttons-cancel-hover signInColor">Sign in</a>
-      <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat cancelColor-back white-text modal-buttons-accept-hover">Close</a>
-    </div>
-    <div class="modal-footer">
-      <div *ngIf="loginView" class="right-align">Not registered yet?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Sign in</a></div>
-      <div *ngIf="!loginView" class="right-align">Already registered?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Log in</a></div>
+        </div>
+        
+        <div class="row center">
+          <button type="submit" *ngIf="loginView" class="modal-action modal-close waves-effect waves-light btn-flat acceptColor-back white-text modal-buttons-cancel-hover">Log in</button>
+          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat Color-back white-text modal-buttons-cancel-hover signInColor">Sign in</button>
+          <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat cancelColor-back white-text modal-buttons-accept-hover">Close</a>
+        </div>
+      </form>
 
     </div>
+  </div>
+
+  <div class="modal-footer">
+    <div *ngIf="loginView" class="right-align">Not registered yet?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Sign in</a></div>
+    <div *ngIf="!loginView" class="right-align">Already registered?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Log in</a></div>
+
+  </div>
 
 </div>

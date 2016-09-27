@@ -8,7 +8,7 @@ const appRoutes: Routes = [
   {
     path: '',
     component: PresentationComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',

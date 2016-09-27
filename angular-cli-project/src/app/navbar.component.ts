@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'navbar',
@@ -7,6 +8,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 
 export class NavbarComponent  {
+
+  constructor(private loginService: LoginService) { }
 
   @Output() signNavButtonEvent = new EventEmitter();
 
