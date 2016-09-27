@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Lesson } from './lesson';
+import { Lesson } from '../lesson';
 
-import { LessonService } from './lesson.service';
-import { AuthenticationService } from './authentication.service';
+import { LessonService } from '../services/lesson.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'dashboard',

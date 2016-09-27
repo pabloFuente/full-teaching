@@ -1,8 +1,8 @@
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PresentationComponent }      from './presentation.component';
-import { DashboardComponent }      from './dashboard.component';
+import { PresentationComponent }      from './presentation/presentation.component';
+import { DashboardComponent }      from './dashboard/dashboard.component';
 import { AuthGuard } from './auth.guard';
 
 const appRoutes: Routes = [

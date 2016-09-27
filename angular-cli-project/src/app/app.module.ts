@@ -8,11 +8,12 @@ import { routing } from './app.routing';
 import { MaterializeModule } from 'angular2-materialize';
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar.component';
-import { LoginModalComponent } from './login-modal.component';
-import { PresentationComponent } from './presentation.component';
-import { DashboardComponent } from './dashboard.component';
-import { AuthenticationService } from './authentication.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LoginModalComponent } from './login-modal/login-modal.component';
+import { PresentationComponent } from './presentation/presentation.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthenticationService } from './services/authentication.service';
+import { LessonService } from './services/lesson.service';
 import { AuthGuard } from './auth.guard';
 
 // used to create fake backend
@@ -38,6 +39,7 @@ import { BaseRequestOptions } from '@angular/http';
   providers: [
     AuthenticationService,
     AuthGuard,
+    LessonService,
 
     // providers used to create fake backend
     fakeBackendProvider,
