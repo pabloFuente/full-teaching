@@ -1,7 +1,6 @@
 export class Lesson {
-  title: string;
-  description: string;
-  date: Date;
-
-  constructor() { }
+  constructor(
+    public title: string,
+    public description: string,
+    public date: Date) { }
 }

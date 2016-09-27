@@ -5,10 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { routing } from './app.routing';
 
-// Imports for loading & configuring the in-memory web api
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
-
 import { MaterializeModule } from 'angular2-materialize';
 
 import { AppComponent } from './app.component';
@@ -16,9 +12,22 @@ import { NavbarComponent } from './navbar.component';
 import { LoginModalComponent } from './login-modal.component';
 import { PresentationComponent } from './presentation.component';
 import { DashboardComponent } from './dashboard.component';
-import { LoginService } from './login.service';
+import { AuthenticationService } from './authentication.service';
+import { AuthGuard } from './auth.guard';
+
+// used to create fake backend
+import { fakeBackendProvider } from './fake-backend';
+import { MockBackend, MockConnection } from '@angular/http/testing';
+import { BaseRequestOptions } from '@angular/http';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    MaterializeModule,
+    routing,
+  ],
   declarations: [
     AppComponent,
     PresentationComponent,
@@ -26,15 +35,15 @@ import { LoginService } from './login.service';
     NavbarComponent,
     LoginModalComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    InMemoryWebApiModule.forRoot(InMemoryDataService),
-    MaterializeModule,
-    routing
+  providers: [
+    AuthenticationService,
+    AuthGuard,
+
+    // providers used to create fake backend
+    fakeBackendProvider,
+    MockBackend,
+    BaseRequestOptions
   ],
-  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

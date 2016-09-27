@@ -1,22 +1,29 @@
-import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Injectable }                              from '@angular/core';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Observable }                              from 'rxjs/Observable';
 
-import 'rxjs/add/operator/toPromise';
+import { Lesson }                from './lesson';
+import { AuthenticationService } from './authentication.service';
 
-import { Lesson } from './lesson';
+import 'rxjs/Rx';
 
 @Injectable()
 export class LessonService {
 
-  private lessonsUrl = 'app/lessons';
+  private url = '/api/lessons';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  getLessons(): Promise<Lesson[]> {
-    return this.http.get(this.lessonsUrl)
-      .toPromise()
-      .then(response => response.json().data as Lesson[])
-      .catch(e => console.log(e));
+  getLessons() {
+    let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.get(this.url, options)
+      .map((response: Response) => response.json() as Lesson[])
+      .catch(error => this.handleError(error));
   }
 
+  private handleError(error: any) {
+    console.error(error);
+    return Observable.throw("Server error (" + error.status + "): " + error.text())
+  }
 }

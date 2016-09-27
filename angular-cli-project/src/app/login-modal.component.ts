@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoginService, User } from './login.service';
+import { AuthenticationService } from './authentication.service';
+import { User } from './user';
 
 @Component({
   selector: 'login-modal',
@@ -12,11 +13,10 @@ import { LoginService, User } from './login.service';
 export class LoginModalComponent {
 
   private loginView: boolean;
-  public user = new User('','');
-  public errorMsg = '';
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
     this.loginView = true;
+    //this.authenticationService.logout();
   }
 
   changeView() {
@@ -27,21 +27,19 @@ export class LoginModalComponent {
     this.loginView = true;
   }
 
-  /*onSubmit(email: string, password: string) {
-    console.log("Submit!: email = " + email + " , password = " + password);
-    this.loginService.login(email, password).subscribe(
-      response => {
-        if (response) {
-          this.router.navigate(['/dashboard']);
-        }
-      },
-      error => console.log("Error de autenticación")
-    );
-  }*/
-
   onSubmit(email: string, password: string) {
     console.log("Submit!: email = " + email + " , password = " + password);
-    this.loginService.login(new User(email, password));
-    //this.router.navigate(['/dashboard']);
+    this.authenticationService.login(email, password).subscribe(
+      result => {
+        if (result) {
+          // login successful
+          this.router.navigate(['/dashboard']);
+        } else {
+          // login failed
+          console.log("Error de autenticación");
+        }
+      }
+    );
   }
+
 }

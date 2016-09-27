@@ -1,5 +1,8 @@
 <div class="container margins-top-bottom">
-  <ul class="collection">
+
+  <div *ngIf="!this.lessons" class="loading-dashboard"></div>
+
+  <ul *ngIf="this.lessons" class="collection">
     <li *ngFor="let lesson of lessons" class="collection-item avatar">
       <!--<img src="images/yuna.jpg" alt="" class="circle">-->
       <div class="row lesson-list-item">
