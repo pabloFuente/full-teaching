@@ -2,18 +2,26 @@
   float: none !important;
 }
 
-.acceptColor-back:hover {
-  background-color: rgba(55,86,70,0.7);
-}
-
-.cancelColor-back:hover {
-  background-color: rgba(167,56,65,0.7);
-}
-
 .signInColor {
   background-color: #2196f3;
 }
 
 .signInColor:hover {
   background-color: rgba(33, 150, 244, 0.7);
+}
+
+.acceptColor-back {
+  background-color: #375646;
+}
+
+.cancelColor-back {
+  background-color: #A73841;
+}
+
+.acceptColor-back:hover {
+  background-color: rgba(55,86,70,0.7);
+}
+
+.cancelColor-back:hover {
+  background-color: rgba(167,56,65,0.7);
 }

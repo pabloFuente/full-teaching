@@ -59,9 +59,14 @@ a {
 }
 /*End Loader*/
 
-
 /* Library Overwrite*/
 .slider .indicators .indicator-item.active{
   background-color: #375646 !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .indicators {
+    display: none !important;
+  }
 }
 /*End Library Overwrite*/

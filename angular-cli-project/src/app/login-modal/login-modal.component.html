@@ -1,20 +1,20 @@
-<div id="modal" class="modal">
+<div id="modal" class="modal" materialize [materializeActions]="actions">
 
   <div class="modal-content">
     <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
     <div class="row">
 
-      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value)" #loginForm="ngForm">
+      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value)">
         <div class="row">
           <div class="input-field col s12">
-            <input #email id="email" type="email" class="validate">
+            <input #email id="email" type="email" class="validate" required>
             <label for="email" data-error="Not an e-mail format!">Email</label>
           </div>
         </div>
 
         <div class="row">
           <div class="input-field col s12">
-            <input #password id="password" type="password" class="validate">
+            <input #password id="password" type="password" class="validate" required>
             <label for="password">Password</label>
           </div>
         </div>
@@ -27,9 +27,9 @@
         </div>
 
         <div class="row center">
-          <button type="submit" *ngIf="loginView" class="modal-action modal-close waves-effect waves-light btn-flat acceptColor-back white-text modal-buttons-cancel-hover">Log in</button>
-          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat Color-back white-text modal-buttons-cancel-hover signInColor">Sign in</button>
-          <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat cancelColor-back white-text modal-buttons-accept-hover">Close</a>
+          <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
+          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signInColor">Sign in</button>
+          <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
       </form>
 

@@ -3,7 +3,7 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo app-title-header white-text">FullTeaching</a>
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Sign in</a></li>
+        <li><a id="signInButton" class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Sign in</a></li>
         <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
       </ul>
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">

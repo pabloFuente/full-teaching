@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async } from '@angular/core/testing';
+/*import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
-describe('App: AngularCliProject', () => {
+describe('App: Ejemplo', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -30,4 +30,4 @@ describe('App: AngularCliProject', () => {
     let compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('app works!');
   }));
-});
+});*/

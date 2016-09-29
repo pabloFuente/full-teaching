@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
@@ -12,6 +12,7 @@ import { AuthenticationService } from '../services/authentication.service';
 export class LoginModalComponent {
 
   private loginView: boolean;
+  private actions = new EventEmitter<string>();
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     this.loginView = true;
@@ -32,6 +33,7 @@ export class LoginModalComponent {
       result => {
         if (result) {
           // login successful
+          this.actions.emit("closeModal");
           this.router.navigate(['/dashboard']);
         } else {
           // login failed

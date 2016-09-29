@@ -1,7 +1,8 @@
 import './polyfills.ts';
 
+import 'zone.js/dist/zone.js';
 import 'zone.js/dist/long-stack-trace-zone';
-import 'zone.js/dist/proxy.js';
+import 'zone.js/dist/proxy';
 import 'zone.js/dist/sync-test';
 import 'zone.js/dist/jasmine-patch';
 import 'zone.js/dist/async-test';
@@ -17,7 +18,7 @@ __karma__.loaded = function () {};
 
 Promise.all([
   System.import('@angular/core/testing'),
-  System.import('@angular/platform-browser-dynamic/testing')
+  System.import('@angular/platform-browser-dynamic/testing'),
 ])
   // First, initialize the Angular testing environment.
   .then(([testing, testingBrowser]) => {

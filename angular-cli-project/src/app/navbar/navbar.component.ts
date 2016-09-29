@@ -7,7 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./navbar.component.css']
 })
 
-export class NavbarComponent  {
+export class NavbarComponent {
 
   constructor(private authenticationService: AuthenticationService) { }
 

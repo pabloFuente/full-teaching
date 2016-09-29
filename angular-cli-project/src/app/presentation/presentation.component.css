@@ -74,11 +74,3 @@ p {
 .indicator-item.active {
   background-color: #375646 !important;
 }
-
-.modal-buttons-accept-hover:hover {
-  background-color: rgb(55, 86, 70, 0.5) !important;
-}
-
-.modal-buttons-accept-hover:hover {
-  background-color: rgb(167, 56, 65, 0.5) !important;
-}
