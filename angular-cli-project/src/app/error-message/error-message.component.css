@@ -1,0 +1,19 @@
+.card-panel {
+  box-shadow: none !important;
+}
+
+.fail {
+  background-color: #FFFFFF;
+  color: #a73841;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #a73841 !important;
+}
+
+.correct {
+  background-color: rgba(55, 86, 70, 0.5);
+}
+
+i {
+  cursor: pointer;
+}

@@ -60,12 +60,12 @@ describe('navbar component', () => {
       TestBed.compileComponents();
     }));
 
-    it('should have Sign in and Log in buttons', async(() => {
+    it('should have Sign up and Log in buttons', async(() => {
       var fixture = TestBed.createComponent(NavbarComponent);
       fixture.detectChanges();
       var compiled = fixture.debugElement.nativeElement;
 
-      expect(compiled).toContainText('Sign in');
+      expect(compiled).toContainText('Sign up');
       expect(compiled).toContainText('Log in');
       //expect(compiled.querySelector('h3')).toHaveText('Status: Enter PIN');
     }));
@@ -74,7 +74,7 @@ describe('navbar component', () => {
       var fixture = TestBed.createComponent(NavbarComponent);
       fixture.detectChanges();
       var compiled = fixture.debugElement.nativeElement;
-      compiled.querySelector('#signInButton').click();
+      compiled.querySelector('#signUpButton').click();
 
       fixture.debugElement.componentInstance.pending.then(() => {
         fixture.detectChanges();

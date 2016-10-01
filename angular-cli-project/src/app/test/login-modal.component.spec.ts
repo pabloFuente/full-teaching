@@ -74,15 +74,15 @@ describe('login-modal component', () => {
       expect(compiled).toContainText('Welcome to FullTeaching !');
     }));
 
-    it('should have Sign In button to change the modal view', async(() => {
+    it('should have Sign up button to change the modal view', async(() => {
       var fixture = TestBed.createComponent(LoginModalComponent);
       fixture.detectChanges();
       var compiled = fixture.debugElement.nativeElement;
 
-      expect(compiled.querySelector('.modal-footer-button')).toHaveText('Sign in');
+      expect(compiled.querySelector('.modal-footer-button')).toHaveText('Sign up');
     }));
 
-    it('should open Sign In view when Sign In button is pressed', async(() => {
+    it('should open Sign up view when Sign up button is pressed', async(() => {
       var fixture = TestBed.createComponent(LoginModalComponent);
       fixture.detectChanges();
       var compiled = fixture.debugElement.nativeElement;

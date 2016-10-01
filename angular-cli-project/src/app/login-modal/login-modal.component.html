@@ -1,10 +1,12 @@
 <div id="modal" class="modal" materialize [materializeActions]="actions">
 
-  <div class="modal-content">
+  <div *ngIf="submitProcessing" class="loading"></div>
+
+  <div class="modal-content" [class.filtered]="submitProcessing">
     <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
     <div class="row">
 
-      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value)">
+      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value, confirmPassword?.value)">
         <div class="row">
           <div class="input-field col s12">
             <input #email id="email" type="email" class="validate" required>
@@ -26,20 +28,21 @@
           </div>
         </div>
 
+        <error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="errorTitle" [errorContent]="errorContent" [customClass]="customClass" [closable]="closable"></error-message>
+
         <div class="row center">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
-          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signInColor">Sign in</button>
-          <a (click)="setLoginView()" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
+          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
+          <a (click)="setLoginView(true)" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
       </form>
 
     </div>
   </div>
 
-  <div class="modal-footer">
-    <div *ngIf="loginView" class="right-align">Not registered yet?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Sign in</a></div>
-    <div *ngIf="!loginView" class="right-align">Already registered?<a (click)="changeView()" class="waves-effect btn-flat modal-footer-button">Log in</a></div>
-
+  <div class="modal-footer" [class.filtered]="submitProcessing">
+    <div *ngIf="loginView" class="right-align">Not registered yet?<a (click)="setLoginView(false)" class="waves-effect btn-flat modal-footer-button">Sign up</a></div>
+    <div *ngIf="!loginView" class="right-align">Already registered?<a (click)="setLoginView(true)" class="waves-effect btn-flat modal-footer-button">Log in</a></div>
   </div>
 
 </div>

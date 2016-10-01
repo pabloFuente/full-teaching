@@ -1,0 +1,5 @@
+<div class="card-panel" [ngClass]="customClass">
+  <i *ngIf="closable" class="material-icons right" (click)="closeAlert()">clear</i>
+  <h5>{{errorTitle}}</h5>
+  <p>{{errorContent}}</p>
+</div>

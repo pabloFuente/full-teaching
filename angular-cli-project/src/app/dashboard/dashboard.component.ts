@@ -6,7 +6,7 @@ import { LessonService } from '../services/lesson.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-  selector: 'dashboard',
+  selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   providers: [LessonService, AuthenticationService],

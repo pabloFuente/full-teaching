@@ -2,26 +2,32 @@
   <nav id="navigation-bar" class="nav-down secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo app-title-header white-text">FullTeaching</a>
+
+      <!--Logout view-->
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a id="signInButton" class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Sign in</a></li>
-        <li><a class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
+        <li><a id="signUpButton" class="navbar-button waves-effect waves-light white-text modal-trigger" href="#modal" materialize="leanModal">Sign up</a></li>
+        <li><a class="navbar-button waves-effect waves-light white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
       </ul>
+
+      <!--Login view-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a class="navbar-button waves-effect white-text">My classes</a></li>
-        <li><a class="navbar-button waves-effect white-text">My settings</a></li>
+        <li><a routerLink="/dashboard" class="navbar-button waves-effect waves-light white-text">My classes</a></li>
+        <li><a routerLink="/settings" class="navbar-button waves-effect waves-light white-text">My settings</a></li>
         <!-- Dropdown Content -->
         <ul id="dropdown1" class="dropdown-content">
           <li class="divider"></li>
-          <li class="dropdown-menu-button"><a class="waves-effect" (click)="this.authenticationService.logout()">LOGOUT</a></li>
+          <li class="dropdown-menu-button"><a class="waves-effect waves-light" (click)="this.authenticationService.logout()">Logout</a></li>
           <li class="divider"></li>
-          <li class="dropdown-menu-button"><a class="waves-effect">CONTACT</a></li>
+          <li class="dropdown-menu-button"><a class="waves-effect waves-light">Contact</a></li>
         </ul>
         <!-- Dropdown Trigger -->
-        <li><a class="navbar-button"><i class="material-icons white-text right dropdown-button" data-activates="dropdown1" data-beloworigin="true" materialize="dropdown" >arrow_drop_down</i></a></li>
+        <li><a class="navbar-button"><i id="arrow-drop-down" class="material-icons white-text right dropdown-button" data-activates="dropdown1" data-beloworigin="true" materialize="dropdown" >arrow_drop_down</i></a></li>
       </ul>
+
+      <!--Side nav mobile-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" id="nav-mobile" class="side-nav">
-        <li><a class="waves-effect">My classes</a></li>
-        <li><a class="waves-effect">My settings</a></li>
+        <li><a routerLink="/dashboard" class="waves-effect">My classes</a></li>
+        <li><a routerLink="/settings" class="waves-effect">My settings</a></li>
         <li class="divider"></li>
         <li><a class="waves-effect">Contact</a></li>
         <li><a class="waves-effect" (click)="this.authenticationService.logout()">Logout</a></li>

@@ -1,12 +1,24 @@
+.modal-content {
+  padding-bottom: 0px !important;
+}
+
+.row {
+  margin-bottom: 10px !important;
+}
+
 .modal-footer-button {
   float: none !important;
 }
 
-.signInColor {
+.filtered {
+  filter: blur(3px);
+}
+
+.signUpColor {
   background-color: #2196f3;
 }
 
-.signInColor:hover {
+.signUpColor:hover {
   background-color: rgba(33, 150, 244, 0.7);
 }
 
@@ -19,9 +31,9 @@
 }
 
 .acceptColor-back:hover {
-  background-color: rgba(55,86,70,0.7);
+  background-color: rgba(55, 86, 70, 0.7);
 }
 
 .cancelColor-back:hover {
-  background-color: rgba(167,56,65,0.7);
+  background-color: rgba(167, 56, 65, 0.7);
 }

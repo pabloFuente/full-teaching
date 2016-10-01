@@ -1,15 +1,14 @@
+<div *ngIf="!this.lessons" class="loading"></div>
+
 <div class="container margins-top-bottom">
-
-  <div *ngIf="!this.lessons" class="loading-dashboard"></div>
-
   <ul *ngIf="this.lessons" class="collection">
     <li *ngFor="let lesson of lessons" class="collection-item avatar">
       <!--<img src="images/yuna.jpg" alt="" class="circle">-->
       <div class="row lesson-list-item">
         <div class="col l11 s9">
           <img materialize="materialbox" class="circle materialboxed" src="../assets/images/default_lesson_image.png">
-          <span class="title">{{lesson.title}}</span>
-          <p>{{ lesson.description }} <br> {{ lesson.date | date }} - {{ lesson.date | date:'H:mm' }}</p>
+          <span class="title">{{lesson?.title}}</span>
+          <p>{{ lesson?.description }} <br> {{ lesson?.date | date }} - {{ lesson?.date | date:'H:mm' }}</p>
         </div>
         <div class="col l1 s3">
           <a href="#" class="secondary-content "><i class="material-icons">grade</i></a>
