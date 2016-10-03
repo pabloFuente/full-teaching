@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { ErrorMessageComponent } from './error-message.component';
+import { ErrorMessageComponent } from './../error-message/error-message.component';
 
 describe('Component: ErrorMessage', () => {
   it('should create an instance', () => {

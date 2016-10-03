@@ -6,6 +6,7 @@
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
+
 import { Observable }               from 'rxjs';
 
 import { AuthenticationService } from '../services/authentication.service';
@@ -20,14 +21,14 @@ class MockAuthenticationService extends AuthenticationService {
 }
 
 describe('navbar component', () => {
-  beforeEach(() => {
 
+  beforeEach(() => {
     //We add to jasmine the following methods
     jasmine.addMatchers({
       toHaveText: function() {
         return {
           compare: function(actual, expectedText) {
-            var actualText = actual.textContent;
+            let actualText = actual.textContent;
             return {
               pass: actualText == expectedText,
               get message() { return 'Expected ' + actualText + ' to equal ' + expectedText; }
@@ -38,7 +39,7 @@ describe('navbar component', () => {
       toContainText: function() {
         return {
           compare: function(actual, expectedText) {
-            var actualText = actual.textContent;
+            let actualText = actual.textContent;
             return {
               pass: actualText.indexOf(expectedText) > -1,
               get message() { return 'Expected ' + actualText + ' to contain ' + expectedText; }
@@ -61,9 +62,9 @@ describe('navbar component', () => {
     }));
 
     it('should have Sign up and Log in buttons', async(() => {
-      var fixture = TestBed.createComponent(NavbarComponent);
+      let fixture = TestBed.createComponent(NavbarComponent);
       fixture.detectChanges();
-      var compiled = fixture.debugElement.nativeElement;
+      let compiled = fixture.debugElement.nativeElement;
 
       expect(compiled).toContainText('Sign up');
       expect(compiled).toContainText('Log in');
@@ -71,52 +72,52 @@ describe('navbar component', () => {
     }));
 
     it('should open login modal', async(() => {
-      var fixture = TestBed.createComponent(NavbarComponent);
+      let fixture = TestBed.createComponent(NavbarComponent);
       fixture.detectChanges();
-      var compiled = fixture.debugElement.nativeElement;
+      let compiled = fixture.debugElement.nativeElement;
       compiled.querySelector('#signUpButton').click();
 
       fixture.debugElement.componentInstance.pending.then(() => {
         fixture.detectChanges();
         expect(compiled.querySelector('.modal')).toHaveText('Welcome');
       });
-    }));
+    }));*/
 
-    it('should accept pin (with whenStable)', async(() => {
-      var fixture = TestBed.createComponent(GreetingComponent);
+    /*it('should accept pin (with whenStable)', async(() => {
+      let fixture = TestBed.createComponent(GreetingComponent);
       fixture.detectChanges();
-      var compiled = fixture.debugElement.nativeElement;
+      let compiled = fixture.debugElement.nativeElement;
       compiled.querySelector('button').click();
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
         expect(compiled.querySelector('h3')).toHaveText('Status: Welcome!');
       });
-    }));
+    }));*/
 
-    it('should accept pin (with fakeAsync)', fakeAsync(() => {
-      var fixture = TestBed.createComponent(GreetingComponent);
+    /*it('should accept pin (with fakeAsync)', fakeAsync(() => {
+      let fixture = TestBed.createComponent(GreetingComponent);
 
-      var compiled = fixture.debugElement.nativeElement;
+      let compiled = fixture.debugElement.nativeElement;
       compiled.querySelector('button').click();
 
       tick();
       fixture.detectChanges();
       expect(compiled.querySelector('h3')).toHaveText('Status: Welcome!');
     }));
-  });
+  });*/
 
-  describe('overriding', () => {
+  /*describe('overriding', () => {
     it('should override the template', async(() => {
       TestBed.overrideComponent(GreetingComponent, {
         set: {
           template: `<span>Foo {{greeting}}<span>`
         }
       }).compileComponents().then(() => {
-        var fixture = TestBed.createComponent(GreetingComponent);
+        let fixture = TestBed.createComponent(GreetingComponent);
         fixture.detectChanges();
 
-        var compiled = fixture.debugElement.nativeElement;
+        let compiled = fixture.debugElement.nativeElement;
         expect(compiled).toHaveText('Foo Enter PIN');
       });
     }));

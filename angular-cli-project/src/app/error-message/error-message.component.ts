@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'error-message',
+  selector: 'app-error-message',
   templateUrl: './error-message.component.html',
   styleUrls: ['./error-message.component.css']
 })
@@ -22,9 +22,6 @@ export class ErrorMessageComponent {
   eventShowable = new EventEmitter<boolean>();
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   public closeAlert() {
     this.eventShowable.emit(false);

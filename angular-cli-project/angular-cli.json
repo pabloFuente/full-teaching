@@ -10,7 +10,7 @@
       "assets": "assets",
       "index": "index.html",
       "main": "main.ts",
-      "test": "test.ts --watch=false",
+      "test": "test.ts",
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "mobile": false,

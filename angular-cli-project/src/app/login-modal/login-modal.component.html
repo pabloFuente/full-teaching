@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="errorTitle" [errorContent]="errorContent" [customClass]="customClass" [closable]="closable"></error-message>
+        <app-error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="errorTitle" [errorContent]="errorContent" [customClass]="customClass" [closable]="closable"></app-error-message>
 
         <div class="row center">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
