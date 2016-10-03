@@ -9,7 +9,6 @@ import { AuthenticationService } from '../services/authentication.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [LessonService, AuthenticationService],
 })
 export class DashboardComponent implements OnInit {
 

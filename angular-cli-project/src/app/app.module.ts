@@ -17,6 +17,7 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 
 import { AuthenticationService } from './services/authentication.service';
 import { LessonService }         from './services/lesson.service';
+import { LoginModalService }      from './services/login-modal.service';
 import { AuthGuard }             from './auth.guard';
 import { Constants }             from './constants';
 
@@ -44,8 +45,9 @@ import { BaseRequestOptions }          from '@angular/http';
   ],
   providers: [
     AuthenticationService,
-    AuthGuard,
     LessonService,
+    LoginModalService,
+    AuthGuard,
     Constants,
 
     // providers used to create fake backend

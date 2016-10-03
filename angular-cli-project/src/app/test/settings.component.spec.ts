@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { SettingsComponent } from './../settings/settings.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 describe('Component: Settings', () => {
   it('should create an instance', () => {

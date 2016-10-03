@@ -2,7 +2,8 @@ import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
-import { Constants } from './../constants';
+import { LoginModalService } from '../services/login-modal.service';
+import { Constants } from '../constants';
 
 @Component({
   selector: 'login-modal',
@@ -26,7 +27,12 @@ export class LoginModalComponent {
   private toastMessage: string;
 
 
-  constructor(private authenticationService: AuthenticationService, private router: Router, private CONSTANTS: Constants) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router,
+    private CONSTANTS: Constants,
+    private loginModalService: LoginModalService) {
+
     this.loginView = true;
     this.fieldsIncorrect = false;
     this.submitProcessing = false;
@@ -35,7 +41,11 @@ export class LoginModalComponent {
     this.customClass = 'fail';
     this.closable = true;
     this.toastMessage = 'Login error! Check your email or password';
-    //this.authenticationService.logout();
+
+    // Suscription to LoginModal shared service (navbar actions on modal)
+    this.loginModalService.wat$.subscribe((value) => {
+       this.loginView = value;
+    });
   }
 
   setLoginView(option: boolean) {
