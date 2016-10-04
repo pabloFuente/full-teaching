@@ -22,9 +22,32 @@ span.title {
 
 i.material-icons {
   cursor: pointer;
-  font-size: 32px;
+  font-size: 42px;
+  transition: all .2s ease-out;
 }
 
 i.material-icons:hover {
-  color: #61ffae;
+  color: #91a59b;
+}
+
+li.active i.material-icons {
+  -webkit-transform: rotate(-45deg);
+}
+
+.lessonImage {
+  display: inline;
+}
+
+@media only screen and (min-width: 993px) {
+  .lessonImage {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .lessonImage {
+    width: 45px;
+    height: 45px;
+  }
 }

@@ -2,19 +2,21 @@
 
 <div class="container margins-top-bottom">
   <ul *ngIf="this.lessons" materialize="collapsible" class="collapsible collection" data-collapsible="accordion">
-    <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[this.collapsibleElement] + i" class="collection-item avatar">
+    <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[this.collapsibleElement] + i" class="collection-item">
 
       <div class="row lesson-list-item valign-wrapper">
 
-        <div class="col l8 s9 valign">
-          <img materialize="materialbox" class="circle materialboxed" src="../assets/images/default_lesson_image.png">
+        <div class="col l2 s2 valign center-align">
+          <img materialize="materialbox" class="circle materialboxed lessonImage" src="../assets/images/default_lesson_image.png">
+        </div>
+
+        <div class="col l6 s8 valign">
           <span class="title">{{lesson?.title}}</span>
           <p>{{ lesson?.description }} <br> {{ lesson?.date | date }} - {{ lesson?.date | date:'H:mm' }}</p>
         </div>
 
-        <div class="col l4 s3 right-align valign">
-          <i class="material-icons" (click)="triggerCollapsible(i , 0)">chat</i>
-          <i class="material-icons" (click)="triggerCollapsible(i , 1)">attachment</i>
+        <div class="col l4 s2 right-align valign">
+          <i class="material-icons" (click)="triggerCollapsible(i)">add</i>
         </div>
 
       </div>
@@ -22,8 +24,26 @@
       <div [attr.id]="[this.collapsibleTrigger] + i" class="collapsible-header"></div>
 
       <div class="collapsible-body">
-        <div [hidden]="view != 0">FORUM VIEW<br/>FORUM VIEW<br/></div>
-        <div [hidden]="view != 1">ATTACHMENT FILES VIEW</div>
+          <md-tab-group [selectedIndex]="0">
+            <md-tab>
+              <template md-tab-label>Forum</template>
+              <template md-tab-content>
+                <p>FORUM VIEW<br/>FORUM VIEW<br/>FORUM VIEW<br/>FORUM VIEW<br/></p>
+              </template>
+            </md-tab>
+            <md-tab>
+              <template md-tab-label>Files</template>
+              <template md-tab-content>
+                <p>FILES VIEW<br/>FILES VIEW<br/></p>
+              </template>
+            </md-tab>
+            <md-tab>
+              <template md-tab-label>Attenders</template>
+              <template md-tab-content>
+                <p>ATTENDERS VIEW</p>
+              </template>
+            </md-tab>
+          </md-tab-group>
       </div>
 
     </li>

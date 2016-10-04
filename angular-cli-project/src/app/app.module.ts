@@ -7,6 +7,8 @@ import { routing } from './app.routing';
 
 import { MaterializeModule } from 'angular2-materialize';
 
+import { MaterialModule } from '@angular/material';
+
 import { AppComponent }          from './app.component';
 import { NavbarComponent }       from './navbar/navbar.component';
 import { LoginModalComponent }   from './login-modal/login-modal.component';
@@ -32,6 +34,7 @@ import { BaseRequestOptions }          from '@angular/http';
     FormsModule,
     HttpModule,
     MaterializeModule,
+    MaterialModule.forRoot(),
     routing,
   ],
   declarations: [

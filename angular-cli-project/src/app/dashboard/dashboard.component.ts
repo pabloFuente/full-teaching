@@ -12,12 +12,11 @@ declare var $: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit{
 
   lessons: Lesson[];
 
   //Collapsible components info
-  view: number = 0;
   collapsibleTrigger: string = 'collapsibleTrigger_';
   collapsibleElement: string = 'collapsibleElement_';
 
@@ -52,21 +51,10 @@ export class DashboardComponent implements OnInit {
       error => console.log(error));
   }
 
-  /*Triggers the particular collapsible body given by "id" parameter to show "option"
-  view (0: forum, 1: files). This method uses two jQuery sentences*/
-  triggerCollapsible(id: string, option: number) {
-    let aux = this.view;
-    switch (option) {
-      case 0:
-        this.view = 0;
-        break;
-      case 1:
-        this.view = 1;
-        break;
-    }
-    let el1 = $('#' + this.collapsibleElement + id);
-    let el2 = $('#' + this.collapsibleTrigger + id);
-    if (!el1.hasClass('active') || aux == option) el2.click();
+  /*Triggers the particular collapsible body given by "id". This method uses one jQuery sentence*/
+  triggerCollapsible(id: string) {
+    let el = $('#' + this.collapsibleTrigger + id);
+    el.click();
   }
 
 }

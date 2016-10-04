@@ -14,8 +14,8 @@ body {
 
 #sticky-footer-div {
   display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 main {
@@ -27,7 +27,7 @@ a {
   text-decoration: none !important;
 }
 
-.app-title-header{
+.app-title-header {
   font-family: 'Molle', cursive;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.71);
 }
@@ -41,6 +41,7 @@ a {
   margin-bottom: 50px;
 }
 
+
 /*Loader*/
 @keyframes spin {
   0% {
@@ -52,27 +53,27 @@ a {
 }
 
 .loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1000;
-    margin: -25px 0px 0px -25px;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    border: .25rem solid rgba(55, 86, 70, 0.2);
-    border-top-color: #375646;
-    animation: spin 0.4s infinite linear;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+  margin: -25px 0px 0px -25px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border: .25rem solid rgba(55, 86, 70, 0.2);
+  border-top-color: #375646;
+  animation: spin 0.4s infinite linear;
 }
 /*End Loader*/
 
 /* Library Overwrite*/
-.slider .indicators .indicator-item.active{
+.slider .indicators .indicator-item.active {
   background-color: #375646 !important;
 }
 
-@media only screen and (min-width: 993px){
-.container {
+@media only screen and (min-width: 993px) {
+  .container {
     width: 60% !important;
   }
 }
@@ -81,5 +82,19 @@ a {
   .indicators {
     display: none !important;
   }
+}
+
+.md-tab-label {
+  min-width: 33% !important;
+  font-weight: normal !important;
+}
+
+.md-tab-header {
+  border-bottom: 1px solid #e0e0e0;
+  text-transform: uppercase;
+}
+
+md-ink-bar {
+  background-color: rgba(55, 86, 70, 0.5);
 }
 /*End Library Overwrite*/
