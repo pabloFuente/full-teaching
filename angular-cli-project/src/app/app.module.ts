@@ -9,17 +9,18 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { MaterialModule } from '@angular/material';
 
-import { AppComponent }          from './app.component';
-import { NavbarComponent }       from './navbar/navbar.component';
-import { LoginModalComponent }   from './login-modal/login-modal.component';
-import { PresentationComponent } from './presentation/presentation.component';
-import { DashboardComponent }    from './dashboard/dashboard.component';
-import { SettingsComponent }     from './settings/settings.component';
-import { ErrorMessageComponent } from './error-message/error-message.component';
+import { AppComponent }           from './app.component';
+import { NavbarComponent }        from './navbar/navbar.component';
+import { LoginModalComponent }    from './login-modal/login-modal.component';
+import { PresentationComponent }  from './presentation/presentation.component';
+import { DashboardComponent }     from './dashboard/dashboard.component';
+import { LessonDetailsComponent } from './lesson-details/lesson-details.component'
+import { SettingsComponent }      from './settings/settings.component';
+import { ErrorMessageComponent }  from './error-message/error-message.component';
 
 import { AuthenticationService } from './services/authentication.service';
 import { LessonService }         from './services/lesson.service';
-import { LoginModalService }      from './services/login-modal.service';
+import { LoginModalService }     from './services/login-modal.service';
 import { AuthGuard }             from './auth.guard';
 import { Constants }             from './constants';
 
@@ -41,6 +42,7 @@ import { BaseRequestOptions }          from '@angular/http';
     AppComponent,
     PresentationComponent,
     DashboardComponent,
+    LessonDetailsComponent,
     NavbarComponent,
     LoginModalComponent,
     SettingsComponent,

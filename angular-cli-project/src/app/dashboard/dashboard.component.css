@@ -4,7 +4,7 @@ span.title {
 
 .lesson-list-item {
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
 }
 
 .collapsible-header {
@@ -13,6 +13,7 @@ span.title {
 
 .collapsible-body {
   border-bottom: none;
+  margin-bottom: 10px;
 }
 
 .collection .collection-item.active {
@@ -21,6 +22,7 @@ span.title {
 }
 
 i.material-icons {
+  color: #375646;
   cursor: pointer;
   font-size: 42px;
   transition: all .2s ease-out;
@@ -30,8 +32,25 @@ i.material-icons:hover {
   color: #91a59b;
 }
 
+i.material-icons:active {
+  color: #375646;
+}
+
 li.active i.material-icons {
   -webkit-transform: rotate(-45deg);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-details {
+  animation: spin 0.7s infinite linear;
 }
 
 .lessonImage {

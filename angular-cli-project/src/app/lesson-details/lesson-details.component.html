@@ -1,0 +1,20 @@
+<md-tab-group [selectedIndex]="0">
+  <md-tab>
+    <template md-tab-label>Forum</template>
+    <template md-tab-content>
+      <p>{{lessonDetails?.forum.entry}}</p>
+    </template>
+  </md-tab>
+  <md-tab>
+    <template md-tab-label>Files</template>
+    <template md-tab-content>
+      <p *ngFor="let file of lessonDetails.files">{{file?.source}}</p>
+    </template>
+  </md-tab>
+  <md-tab>
+    <template md-tab-label>Attenders</template>
+    <template md-tab-content>
+      <p *ngFor="let attender of lessonDetails.attenders">{{attender?.user.name}}</p>
+    </template>
+  </md-tab>
+</md-tab-group>

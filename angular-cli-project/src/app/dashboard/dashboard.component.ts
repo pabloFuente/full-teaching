@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { LessonDetailsComponent } from '../lesson-details/lesson-details.component';
+
 import { Lesson } from '../lesson';
+import { LessonDetails } from '../lesson-details';
 
 import { LessonService } from '../services/lesson.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -12,13 +15,17 @@ declare var $: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
 
   lessons: Lesson[];
+  lessonDetails: LessonDetails;
 
-  //Collapsible components info
+  lessonDetailsActive: number = -1;
+
+  //Collapsible components HTML info
   collapsibleTrigger: string = 'collapsibleTrigger_';
   collapsibleElement: string = 'collapsibleElement_';
+  iconTrigger: string = 'iconTrigger_';
 
   constructor(
     private lessonService: LessonService,
@@ -37,7 +44,7 @@ export class DashboardComponent implements OnInit{
   getLessons(): void {
     this.lessonService.getLessons().subscribe(
       lessons => {
-        lessons.sort((l1, l2) => {
+        lessons.sort((l1, l2) => { //Sort lessons by date
           if (l1.date > l2.date) {
             return 1;
           }
@@ -51,10 +58,34 @@ export class DashboardComponent implements OnInit{
       error => console.log(error));
   }
 
-  /*Triggers the particular collapsible body given by "id". This method uses one jQuery sentence*/
-  triggerCollapsible(id: string) {
-    let el = $('#' + this.collapsibleTrigger + id);
-    el.click();
+  getLessonDetails(id: string): void {
+    this.lessonService.getLessonDetails(id).subscribe(
+      lessonDetails => {
+        this.lessonDetails = lessonDetails;
+        $('#' + this.iconTrigger + id).removeClass('loading-details'); //Petition animation deactivated
+        this.fireClickOnCollapsible(id); //Click event on collapsible to activate it
+      },
+      error => console.log(error));
+  }
+
+  triggerLessonDetails(id: string) {
+
+    // If there's no lesson-detail active or if a different one is going to be actived
+    if (this.lessonDetailsActive == -1 || this.lessonDetailsActive != +id){
+      $('#' + this.iconTrigger + id).addClass('loading-details'); //Petition animation activated
+      this.getLessonDetails(id);      //Petition for specific lesson-details
+      this.lessonDetailsActive = +id; //New lesson-details view active
+    }
+
+    // If an active lesson-detail is going to be closed
+    else {
+      this.fireClickOnCollapsible(id); //Click event on collapsible to close it
+      this.lessonDetailsActive = -1;   //No lesson-details view active
+    }
+  }
+
+  fireClickOnCollapsible(id) {
+    $('#' + this.collapsibleTrigger + id).click();
   }
 
 }

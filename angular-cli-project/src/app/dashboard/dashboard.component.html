@@ -16,7 +16,7 @@
         </div>
 
         <div class="col l4 s2 right-align valign">
-          <i class="material-icons" (click)="triggerCollapsible(i)">add</i>
+          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerLessonDetails(i)">add</i>
         </div>
 
       </div>
@@ -24,26 +24,7 @@
       <div [attr.id]="[this.collapsibleTrigger] + i" class="collapsible-header"></div>
 
       <div class="collapsible-body">
-          <md-tab-group [selectedIndex]="0">
-            <md-tab>
-              <template md-tab-label>Forum</template>
-              <template md-tab-content>
-                <p>FORUM VIEW<br/>FORUM VIEW<br/>FORUM VIEW<br/>FORUM VIEW<br/></p>
-              </template>
-            </md-tab>
-            <md-tab>
-              <template md-tab-label>Files</template>
-              <template md-tab-content>
-                <p>FILES VIEW<br/>FILES VIEW<br/></p>
-              </template>
-            </md-tab>
-            <md-tab>
-              <template md-tab-label>Attenders</template>
-              <template md-tab-content>
-                <p>ATTENDERS VIEW</p>
-              </template>
-            </md-tab>
-          </md-tab-group>
+          <app-lesson-details *ngIf="this.lessonDetails" [lessonDetails]="this.lessonDetails"></app-lesson-details>
       </div>
 
     </li>

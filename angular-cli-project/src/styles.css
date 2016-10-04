@@ -94,6 +94,13 @@ a {
   text-transform: uppercase;
 }
 
+.md-tab-body-wrapper {
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #e0e0e0;
+  background-color: white;
+}
+
 md-ink-bar {
   background-color: rgba(55, 86, 70, 0.5);
 }
