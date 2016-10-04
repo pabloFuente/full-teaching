@@ -3,6 +3,28 @@ span.title {
 }
 
 .lesson-list-item {
-  margin-top:15px;
+  margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.collapsible-header {
+  display: none;
+}
+
+.collapsible-body {
+  border-bottom: none;
+}
+
+.collection .collection-item.active {
+  background-color: rgba(192, 214, 203, 0.33);
+  color: #000000;
+}
+
+i.material-icons {
+  cursor: pointer;
+  font-size: 32px;
+}
+
+i.material-icons:hover {
+  color: #61ffae;
 }

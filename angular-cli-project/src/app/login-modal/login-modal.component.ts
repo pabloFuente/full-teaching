@@ -5,6 +5,8 @@ import { AuthenticationService } from '../services/authentication.service';
 import { LoginModalService } from '../services/login-modal.service';
 import { Constants } from '../constants';
 
+declare var Materialize : any;
+
 @Component({
   selector: 'login-modal',
   templateUrl: './login-modal.component.html',

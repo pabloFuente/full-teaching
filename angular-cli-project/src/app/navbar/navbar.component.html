@@ -5,20 +5,20 @@
 
       <!--Logout view-->
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a (click)="updateLoginModalView(false)" id="signUpButton" class="navbar-button waves-effect waves-light white-text modal-trigger" href="#modal" materialize="leanModal">Sign up</a></li>
-        <li><a (click)="updateLoginModalView(true)" class="navbar-button waves-effect waves-light white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
+        <li><a (click)="updateLoginModalView(false)" id="signUpButton" class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Sign up</a></li>
+        <li><a (click)="updateLoginModalView(true)" class="navbar-button waves-effect white-text modal-trigger" href="#modal" materialize="leanModal">Log in</a></li>
       </ul>
 
       <!--Login view-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a routerLink="/dashboard" class="navbar-button waves-effect waves-light white-text">My classes</a></li>
-        <li><a routerLink="/settings" class="navbar-button waves-effect waves-light white-text">My settings</a></li>
+        <li><a routerLink="/dashboard" class="navbar-button waves-effect white-text">My classes</a></li>
+        <li><a routerLink="/settings" class="navbar-button waves-effect white-text">My settings</a></li>
         <!-- Dropdown Content -->
         <ul id="dropdown1" class="dropdown-content">
           <li class="divider"></li>
-          <li class="dropdown-menu-button"><a class="waves-effect waves-light" (click)="this.authenticationService.logout()">Logout</a></li>
+          <li class="dropdown-menu-button"><a class="waves-effect" (click)="this.authenticationService.logout()">Logout</a></li>
           <li class="divider"></li>
-          <li class="dropdown-menu-button"><a class="waves-effect waves-light">Contact</a></li>
+          <li class="dropdown-menu-button"><a class="waves-effect">Contact</a></li>
         </ul>
         <!-- Dropdown Trigger -->
         <li><a class="navbar-button"><i id="arrow-drop-down" class="material-icons white-text right dropdown-button" data-activates="dropdown1" data-beloworigin="true" materialize="dropdown" >arrow_drop_down</i></a></li>

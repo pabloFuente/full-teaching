@@ -7,7 +7,8 @@ export let fakeBackendProvider = {
   useFactory: (backend, options) => {
     // configure fake backend
     backend.connections.subscribe((connection: MockConnection) => {
-      let adminUser = { email: 'admin@admin.com', pass: 'admin' };
+      let teacherUser = { email: 'teacher@gmail.com', pass: 't' };
+      let studentUser = { email: 'student@gmail.com', pass: 's' };
 
       let lessons = [
         { title: "Lesson 1: Introduction to Web", description: 'This is a nice description about this lesson.', date: new Date("October 13, 2016 11:30:00") },
@@ -26,11 +27,17 @@ export let fakeBackendProvider = {
           let params = JSON.parse(connection.request.getBody());
 
           // check user credentials and return fake jwt token if valid
-          if (params.email === adminUser.email && params.pass === adminUser.pass) {
+          if (params.email === teacherUser.email && params.pass === teacherUser.pass) {
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token' } })
+              new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token-teacher' } })
             ));
-          } else {
+          }
+          else if (params.email === studentUser.email && params.pass === studentUser.pass){
+            connection.mockRespond(new Response(
+              new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token-student' } })
+            ));
+          }
+          else {
             connection.mockRespond(new Response(
               new ResponseOptions({ status: 200 })
             ));
@@ -41,7 +48,7 @@ export let fakeBackendProvider = {
         if (connection.request.url.endsWith('/api/lessons') && connection.request.method === RequestMethod.Get) {
           // check for fake auth token in header and return lessons if valid, this security is implemented server side
           // in a real application
-          if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+          if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token-teacher' || 'Bearer fake-jwt-token-student') {
             connection.mockRespond(new Response(
               new ResponseOptions({ status: 200, body: lessons })
             ));
