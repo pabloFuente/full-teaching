@@ -24,7 +24,7 @@
       <div [attr.id]="[this.collapsibleTrigger] + i" class="collapsible-header"></div>
 
       <div class="collapsible-body">
-          <app-lesson-details *ngIf="this.lessonDetails" [lessonDetails]="this.lessonDetails"></app-lesson-details>
+          <app-lesson-details [lessonDetails]="this.lessonDetails"></app-lesson-details>
       </div>
 
     </li>

@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
   getLessons(): void {
     this.lessonService.getLessons().subscribe(
       lessons => {
+        console.log(lessons);
         lessons.sort((l1, l2) => { //Sort lessons by date
           if (l1.date > l2.date) {
             return 1;
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
   getLessonDetails(id: string): void {
     this.lessonService.getLessonDetails(id).subscribe(
       lessonDetails => {
+        console.log(lessonDetails);
         this.lessonDetails = lessonDetails;
         $('#' + this.iconTrigger + id).removeClass('loading-details'); //Petition animation deactivated
         this.fireClickOnCollapsible(id); //Click event on collapsible to activate it
@@ -71,7 +73,7 @@ export class DashboardComponent implements OnInit {
   triggerLessonDetails(id: string) {
 
     // If there's no lesson-detail active or if a different one is going to be actived
-    if (this.lessonDetailsActive == -1 || this.lessonDetailsActive != +id){
+    if (this.lessonDetailsActive == -1 || this.lessonDetailsActive != +id) {
       $('#' + this.iconTrigger + id).addClass('loading-details'); //Petition animation activated
       this.getLessonDetails(id);      //Petition for specific lesson-details
       this.lessonDetailsActive = +id; //New lesson-details view active
