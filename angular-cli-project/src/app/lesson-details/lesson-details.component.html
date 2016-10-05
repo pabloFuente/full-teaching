@@ -1,20 +1,39 @@
 <md-tab-group [selectedIndex]="0">
   <md-tab>
-    <template md-tab-label><div class="md-tab-label-aux waves-effect">Forum</div></template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">chat</i></div></template>
     <template md-tab-content>
-      <p>{{lessonDetails?.forum.entry}}</p>
+      <div class="tab-template-content row row-no-margin">
+        <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s12" (click)="this.sideNavHidden = false" [class.hide]="!this.sideNavHidden">menu</i></a>
+        <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.sideNavHidden">
+          <li (click)="this.sideNavHidden = true"><a class="truncate">First Entry</a></li>
+          <li><div class="divider"></div></li>
+          <li (click)="this.sideNavHidden = true"><a class="truncate">Second Entry</a></li>
+          <li><div class="divider"></div></li>
+          <li (click)="this.sideNavHidden = true"><a class="truncate">Third Entry pretty long one goes so far</a></li>
+          <li><div class="divider"></div></li>
+          <li (click)="this.sideNavHidden = true"><a class="truncate">Fourth Entry</a></li>
+        </ul>
+        <div class="col l8 m8 s12" [class.hide-on-small-only]="!this.sideNavHidden">{{lessonDetails?.forum.entry}}</div>
+      </div>
     </template>
   </md-tab>
   <md-tab>
-    <template md-tab-label><div class="md-tab-label-aux waves-effect">Files</div></template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
     <template md-tab-content>
-      <p *ngFor="let file of lessonDetails?.files">{{file?.source}}</p>
+      <div class="tab-template-content row row-no-margin">
+        <div *ngFor="let file of lessonDetails?.files" class="chip truncate">
+          <img src="../../assets/images/default_file_image.png" class="file-image" alt="Contact Person">
+          {{file?.source}}
+        </div>
+      </div>
     </template>
   </md-tab>
   <md-tab>
-    <template md-tab-label><div class="md-tab-label-aux waves-effect">Attenders</div></template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
     <template md-tab-content>
+      <div class="tab-template-content">
       <p *ngFor="let attender of lessonDetails?.attenders">{{attender?.user.name}}</p>
+    </div>
     </template>
   </md-tab>
 </md-tab-group>

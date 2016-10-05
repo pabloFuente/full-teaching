@@ -104,4 +104,16 @@ a {
 md-ink-bar {
   background-color: rgba(55, 86, 70, 0.5);
 }
+
+.md-tab-label {
+  padding: 0px !important;
+}
+
+.md-tab-label.md-tab-active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.backdrop{
+  background-color: #5e615f;
+}
 /*End Library Overwrite*/

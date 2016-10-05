@@ -12,9 +12,10 @@ export class LessonDetailsComponent implements OnInit {
   @Input()
   lessonDetails: LessonDetails;
 
+  private sideNavHidden = true;
+
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }

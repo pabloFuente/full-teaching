@@ -24,7 +24,7 @@
       </div>
 
       <article class="collapsible-container">
-          <app-lesson-details *ngIf="this.lessonDetails" [lessonDetails]="this.lessonDetails"></app-lesson-details>
+          <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails"></app-lesson-details>
       </article>
 
     </li>
