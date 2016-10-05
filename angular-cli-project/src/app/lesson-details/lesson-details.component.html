@@ -1,18 +1,18 @@
 <md-tab-group [selectedIndex]="0">
   <md-tab>
-    <template md-tab-label>Forum</template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect">Forum</div></template>
     <template md-tab-content>
       <p>{{lessonDetails?.forum.entry}}</p>
     </template>
   </md-tab>
   <md-tab>
-    <template md-tab-label>Files</template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect">Files</div></template>
     <template md-tab-content>
       <p *ngFor="let file of lessonDetails?.files">{{file?.source}}</p>
     </template>
   </md-tab>
   <md-tab>
-    <template md-tab-label>Attenders</template>
+    <template md-tab-label><div class="md-tab-label-aux waves-effect">Attenders</div></template>
     <template md-tab-content>
       <p *ngFor="let attender of lessonDetails?.attenders">{{attender?.user.name}}</p>
     </template>

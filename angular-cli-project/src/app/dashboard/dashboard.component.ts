@@ -74,25 +74,25 @@ export class DashboardComponent implements OnInit {
 
   triggerLessonDetails(id: string) {
 
-    // If there's no lesson-detail active or if a different one is going to be actived
+    // If there's no lesson-detail active or if a different one is going to be activated
     if (this.lessonDetailsActive == -1 || this.lessonDetailsActive != +id) {
       $('#' + this.iconTrigger + id).addClass('loading-details'); //Petition animation activated
-      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Active class from previous collapsible eliminated
+      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Removed active class from previous collapsible
       this.getLessonDetails(id);      //Petition for specific lesson-details
       this.lessonDetailsActive = +id; //New lesson-details view active
     }
 
     // If an active lesson-detail is going to be closed
     else {
-      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Active class from previous collapsible eliminated
-      $('#' + this.collapsibleTrigger + id).prop("checked", false);
+      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Removed active class from the collapsible
+      $('#' + this.collapsibleTrigger + id).prop("checked", false); //The input is unchecked
       this.lessonDetailsActive = -1;   //No lesson-details view active
     }
   }
 
   fireClickOnCollapsible(id) {
-    $('#' + this.collapsibleTrigger + id).prop("checked", true);
-    $('#' + this.collapsibleElement + id).addClass('active');
+    $('#' + this.collapsibleTrigger + id).prop("checked", true); //The input is checked
+    $('#' + this.collapsibleElement + id).addClass('active'); // Its container is activated
   }
 
 }
