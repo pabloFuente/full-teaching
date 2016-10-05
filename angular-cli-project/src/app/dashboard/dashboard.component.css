@@ -16,7 +16,7 @@ span.title {
   margin-bottom: 10px;
 }
 
-.collection .collection-item.active {
+.collection .active {
   background-color: rgba(192, 214, 203, 0.33);
   color: #000000;
 }
@@ -69,4 +69,22 @@ li.active i.material-icons {
     width: 45px;
     height: 45px;
   }
+}
+
+
+
+
+.accordion-container input {
+  display: none;
+}
+
+.accordion-container article {
+  overflow: hidden;
+  max-height: 0;
+  position: relative;
+}
+
+.accordion-container input:checked ~ article {
+  max-height: 1000px;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 1, 1);
 }

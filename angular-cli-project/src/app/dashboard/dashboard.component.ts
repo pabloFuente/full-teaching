@@ -70,24 +70,29 @@ export class DashboardComponent implements OnInit {
       error => console.log(error));
   }
 
+
+
   triggerLessonDetails(id: string) {
 
     // If there's no lesson-detail active or if a different one is going to be actived
     if (this.lessonDetailsActive == -1 || this.lessonDetailsActive != +id) {
       $('#' + this.iconTrigger + id).addClass('loading-details'); //Petition animation activated
+      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Active class from previous collapsible eliminated
       this.getLessonDetails(id);      //Petition for specific lesson-details
       this.lessonDetailsActive = +id; //New lesson-details view active
     }
 
     // If an active lesson-detail is going to be closed
     else {
-      this.fireClickOnCollapsible(id); //Click event on collapsible to close it
+      $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Active class from previous collapsible eliminated
+      $('#' + this.collapsibleTrigger + id).prop("checked", false);
       this.lessonDetailsActive = -1;   //No lesson-details view active
     }
   }
 
   fireClickOnCollapsible(id) {
-    $('#' + this.collapsibleTrigger + id).click();
+    $('#' + this.collapsibleTrigger + id).prop("checked", true);
+    $('#' + this.collapsibleElement + id).addClass('active');
   }
 
 }

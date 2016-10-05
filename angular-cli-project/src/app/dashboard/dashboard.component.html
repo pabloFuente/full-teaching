@@ -1,8 +1,10 @@
 <div *ngIf="!this.lessons" class="loading"></div>
 
 <div class="container margins-top-bottom">
-  <ul *ngIf="this.lessons" materialize="collapsible" class="collapsible collection" data-collapsible="accordion">
-    <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[this.collapsibleElement] + i" class="collection-item">
+
+  <ul *ngIf="this.lessons" class="accordion-container collection">
+    <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
+      <input [attr.id]="[collapsibleTrigger] + i" name="accordion-1" type="radio" />
 
       <div class="row lesson-list-item valign-wrapper">
 
@@ -21,12 +23,13 @@
 
       </div>
 
-      <div [attr.id]="[this.collapsibleTrigger] + i" class="collapsible-header"></div>
-
-      <div class="collapsible-body">
-          <app-lesson-details [lessonDetails]="this.lessonDetails"></app-lesson-details>
-      </div>
+      <article>
+        <div>
+          <app-lesson-details *ngIf="this.lessonDetails" [lessonDetails]="this.lessonDetails"></app-lesson-details>
+        </div>
+      </article>
 
     </li>
   </ul>
+
 </div>
