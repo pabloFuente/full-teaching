@@ -24,7 +24,6 @@ export class LoginModalComponent {
   private errorTitle: string;
   private errorContent: string;
   private customClass: string;
-  private closable: boolean;
 
   private toastMessage: string;
 
@@ -41,7 +40,6 @@ export class LoginModalComponent {
     this.errorTitle = 'Invalid field';
     this.errorContent = 'Please check your email or password';
     this.customClass = 'fail';
-    this.closable = true;
     this.toastMessage = 'Login error! Check your email or password';
 
     // Suscription to LoginModal shared service (navbar actions on modal)
@@ -55,14 +53,12 @@ export class LoginModalComponent {
       this.errorTitle = 'Invalid field';
       this.errorContent = 'Please check your email or password';
       this.customClass = 'fail';
-      this.closable = true;
       this.toastMessage = 'Login error! Check your email or password';
     }
     else {
       this.errorTitle = 'Invalid field';
       this.errorContent = 'Please check your passwords';
       this.customClass = 'fail';
-      this.closable = true;
       this.toastMessage = 'Sign up error! Check your email or password';
     }
     this.loginView = option;

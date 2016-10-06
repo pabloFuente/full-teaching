@@ -10,6 +10,14 @@
   border-color: #a73841 !important;
 }
 
+.warning {
+  background-color: #FFFFFF;
+  color: #af6e00;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #af6e00 !important;
+}
+
 .correct {
   background-color: rgba(55, 86, 70, 0.5);
 }

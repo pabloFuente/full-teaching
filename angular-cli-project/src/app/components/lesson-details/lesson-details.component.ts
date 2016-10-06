@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { LessonDetails } from '../../classes/lesson-details';
 
+import { Entry } from '../../classes/entry';
+
 @Component({
   selector: 'app-lesson-details',
   templateUrl: './lesson-details.component.html',
@@ -12,10 +14,14 @@ export class LessonDetailsComponent implements OnInit {
   @Input()
   lessonDetails: LessonDetails;
 
-  private sideNavHidden = true;
+  selectedEntry: Entry;
+
+  sideNavHidden = false;
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.selectedEntry = this.lessonDetails.forum.entries[0];
+  }
 
 }

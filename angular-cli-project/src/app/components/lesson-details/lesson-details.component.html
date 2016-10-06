@@ -3,17 +3,22 @@
     <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">chat</i></div></template>
     <template md-tab-content>
       <div class="tab-template-content row row-no-margin">
-        <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s12" (click)="this.sideNavHidden = false" [class.hide]="!this.sideNavHidden">menu</i></a>
-        <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.sideNavHidden">
-          <li (click)="this.sideNavHidden = true"><a class="truncate">First Entry</a></li>
-          <li><div class="divider"></div></li>
-          <li (click)="this.sideNavHidden = true"><a class="truncate">Second Entry</a></li>
-          <li><div class="divider"></div></li>
-          <li (click)="this.sideNavHidden = true"><a class="truncate">Third Entry pretty long one goes so far</a></li>
-          <li><div class="divider"></div></li>
-          <li (click)="this.sideNavHidden = true"><a class="truncate">Fourth Entry</a></li>
-        </ul>
-        <div class="col l8 m8 s12" [class.hide-on-small-only]="!this.sideNavHidden">{{lessonDetails?.forum.entry}}</div>
+        <div *ngIf="this.lessonDetails?.forum.activated">
+          <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.sideNavHidden">
+            <div *ngFor="let entry of this.lessonDetails?.forum.entries; let l = last">
+              <li (click)="this.selectedEntry = entry; this.sideNavHidden = true" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
+              <li *ngIf="!l"><div class="divider"></div></li>
+            </div>
+          </ul>
+          <div class="row row-no-margin">
+            <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.sideNavHidden = false" [class.hide]="!this.sideNavHidden">menu</i></a>
+            <div class="comment-section-title" [class.hide-on-small-only]="!this.sideNavHidden">{{selectedEntry.title}} - {{selectedEntry.user.name}}</div>
+            <div class="col l8 m8 s12" [class.hide-on-small-only]="!this.sideNavHidden">
+              <div *ngFor="let comment of this.selectedEntry?.comments">{{comment.message}}<div class="user-name right-align">{{comment.user.name}}</div></div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!this.lessonDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
     </template>
   </md-tab>
