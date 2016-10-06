@@ -1,9 +1,9 @@
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PresentationComponent }      from './presentation/presentation.component';
-import { DashboardComponent }      from './dashboard/dashboard.component';
-import { SettingsComponent }      from './settings/settings.component';
+import { PresentationComponent }      from './components/presentation/presentation.component';
+import { DashboardComponent }      from './components/dashboard/dashboard.component';
+import { SettingsComponent }      from './components/settings/settings.component';
 import { AuthGuard } from './auth.guard';
 
 const appRoutes: Routes = [

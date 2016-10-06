@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { LessonDetailsComponent } from '../lesson-details/lesson-details.component';
 
-import { Lesson } from '../lesson';
-import { LessonDetails } from '../lesson-details';
+import { Lesson } from '../../classes/lesson';
+import { LessonDetails } from '../../classes/lesson-details';
 
-import { LessonService } from '../services/lesson.service';
-import { AuthenticationService } from '../services/authentication.service';
+import { LessonService } from '../../services/lesson.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 declare var $: any;
 

@@ -1,9 +1,9 @@
 import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
-import { LoginModalService } from '../services/login-modal.service';
-import { Constants } from '../constants';
+import { AuthenticationService } from '../../services/authentication.service';
+import { LoginModalService } from '../../services/login-modal.service';
+import { Constants } from '../../constants';
 
 declare var Materialize : any;
 

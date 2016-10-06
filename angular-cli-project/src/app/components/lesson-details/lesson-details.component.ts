@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { LessonDetails } from '../lesson-details';
+import { LessonDetails } from '../../classes/lesson-details';
 
 @Component({
   selector: 'app-lesson-details',

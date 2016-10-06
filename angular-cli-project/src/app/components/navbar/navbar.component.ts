@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { AuthenticationService } from '../services/authentication.service';
-import { LoginModalService }     from '../services/login-modal.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { LoginModalService }     from '../../services/login-modal.service';
 
 @Component({
   selector: 'navbar',

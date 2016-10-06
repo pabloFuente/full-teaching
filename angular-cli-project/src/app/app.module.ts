@@ -10,13 +10,13 @@ import { MaterializeModule } from 'angular2-materialize';
 import { MaterialModule } from '@angular/material';
 
 import { AppComponent }           from './app.component';
-import { NavbarComponent }        from './navbar/navbar.component';
-import { LoginModalComponent }    from './login-modal/login-modal.component';
-import { PresentationComponent }  from './presentation/presentation.component';
-import { DashboardComponent }     from './dashboard/dashboard.component';
-import { LessonDetailsComponent } from './lesson-details/lesson-details.component'
-import { SettingsComponent }      from './settings/settings.component';
-import { ErrorMessageComponent }  from './error-message/error-message.component';
+import { NavbarComponent }        from './components/navbar/navbar.component';
+import { LoginModalComponent }    from './components/login-modal/login-modal.component';
+import { PresentationComponent }  from './components/presentation/presentation.component';
+import { DashboardComponent }     from './components/dashboard/dashboard.component';
+import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component'
+import { SettingsComponent }      from './components/settings/settings.component';
+import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 
 import { AuthenticationService } from './services/authentication.service';
 import { LessonService }         from './services/lesson.service';
