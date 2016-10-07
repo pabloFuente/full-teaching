@@ -1,14 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/materialize-css/dist/css/materialize.css";
 
+@import "../node_modules/materialize-css/dist/css/materialize.css";
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
+  overflow-y: scroll !important;
+  /*Never hide vertical scroll-bar*/
   background-color: #FFFFFF !important;
 }
 
@@ -20,7 +21,8 @@ body {
 
 main {
   flex: 1 0 auto;
-  position: relative; /*WARNING! maybe unexpected behaviours*/
+  position: relative;
+  /*WARNING! maybe unexpected behaviours*/
 }
 
 a {
@@ -43,6 +45,7 @@ a {
 
 
 /*Loader*/
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -65,9 +68,13 @@ a {
   border-top-color: #375646;
   animation: spin 0.4s infinite linear;
 }
+
+
 /*End Loader*/
 
+
 /* Library Overwrite*/
+
 .slider .indicators .indicator-item.active {
   background-color: #375646 !important;
 }
@@ -78,7 +85,7 @@ a {
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   .indicators {
     display: none !important;
   }
@@ -113,7 +120,9 @@ md-ink-bar {
   background-color: rgba(0, 0, 0, 0.08);
 }
 
-.backdrop{
+.backdrop {
   background-color: #5e615f;
 }
+
+
 /*End Library Overwrite*/

@@ -2,7 +2,7 @@
 var didScroll;
 var lastScrollTop = 0;
 var deltaDown = 26;
-var deltaUp = 10;
+var deltaUp = 1;
 var navbarHeight = $('#navigation-bar').outerHeight();
 
 $(window).scroll(function(event) {
@@ -14,7 +14,7 @@ setInterval(function() {
     hasScrolled();
     didScroll = false;
   }
-}, 250);
+}, 200);
 
 function hasScrolled() {
   var st = $(this).scrollTop();
@@ -28,7 +28,7 @@ function hasScrolled() {
     if (Math.abs(lastScrollTop - st) <= deltaDown)
       return;
     // Scroll Down
-    $('#navigation-bar').removeClass('nav-down').addClass('nav-up');
+    $('#navigation-bar').addClass('nav-up');
     $('.dropdown-button').dropdown('close');
   } else {
     // Make sure they scroll more than delta
@@ -36,7 +36,7 @@ function hasScrolled() {
         return;
     // Scroll Up
     if (st + $(window).height() < $(document).height()) {
-      $('#navigation-bar').removeClass('nav-up').addClass('nav-down');
+      $('#navigation-bar').removeClass('nav-up');
     }
   }
   lastScrollTop = st;

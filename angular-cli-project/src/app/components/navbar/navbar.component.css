@@ -1,6 +1,6 @@
 #navigation-bar {
   top: 0;
-  transition: top 0.2s ease-in-out;
+  transition: top 0.15s ease-in-out;
 }
 
 .nav-up {
