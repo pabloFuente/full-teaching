@@ -85,9 +85,20 @@ a {
   }
 }
 
+/*Mobile phones */
 @media only screen and (max-width: 600px) {
   .indicators {
     display: none !important;
+  }
+  .lean-overlay {
+    display: none !important;
+  }
+
+  #login-modal {
+    position: absolute !important;
+    top: 0 !important;
+    width: 100% !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -123,6 +134,5 @@ md-ink-bar {
 .backdrop {
   background-color: #5e615f;
 }
-
 
 /*End Library Overwrite*/
