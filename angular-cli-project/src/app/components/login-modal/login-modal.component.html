@@ -6,7 +6,7 @@
     <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
     <div class="row">
 
-      <form class="col s12" (ngSubmit)="onSubmit(email.value, password.value, confirmPassword?.value)">
+      <form #myForm class="col s12" (ngSubmit)="onSubmit(email.value, password.value, confirmPassword?.value)">
         <div class="row">
           <div class="input-field col s12">
             <input #email id="email" type="email" class="validate" required>
@@ -33,7 +33,7 @@
         <div class="row center">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
           <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
-          <a (click)="setLoginView(true)" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
+          <a (click)="setLoginView(true); myForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
       </form>
 

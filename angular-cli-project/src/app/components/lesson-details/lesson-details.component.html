@@ -30,6 +30,7 @@
           <img src="../../assets/images/default_file_image.png" class="file-image" alt="Contact Person">
           {{file?.source}}
         </div>
+        <div *ngIf="this.lessonDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
     </template>
   </md-tab>
