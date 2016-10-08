@@ -1,0 +1,51 @@
+.row-no-margin {
+  margin: 0px;
+}
+
+.entries-side-view {
+  height: 100%;
+}
+
+#entries-sml-btn {
+  color: #375646;
+  padding-left: 0px;
+  cursor: pointer;
+}
+
+#entries-sml-btn:hover {
+  color: #91a59b;
+}
+
+.entry-title {
+  cursor: pointer;
+  padding: 3px 0px 3px 0px;
+  display: list-item !important;
+  transition: all .2s ease-out !important;
+}
+
+.entry-title:hover {
+  background-color: rgba(224, 224, 224, 0.5);
+}
+
+.entry-title a {
+  color: #375646;
+  font-weight: bold;
+}
+
+.entry-selected {
+  background-color: #e0e0e0;
+}
+
+.comment-section-title {
+  font-weight: bold;
+}
+
+.user-name {
+  display: inline-block;
+  font-size: small;
+  font-weight: 300;
+}
+
+.message {
+  display: inline-block;
+}
