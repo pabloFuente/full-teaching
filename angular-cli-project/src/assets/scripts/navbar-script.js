@@ -4,9 +4,14 @@ var lastScrollTop = 0;
 var deltaDown = 1;
 var deltaUp = 1;
 var navbarHeight = $('#navigation-bar').outerHeight();
+var smallDevice = $(window).width() <= 600 || $(window).height() <= 600;
+
+$(window).resize(function(event){
+  smallDevice = $(window).width() <= 600 || $(window).height() <= 600;
+});
 
 $(window).scroll(function(event) {
-  didScroll = true;
+  didScroll = !smallDevice;
 });
 
 setInterval(function() {
