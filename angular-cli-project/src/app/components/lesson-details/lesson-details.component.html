@@ -4,16 +4,16 @@
     <template md-tab-content>
       <div class="tab-template-content row row-no-margin">
         <div *ngIf="this.lessonDetails?.forum.activated">
-          <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.sideNavHidden">
+          <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsShown'">
             <div *ngFor="let entry of this.lessonDetails?.forum.entries; let l = last">
-              <li (click)="this.selectedEntry = entry; this.sideNavHidden = true" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
+              <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
               <li *ngIf="!l"><div class="divider"></div></li>
             </div>
           </ul>
-          <div class="row row-no-margin">
-            <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.sideNavHidden = false" [class.hide]="!this.sideNavHidden">menu</i></a>
-            <div class="comment-section-title" [class.hide-on-small-only]="!this.sideNavHidden">{{selectedEntry.title}} - {{selectedEntry.user.name}}</div>
-            <div class="col l8 m8 s12" [class.hide-on-small-only]="!this.sideNavHidden">
+          <div class="row row-no-margin" [@fadeAnim] ="this.fadeAnim">
+            <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
+            <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}} - {{selectedEntry.user.name}}</div>
+            <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
               <div *ngFor="let comment of this.selectedEntry?.comments">{{comment.message}}<div class="user-name right-align">{{comment.user.name}}</div></div>
             </div>
           </div>

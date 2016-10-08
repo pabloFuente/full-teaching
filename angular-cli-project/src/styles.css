@@ -1,6 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "../node_modules/materialize-css/dist/css/materialize.css";
+
 html, body {
   margin: 0;
   padding: 0;
@@ -45,7 +44,6 @@ a {
 
 
 /*Loader*/
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -68,16 +66,7 @@ a {
   border-top-color: #375646;
   animation: spin 0.4s infinite linear;
 }
-
-
 /*End Loader*/
-
-
-/* Library Overwrite*/
-
-.slider .indicators .indicator-item.active {
-  background-color: #375646 !important;
-}
 
 @media only screen and (min-width: 993px) {
   .container {
@@ -85,8 +74,8 @@ a {
   }
 }
 
-/*Mobile phones */
-@media only screen and (max-width: 600px) {
+/*Mobile phones*/
+@media only screen and (max-width: 600px) and (max-height: 992px), screen and (max-width: 992px) and (max-height: 600px) {
   .indicators {
     display: none !important;
   }
@@ -100,6 +89,12 @@ a {
     width: 100% !important;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
+}
+/*End mobile phones*/
+
+/*Library Overwrite*/
+.slider .indicators .indicator-item.active {
+  background-color: #375646 !important;
 }
 
 .md-tab-label {
