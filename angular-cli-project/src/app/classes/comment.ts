@@ -3,5 +3,6 @@ import { User } from './user';
 export class Comment {
   constructor(
     public user: User,
-    public message: string) { }
+    public message: string,
+    public replies: Comment[]) { }
 }

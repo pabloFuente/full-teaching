@@ -1,0 +1,15 @@
+<div [style.padding-left]="calculatePaddingLeft()">
+  <div class="row">
+    <div class="col l11 m10 s10 no-padding-right">
+      <div class="message-itself">{{comment.message}}</div>
+      <div class="user-name">{{comment.user.name}}</div> |
+      <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
+    </div>
+    <div class="col l1 m2 s2 no-padding-right">
+      <a [title]="'Send replay'"><i class="material-icons replay-icon">feedback</i></a>
+    </div>
+  </div>
+  <div *ngFor="let replay of comment.replies; let i = index">
+    <app-comment [comment]="replay" [depth]="this.depth + 1"></app-comment>
+  </div>
+</div>

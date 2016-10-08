@@ -31,6 +31,6 @@ export class ForumComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { console.log(this.entries); }
+  ngOnInit() { }
 
 }

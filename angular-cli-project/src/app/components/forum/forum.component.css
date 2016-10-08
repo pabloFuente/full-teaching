@@ -18,7 +18,7 @@
 
 .entry-title {
   cursor: pointer;
-  padding: 3px 0px 3px 0px;
+  padding: 5px 0px 5px 0px;
   display: list-item !important;
   transition: all .2s ease-out !important;
 }
@@ -40,12 +40,10 @@
   font-weight: bold;
 }
 
-.user-name {
-  display: inline-block;
-  font-size: small;
-  font-weight: 300;
+.comment-block {
+  padding: 8px 0px 4px 0px;
 }
 
-.message {
-  display: inline-block;
+.comment-divider {
+  border-bottom: 1px solid #e0e0e0;
 }

@@ -1,0 +1,26 @@
+.user-name {
+  display: inline-block;
+  font-size: small;
+  font-weight: 300;
+}
+
+.message {
+  display: inline-block;
+}
+
+.no-padding-right {
+  padding-right: 0;
+}
+
+.replay-icon {
+  font-size: 20px;
+  color: #5e615f;
+  cursor: pointer;
+}
+.replay-icon:hover {
+  color: #91a59b;
+}
+
+.message-itself {
+   word-wrap: break-word;
+}
