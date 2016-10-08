@@ -42,6 +42,17 @@ a {
   margin-bottom: 50px;
 }
 
+.no-padding-right {
+  padding-right: 0 !important;
+}
+
+.no-padding-left {
+  padding-left: 0 !important;
+}
+
+.row-no-margin {
+  margin: 0 !important;
+}
 
 /*Loader*/
 @keyframes spin {

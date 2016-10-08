@@ -3,10 +3,20 @@
     <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
     <li *ngIf="!last1"><div class="divider"></div></li>
   </div>
+  <div class="center-align div-entry-icon"><a [title]="'Add a new entry'"><i class="material-icons forum-icon">chat</i></a></div>
 </ul>
-<div class="row row-no-margin" [@fadeAnim]="this.fadeAnim">
+<div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
   <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
-  <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}} - {{selectedEntry.user.name}}</div>
+  <div class="col l8 m8 s11">
+    <div class="col l11 m10 s10 no-padding-right no-padding-left">
+      <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}}:
+        <div class="entry-user">{{selectedEntry.user.name}}</div>
+      </div>
+    </div>
+    <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
+      <a [title]="'Add new comment'"><i class="material-icons forum-icon">chat</i></a>
+    </div>
+  </div>
   <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
     <div *ngFor="let comment of this.selectedEntry?.comments;  let last2 = last" class="comment-block" [class.comment-divider]="!last2">
       <app-comment [comment]="comment" [depth]="0"></app-comment>

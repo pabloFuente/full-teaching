@@ -1,7 +1,3 @@
-.row-no-margin {
-  margin: 0px;
-}
-
 .entries-side-view {
   height: 100%;
 }
@@ -32,6 +28,12 @@
   font-weight: bold;
 }
 
+.entry-user {
+  display: inline-block;
+  font-size: small;
+  font-weight: 500;
+}
+
 .entry-selected {
   background-color: #e0e0e0;
 }
@@ -46,4 +48,18 @@
 
 .comment-divider {
   border-bottom: 1px solid #e0e0e0;
+}
+
+.forum-icon {
+  font-size: 20px;
+  color: #5e615f;
+  cursor: pointer;
+}
+
+.forum-icon:hover {
+  color: #91a59b;
+}
+
+.div-entry-icon {
+  padding-top: 10px;
 }
