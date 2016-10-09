@@ -3,7 +3,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -100,6 +100,14 @@ a {
     width: 100% !important;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
+
+  .modal.forum-modal {
+    position: absolute !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-height: none !important;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
 }
 /*End mobile phones*/
 
@@ -139,6 +147,10 @@ md-ink-bar {
 
 .backdrop {
   background-color: #5e615f;
+}
+
+div.drag-target {
+  max-width: 30% !important;
 }
 
 /*End Library Overwrite*/

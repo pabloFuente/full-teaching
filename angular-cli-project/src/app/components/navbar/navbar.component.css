@@ -20,6 +20,10 @@ a {
   color: #333;
 }
 
+a.button-collapse {
+  color: #FFFFFF;
+}
+
 ul li {
   text-transform: uppercase;
 }

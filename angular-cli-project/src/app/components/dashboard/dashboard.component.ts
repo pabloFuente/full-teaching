@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
 import { LessonDetailsComponent } from '../lesson-details/lesson-details.component';
 
@@ -26,6 +26,8 @@ export class DashboardComponent implements OnInit {
   collapsibleTrigger: string = 'collapsibleTrigger_';
   collapsibleElement: string = 'collapsibleElement_';
   iconTrigger: string = 'iconTrigger_';
+
+  actions = new EventEmitter<string>();
 
   constructor(
     private lessonService: LessonService,

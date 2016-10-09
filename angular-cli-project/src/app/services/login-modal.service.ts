@@ -4,10 +4,10 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class LoginModalService {
 
-  wat$: Subject<any>;
+  wat$: Subject<boolean>;
 
   constructor() {
-    this.wat$ = new Subject();
+    this.wat$ = new Subject<boolean>();
   }
 
   activateLoginView(b: boolean) {

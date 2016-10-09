@@ -16,6 +16,10 @@ span.title {
   color: #000000;
 }
 
+li.collection-item{
+  position: relative;
+}
+
 i.material-icons {
   color: #375646;
   cursor: pointer;
@@ -66,9 +70,28 @@ li.active i.material-icons {
   }
 }
 
+/*Mobile phones*/
+@media only screen and (max-width: 600px) and (max-height: 992px), screen and (max-width: 992px) and (max-height: 600px) {
+  .container-ul {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .accordion-container.collection {
+    margin-top: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+  }
+
+  .accordion-container article {
+    margin-left: -7px;
+    margin-right: -7px;
+  }
+}
 
 .accordion-container {
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .accordion-container input {
@@ -81,7 +104,7 @@ li.active i.material-icons {
   position: relative;
 }
 
-.accordion-container input:checked ~ article {
+.accordion-container input:checked~article {
   max-height: 1000px;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 1, 1);
 }

@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Comment } from '../../classes/comment';
 
+import { ForumModalService } from '../../services/forum-modal.service';
+
+import { Subscription }   from 'rxjs/Subscription';
+
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -15,7 +19,16 @@ export class CommentComponent implements OnInit {
   @Input()
   public depth: number;
 
-  constructor() { }
+  public lessonIndex: number;
+
+  subscription: Subscription;
+
+  constructor(private forumModalService: ForumModalService) {
+    this.subscription = forumModalService.indexAnnounced$.subscribe(
+      i => {
+        this.lessonIndex = i;
+      });
+  }
 
   ngOnInit() {
   }

@@ -17,7 +17,6 @@ import { DashboardComponent }     from './components/dashboard/dashboard.compone
 import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component'
 import { SettingsComponent }      from './components/settings/settings.component';
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
-import { ForumComponent }         from './components/forum/forum.component';
 import { CommentComponent }       from './components/comment/comment.component';
 
 import { AuthenticationService } from './services/authentication.service';
@@ -49,7 +48,6 @@ import { BaseRequestOptions }          from '@angular/http';
     LoginModalComponent,
     SettingsComponent,
     ErrorMessageComponent,
-    ForumComponent,
     CommentComponent,
   ],
   providers: [

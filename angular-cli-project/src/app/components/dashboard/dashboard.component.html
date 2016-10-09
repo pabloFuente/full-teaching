@@ -1,9 +1,35 @@
 <div *ngIf="!this.lessons" class="loading"></div>
 
-<div class="container margins-top-bottom">
+<div class="container container-ul margins-top-bottom">
 
   <ul *ngIf="this.lessons" class="accordion-container collection">
     <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
+
+      <!--Forum modal-->
+      <div *ngIf="this.lessonDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions">
+        <div class="modal-content">
+          <div class="row">
+            <form class="col s12" (ngSubmit)="onSubmit()">
+              <div class="row row-no-margin">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <textarea id="textarea1" class="materialize-textarea"></textarea>
+                      <label for="textarea1">Write your comment here</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="right-align"><a class="waves-effect btn-flat modal-footer-button">Send</a></div>
+          <div class="right-align"><a class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a></div>
+        </div>
+      </div>
+      <!--Forum modal-->
+
       <input [attr.id]="[collapsibleTrigger] + i" name="accordion-1" type="radio" />
 
       <div class="row lesson-list-item valign-wrapper">
@@ -24,7 +50,7 @@
       </div>
 
       <article class="collapsible-container">
-          <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails"></app-lesson-details>
+          <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails" [lessonIndex]="i"></app-lesson-details>
       </article>
 
     </li>
