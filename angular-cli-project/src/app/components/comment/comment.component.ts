@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Comment } from '../../classes/comment';
 
-import { ForumModalService } from '../../services/forum-modal.service';
+import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
+import { ForumModalDataService } from '../../services/forum-modal-data.service';
 
 @Component({
   selector: 'app-comment',
@@ -19,7 +20,7 @@ export class CommentComponent implements OnInit {
 
   public lessonIndex: number;
 
-  constructor(private forumModalService: ForumModalService) {
+  constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) {
 
   }
 
@@ -29,6 +30,11 @@ export class CommentComponent implements OnInit {
 
   calculatePaddingLeft(){
     return ((this.depth * 20) + "px");
+  }
+
+  updateForumModalMode(mode: number, header: string, commentReplay: string){
+    let objs = [mode, header, commentReplay];
+    this.forumModalDataService.announceMode(objs);
   }
 
 }

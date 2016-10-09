@@ -2,14 +2,15 @@ import { Component, OnInit, OnChanges, Input, trigger, state, animate, transitio
 
 import { CommentComponent } from '../comment/comment.component';
 
-import { ForumModalService } from '../../services/forum-modal.service';
+import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
+import { ForumModalDataService } from '../../services/forum-modal-data.service';
 
 import { LessonDetails } from '../../classes/lesson-details';
 import { Entry } from '../../classes/entry';
 
 @Component({
   selector: 'app-lesson-details',
-  providers: [ForumModalService],
+  providers: [ForumModalTriggerService],
   templateUrl: './lesson-details.component.html',
   styleUrls: ['./lesson-details.component.css'],
   animations: [
@@ -37,11 +38,16 @@ export class LessonDetailsComponent implements OnInit {
 
   fadeAnim = 'commentsShown';
 
-  constructor(private forumModalService: ForumModalService) { }
+  constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) { }
 
   ngOnInit() {
     this.selectedEntry = this.lessonDetails.forum.entries[0];
     this.forumModalService.setCurrentIndex(this.lessonIndex);
+  }
+
+  updateForumModalMode(mode: number, header: string, commentReplay: string){
+    let objs = [mode, header, commentReplay];
+    this.forumModalDataService.announceMode(objs);
   }
 
 }

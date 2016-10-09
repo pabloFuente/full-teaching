@@ -8,24 +8,30 @@
       <!--Forum modal-->
       <div *ngIf="this.lessonDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions">
         <div class="modal-content">
+          <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalHeader}}</h5>
+          <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay}}</p>
           <div class="row">
-            <form class="col s12" (ngSubmit)="onSubmit()">
+            <form #forumForm class="col s12" (ngSubmit)="onSubmitForum(entryTitle?.value, inputComment.value)">
               <div class="row row-no-margin">
-                <form class="col s12">
-                  <div class="row">
-                    <div class="input-field col s12">
-                      <textarea id="textarea1" class="materialize-textarea"></textarea>
-                      <label for="textarea1">Write your comment here</label>
-                    </div>
+                <div *ngIf="this.forumModalMode === 0" class="row">
+                  <div class="input-field col s12">
+                    <input #entryTitle id="entry-title" type="text">
+                    <label for="entry-title">Entry title</label>
                   </div>
-                </form>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea #inputComment id="input-comment" class="materialize-textarea"></textarea>
+                    <label for="input-comment">Write your comment here</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row right-align">
+                <button (click)="forumForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</button>
+                <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
               </div>
             </form>
           </div>
-        </div>
-        <div class="modal-footer">
-          <div class="right-align"><a class="waves-effect btn-flat modal-footer-button">Send</a></div>
-          <div class="right-align"><a class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a></div>
         </div>
       </div>
       <!--Forum modal-->
@@ -50,7 +56,7 @@
       </div>
 
       <article class="collapsible-container">
-          <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails" [lessonIndex]="i"></app-lesson-details>
+        <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails" [lessonIndex]="i"></app-lesson-details>
       </article>
 
     </li>

@@ -19,11 +19,12 @@ import { SettingsComponent }      from './components/settings/settings.component
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 import { CommentComponent }       from './components/comment/comment.component';
 
-import { AuthenticationService } from './services/authentication.service';
-import { LessonService }         from './services/lesson.service';
-import { LoginModalService }     from './services/login-modal.service';
-import { AuthGuard }             from './auth.guard';
-import { Constants }             from './constants';
+import { AuthenticationService }  from './services/authentication.service';
+import { LessonService }          from './services/lesson.service';
+import { ForumService }           from './services/forum.service';
+import { LoginModalService }      from './services/login-modal.service';
+import { AuthGuard }              from './auth.guard';
+import { Constants }              from './constants';
 
 // used to create fake backend
 import { fakeBackendProvider }         from './fake-backend';
@@ -53,6 +54,7 @@ import { BaseRequestOptions }          from '@angular/http';
   providers: [
     AuthenticationService,
     LessonService,
+    ForumService,
     LoginModalService,
     AuthGuard,
     Constants,

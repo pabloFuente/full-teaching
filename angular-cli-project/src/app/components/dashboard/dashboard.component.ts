@@ -1,17 +1,20 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter }  from '@angular/core';
+import { Subscription }                     from 'rxjs/Subscription';
 
 import { LessonDetailsComponent } from '../lesson-details/lesson-details.component';
 
-import { Lesson } from '../../classes/lesson';
-import { LessonDetails } from '../../classes/lesson-details';
+import { Lesson }         from '../../classes/lesson';
+import { LessonDetails }  from '../../classes/lesson-details';
 
-import { LessonService } from '../../services/lesson.service';
-import { AuthenticationService } from '../../services/authentication.service';
+import { LessonService }            from '../../services/lesson.service';
+import { AuthenticationService }    from '../../services/authentication.service';
+import { ForumModalDataService }  from '../../services/forum-modal-data.service';
 
 declare var $: any;
 
 @Component({
   selector: 'app-dashboard',
+  providers: [ForumModalDataService],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -22,6 +25,11 @@ export class DashboardComponent implements OnInit {
 
   lessonDetailsActive: number = -1;
 
+  //Forum modal data
+  forumModalMode: number; // 0: New entry | 1: New comment on an entry | 2: New replay to existing comment
+  forumModalHeader: string;
+  forumModalCommentReplay: string;
+
   //Collapsible components HTML info
   collapsibleTrigger: string = 'collapsibleTrigger_';
   collapsibleElement: string = 'collapsibleElement_';
@@ -29,10 +37,21 @@ export class DashboardComponent implements OnInit {
 
   actions = new EventEmitter<string>();
 
+  subscription: Subscription;
+
   constructor(
     private lessonService: LessonService,
     private authenticationService: AuthenticationService,
-  ) { }
+    private forumModalHeaderService: ForumModalDataService,
+  ) {
+    this.subscription = forumModalHeaderService.modeAnnounced$.subscribe(
+      objs => {
+        //Objs is an array containing forumModalMode, forumModalHeader and forumModalCommentReplay, in that order
+        this.forumModalMode = objs[0];
+        if (objs[1]) this.forumModalHeader = objs[1]; //Only if the string is not empty
+        if (objs[2]) this.forumModalCommentReplay = objs[2]; //Only if the string is not empty
+      });
+  }
 
   ngOnInit(): void {
     this.authenticationService.checkCredentials();
@@ -95,6 +114,10 @@ export class DashboardComponent implements OnInit {
     $('#' + this.collapsibleElement + id).addClass('active'); // Its container is activated
     $('#' + this.collapsibleElement + this.lessonDetailsActive).removeClass('active'); //Previous collapsible is not activated
     this.lessonDetailsActive = +id; //New lesson-details view active
+  }
+
+  onSubmitForum(entryTitle: string, comment: string){
+    //Send new entry/comment
   }
 
 }

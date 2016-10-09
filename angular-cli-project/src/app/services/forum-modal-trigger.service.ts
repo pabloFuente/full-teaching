@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class ForumModalService {
+export class ForumModalTriggerService {
 
   public currentIndex: number;
 
