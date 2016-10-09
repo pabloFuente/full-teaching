@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class ForumModalService {
 
-  indexAnnounced$: Subject<number>;
+  public currentIndex: number;
 
-  constructor(){
-    this.indexAnnounced$ = new Subject<number>();
+  constructor(){ }
+
+  setCurrentIndex(i: number){
+    this.currentIndex = i;
   }
 
-  announceIndex(i: number){
-    this.indexAnnounced$.next(i);
+  getCurrentIndex(){
+    return this.currentIndex;
   }
 
 }

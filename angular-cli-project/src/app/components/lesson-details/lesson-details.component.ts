@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked, Input, trigger, state, animate, transition, style } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, trigger, state, animate, transition, style } from '@angular/core';
 
 import { CommentComponent } from '../comment/comment.component';
 
@@ -25,7 +25,7 @@ import { Entry } from '../../classes/entry';
     ]),
   ]
 })
-export class LessonDetailsComponent implements OnInit, AfterContentChecked {
+export class LessonDetailsComponent implements OnInit {
 
   @Input()
   lessonDetails: LessonDetails;
@@ -41,10 +41,7 @@ export class LessonDetailsComponent implements OnInit, AfterContentChecked {
 
   ngOnInit() {
     this.selectedEntry = this.lessonDetails.forum.entries[0];
-  }
-
-  ngAfterContentChecked() {
-    this.forumModalService.announceIndex(this.lessonIndex);
+    this.forumModalService.setCurrentIndex(this.lessonIndex);
   }
 
 }
