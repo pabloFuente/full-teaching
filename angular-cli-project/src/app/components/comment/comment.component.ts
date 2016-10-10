@@ -15,9 +15,6 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  @Input()
-  public depth: number;
-
   public lessonIndex: number;
 
   constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) {
@@ -26,10 +23,6 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     this.lessonIndex = this.forumModalService.getCurrentIndex();
-  }
-
-  calculatePaddingLeft(){
-    return ((this.depth * 20) + "px");
   }
 
   updateForumModalMode(mode: number, header: string, commentReplay: string){

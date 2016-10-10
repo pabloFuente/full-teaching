@@ -1,4 +1,4 @@
-<div [style.padding-left]="calculatePaddingLeft()">
+<div class="comment-div">
   <div class="row row-margin-bottom">
     <div class="col l11 m10 s10">
       <div class="message-itself">{{comment.message}}</div>
@@ -10,6 +10,6 @@
     </div>
   </div>
   <div *ngFor="let replay of comment.replies; let i = index">
-    <app-comment [comment]="replay" [depth]="this.depth + 1"></app-comment>
+    <app-comment [comment]="replay"></app-comment>
   </div>
 </div>
