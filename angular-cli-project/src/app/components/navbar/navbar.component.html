@@ -2,7 +2,7 @@
   <nav id="navigation-bar" class="secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="/" class="brand-logo app-title-header white-text">FullTeaching</a>
-      <i *ngIf="this.authenticationService.isLoggedIn() && addLessonHidden()" class="add-lesson-small material-icons">add_circle_outline</i>
+      <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher() && addLessonHidden()" class="add-lesson-small material-icons">add_circle_outline</i>
 
       <!--Logout view-->
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
@@ -12,7 +12,7 @@
 
       <!--Login view-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li [hidden]="!addLessonHidden()"><a id="addLessonButton" class="navbar-button white-text"><i materialize="tooltip" class="material-icons tooltipped" data-position="bottom" data-tooltip="New lesson">add_circle_outline</i></a></li>
+        <li *ngIf="this.authenticationService.isTeacher() && addLessonHidden()"><a id="addLessonButton" class="navbar-button white-text"><i materialize="tooltip" class="material-icons tooltipped" data-position="bottom" data-tooltip="New lesson">add_circle_outline</i></a></li>
         <li><a routerLink="/dashboard" class="navbar-button waves-effect white-text">My classes</a></li>
         <li><a routerLink="/settings" class="navbar-button waves-effect white-text">My settings</a></li>
         <!-- Dropdown Content -->

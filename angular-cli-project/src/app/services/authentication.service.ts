@@ -29,7 +29,7 @@ export class AuthenticationService {
 
           // store email and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('auth_token', JSON.stringify({ email: email, token: token }));
-          localStorage.setItem('currentUser', JSON.stringify( response.json().user ));
+          localStorage.setItem('current_user', JSON.stringify( response.json().user ));
           // stores the user information in this.user attribute
 
           // return true to indicate successful login
@@ -61,14 +61,14 @@ export class AuthenticationService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('currentUser')) as User;
+    return JSON.parse(localStorage.getItem('current_user')) as User;
   }
 
   isTeacher() {
-    return +this.user.rol === 1;
+    return (JSON.parse(localStorage.getItem('current_user')).role) === 1;
   }
 
   isStudent() {
-    return +this.user.rol === 0;
+    return (JSON.parse(localStorage.getItem('current_user')).role) === 0;
   }
 }
