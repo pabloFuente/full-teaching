@@ -6,24 +6,24 @@
     <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
     <div class="row">
 
-      <form #myForm class="col s12" (ngSubmit)="onSubmit(email.value, password.value, confirmPassword?.value)">
+      <form materialize #myForm class="col s12" (ngSubmit)="onSubmit()">
         <div class="row">
           <div class="input-field col s12">
-            <input #email id="email" type="email" class="validate" required>
+            <input [(ngModel)]="email" name="email" id="email" type="email" class="validate" required>
             <label for="email" data-error="Not an e-mail format!">Email</label>
           </div>
         </div>
 
         <div class="row">
           <div class="input-field col s12">
-            <input #password id="password" type="password" class="validate" required>
+            <input [(ngModel)]="password" name="password" id="password" type="password" class="validate" required>
             <label for="password">Password</label>
           </div>
         </div>
 
         <div *ngIf="!loginView" class="row">
           <div class="input-field col s12">
-            <input id="confirmPassword" type="password" class="validate">
+            <input [(ngModel)]="confirmPassword" name="confirmPassword" id="confirmPassword" type="password" class="validate">
             <label for="confirmPassword">Confirm password</label>
           </div>
         </div>

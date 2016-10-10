@@ -55,7 +55,7 @@ a {
 }
 
 /*Loader*/
-@keyframes spin {
+@keyframes spinLoader {
   0% {
     transform: rotate(0deg);
   }
@@ -75,7 +75,7 @@ a {
   height: 50px;
   border: .25rem solid rgba(55, 86, 70, 0.2);
   border-top-color: #375646;
-  animation: spin 0.4s infinite linear;
+  animation: spinLoader 0.4s infinite linear;
 }
 /*End Loader*/
 

@@ -4,10 +4,13 @@ import { Router }                   from '@angular/router';
 import { Observable }               from 'rxjs';
 import 'rxjs/add/operator/map';
 
+import { User } from '../classes/user';
+
 @Injectable()
 export class AuthenticationService {
 
   public token: string;
+  private user: User;
 
   constructor(private http: Http, private router: Router) {
     // set token if saved in local storage
@@ -26,11 +29,14 @@ export class AuthenticationService {
 
           // store email and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('auth_token', JSON.stringify({ email: email, token: token }));
+          localStorage.setItem('currentUser', JSON.stringify( response.json().user ));
+          // stores the user information in this.user attribute
 
           // return true to indicate successful login
           return true;
         } else {
           // return false to indicate failed login
+          this.user = null;
           return false;
         }
       });
@@ -39,6 +45,7 @@ export class AuthenticationService {
   logout(): void {
     // clear token remove user from local storage to log user out and navigates to welcome page
     this.token = null;
+    localStorage.removeItem('current_user');
     localStorage.removeItem('auth_token');
     this.router.navigate(['']);
   }
@@ -51,5 +58,17 @@ export class AuthenticationService {
 
   isLoggedIn() {
     return !!localStorage.getItem('auth_token');
+  }
+
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem('currentUser')) as User;
+  }
+
+  isTeacher() {
+    return +this.user.rol === 1;
+  }
+
+  isStudent() {
+    return +this.user.rol === 0;
   }
 }

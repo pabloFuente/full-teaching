@@ -11,23 +11,23 @@ import 'rxjs/Rx';
 @Injectable()
 export class LessonService {
 
-  private url1 = '/api/lessons';
-  private url2 = '/api/lesson-details';
+  private urlLessons = '/api/lessons';
+  private urlLessonDetails = '/api/lesson-details';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  getLessons() {
-    let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+  getLessons(userId) {
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.get(this.url1, options)
+    return this.http.get(this.urlLessons, options) //Must send userId
       .map((response: Response) => response.json() as Lesson[])
       .catch(error => this.handleError(error));
   }
 
-  getLessonDetails(id) {
-    let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+  getLessonDetails(lessonId) {
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    let urlId = this.url2 + '/' + id;
+    let urlId = this.urlLessonDetails + '/' + lessonId;
     return this.http.get(urlId, options)
       .map((response: Response) => response.json() as LessonDetails)
       .catch(error => this.handleError(error));

@@ -11,7 +11,7 @@
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
               <li *ngIf="!last1"><div class="divider"></div></li>
             </div>
-            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, '', '');" [title]="'Add a new entry'" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
+            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null);" [title]="'Add a new entry'" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
@@ -22,7 +22,7 @@
                 </div>
               </div>
               <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry.title, '');" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
+                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null);" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
               </div>
             </div>
             <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">

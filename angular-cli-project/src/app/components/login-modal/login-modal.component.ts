@@ -15,6 +15,10 @@ declare var Materialize : any;
 
 export class LoginModalComponent {
 
+  private email: string;
+  private password: string;
+  private confirmPassword: string;
+
   private loginView: boolean;
   private fieldsIncorrect: boolean;
   private submitProcessing: boolean;
@@ -64,13 +68,13 @@ export class LoginModalComponent {
     this.loginView = option;
   }
 
-  onSubmit(email: string, password: string, confirmPassword: string) {
-    console.log("Submit!: email = " + email + " , password = " + password + " , confirmPassword = " + confirmPassword);
+  onSubmit() {
+    console.log("Submit!: email = " + this.email + " , password = " + this.password + " , confirmPassword = " + this.confirmPassword);
     this.submitProcessing = true;
 
     // If login view is activated
     if (this.loginView) {
-      this.authenticationService.login(email, password).subscribe(
+      this.authenticationService.login(this.email, this.password).subscribe(
         result => {
           this.submitProcessing = false;
           if (result) {

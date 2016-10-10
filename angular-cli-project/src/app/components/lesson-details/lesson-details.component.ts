@@ -49,5 +49,4 @@ export class LessonDetailsComponent implements OnInit {
     let objs = [mode, header, commentReplay];
     this.forumModalDataService.announceMode(objs);
   }
-
 }

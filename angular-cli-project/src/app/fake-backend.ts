@@ -168,12 +168,12 @@ export let fakeBackendProvider = {
           // check user credentials and return fake jwt token if valid
           if (params.email === teacherUser.email && params.pass === teacherUser.pass) {
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token-teacher' } })
+              new ResponseOptions({ status: 200, body: { user: teacherUser, token: 'fake-jwt-token-teacher' } })
             ));
           }
           else if (params.email === studentUser.email && params.pass === studentUser.pass){
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token-student' } })
+              new ResponseOptions({ status: 200, body: { user: studentUser, token: 'fake-jwt-token-student' } })
             ));
           }
           else {

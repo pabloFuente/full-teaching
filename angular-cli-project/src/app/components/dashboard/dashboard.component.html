@@ -6,31 +6,36 @@
     <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
 
       <!--Forum modal-->
-      <div *ngIf="this.lessonDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions">
+      <div *ngIf="this.lessonDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions2">
         <div class="modal-content">
-          <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalHeader}}</h5>
-          <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay}}</p>
+          <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalEntry?.title}}</h5>
+          <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
           <div class="row">
-            <form #forumForm class="col s12" (ngSubmit)="onSubmitForum(entryTitle?.value, inputComment.value)">
+
+            <form materialize #forumForm class="col s12" (ngSubmit)="onSubmit(forumForm); forumForm.reset();">
               <div class="row row-no-margin">
+
                 <div *ngIf="this.forumModalMode === 0" class="row">
                   <div class="input-field col s12">
-                    <input #entryTitle id="entry-title" type="text">
-                    <label for="entry-title">Entry title</label>
+                    <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
+                    <label for="inputTitle">Entry title</label>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="input-field col s12">
-                    <textarea #inputComment id="input-comment" class="materialize-textarea"></textarea>
-                    <label for="input-comment">Write your comment here</label>
+                    <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
+                    <label for="inputComment">Write your comment here</label>
                   </div>
                 </div>
+
               </div>
               <div class="row right-align">
-                <button (click)="forumForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</button>
+                <a (click)="forumForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
                 <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
               </div>
             </form>
+
           </div>
         </div>
       </div>

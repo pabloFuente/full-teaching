@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Location }                        from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { LoginModalService }     from '../../services/login-modal.service';
@@ -10,10 +11,17 @@ import { LoginModalService }     from '../../services/login-modal.service';
 })
 export class NavbarComponent {
 
-  constructor(private authenticationService: AuthenticationService, private loginModalService: LoginModalService) { }
+  constructor(private authenticationService: AuthenticationService, private loginModalService: LoginModalService, private location: Location) { }
 
   updateLoginModalView(b: boolean){
     this.loginModalService.activateLoginView(b);
+  }
+
+  //Checks if the route is "/dashboard".
+  public addLessonHidden() {
+    let list = ["/dashboard"],
+        route = this.location.path();
+    return (list.indexOf(route) > -1);
   }
 
 }

@@ -6,6 +6,22 @@
 }
 /*End mobile phones*/
 
+/*Till tablets*/
+@media only screen and (max-width: 992px) {
+  .add-lesson-small {
+    display: block !important;
+    float: right !important;
+  }
+}
+
+
+.add-lesson-small {
+  display: none;
+}
+
+#addLessonButton {
+  padding-right: 5px !important;
+}
 
 #navigation-bar {
   top: 0;
@@ -29,8 +45,8 @@ ul li {
 }
 
 .navbar-button {
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 20px;
+  padding-right: 20px;
   vertical-align: inherit;
 }
 
@@ -55,4 +71,8 @@ ul li {
 
 #arrow-drop-down:hover {
   color: #61ffae !important;
+}
+
+i.material-icons {
+    transition: all .2s ease-out;
 }

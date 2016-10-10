@@ -39,17 +39,19 @@ li.active i.material-icons {
   -webkit-transform: rotate(-45deg);
 }
 
-@keyframes spin {
+@keyframes spinIcon {
   0% {
+    color: #91a59b;
     transform: rotate(0deg);
   }
   100% {
+    color: #91a59b;
     transform: rotate(360deg);
   }
 }
 
 .loading-details {
-  animation: spin 0.7s infinite linear;
+  animation: spinIcon 0.7s infinite linear;
 }
 
 .lessonImage {
@@ -109,6 +111,6 @@ li.active i.material-icons {
   transition: max-height 0.4s cubic-bezier(0.4, 0, 1, 1);
 }
 
-input#entry-title {
-  display: inline-block;
+form input#inputTitle {
+  display: inline-block !important;
 }
