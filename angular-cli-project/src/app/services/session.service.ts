@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable }                              from 'rxjs/Observable';
 
 import { Session }                from '../classes/session';
-import { SessionDetails } from '../classes/session-details';
+import { CourseDetails } from '../classes/course-details';
 import { AuthenticationService } from './authentication.service';
 
 import 'rxjs/Rx';
@@ -12,7 +12,7 @@ import 'rxjs/Rx';
 export class SessionService {
 
   private urlSessions = '/api/sessions';
-  private urlSessionDetails = '/api/session-details';
+  private urlCourseDetails = '/api/course-details';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
@@ -24,12 +24,12 @@ export class SessionService {
       .catch(error => this.handleError(error));
   }
 
-  getSessionDetails(sessionId) {
+  getCourseDetails(sessionId) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    let urlId = this.urlSessionDetails + '/' + sessionId;
+    let urlId = this.urlCourseDetails + '/' + sessionId;
     return this.http.get(urlId, options)
-      .map((response: Response) => response.json() as SessionDetails)
+      .map((response: Response) => response.json() as CourseDetails)
       .catch(error => this.handleError(error));
   }
 

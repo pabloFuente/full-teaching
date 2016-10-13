@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter }  from '@angular/core';
 import { Subscription }                     from 'rxjs/Subscription';
 
-import { SessionDetailsComponent } from '../session-details/session-details.component';
+import { CourseDetailsComponent } from '../course-details/course-details.component';
 
 import { Session }         from '../../classes/session';
-import { SessionDetails }  from '../../classes/session-details';
+import { CourseDetails }  from '../../classes/course-details';
 import { Entry }          from '../../classes/entry';
 import { Comment }          from '../../classes/comment';
 
@@ -24,7 +24,7 @@ declare var $: any;
 export class DashboardComponent implements OnInit {
 
   sessions: Session[];
-  sessionDetails: SessionDetails;
+  sessionDetails: CourseDetails;
 
   sessionDetailsActive: number = -1;
 
@@ -87,9 +87,9 @@ export class DashboardComponent implements OnInit {
       error => console.log(error));
   }
 
-  getSessionDetails(id: string): void {;
+  getCourseDetails(id: string): void {;
     console.log("Getting details");
-    this.sessionService.getSessionDetails(id).subscribe(
+    this.sessionService.getCourseDetails(id).subscribe(
       sessionDetails => {
         console.log(sessionDetails);
         this.sessionDetails = sessionDetails;
@@ -101,19 +101,19 @@ export class DashboardComponent implements OnInit {
 
 
 
-  triggerSessionDetails(id: string) {
+  triggerCourseDetails(id: string) {
 
     // If there's no session-detail active or if a different one is going to be activated
     if (this.sessionDetailsActive == -1 || this.sessionDetailsActive != +id) {
       $('#' + this.iconTrigger + id).addClass('loading-details'); //Petition animation activated
-      this.getSessionDetails(id);      //Petition for specific session-details
+      this.getCourseDetails(id);      //Petition for specific course-details
     }
 
     // If an active session-detail is going to be closed
     else {
       $('#' + this.collapsibleElement + this.sessionDetailsActive).removeClass('active'); //Removed active class from the collapsible
       $('#' + this.collapsibleTrigger + id).prop("checked", false); //The input is unchecked
-      this.sessionDetailsActive = -1;   //No session-details view active
+      this.sessionDetailsActive = -1;   //No course-details view active
     }
   }
 
@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
     $('#' + this.collapsibleTrigger + id).prop("checked", true); //The input is checked
     $('#' + this.collapsibleElement + id).addClass('active'); // Its container is activated
     $('#' + this.collapsibleElement + this.sessionDetailsActive).removeClass('active'); //Previous collapsible is not activated
-    this.sessionDetailsActive = +id; //New session-details view active
+    this.sessionDetailsActive = +id; //New course-details view active
   }
 
   onSubmit(){

@@ -5,14 +5,14 @@ import { CommentComponent } from '../comment/comment.component';
 import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
 import { ForumModalDataService } from '../../services/forum-modal-data.service';
 
-import { SessionDetails } from '../../classes/session-details';
+import { CourseDetails } from '../../classes/course-details';
 import { Entry } from '../../classes/entry';
 
 @Component({
-  selector: 'app-session-details',
+  selector: 'app-course-details',
   providers: [ForumModalTriggerService],
-  templateUrl: './session-details.component.html',
-  styleUrls: ['./session-details.component.css'],
+  templateUrl: './course-details.component.html',
+  styleUrls: ['./course-details.component.css'],
   animations: [
     trigger('fadeAnim', [
       state('commentsShown', style({
@@ -26,10 +26,10 @@ import { Entry } from '../../classes/entry';
     ]),
   ]
 })
-export class SessionDetailsComponent implements OnInit {
+export class CourseDetailsComponent implements OnInit {
 
   @Input()
-  sessionDetails: SessionDetails;
+  sessionDetails: CourseDetails;
 
   @Input()
   sessionIndex: number;

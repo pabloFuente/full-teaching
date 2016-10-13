@@ -55,13 +55,13 @@
         </div>
 
         <div class="col l4 s2 right-align valign">
-          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerSessionDetails(i)">add</i>
+          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerCourseDetails(i)">add</i>
         </div>
 
       </div>
 
       <article class="collapsible-container">
-        <app-session-details *ngIf="this.sessionDetailsActive === i" [sessionDetails]="this.sessionDetails" [sessionIndex]="i"></app-session-details>
+        <app-course-details *ngIf="this.sessionDetailsActive === i" [sessionDetails]="this.sessionDetails" [sessionIndex]="i"></app-course-details>
       </article>
 
     </li>

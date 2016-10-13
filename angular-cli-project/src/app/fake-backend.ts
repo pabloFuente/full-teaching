@@ -200,7 +200,7 @@ export let fakeBackendProvider = {
         }
 
         // FAKE LESSON-DETAILS API ENDPOINT
-        if (connection.request.url.endsWith('session-details/', 21) && connection.request.method === RequestMethod.Get) {
+        if (connection.request.url.endsWith('course-details/', 20) && connection.request.method === RequestMethod.Get) {
           // check for fake auth token in header and return sessions if valid, this security is implemented server side
           // in a real application
           let url = connection.request.url;

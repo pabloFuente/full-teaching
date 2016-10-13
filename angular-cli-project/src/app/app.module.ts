@@ -14,7 +14,7 @@ import { NavbarComponent }        from './components/navbar/navbar.component';
 import { LoginModalComponent }    from './components/login-modal/login-modal.component';
 import { PresentationComponent }  from './components/presentation/presentation.component';
 import { DashboardComponent }     from './components/dashboard/dashboard.component';
-import { SessionDetailsComponent } from './components/session-details/session-details.component'
+import { CourseDetailsComponent } from './components/course-details/course-details.component'
 import { SettingsComponent }      from './components/settings/settings.component';
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 import { CommentComponent }       from './components/comment/comment.component';
@@ -44,7 +44,7 @@ import { BaseRequestOptions }          from '@angular/http';
     AppComponent,
     PresentationComponent,
     DashboardComponent,
-    SessionDetailsComponent,
+    CourseDetailsComponent,
     NavbarComponent,
     LoginModalComponent,
     SettingsComponent,

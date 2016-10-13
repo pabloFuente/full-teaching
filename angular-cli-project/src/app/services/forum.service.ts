@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable }                              from 'rxjs/Observable';
 
 import { Session }                from '../classes/session';
-import { SessionDetails } from '../classes/session-details';
+import { CourseDetails } from '../classes/course-details';
 import { AuthenticationService } from './authentication.service';
 
 import 'rxjs/Rx';

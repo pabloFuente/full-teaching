@@ -1,13 +1,12 @@
-import { Session } from './session';
-import { Forum } from './forum';
-import { User } from './user';
+import { Session }        from './session';
+import { Forum }          from './forum';
+import { User }           from './user';
+import { CourseDetails }  from './course-details';
 
 export class Course {
   constructor(
     public title: string,
     public teacher: User,
-    public sessions: Session[],
-    public fourm: Forum,
-    public files: string[],
-    public attenders: User[]) { }
+    public image: string,
+    public courseDetails: CourseDetails) { }
 }
