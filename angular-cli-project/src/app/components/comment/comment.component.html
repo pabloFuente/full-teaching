@@ -6,9 +6,10 @@
       <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
     </div>
     <div class="col l1 m2 s2 no-padding-left right-align">
-      <a [title]="'Send replay'" (click)="updateForumModalMode(2, null, comment);" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons replay-icon">feedback</i></a>
+      <a [title]="'Send replay'" (click)="updateForumModalMode(2, null, comment);" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons replay-icon">feedback</i></a>
     </div>
   </div>
+
   <div *ngFor="let replay of comment.replies; let i = index">
     <app-comment [comment]="replay"></app-comment>
   </div>

@@ -2,7 +2,6 @@
   <nav id="navigation-bar" class="secondaryColor-back" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="/" class="brand-logo app-title-header white-text">FullTeaching</a>
-      <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher() && addSessionHidden()" class="add-session-small material-icons">add_circle_outline</i>
 
       <!--Logout view-->
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
@@ -12,8 +11,7 @@
 
       <!--Login view-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li *ngIf="this.authenticationService.isTeacher() && addSessionHidden()"><a id="addSessionButton" class="navbar-button white-text"><i materialize="tooltip" class="material-icons tooltipped" data-position="bottom" data-tooltip="New session">add_circle_outline</i></a></li>
-        <li><a routerLink="/dashboard" class="navbar-button waves-effect white-text">My classes</a></li>
+        <li><a routerLink="/courses" class="navbar-button waves-effect white-text">My courses</a></li>
         <li><a routerLink="/settings" class="navbar-button waves-effect white-text">My settings</a></li>
         <!-- Dropdown Content -->
         <ul id="dropdown1" class="dropdown-content">
@@ -28,7 +26,7 @@
 
       <!--Side nav mobile-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" id="nav-mobile" class="side-nav">
-        <li><a routerLink="/dashboard" class="waves-effect">My classes</a></li>
+        <li><a routerLink="/courses" class="waves-effect">My courses</a></li>
         <li><a routerLink="/settings" class="waves-effect">My settings</a></li>
         <li class="divider"></li>
         <li><a class="waves-effect">Contact</a></li>

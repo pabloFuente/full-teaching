@@ -5,6 +5,7 @@ import { CourseDetails }  from './course-details';
 
 export class Course {
   constructor(
+    public id: number,
     public title: string,
     public teacher: User,
     public image: string,

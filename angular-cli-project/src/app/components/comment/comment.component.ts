@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Comment } from '../../classes/comment';
 
-import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
 import { ForumModalDataService } from '../../services/forum-modal-data.service';
 
 @Component({
@@ -15,14 +14,12 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  public sessionIndex: number;
-
-  constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) {
+  constructor(private forumModalDataService: ForumModalDataService) {
 
   }
 
   ngOnInit() {
-    this.sessionIndex = this.forumModalService.getCurrentIndex();
+
   }
 
   updateForumModalMode(mode: number, header: string, commentReplay: string){

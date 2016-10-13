@@ -1,70 +1,28 @@
-<div *ngIf="!this.sessions" class="loading"></div>
+<div *ngIf="!this.courses" class="loading"></div>
 
 <div class="container container-ul margins-top-bottom">
+  <div class="row">
+    <div class="col l7 m6 s12">
+      <ul *ngIf="this.courses" class="collection">
+        <li *ngFor="let course of courses; let i = index" class="collection-item">
+          <div class="row session-list-item valign-wrapper">
 
-  <ul *ngIf="this.sessions" class="accordion-container collection">
-    <li *ngFor="let session of sessions; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
+            <div class="col l4 s3 valign center-align">
+              <img materialize="materialbox" class="circle materialboxed sessionImage" src={{this.getImage(course)}}>
+            </div>
 
-      <!--Forum modal-->
-      <div *ngIf="this.sessionDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions2">
-        <div class="modal-content">
-          <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalEntry?.title}}</h5>
-          <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
-          <div class="row">
-
-            <form materialize #forumForm class="col s12" (ngSubmit)="onSubmit(forumForm); forumForm.reset();">
-              <div class="row row-no-margin">
-
-                <div *ngIf="this.forumModalMode === 0" class="row">
-                  <div class="input-field col s12">
-                    <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
-                    <label for="inputTitle">Entry title</label>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="input-field col s12">
-                    <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
-                    <label for="inputComment">Write your comment here</label>
-                  </div>
-                </div>
-
-              </div>
-              <div class="row right-align">
-                <a (click)="forumForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
-                <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
-              </div>
-            </form>
+            <div (click)="goToCourseDetail(course.id)" class="col l8 s9 valign course-title">
+              <span class="title">{{course?.title}}</span>
+            </div>
 
           </div>
-        </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col l5 m6 s12 valign-wrapper">
+      <div class="valign">
+        <div id="calendar"></div>
       </div>
-      <!--Forum modal-->
-
-      <input [attr.id]="[collapsibleTrigger] + i" name="accordion-1" type="radio" />
-
-      <div class="row session-list-item valign-wrapper">
-
-        <div class="col l2 s2 valign center-align">
-          <img materialize="materialbox" class="circle materialboxed sessionImage" src="../assets/images/default_session_image.png">
-        </div>
-
-        <div class="col l6 s8 valign">
-          <span class="title">{{session?.title}}</span>
-          <p>{{ session?.description }} <br> {{ session?.date | date }} - {{ session?.date | date:'H:mm' }}</p>
-        </div>
-
-        <div class="col l4 s2 right-align valign">
-          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerCourseDetails(i)">add</i>
-        </div>
-
-      </div>
-
-      <article class="collapsible-container">
-        <app-course-details *ngIf="this.sessionDetailsActive === i" [sessionDetails]="this.sessionDetails" [sessionIndex]="i"></app-course-details>
-      </article>
-
-    </li>
-  </ul>
-
+    </div>
+  </div>
 </div>

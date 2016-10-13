@@ -1,16 +1,17 @@
 import { Component, OnInit, OnChanges, Input, trigger, state, animate, transition, style } from '@angular/core';
+import { ActivatedRoute, Params }   from '@angular/router';
 
 import { CommentComponent } from '../comment/comment.component';
 
-import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
 import { ForumModalDataService } from '../../services/forum-modal-data.service';
+import { CourseService }            from '../../services/course.service';
+import { AuthenticationService }    from '../../services/authentication.service';
 
 import { CourseDetails } from '../../classes/course-details';
 import { Entry } from '../../classes/entry';
 
 @Component({
   selector: 'app-course-details',
-  providers: [ForumModalTriggerService],
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.css'],
   animations: [
@@ -28,24 +29,33 @@ import { Entry } from '../../classes/entry';
 })
 export class CourseDetailsComponent implements OnInit {
 
-  @Input()
-  sessionDetails: CourseDetails;
-
-  @Input()
-  sessionIndex: number;
+  courseDetails: CourseDetails;
 
   selectedEntry: Entry;
 
   fadeAnim = 'commentsShown';
 
-  constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) { }
+  constructor(
+    private courseService: CourseService,
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    private forumModalDataService: ForumModalDataService) { }
 
   ngOnInit() {
-    this.selectedEntry = this.sessionDetails.forum.entries[0];
-    this.forumModalService.setCurrentIndex(this.sessionIndex);
+    this.route.params.forEach((params: Params) => {
+      let id = +params['id'];
+      this.courseService.getCourseDetails(id).subscribe(
+        courseDetails => {
+          console.log(courseDetails);
+          this.courseDetails = courseDetails;
+          this.selectedEntry = this.courseDetails.forum.entries[0];
+        },
+        error => console.log(error));
+    });
+
   }
 
-  updateForumModalMode(mode: number, header: string, commentReplay: string){
+  updateForumModalMode(mode: number, header: string, commentReplay: string) {
     let objs = [mode, header, commentReplay];
     this.forumModalDataService.announceMode(objs);
   }

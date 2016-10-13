@@ -17,9 +17,9 @@ export class NavbarComponent {
     this.loginModalService.activateLoginView(b);
   }
 
-  //Checks if the route is "/dashboard".
+  //Checks if the route is "/courses".
   public addSessionHidden() {
-    let list = ["/dashboard"],
+    let list = ["/courses"],
         route = this.location.path();
     return (list.indexOf(route) > -1);
   }

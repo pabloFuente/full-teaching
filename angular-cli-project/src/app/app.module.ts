@@ -20,8 +20,10 @@ import { ErrorMessageComponent }  from './components/error-message/error-message
 import { CommentComponent }       from './components/comment/comment.component';
 
 import { AuthenticationService }  from './services/authentication.service';
-import { SessionService }          from './services/session.service';
+import { CourseService }          from './services/course.service';
+import { SessionService }         from './services/session.service';
 import { ForumService }           from './services/forum.service';
+import { ForumModalDataService }  from './services/forum-modal-data.service';
 import { LoginModalService }      from './services/login-modal.service';
 import { AuthGuard }              from './auth.guard';
 import { Constants }              from './constants';
@@ -53,8 +55,10 @@ import { BaseRequestOptions }          from '@angular/http';
   ],
   providers: [
     AuthenticationService,
+    CourseService,
     SessionService,
     ForumService,
+    ForumModalDataService,
     LoginModalService,
     AuthGuard,
     Constants,

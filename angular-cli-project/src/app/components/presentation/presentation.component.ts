@@ -13,6 +13,6 @@ export class PresentationComponent implements OnInit{
   constructor(private authenticationService: AuthenticationService, private router: Router) {}
 
   ngOnInit() {
-    if (this.authenticationService.isLoggedIn()) this.router.navigateByUrl('/dashboard');
+    if (this.authenticationService.isLoggedIn()) this.router.navigateByUrl('/courses');
   }
 }

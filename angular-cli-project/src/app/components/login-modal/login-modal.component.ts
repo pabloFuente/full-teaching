@@ -81,7 +81,7 @@ export class LoginModalComponent {
             // Login successful
             this.fieldsIncorrect = false;
             this.actions.emit("closeModal");
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/courses']);
           } else {
             // Login failed
             if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
