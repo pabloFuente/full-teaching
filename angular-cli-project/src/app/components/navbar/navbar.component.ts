@@ -18,7 +18,7 @@ export class NavbarComponent {
   }
 
   //Checks if the route is "/dashboard".
-  public addLessonHidden() {
+  public addSessionHidden() {
     let list = ["/dashboard"],
         route = this.location.path();
     return (list.indexOf(route) > -1);

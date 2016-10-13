@@ -5,14 +5,14 @@ import { CommentComponent } from '../comment/comment.component';
 import { ForumModalTriggerService } from '../../services/forum-modal-trigger.service';
 import { ForumModalDataService } from '../../services/forum-modal-data.service';
 
-import { LessonDetails } from '../../classes/lesson-details';
+import { SessionDetails } from '../../classes/session-details';
 import { Entry } from '../../classes/entry';
 
 @Component({
-  selector: 'app-lesson-details',
+  selector: 'app-session-details',
   providers: [ForumModalTriggerService],
-  templateUrl: './lesson-details.component.html',
-  styleUrls: ['./lesson-details.component.css'],
+  templateUrl: './session-details.component.html',
+  styleUrls: ['./session-details.component.css'],
   animations: [
     trigger('fadeAnim', [
       state('commentsShown', style({
@@ -26,13 +26,13 @@ import { Entry } from '../../classes/entry';
     ]),
   ]
 })
-export class LessonDetailsComponent implements OnInit {
+export class SessionDetailsComponent implements OnInit {
 
   @Input()
-  lessonDetails: LessonDetails;
+  sessionDetails: SessionDetails;
 
   @Input()
-  lessonIndex: number;
+  sessionIndex: number;
 
   selectedEntry: Entry;
 
@@ -41,8 +41,8 @@ export class LessonDetailsComponent implements OnInit {
   constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) { }
 
   ngOnInit() {
-    this.selectedEntry = this.lessonDetails.forum.entries[0];
-    this.forumModalService.setCurrentIndex(this.lessonIndex);
+    this.selectedEntry = this.sessionDetails.forum.entries[0];
+    this.forumModalService.setCurrentIndex(this.sessionIndex);
   }
 
   updateForumModalMode(mode: number, header: string, commentReplay: string){

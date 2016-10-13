@@ -1,10 +1,10 @@
-import { Lesson } from './lesson';
+import { Session } from './session';
 import { Forum } from './forum';
 import { User } from './user';
 
-export class LessonDetails {
+export class SessionDetails {
   constructor(
-    public lesson: Lesson,
+    public session: Session,
     public forum: Forum,
     public files: string[],
     public attenders: User[]) { }

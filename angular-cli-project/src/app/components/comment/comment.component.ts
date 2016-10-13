@@ -15,14 +15,14 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  public lessonIndex: number;
+  public sessionIndex: number;
 
   constructor(private forumModalService: ForumModalTriggerService, private forumModalDataService: ForumModalDataService) {
 
   }
 
   ngOnInit() {
-    this.lessonIndex = this.forumModalService.getCurrentIndex();
+    this.sessionIndex = this.forumModalService.getCurrentIndex();
   }
 
   updateForumModalMode(mode: number, header: string, commentReplay: string){

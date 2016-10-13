@@ -1,12 +1,12 @@
-<div *ngIf="!this.lessons" class="loading"></div>
+<div *ngIf="!this.sessions" class="loading"></div>
 
 <div class="container container-ul margins-top-bottom">
 
-  <ul *ngIf="this.lessons" class="accordion-container collection">
-    <li *ngFor="let lesson of lessons; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
+  <ul *ngIf="this.sessions" class="accordion-container collection">
+    <li *ngFor="let session of sessions; let i = index" [attr.id]="[collapsibleElement] + i" class="collection-item">
 
       <!--Forum modal-->
-      <div *ngIf="this.lessonDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions2">
+      <div *ngIf="this.sessionDetailsActive === i" id="forum-modal{{i}}" class="modal forum-modal" materialize [materializeActions]="actions2">
         <div class="modal-content">
           <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalEntry?.title}}</h5>
           <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
@@ -43,25 +43,25 @@
 
       <input [attr.id]="[collapsibleTrigger] + i" name="accordion-1" type="radio" />
 
-      <div class="row lesson-list-item valign-wrapper">
+      <div class="row session-list-item valign-wrapper">
 
         <div class="col l2 s2 valign center-align">
-          <img materialize="materialbox" class="circle materialboxed lessonImage" src="../assets/images/default_lesson_image.png">
+          <img materialize="materialbox" class="circle materialboxed sessionImage" src="../assets/images/default_session_image.png">
         </div>
 
         <div class="col l6 s8 valign">
-          <span class="title">{{lesson?.title}}</span>
-          <p>{{ lesson?.description }} <br> {{ lesson?.date | date }} - {{ lesson?.date | date:'H:mm' }}</p>
+          <span class="title">{{session?.title}}</span>
+          <p>{{ session?.description }} <br> {{ session?.date | date }} - {{ session?.date | date:'H:mm' }}</p>
         </div>
 
         <div class="col l4 s2 right-align valign">
-          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerLessonDetails(i)">add</i>
+          <i [attr.id]="[this.iconTrigger] + i" class="material-icons" (click)="triggerSessionDetails(i)">add</i>
         </div>
 
       </div>
 
       <article class="collapsible-container">
-        <app-lesson-details *ngIf="this.lessonDetailsActive === i" [lessonDetails]="this.lessonDetails" [lessonIndex]="i"></app-lesson-details>
+        <app-session-details *ngIf="this.sessionDetailsActive === i" [sessionDetails]="this.sessionDetails" [sessionIndex]="i"></app-session-details>
       </article>
 
     </li>

@@ -14,13 +14,13 @@ import { NavbarComponent }        from './components/navbar/navbar.component';
 import { LoginModalComponent }    from './components/login-modal/login-modal.component';
 import { PresentationComponent }  from './components/presentation/presentation.component';
 import { DashboardComponent }     from './components/dashboard/dashboard.component';
-import { LessonDetailsComponent } from './components/lesson-details/lesson-details.component'
+import { SessionDetailsComponent } from './components/session-details/session-details.component'
 import { SettingsComponent }      from './components/settings/settings.component';
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 import { CommentComponent }       from './components/comment/comment.component';
 
 import { AuthenticationService }  from './services/authentication.service';
-import { LessonService }          from './services/lesson.service';
+import { SessionService }          from './services/session.service';
 import { ForumService }           from './services/forum.service';
 import { LoginModalService }      from './services/login-modal.service';
 import { AuthGuard }              from './auth.guard';
@@ -44,7 +44,7 @@ import { BaseRequestOptions }          from '@angular/http';
     AppComponent,
     PresentationComponent,
     DashboardComponent,
-    LessonDetailsComponent,
+    SessionDetailsComponent,
     NavbarComponent,
     LoginModalComponent,
     SettingsComponent,
@@ -53,7 +53,7 @@ import { BaseRequestOptions }          from '@angular/http';
   ],
   providers: [
     AuthenticationService,
-    LessonService,
+    SessionService,
     ForumService,
     LoginModalService,
     AuthGuard,

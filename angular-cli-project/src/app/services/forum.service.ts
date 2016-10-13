@@ -2,8 +2,8 @@ import { Injectable }                              from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable }                              from 'rxjs/Observable';
 
-import { Lesson }                from '../classes/lesson';
-import { LessonDetails } from '../classes/lesson-details';
+import { Session }                from '../classes/session';
+import { SessionDetails } from '../classes/session-details';
 import { AuthenticationService } from './authentication.service';
 
 import 'rxjs/Rx';
@@ -16,12 +16,12 @@ export class ForumService {
   private urlNewEntry = "";
   private urlNewComment = "";
 
-  //POST new entry, attached to the given forum ('lesson' parameter)
-  public newEntry(entry, lesson){
+  //POST new entry, attached to the given forum ('session' parameter)
+  public newEntry(entry, session){
     /*let body = JSON.stringify(entry);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    let url = this.urlNewEntry + "/lesson/" + lesson;
+    let url = this.urlNewEntry + "/session/" + session;
     return this.http.post(url, body, options)
       .map(response => response.json())
       .catch(error => this.handleError(error));*/

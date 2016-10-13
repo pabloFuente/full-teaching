@@ -3,15 +3,15 @@
     <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
     <template md-tab-content>
       <div class="tab-template-content row row-no-margin">
-        <div *ngIf="this.lessonDetails?.forum.activated">
+        <div *ngIf="this.sessionDetails?.forum.activated">
 
           <!--Forum view-->
           <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsShown'">
-            <div *ngFor="let entry of this.lessonDetails?.forum.entries; let last1 = last">
+            <div *ngFor="let entry of this.sessionDetails?.forum.entries; let last1 = last">
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
               <li *ngIf="!last1"><div class="divider"></div></li>
             </div>
-            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null);" [title]="'Add a new entry'" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
+            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null);" [title]="'Add a new entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
@@ -22,7 +22,7 @@
                 </div>
               </div>
               <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null);" href="#forum-modal{{this.lessonIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
+                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null);" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
               </div>
             </div>
             <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
@@ -34,7 +34,7 @@
           <!--Forum view-->
 
         </div>
-        <div *ngIf="!this.lessonDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+        <div *ngIf="!this.sessionDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
     </template>
   </md-tab>
@@ -42,11 +42,11 @@
     <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
     <template md-tab-content>
       <div class="tab-template-content row row-no-margin">
-        <div *ngFor="let file of lessonDetails?.files" class="chip truncate">
+        <div *ngFor="let file of sessionDetails?.files" class="chip truncate">
           <img src="../../assets/images/default_file_image.png" class="file-image" alt="Contact Person">
           {{file?.source}}
         </div>
-        <div *ngIf="this.lessonDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+        <div *ngIf="this.sessionDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
     </template>
   </md-tab>
@@ -54,7 +54,7 @@
     <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
     <template md-tab-content>
       <div class="tab-template-content">
-      <p *ngFor="let attender of lessonDetails?.attenders">{{attender?.user.name}}</p>
+      <p *ngFor="let attender of sessionDetails?.attenders">{{attender?.user.name}}</p>
     </div>
     </template>
   </md-tab>

@@ -8,18 +8,18 @@
 
 /*Till tablets*/
 @media only screen and (max-width: 992px) {
-  .add-lesson-small {
+  .add-session-small {
     display: block !important;
     float: right !important;
   }
 }
 
 
-.add-lesson-small {
+.add-session-small {
   display: none;
 }
 
-#addLessonButton {
+#addSessionButton {
   padding-right: 5px !important;
 }
 

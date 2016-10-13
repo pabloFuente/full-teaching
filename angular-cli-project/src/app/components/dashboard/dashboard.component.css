@@ -2,7 +2,7 @@ span.title {
   font-weight: bold;
 }
 
-.lesson-list-item {
+.session-list-item {
   margin-top: 15px;
   margin-bottom: 0px;
 }
@@ -54,19 +54,19 @@ li.active i.material-icons {
   animation: spinIcon 0.7s infinite linear;
 }
 
-.lessonImage {
+.sessionImage {
   display: inline;
 }
 
 @media only screen and (min-width: 993px) {
-  .lessonImage {
+  .sessionImage {
     width: 70px;
     height: 70px;
   }
 }
 
 @media only screen and (max-width: 992px) {
-  .lessonImage {
+  .sessionImage {
     width: 45px;
     height: 45px;
   }
