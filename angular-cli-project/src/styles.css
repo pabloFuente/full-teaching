@@ -54,6 +54,16 @@ a {
   margin: 0 !important;
 }
 
+.add-element-icon{
+  float: right;
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.add-element-icon:hover {
+  color: #91a59b;
+}
+
 /*Loader*/
 @keyframes spinLoader {
   0% {

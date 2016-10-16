@@ -4,7 +4,9 @@
   <div class="row">
 
     <div class="col l6 m5 s12">
-      <div class="dashboard-title">MY COURSES</div>
+      <div class="dashboard-title">MY COURSES
+        <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="tooltip" class="material-icons add-element-icon tooltipped" data-position="left" data-delay="65" data-tooltip="New course">add_circle_outline</i>
+      </div>
       <ul class="collection">
         <li *ngFor="let course of courses; let i = index" class="collection-item">
           <div class="row session-list-item valign-wrapper">
