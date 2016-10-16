@@ -16,20 +16,19 @@ export class SessionService {
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
+  getAllSessions() {
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.get(this.urlSessions) //Must send userId
+      .map((response: Response) => response.json() as Session[])
+      .catch(error => this.handleError(error));
+  }
+
   getSessions(courseId) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.get(this.urlSessions + '/' + courseId, options) //Must send userId
       .map((response: Response) => response.json() as Session[])
-      .catch(error => this.handleError(error));
-  }
-
-  getCourseDetails(courseId) {
-    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-    let options = new RequestOptions({ headers });
-    let urlId = this.urlCourseDetails + '/' + courseId;
-    return this.http.get(urlId, options)
-      .map((response: Response) => response.json() as CourseDetails)
       .catch(error => this.handleError(error));
   }
 

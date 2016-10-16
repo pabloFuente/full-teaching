@@ -1,3 +1,11 @@
+.calendar-container {
+  position: relative;
+}
+
+.my-calendar-header {
+  min-width: 365px;
+}
+
 i.material-icons {
   cursor: pointer;
   font-size: 30px;
@@ -16,4 +24,32 @@ i.material-icons:hover {
 .calendar-title {
   font-weight: 300 !important;
   text-align: left !important;
+}
+
+
+.loader-calendar {
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(221, 221, 221, 0.5);
+}
+.loader-calendar:before{
+  display: block;
+  position: absolute;
+  content: "";
+  left: -200px;
+  width: 200px;
+  height: 4px;
+  background-color: #375646;
+  animation: loading 0.5s linear infinite;
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
 }

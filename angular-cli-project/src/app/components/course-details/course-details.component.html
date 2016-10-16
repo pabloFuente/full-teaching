@@ -53,7 +53,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="tooltip" class="material-icons add-element-icon tooltipped right" data-position="left" data-delay="65" data-tooltip="New session">add_circle_outline</i>
+                <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon tooltipped right" data-position="left" data-delay="65" data-tooltip="New session">add_circle_outline</i>
               </div>
               <ul>
                 <div *ngFor="let session of this.courseDetails?.sessions; let last1 = last">

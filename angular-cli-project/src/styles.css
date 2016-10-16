@@ -454,3 +454,18 @@ h3.calendar-title {
   padding: 8px;
   border: solid 1px;
 }
+
+.calendar-event-icon {
+  position: absolute;
+  right: 0;
+  margin-right: 10px;
+  color: #61ffae;
+}
+
+.calendar-event-icon:hover {
+  color: rgba(97,255,174,0.5);
+}
+
+a.cal-event-title {
+  cursor: default !important;
+}

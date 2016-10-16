@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SessionService }   from '../../services/session.service';
+import { Session } from '../../classes/session';
 import {
   startOfDay,
   subDays,
@@ -31,55 +34,51 @@ const colors: any = {
   }
 };
 
+class MyCalendarEvent implements CalendarEvent {
+  start: Date;
+  title: string;
+  color = colors.red;
+  actions: CalendarEventAction[];
+  session: Session;
+}
+
 @Component({
   selector: 'calendar-app',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
 
   view: string = 'month';
 
   viewDate: Date = new Date();
 
-  events: CalendarEvent[] = [{
-    start: startOfDay(new Date()),
-    title: 'An event with no end date',
-    color: colors.red,
-  },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-    }, {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue
-    }];
+  events: MyCalendarEvent[] = [];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen: boolean = false;
+
+  constructor(private sessionService: SessionService, private router: Router) { }
+
+  ngOnInit() {
+    this.getAllSessions();
+  }
 
   increment(): void {
-
     const addFn: any = {
       day: addDays,
       week: addWeeks,
       month: addMonths
     }[this.view];
-
     this.viewDate = addFn(this.viewDate, 1);
     this.activeDayIsOpen = false;
   }
 
   decrement(): void {
-
     const subFn: any = {
       day: subDays,
       week: subWeeks,
       month: subMonths
     }[this.view];
-
     this.viewDate = subFn(this.viewDate, 1);
     this.activeDayIsOpen = false;
   }
@@ -90,7 +89,6 @@ export class CalendarComponent {
   }
 
   dayClicked({date, events}: { date: Date, events: CalendarEvent[] }): void {
-
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -102,6 +100,32 @@ export class CalendarComponent {
         this.viewDate = date;
       }
     }
+  }
+
+  getAllSessions() {
+    this.sessionService.getAllSessions().subscribe(
+      sessions => {
+        console.log(sessions);
+        for (let s of sessions) {
+          let min = s.date.getMinutes();
+          if (min < 10) { min = "0" + min; }
+          this.events.push({
+            start: s.date,
+            title: s.title + '  |  ' + s.date.getHours() + ':' + min,
+            color: colors.red,
+            actions: [
+              {
+                label: '<i class="material-icons calendar-event-icon">forward</i>',
+                onClick: ({event}: { event: CalendarEvent }): void => {
+                  this.router.navigateByUrl('/courses/' + 0);
+                }
+              }],
+              session: s,
+          });
+        }
+      },
+      error => console.log(error)
+    );
   }
 
 }

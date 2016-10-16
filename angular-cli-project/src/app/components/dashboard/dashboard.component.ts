@@ -2,6 +2,7 @@ import { Component, OnInit }  from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Course }         from '../../classes/course';
+import { Session }         from '../../classes/session';
 
 import { CalendarComponent } from '../calendar/calendar.component';
 
