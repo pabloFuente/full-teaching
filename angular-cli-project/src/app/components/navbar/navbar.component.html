@@ -11,8 +11,8 @@
 
       <!--Login view-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a routerLink="/courses" class="navbar-button waves-effect white-text">My courses</a></li>
-        <li><a routerLink="/settings" class="navbar-button waves-effect white-text">My settings</a></li>
+        <li><a routerLink="/courses" class="navbar-button waves-effect white-text">Courses</a></li>
+        <li><a routerLink="/settings" class="navbar-button waves-effect white-text">Settings</a></li>
         <!-- Dropdown Content -->
         <ul id="dropdown1" class="dropdown-content">
           <li class="divider"></li>
@@ -26,8 +26,8 @@
 
       <!--Side nav mobile-->
       <ul *ngIf="this.authenticationService.isLoggedIn()" id="nav-mobile" class="side-nav">
-        <li><a routerLink="/courses" class="waves-effect">My courses</a></li>
-        <li><a routerLink="/settings" class="waves-effect">My settings</a></li>
+        <li><a routerLink="/courses" class="waves-effect">Courses</a></li>
+        <li><a routerLink="/settings" class="waves-effect">Settings</a></li>
         <li class="divider"></li>
         <li><a class="waves-effect">Contact</a></li>
         <li><a class="waves-effect" (click)="this.authenticationService.logout()">Logout</a></li>

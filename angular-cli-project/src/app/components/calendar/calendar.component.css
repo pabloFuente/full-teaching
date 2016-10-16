@@ -1,0 +1,19 @@
+i.material-icons {
+  cursor: pointer;
+  font-size: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+i.material-icons:hover {
+  color: #91a59b;
+}
+
+.calendar-icon-group {
+  float: right;
+}
+
+.calendar-title {
+  font-weight: 300 !important;
+  text-align: left !important;
+}

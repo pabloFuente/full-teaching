@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { Course }         from '../../classes/course';
 
+import { CalendarComponent } from '../calendar/calendar.component';
+
 import { CourseService }            from '../../services/course.service';
 import { AuthenticationService }    from '../../services/authentication.service';
 

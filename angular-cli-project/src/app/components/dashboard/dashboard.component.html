@@ -1,9 +1,11 @@
 <div *ngIf="!this.courses" class="loading"></div>
 
-<div class="container container-ul margins-top-bottom">
+<div *ngIf="this.courses" class="container container-ul margins-top-bottom">
   <div class="row">
-    <div class="col l7 m6 s12">
-      <ul *ngIf="this.courses" class="collection">
+
+    <div class="col l6 m5 s12">
+      <div class="dashboard-title">MY COURSES</div>
+      <ul class="collection">
         <li *ngFor="let course of courses; let i = index" class="collection-item">
           <div class="row session-list-item valign-wrapper">
 
@@ -19,10 +21,13 @@
         </li>
       </ul>
     </div>
-    <div class="col l5 m6 s12 valign-wrapper">
-      <div class="valign">
-        <div id="calendar"></div>
+
+    <div class="col l6 m7 s12">
+      <div class="dashboard-title">MY CALENDAR</div>
+      <div class="calendar-div">
+        <calendar-app></calendar-app>
       </div>
     </div>
+
   </div>
 </div>
