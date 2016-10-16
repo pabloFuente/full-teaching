@@ -52,6 +52,25 @@
   color: #91a59b;
 }
 
+.session-data {
+  padding: 25px 25px 25px 25px;
+  display: list-item !important;
+  transition: all .2s ease-out !important;
+}
+
+.session-data a {
+  color: inherit !important;
+}
+
+.session-title {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.session-description {
+
+}
+
 .entry-title {
   cursor: pointer;
   padding: 8px 0px 8px 0px;

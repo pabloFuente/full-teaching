@@ -2,6 +2,43 @@
 
 <div *ngIf="this.courseDetails" class="container course-detail-div">
 
+  <!--Forum modal-->
+  <div id="forum-modal" class="modal forum-modal" materialize [materializeActions]="actions2">
+    <div class="modal-content">
+      <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalEntry?.title}}</h5>
+      <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
+      <div class="row">
+
+        <form materialize #forumForm class="col s12" (ngSubmit)="onForumSubmit(forumForm); forumForm.reset();">
+          <div class="row row-no-margin">
+
+            <div *ngIf="this.forumModalMode === 0" class="row">
+              <div class="input-field col s12">
+                <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
+                <label for="inputTitle">Entry title</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
+                <label for="inputComment">Write your comment here</label>
+              </div>
+            </div>
+
+          </div>
+          <div class="row right-align">
+            <a (click)="forumForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <!--Forum modal-->
+
+
   <div class="row valign-wrapper">
     <div class="col l1 m1 s2 valign"><a routerLink="/courses" [title]="'Back to courses'"><i class="material-icons medium back-icon">arrow_back</i></a></div>
     <div class="col l11 m11 s10 valign">
@@ -15,6 +52,22 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
         <template md-tab-content>
             <div class="tab-template-content">
+              <ul>
+                <div *ngFor="let session of this.courseDetails?.sessions; let last1 = last">
+                  <li class="session-data waves-effect">
+                    <div class="row row-no-margin">
+                      <div class="col l8 m7 s7">
+                        <div class="session-title">{{session.title}}</div>
+                        <div class="session-description">{{session.description}}</div>
+                      </div>
+                      <div class="col l4 m5 s5 right-align">
+                        {{session.date | date}} - {{session.date | date:'H:mm' }}
+                      </div>
+                    </div>
+                  </li>
+                  <li *ngIf="!last1"><div class="divider"></div></li>
+                </div>
+            </ul>
             </div>
           </template>
       </md-tab>
@@ -34,16 +87,16 @@
             <div *ngIf="this.courseDetails?.forum.activated">
 
           <!--Forum view-->
-          <ul class="entries-side-view col l4 m4 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsShown'">
-            <div *ngFor="let entry of this.courseDetails?.forum.entries; let last1 = last">
+          <ul class="entries-side-view col l3 m3 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsShown'">
+            <div *ngFor="let entry of this.courseDetails?.forum.entries; let last2 = last">
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
-              <li *ngIf="!last1"><div class="divider"></div></li>
+              <li *ngIf="!last2"><div class="divider"></div></li>
             </div>
             <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null);" [title]="'Add a new entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
-            <div class="col l8 m8 s11">
+            <div class="col l9 m9 s11">
               <div class="col l11 m10 s10 no-padding-right no-padding-left">
                 <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}}:
                   <div class="entry-user">{{selectedEntry.user.name}}</div>
