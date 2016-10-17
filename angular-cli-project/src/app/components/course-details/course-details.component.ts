@@ -73,7 +73,6 @@ export class CourseDetailsComponent implements OnInit {
         },
         error => console.log(error));
     });
-
   }
 
   updateForumModalMode(mode: number, header: string, commentReplay: string) {
@@ -81,32 +80,32 @@ export class CourseDetailsComponent implements OnInit {
     this.forumModalDataService.announceMode(objs);
   }
 
-  onForumSubmit(){
+  onForumSubmit() {
     //If modal is opened in "New Entry" mode
-    if (this.forumModalMode === 0){
+    if (this.forumModalMode === 0) {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
       let e = new Entry(this.inputTitle, [new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), [])], new Date(), this.authenticationService.getCurrentUser());
       console.log(e);
 
       /*this.forumService.newEntry(e, this.lessonDetails.lesson).suscribe( //POST method requires an Entry and the Lesson (its forum) which it belongs
         response => */this.courseDetails.forum.entries.push(e); this.actions2.emit("closeModal");//Only on succesful post we locally save the new entry
-        /*error =>
-      );*/
+      /*error =>
+    );*/
     }
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else {
       let c = new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), []);
       /*this.forumService.newComment(c, this.forumModalEntry, this.forumModalCommentReplay).suscribe( //POST method requires the Comment, the ENtry which it belongs and the replayed comment
-        response =>*/if (this.forumModalMode === 2){ //Only on succesful post we locally save the new comment
-                      this.forumModalCommentReplay.replies.push(c);
-                    }
-                    else {
-                      this.forumModalEntry.comments.push(c);
-                    }
-                    this.actions2.emit("closeModal");
-        /*error =>
-      );*/
+        response =>*/if (this.forumModalMode === 2) { //Only on succesful post we locally save the new comment
+        this.forumModalCommentReplay.replies.push(c);
+      }
+      else {
+        this.forumModalEntry.comments.push(c);
+      }
+      this.actions2.emit("closeModal");
+      /*error =>
+    );*/
     }
-
   }
+
 }

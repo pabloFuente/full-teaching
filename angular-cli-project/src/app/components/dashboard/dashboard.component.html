@@ -1,9 +1,9 @@
 <div *ngIf="!this.courses" class="loading"></div>
 
 <div *ngIf="this.courses" class="container container-ul margins-top-bottom">
-  <div class="row">
+  <div class="row row-no-margin">
 
-    <div class="col l6 m5 s12">
+    <div class="col l6 m5 s12 dashboard-col">
       <div class="dashboard-title">MY COURSES
         <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="tooltip" class="material-icons add-element-icon tooltipped" data-position="left" data-delay="65" data-tooltip="New course">add_circle_outline</i>
       </div>
@@ -24,7 +24,7 @@
       </ul>
     </div>
 
-    <div class="col l6 m7 s12">
+    <div class="col l6 m7 s12 dashboard-col">
       <div class="dashboard-title">MY CALENDAR</div>
       <div class="calendar-div">
         <calendar-app></calendar-app>

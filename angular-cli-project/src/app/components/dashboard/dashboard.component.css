@@ -72,10 +72,13 @@ li.collection-item {
   }
   .dashboard-title{
     text-align: center;
-    padding-top: 20px;
   }
   .calendar-div{
     margin-left: 12px;
     margin-right: 12px;
+    margin-bottom: 35px;
+  }
+  .dashboard-col{
+    margin-top: 30px;
   }
 }

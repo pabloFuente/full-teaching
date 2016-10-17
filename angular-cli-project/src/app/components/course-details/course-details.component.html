@@ -53,7 +53,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon tooltipped right" data-position="left" data-delay="65" data-tooltip="New session">add_circle_outline</i>
+                <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.forumModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right">add_circle_outline</i>
               </div>
               <ul>
                 <div *ngFor="let session of this.courseDetails?.sessions; let last1 = last">
@@ -95,7 +95,7 @@
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
               <li *ngIf="!last2"><div class="divider"></div></li>
             </div>
-            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null);" [title]="'Add a new entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
+            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null); this.forumModalDataService.animateIfSmall()" [title]="'Add a new entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
@@ -106,7 +106,7 @@
                 </div>
               </div>
               <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null);" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
+                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null); this.forumModalDataService.animateIfSmall()" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
               </div>
             </div>
             <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
