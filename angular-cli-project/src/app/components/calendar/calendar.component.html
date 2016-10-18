@@ -1,11 +1,11 @@
 <div class="calendar-container">
     <div class="row row-no-margin my-calendar-header">
-      <div class="col l7 m7 s7 no-padding-left">
+      <div class="col l7 m7 s7 no-padding-lateral">
         <h3 class="calendar-title">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
       </div>
-      <div *ngIf="this.events.length > 0" class="col l5 m5 s5 no-padding-right">
+      <div *ngIf="this.events.length > 0" class="col l5 m5 s5 no-padding-lateral">
         <div class="calendar-icon-group">
-          <i class="material-icons" (click)="decrement()">chevron_left</i>
+          <i class="material-icons no-padding-left" (click)="decrement()">chevron_left</i>
           <i class="material-icons" (click)="today()">today</i>
           <i class="material-icons" (click)="increment()">chevron_right</i>
         </div>

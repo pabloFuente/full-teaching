@@ -2,8 +2,8 @@
 
 <div *ngIf="this.courseDetails" class="container course-detail-div">
 
-  <!--Forum modal-->
-  <div id="forum-modal" class="modal forum-modal" materialize [materializeActions]="actions2">
+  <!--MODAL DIALOG-->
+  <div id="forum-modal" class="modal my-modal-class forum-modal" materialize [materializeActions]="actions2">
     <div class="modal-content">
       <h5 *ngIf="this.forumModalMode === 1">{{this.forumModalEntry?.title}}</h5>
       <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
@@ -57,15 +57,16 @@
       </div>
     </div>
   </div>
-  <!--Forum modal-->
+  <!--MODAL DIALOG-->
 
 
   <div class="row valign-wrapper">
-    <div class="col l1 m1 s2 valign"><a routerLink="/courses" [title]="'Back to courses'"><i class="material-icons medium back-icon">arrow_back</i></a></div>
+    <div class="col l1 m1 s2 valign"><a routerLink="/courses" [title]="'Back to courses'" class="btn-floating"><i class="material-icons medium back-icon">arrow_back</i></a></div>
     <div class="col l11 m11 s10 valign">
       <h4 class="course-title">{{courseDetails.course.title}}</h4></div>
   </div>
 
+  <!--TABS-->
   <div class="row">
     <md-tab-group [selectedIndex]="0">
 
@@ -131,7 +132,7 @@
               </div>
             </div>
             <div class="col l9 m9 s12 comments-col" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-              <div *ngFor="let comment of this.selectedEntry?.comments" class="comment-block" [class.comment-divider]="!last2">
+              <div *ngFor="let comment of this.selectedEntry?.comments; let last3 = last" class="comment-block" [class.comment-divider]="!last3">
                 <app-comment [comment]="comment"></app-comment>
               </div>
             </div>
@@ -148,9 +149,9 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
-            <div *ngFor="let fileG of courseDetails?.files; let last3 = last">
+            <div *ngFor="let fileG of courseDetails?.files; let last4 = last">
               <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
-              <div *ngIf="!last3" class="divider"></div>
+              <div *ngIf="!last4" class="divider"></div>
             </div>
             <div *ngIf="this.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>
@@ -161,6 +162,9 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content">
+            <div class="row row-no-margin">
+              <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateForumModalMode(3, null, null); this.forumModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
+            </div>
             <div *ngFor="let attender of courseDetails?.attenders" class="row row-no-margin valign-wrapper">
               <div class="col l2 m2 s3 valign attender-col">
                 <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.user.picture}}>
@@ -175,4 +179,6 @@
 
     </md-tab-group>
   </div>
+  <!--TABS-->
+
 </div>

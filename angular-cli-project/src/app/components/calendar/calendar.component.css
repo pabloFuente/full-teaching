@@ -53,3 +53,10 @@ i.material-icons:hover {
     95% {left: 120%;}
     to {left: 100%;}
 }
+
+/*Mobile Phones*/
+@media only screen and (max-width: 600px) and (orientation: portrait), screen and (max-width: 992px) and (orientation: landscape) {
+  .my-calendar-header {
+    min-width: 0;
+  }
+}

@@ -52,6 +52,11 @@ a {
   padding-left: 0 !important;
 }
 
+.no-padding-lateral {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
 .row-no-margin {
   margin: 0 !important;
 }
@@ -106,19 +111,23 @@ a {
     display: none !important;
   }
 
-  #login-modal {
+  .modal.my-modal-class {
     position: absolute !important;
     top: 0 !important;
     width: 100% !important;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 
-  .modal.forum-modal {
-    position: absolute !important;
-    top: 0 !important;
-    width: 100% !important;
+  #forum-modal {
     max-height: none !important;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  .modal.my-modal-class {
+    background-color: rgb(231, 235, 233);
+  }
+
+  .modal.my-modal-class .modal-footer{
+    background-color: rgb(231, 235, 233);
   }
 }
 /*End mobile phones*/
@@ -460,13 +469,23 @@ h3.calendar-title {
   position: absolute;
   right: 0;
   margin-right: 10px;
-  color: #61ffae;
+  color: #375646;
 }
 
 .calendar-event-icon:hover {
-  color: rgba(97,255,174,0.5);
+  color: #91a59b;
 }
 
 a.cal-event-title {
   cursor: default !important;
+}
+
+.cal-month-view .cal-open-day-events{
+  background-color: #EDEDED;
+  box-shadow: none;
+  border: #e1e1e1 solid 1px;
+}
+
+.cal-month-view .cal-open-day-events a {
+  color: #000000;
 }
