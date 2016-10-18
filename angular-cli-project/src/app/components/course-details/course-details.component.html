@@ -121,16 +121,16 @@
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
             <div class="col l9 m9 s11">
-              <div class="col l11 m10 s10 no-padding-right no-padding-left">
+              <div class="col l11 m11 s10 no-padding-right no-padding-left">
                 <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}}:
                   <div class="entry-user">{{selectedEntry.user.name}}</div>
                 </div>
               </div>
-              <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
+              <div class="col l1 m1 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
                 <a [title]="'New comment'" (click)="updateForumModalMode(1, selectedEntry, null); this.forumModalDataService.animateIfSmall()" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
               </div>
             </div>
-            <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
+            <div class="col l9 m9 s12 comments-col" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
               <div *ngFor="let comment of this.selectedEntry?.comments;  let last2 = last" class="comment-block" [class.comment-divider]="!last2">
                 <app-comment [comment]="comment"></app-comment>
               </div>
@@ -148,9 +148,8 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
-            <div *ngFor="let file of courseDetails?.files" class="chip truncate">
-              <img src="../../assets/images/default_file_image.png" class="file-image" alt="Contact Person">
-              {{file?.source}}
+            <div *ngFor="let fileG of courseDetails?.files">
+              <app-file-group [fileGroup]="fileG"></app-file-group>
             </div>
             <div *ngIf="this.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>

@@ -1,11 +1,11 @@
 <div class="comment-div">
   <div class="row row-margin-bottom">
-    <div class="col l11 m10 s10">
+    <div class="col l11 m11 s11">
       <div class="message-itself">{{comment.message}}</div>
       <div class="user-name">{{comment.user.name}}</div> |
       <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
     </div>
-    <div class="col l1 m2 s2 no-padding-left right-align">
+    <div class="col l1 m1 s1 no-padding-left right-align">
       <a [title]="'Send replay'" (click)="updateForumModalMode(2, null, comment); this.forumModalDataService.animateIfSmall()" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons replay-icon">feedback</i></a>
     </div>
   </div>

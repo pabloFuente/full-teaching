@@ -121,31 +121,39 @@ export let fakeBackendProvider = {
         { id: 1, course: 1, activated: false, entries:  entries2 },
       ];
 
+      let file1 = { id: 1, course: 0, link: "www.myFileLink.com", name: "fileAPrettyLongName", type: 1 };
+      let file2 = { id: 2, course: 0, link: "www.myFileLink.com", name: "fileB", type: 0 };
+      let file3 = { id: 3, course: 0, link: "www.myFileLink.com", name: "fileCPrettyLongName", type: 0 };
+      let file4 = { id: 4, course: 0, link: "www.myFileLink.com", name: "fileD", type: 1 };
+      let file5 = { id: 5, course: 0, link: "www.myFileLink.com", name: "fileEPrettyLongName", type: 2 };
+      let file6 = { id: 6, course: 0, link: "www.myFileLink.com", name: "fileF", type: 0 };
+      let file7 = { id: 10, course: 0, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 2 };
+      let file8 = { id: 11, course: 0, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 0 };
+      let file9 = { id: 12, course: 0, link: "www.myFileLink.com", name: "fileF", type: 0 };
+      let file10 = { id: 13, course: 0, link: "www.myFileLink.com", name: "fileF", type: 0 };
+      let file11 = { id: 14, course: 0, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 1 };
+      let file12 = { id: 15, course: 0, link: "www.myFileLink.com", name: "fileF", type: 0 };
+      let file13 = { id: 16, course: 0, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 1 };
+      let file14 = { id: 17, course: 1, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 1 };
+      let file15 = { id: 18, course: 1, link: "www.myFileLink.com", name: "fileF", type: 1 };
+      let file16 = { id: 19, course: 1, link: "www.myFileLink.com", name: "fileF", type: 1 };
+      let file17 = { id: 20, course: 1, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 0 };
+      let file18 = { id: 21, course: 1, link: "www.myFileLink.com", name: "fileF", type: 2 };
+      let file19 = { id: 22, course: 1, link: "www.myFileLink.com", name: "fileF", type: 2 };
+      let file20 = { id: 23, course: 1, link: "www.myFileLink.com", name: "fileFPrettyLongName", type: 0 };
+      let file21 = { id: 24, course: 1, link: "www.myFileLink.com", name: "fileF", type: 1 };
 
+      let fileGroup1 = { title: "Take a look if you have plenty of time", files: [file1, file2, file3], fileGroups: []};
+      let fileGroup2 = { title: "Optional tasks", files: [file4, file5], fileGroups: [fileGroup1]};
+      let fileGroup3 = { title: "Lesson 1 - Important files", files: [file6, file7, file8, file9, file10], fileGroups: []};
+      let fileGroup4 = { title: "Optional tasks", files: [file11, file12, file13], fileGroups: []};
+      let fileGroup6 = { title: "Optional tasks", files: [file17, file18, file19, file20, file21], fileGroups: []};
+      let fileGroup5 = { title: "Real Examples for Lesson 2", files: [file14, file15, file16], fileGroups: [fileGroup6]};
 
-      let files = [
-        { id: 1, course: 0, source: "fileAPrettyLongName.src" },
-        { id: 2, course: 0, source: "fileB.src" },
-        { id: 3, course: 0, source: "fileCPrettyLongName.src" },
-        { id: 4, course: 0, source: "fileD.src" },
-        { id: 5, course: 0, source: "fileEPrettyLongName.src" },
-        { id: 6, course: 0, source: "fileF.src" },
-        { id: 6, course: 0, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 0, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 0, source: "fileF.src" },
-        { id: 6, course: 0, source: "fileF.src" },
-        { id: 6, course: 0, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 0, source: "fileF.src" },
-        { id: 6, course: 0, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 1, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 1, source: "fileF.src" },
-        { id: 6, course: 1, source: "fileF.src" },
-        { id: 6, course: 1, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 1, source: "fileF.src" },
-        { id: 6, course: 1, source: "fileF.src" },
-        { id: 6, course: 1, source: "fileFPrettyLongName.src" },
-        { id: 6, course: 1, source: "fileF.src" },
-      ]
+      let fileGroupsA = {course: 0, fileGroups: [fileGroup2, fileGroup3]};
+      let fileGroupsB = {course: 1, fileGroups: [fileGroup4, fileGroup5]};
+
+      let fileGroups = [fileGroupsA, fileGroupsB];
 
       let attenders = [
         { user: teacherUser },
@@ -203,7 +211,7 @@ export let fakeBackendProvider = {
           let last = url.substring(url.lastIndexOf("/") + 1, url.length);
           if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token-teacher' || 'Bearer fake-jwt-token-student') {
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseID2(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseID(files, last), attenders: attenders} })
+              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseID2(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseID(fileGroups, last), attenders: attenders} })
             ));
           } else {
             // return 401 not authorised if token is null or invalid

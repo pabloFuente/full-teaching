@@ -18,6 +18,7 @@ import { CourseDetailsComponent } from './components/course-details/course-detai
 import { SettingsComponent }      from './components/settings/settings.component';
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 import { CommentComponent }       from './components/comment/comment.component';
+import { FileGroupComponent }     from './components/file-group/file-group.component';
 
 import { AuthenticationService }  from './services/authentication.service';
 import { CourseService }          from './services/course.service';
@@ -56,6 +57,7 @@ import { BaseRequestOptions }          from '@angular/http';
     SettingsComponent,
     ErrorMessageComponent,
     CommentComponent,
+    FileGroupComponent,
     CalendarComponent,
   ],
   providers: [

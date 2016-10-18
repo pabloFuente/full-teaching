@@ -1,0 +1,26 @@
+.file-group-div {
+  padding-left: 25px;
+  margin-bottom: 20px;
+}
+
+.file-group-title h5{
+  font-size: 1.3rem;
+  margin: 1.5rem 0 1.5rem 0;
+}
+
+.chip-file {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 300px;
+  cursor: pointer;
+  padding-left: 0;
+}
+
+.file-image {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 2px;
+  font-size: 22px;
+  border: 3px solid #e0e0e0;
+}
