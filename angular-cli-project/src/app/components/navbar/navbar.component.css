@@ -1,5 +1,5 @@
 /*Mobile phones*/
-@media only screen and (max-width: 600px) and (max-height: 992px), screen and (max-width: 992px) and (max-height: 600px) {
+@media only screen and (max-width: 600px) and (orientation: portrait), screen and (max-width: 992px) and (orientation: landscape) {
   #navigation-bar {
     position: absolute !important; /*Navbar will be fixed at top of the page in small devices*/
   }
