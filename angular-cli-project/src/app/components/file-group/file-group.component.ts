@@ -12,6 +12,9 @@ export class FileGroupComponent implements OnInit {
   @Input()
   public fileGroup: FileGroup;
 
+  @Input()
+  public depth: number;
+
   typeOfFile = ['language', 'picture_as_pdf', 'videocam'];
 
   constructor() {

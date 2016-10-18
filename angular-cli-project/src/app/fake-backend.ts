@@ -12,8 +12,13 @@ export let fakeBackendProvider = {
         return objArray.filter(function( obj ) {return (obj.course.toString() === a.toString());});
       }
 
-      function getElementsByCourseID2(objArray, a): any[] {
+      function getElementsByCourseIDSessions(objArray, a): any[] {
         return objArray.filter(function( obj ) {return (obj.courseID.toString() === a.toString());});
+      }
+
+      function getElementsByCourseIDFiles(objArray, a): any[] {
+        let filteredFileGroups = objArray.filter(function( obj ) {return (obj.course.toString() === a.toString());});
+        return filteredFileGroups[0].fileGroups;
       }
 
       let teacherUser = { email: 'teacher@gmail.com', pass: 't', name: 'Techer Cheater', role: 1, picture: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b666f811889067.562541eff3013.png' };
@@ -211,7 +216,7 @@ export let fakeBackendProvider = {
           let last = url.substring(url.lastIndexOf("/") + 1, url.length);
           if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token-teacher' || 'Bearer fake-jwt-token-student') {
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseID2(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseID(fileGroups, last), attenders: attenders} })
+              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseIDSessions(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseIDFiles(fileGroups, last), attenders: attenders} })
             ));
           } else {
             // return 401 not authorised if token is null or invalid

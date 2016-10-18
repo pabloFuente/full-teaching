@@ -1,5 +1,10 @@
-.file-group-div {
-  padding-left: 25px;
+.file-group-root {
+  padding-left: 15px;
+  margin-bottom: 30px;
+}
+
+.file-group-child {
+  padding-left: 30px;
   margin-bottom: 20px;
 }
 

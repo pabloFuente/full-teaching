@@ -149,7 +149,7 @@
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
             <div *ngFor="let fileG of courseDetails?.files">
-              <app-file-group [fileGroup]="fileG"></app-file-group>
+              <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
             </div>
             <div *ngIf="this.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>

@@ -1,9 +1,9 @@
-<div class="file-group-div">
+<div class="file-group-root" [class.file-group-child]="this.depth > 0">
   <div class="file-group-title"><h5>{{fileGroup.title}}</h5></div>
   <div *ngFor="let f of fileGroup.files" class="chip chip-file truncate valign-wrapper">
     <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
   </div>
   <div *ngFor="let subFileGroup of fileGroup.fileGroups">
-    <app-file-group [fileGroup]="subFileGroup"></app-file-group>
+    <app-file-group [fileGroup]="subFileGroup" [depth]="this.depth + 1"></app-file-group>
   </div>
 </div>
