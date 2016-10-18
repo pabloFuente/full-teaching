@@ -28,8 +28,8 @@ import { LoginModalService }      from './services/login-modal.service';
 import { AuthGuard }              from './auth.guard';
 import { Constants }              from './constants';
 
-import { CalendarModule } from 'angular2-calendar';
-import { CalendarComponent } from './components/calendar/calendar.component';
+import { CalendarModule }         from 'angular2-calendar';
+import { CalendarComponent }      from './components/calendar/calendar.component';
 
 // used to create fake backend
 import { fakeBackendProvider }         from './fake-backend';

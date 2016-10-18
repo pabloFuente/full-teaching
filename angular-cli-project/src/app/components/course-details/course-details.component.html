@@ -9,20 +9,41 @@
       <p *ngIf="this.forumModalMode === 2">{{this.forumModalCommentReplay?.message}}</p>
       <div class="row">
 
-        <form materialize #forumForm class="col s12" (ngSubmit)="onForumSubmit(forumForm); forumForm.reset();">
+        <form materialize #forumForm class="col s12" (ngSubmit)="onForumSubmit(); forumForm.reset();">
           <div class="row row-no-margin">
 
-            <div *ngIf="this.forumModalMode === 0" class="row">
+            <div *ngIf="this.forumModalMode === 0 || this.forumModalMode === 3" class="row">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
-                <label for="inputTitle">Entry title</label>
+                <label *ngIf="this.forumModalMode === 0" for="inputTitle">Entry title</label>
+                <label *ngIf="this.forumModalMode === 3" for="inputTitle">Session title</label>
               </div>
             </div>
 
             <div class="row">
               <div class="input-field col s12">
                 <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
-                <label for="inputComment">Write your comment here</label>
+                <label *ngIf="this.forumModalMode != 3" for="inputComment">Write your comment here</label>
+                <label *ngIf="this.forumModalMode === 3" for="inputComment">Description</label>
+              </div>
+            </div>
+
+            <div class="row row-no-margin">
+              <div class="col l6 m6 s6">
+                <div *ngIf="this.forumModalMode === 3" class="row">
+                  <label for="inputDate">Date</label>
+                  <div class="input-field col s12">
+                    <input materialize="pickadate" [(ngModel)]="inputDate" name="inputDate" id="inputDate" type="date" class="datepicker" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col l6 m6 s6">
+                <div *ngIf="this.forumModalMode === 3" class="row">
+                  <label for="inputTime">Time</label>
+                  <div class="input-field col s12">
+                    <input type="time" [(ngModel)]="inputTime" id="inputTime" name="inputTime" class="validate" required>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -53,7 +74,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.forumModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right">add_circle_outline</i>
+                <i href="#forum-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateForumModalMode(3, null, null); this.forumModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
               </div>
               <ul>
                 <div *ngFor="let session of this.courseDetails?.sessions; let last1 = last">
@@ -95,7 +116,7 @@
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
               <li *ngIf="!last2"><div class="divider"></div></li>
             </div>
-            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null); this.forumModalDataService.animateIfSmall()" [title]="'Add a new entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
+            <div class="center-align div-entry-icon"><a (click)="updateForumModalMode(0, null, null); this.forumModalDataService.animateIfSmall()" [title]="'New entry'" href="#forum-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
             <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
@@ -106,7 +127,7 @@
                 </div>
               </div>
               <div class="col l1 m2 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-                <a [title]="'Add new comment'" (click)="updateForumModalMode(1, selectedEntry, null); this.forumModalDataService.animateIfSmall()" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
+                <a [title]="'New comment'" (click)="updateForumModalMode(1, selectedEntry, null); this.forumModalDataService.animateIfSmall()" href="#forum-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
               </div>
             </div>
             <div class="col l8 m8 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">

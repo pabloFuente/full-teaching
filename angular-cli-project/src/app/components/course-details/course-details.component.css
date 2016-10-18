@@ -132,3 +132,11 @@
 .course-title {
   font-weight: 300;
 }
+
+#inputDate {
+  cursor: pointer;
+}
+
+#inputTime {
+  cursor: pointer;
+}

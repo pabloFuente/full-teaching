@@ -1,5 +1,9 @@
 @import "../node_modules/materialize-css/dist/css/materialize.css";
 
+html {
+  overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -7,8 +11,6 @@ html, body {
 }
 
 body {
-  overflow-y: scroll !important;
-  /*Never hide vertical scroll-bar*/
   background-color: #FFFFFF !important;
 }
 
@@ -161,6 +163,10 @@ md-ink-bar {
 
 div.drag-target {
   max-width: 30% !important;
+}
+
+.picker__date-display {
+  display: none;
 }
 
 /*End Library Overwrite*/

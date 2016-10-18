@@ -8,6 +8,7 @@ import { ForumModalDataService } from '../../services/forum-modal-data.service';
 import { CourseService }         from '../../services/course.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
+import { Session }       from '../../classes/session';
 import { CourseDetails } from '../../classes/course-details';
 import { Entry }         from '../../classes/entry';
 import { Comment }       from '../../classes/comment';
@@ -40,7 +41,9 @@ export class CourseDetailsComponent implements OnInit {
   //Forum Modal Data
   inputTitle: string;
   inputComment: string;
-  forumModalMode: number; // 0 -> New entry | 1 -> New comment | 2 -> New replay
+  inputDate: Date;
+  inputTime: string;
+  forumModalMode: number; // 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session
   forumModalEntry: Entry;
   forumModalCommentReplay: Comment;
 
@@ -91,6 +94,16 @@ export class CourseDetailsComponent implements OnInit {
         response => */this.courseDetails.forum.entries.push(e); this.actions2.emit("closeModal");//Only on succesful post we locally save the new entry
       /*error =>
     );*/
+    }
+    //If modal is opened in "New Session" mode
+    else if (this.forumModalMode === 3) {
+      let date = new Date(this.inputDate);
+      let hoursMins = this.inputTime.split(":");
+      date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
+      let s = new Session(this.inputTitle, this.inputComment, date);
+      this.courseDetails.sessions.push(s);
+      
+      this.actions2.emit("closeModal");
     }
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else {
