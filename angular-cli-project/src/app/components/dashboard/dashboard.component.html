@@ -1,11 +1,48 @@
 <div *ngIf="!this.courses" class="loading"></div>
 
+<!--Course modal-->
+<div id="course-modal" class="modal course-modal" materialize [materializeActions]="actions1">
+  <div class="modal-content">
+    <h5>New course</h5>
+    <div class="row">
+
+      <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
+        <div class="row row-no-margin">
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input [(ngModel)]="inputCourseName" name="inputCourseName" id="inputCourseName" type="text" class="validate" required>
+              <label for="inputCourseName">Course name</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field file-field col s12">
+              <div>
+                <img class="circle" src="../assets/images/default_session_image.png">
+                <input type="file" name="inputCourseImage" id="inputCourseImage">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row right-align">
+          <a (click)="courseForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+          <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<!--Course modal-->
+
 <div *ngIf="this.courses" class="container container-ul margins-top-bottom">
   <div class="row row-no-margin">
 
     <div class="col l6 m5 s12 dashboard-col">
       <div class="dashboard-title">MY COURSES
-        <i *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="tooltip" class="material-icons add-element-icon tooltipped" data-position="left" data-delay="65" data-tooltip="New course">add_circle_outline</i>
+        <i href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon">add_circle_outline</i>
       </div>
       <ul class="collection">
         <li *ngFor="let course of courses; let i = index" class="collection-item">

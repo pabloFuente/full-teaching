@@ -1,7 +1,8 @@
-import { Component, OnInit }  from '@angular/core';
+import { Component, OnInit, EventEmitter }  from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Course }         from '../../classes/course';
+import { CourseDetails }         from '../../classes/course-details';
 import { Session }         from '../../classes/session';
 
 import { CalendarComponent } from '../calendar/calendar.component';
@@ -19,6 +20,11 @@ declare var $: any;
 export class DashboardComponent implements OnInit {
 
   courses: Course[];
+
+  //Course modal data
+  private inputCourseName: string;
+
+  private actions1 = new EventEmitter<string>();
 
   constructor(
     private courseService: CourseService,
@@ -57,6 +63,13 @@ export class DashboardComponent implements OnInit {
     else {
       return c.teacher.picture;
     }
+  }
+
+  onCourseSubmit() {
+    let newCourse = new Course(3, this.inputCourseName, this.authenticationService.getCurrentUser(), this.authenticationService.getCurrentUser().picture, undefined);
+    newCourse.courseDetails = new CourseDetails(newCourse, [], undefined, [], [this.authenticationService.getCurrentUser()]);
+    this.courses.push(newCourse);
+    this.actions1.emit("closeModal");
   }
 
 }

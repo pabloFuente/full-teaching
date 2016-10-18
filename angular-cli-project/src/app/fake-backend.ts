@@ -18,7 +18,8 @@ export let fakeBackendProvider = {
 
       function getElementsByCourseIDFiles(objArray, a): any[] {
         let filteredFileGroups = objArray.filter(function( obj ) {return (obj.course.toString() === a.toString());});
-        return filteredFileGroups[0].fileGroups;
+        if(filteredFileGroups[0]) {return filteredFileGroups[0].fileGroups;}
+        else {return [];}
       }
 
       let teacherUser = { email: 'teacher@gmail.com', pass: 't', name: 'Techer Cheater', role: 1, picture: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b666f811889067.562541eff3013.png' };

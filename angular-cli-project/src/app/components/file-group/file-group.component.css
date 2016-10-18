@@ -4,12 +4,13 @@
 }
 
 .file-group-child {
-  padding-left: 30px;
-  margin-bottom: 20px;
+  padding-left: 30px !important;
+  margin-bottom: 20px !important;
 }
 
 .file-group-title h5{
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+  font-weight: 300;
   margin: 1.5rem 0 1.5rem 0;
 }
 

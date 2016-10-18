@@ -131,7 +131,7 @@
               </div>
             </div>
             <div class="col l9 m9 s12 comments-col" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-              <div *ngFor="let comment of this.selectedEntry?.comments;  let last2 = last" class="comment-block" [class.comment-divider]="!last2">
+              <div *ngFor="let comment of this.selectedEntry?.comments" class="comment-block" [class.comment-divider]="!last2">
                 <app-comment [comment]="comment"></app-comment>
               </div>
             </div>
@@ -148,8 +148,9 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
-            <div *ngFor="let fileG of courseDetails?.files">
+            <div *ngFor="let fileG of courseDetails?.files; let last3 = last">
               <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
+              <div *ngIf="!last3" class="divider"></div>
             </div>
             <div *ngIf="this.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>
