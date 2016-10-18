@@ -24,7 +24,7 @@ import { AuthenticationService }  from './services/authentication.service';
 import { CourseService }          from './services/course.service';
 import { SessionService }         from './services/session.service';
 import { ForumService }           from './services/forum.service';
-import { ForumModalDataService }  from './services/forum-modal-data.service';
+import { CourseDetailsModalDataService }  from './services/course-details-modal-data.service';
 import { LoginModalService }      from './services/login-modal.service';
 import { AuthGuard }              from './auth.guard';
 import { Constants }              from './constants';
@@ -65,7 +65,7 @@ import { BaseRequestOptions }          from '@angular/http';
     CourseService,
     SessionService,
     ForumService,
-    ForumModalDataService,
+    CourseDetailsModalDataService,
     LoginModalService,
     AuthGuard,
     Constants,

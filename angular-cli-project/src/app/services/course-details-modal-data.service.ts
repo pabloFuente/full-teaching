@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 declare var $: any;
 
 @Injectable()
-export class ForumModalDataService {
+export class CourseDetailsModalDataService {
 
   modeAnnounced$: Subject<any>;
 

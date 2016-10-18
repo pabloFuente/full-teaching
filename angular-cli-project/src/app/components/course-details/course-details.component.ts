@@ -4,7 +4,7 @@ import { Subscription }             from 'rxjs/Subscription';
 
 import { CommentComponent } from '../comment/comment.component';
 
-import { ForumModalDataService } from '../../services/forum-modal-data.service';
+import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 import { CourseService }         from '../../services/course.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -43,9 +43,9 @@ export class CourseDetailsComponent implements OnInit {
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-  forumModalMode: number; // 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session
-  forumModalEntry: Entry;
-  forumModalCommentReplay: Comment;
+  courseDetailsModalMode: number; // 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session
+  courseDetailsModalEntry: Entry;
+  courseDetailsModalCommentReplay: Comment;
 
   private actions2 = new EventEmitter<string>();
 
@@ -55,13 +55,13 @@ export class CourseDetailsComponent implements OnInit {
     private courseService: CourseService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private forumModalDataService: ForumModalDataService) {
-    this.subscription = forumModalDataService.modeAnnounced$.subscribe(
+    private courseDetailsModalDataService: CourseDetailsModalDataService) {
+    this.subscription = courseDetailsModalDataService.modeAnnounced$.subscribe(
       objs => {
-        //objs is an array containing forumModalMode, forumModalEntry and forumModalCommentReplay, in that specific order
-        this.forumModalMode = objs[0];
-        if (objs[1]) this.forumModalEntry = objs[1]; //Only if the string is not empty
-        if (objs[2]) this.forumModalCommentReplay = objs[2]; //Only if the string is not empty
+        //objs is an array containing courseDetailsModalMode, courseDetailsModalEntry and courseDetailsModalCommentReplay, in that specific order
+        this.courseDetailsModalMode = objs[0];
+        if (objs[1]) this.courseDetailsModalEntry = objs[1]; //Only if the string is not empty
+        if (objs[2]) this.courseDetailsModalCommentReplay = objs[2]; //Only if the string is not empty
       });
   }
 
@@ -78,14 +78,14 @@ export class CourseDetailsComponent implements OnInit {
     });
   }
 
-  updateForumModalMode(mode: number, header: string, commentReplay: string) {
+  updateCourseDetailsModalMode(mode: number, header: string, commentReplay: string) {
     let objs = [mode, header, commentReplay];
-    this.forumModalDataService.announceMode(objs);
+    this.courseDetailsModalDataService.announceMode(objs);
   }
 
-  onForumSubmit() {
+  onCourseDetailsSubmit() {
     //If modal is opened in "New Entry" mode
-    if (this.forumModalMode === 0) {
+    if (this.courseDetailsModalMode === 0) {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
       let e = new Entry(this.inputTitle, [new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), [])], new Date(), this.authenticationService.getCurrentUser());
       console.log(e);
@@ -96,7 +96,7 @@ export class CourseDetailsComponent implements OnInit {
     );*/
     }
     //If modal is opened in "New Session" mode
-    else if (this.forumModalMode === 3) {
+    else if (this.courseDetailsModalMode === 3) {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
@@ -107,12 +107,12 @@ export class CourseDetailsComponent implements OnInit {
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else {
       let c = new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), []);
-      /*this.forumService.newComment(c, this.forumModalEntry, this.forumModalCommentReplay).suscribe( //POST method requires the Comment, the ENtry which it belongs and the replayed comment
-        response =>*/if (this.forumModalMode === 2) { //Only on succesful post we locally save the new comment
-        this.forumModalCommentReplay.replies.push(c);
+      /*this.forumService.newComment(c, this.courseDetailsModalEntry, this.courseDetailsModalCommentReplay).suscribe( //POST method requires the Comment, the ENtry which it belongs and the replayed comment
+        response =>*/if (this.courseDetailsModalMode === 2) { //Only on succesful post we locally save the new comment
+        this.courseDetailsModalCommentReplay.replies.push(c);
       }
       else {
-        this.forumModalEntry.comments.push(c);
+        this.courseDetailsModalEntry.comments.push(c);
       }
       this.actions2.emit("closeModal");
       /*error =>

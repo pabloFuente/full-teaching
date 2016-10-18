@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Comment } from '../../classes/comment';
 
-import { ForumModalDataService } from '../../services/forum-modal-data.service';
+import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 
 @Component({
   selector: 'app-comment',
@@ -14,7 +14,7 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  constructor(private forumModalDataService: ForumModalDataService) {
+  constructor(private courseDetailsModalDataService: CourseDetailsModalDataService) {
 
   }
 
@@ -22,9 +22,9 @@ export class CommentComponent implements OnInit {
 
   }
 
-  updateForumModalMode(mode: number, header: string, commentReplay: string){
+  updateCourseDetailsModalMode(mode: number, header: string, commentReplay: string){
     let objs = [mode, header, commentReplay];
-    this.forumModalDataService.announceMode(objs);
+    this.courseDetailsModalDataService.announceMode(objs);
   }
 
 }
