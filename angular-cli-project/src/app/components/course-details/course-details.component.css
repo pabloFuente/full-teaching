@@ -140,3 +140,25 @@
 #inputTime {
   cursor: pointer;
 }
+
+.userImage {
+  display: inline !important;
+}
+
+.attender-col {
+  margin: inherit !important;
+}
+
+@media only screen and (min-width: 993px) {
+  .userImage {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .userImage {
+    width: 45px;
+    height: 45px;
+  }
+}

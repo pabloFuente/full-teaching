@@ -117,7 +117,7 @@ export class CalendarComponent implements OnInit {
               {
                 label: '<i class="material-icons calendar-event-icon">forward</i>',
                 onClick: ({event}: { event: CalendarEvent }): void => {
-                  this.router.navigateByUrl('/courses/' + 0);
+                  this.router.navigateByUrl('/courses/' + s.courseID);
                 }
               }],
               session: s,

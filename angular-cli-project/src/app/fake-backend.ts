@@ -12,14 +12,18 @@ export let fakeBackendProvider = {
         return objArray.filter(function( obj ) {return (obj.course.toString() === a.toString());});
       }
 
+      function getElementsByCourseID2(objArray, a): any[] {
+        return objArray.filter(function( obj ) {return (obj.courseID.toString() === a.toString());});
+      }
+
       let teacherUser = { email: 'teacher@gmail.com', pass: 't', name: 'Techer Cheater', role: 1, picture: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b666f811889067.562541eff3013.png' };
       let studentUser = { email: 'student@gmail.com', pass: 's', name: 'Student Imprudent', role: 0, picture: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/b666f811889067.562541eff3013.png'};
 
-      let session1 = { id: 0, course: 0, title: "Session 1: Introduction to Web", description: 'This is a nice description about this session.', date: new Date("October 13, 2016 11:30:00"), user: teacherUser, image: '' };
-      let session2 = { id: 1, course: 0, title: "Examples", description: 'This is a nice description about this session.', date: new Date("November 5, 2016 12:30:00"), user: teacherUser, image: '' };
-      let session3 = { id: 2, course: 0, title: "Project configuration", description: 'This is a nice description about this session.', date: new Date("October 22, 2016 17:45:00"), user: teacherUser, image: '' };
-      let session4 = { id: 3, course: 1, title: "Session 3: New technologies", description: 'This is a nice description about this session.', date: new Date("November 1, 2016 11:30:00"), user: teacherUser, image: '' };
-      let session5 = { id: 4, course: 1, title: "Session 2: Database integration", description: 'This is a nice description about this session.', date: new Date("October 15, 2016 13:00:00"), user: teacherUser, image: '' };
+      let session1 = { id: 0, courseID: 0, title: "Session 1: Introduction to Web", description: 'This is a nice description about this session.', date: new Date("October 13, 2016 11:30:00")};
+      let session2 = { id: 1, courseID: 0, title: "Examples", description: 'This is a nice description about this session.', date: new Date("November 5, 2016 12:30:00")};
+      let session3 = { id: 2, courseID: 0, title: "Project configuration", description: 'This is a nice description about this session.', date: new Date("October 22, 2016 17:45:00")};
+      let session4 = { id: 3, courseID: 1, title: "Session 3: New technologies", description: 'This is a nice description about this session.', date: new Date("November 1, 2016 11:30:00")};
+      let session5 = { id: 4, courseID: 1, title: "Session 2: Database integration", description: 'This is a nice description about this session.', date: new Date("October 15, 2016 13:00:00")};
 
       let sessions = [session1, session2, session3, session4, session5];
 
@@ -199,7 +203,7 @@ export let fakeBackendProvider = {
           let last = url.substring(url.lastIndexOf("/") + 1, url.length);
           if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token-teacher' || 'Bearer fake-jwt-token-student') {
             connection.mockRespond(new Response(
-              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseID(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseID(files, last), attenders: attenders} })
+              new ResponseOptions({ status: 200, body: {course: courses.filter(function( c ) {return c.id === +last;})[0], sessions: getElementsByCourseID2(sessions, last), forum: getElementsByCourseID(forums, last)[0], files: getElementsByCourseID(files, last), attenders: attenders} })
             ));
           } else {
             // return 401 not authorised if token is null or invalid
