@@ -122,13 +122,13 @@
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
                       <div class="col l6 m6 s6 user-name">{{entry.user.name}}</div>
-                      <div class="col l6 m6 s6 user-name">{{entry.date | date}} - {{entry.date | date:'H:mm' }}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry.date | timeAgo}}</div>
                     </div>
                   </div>
                 </div>
                 <div class="row row-no-margin last-comment-row">
                   <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntrytComment(entry).user.name}} - {{getLastEntrytComment(entry).date | date}} - {{getLastEntrytComment(entry).date | date:'H:mm' }}</div>
+                  <div class="col">{{getLastEntrytComment(entry).user.name}} - {{getLastEntrytComment(entry).date | timeAgo}}</div>
                 </div>
               </li>
               <li *ngIf="!last2"><div class="divider"></div></li>
@@ -141,10 +141,16 @@
           </ul>
           <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
             <div class="row zero-lateral-margin">
-              <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
+              <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1 no-padding-lateral" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
               <div class="col l10 m10 s10 no-padding-lateral">
-                <div class="comment-section-title">{{selectedEntry.title}}:
-                  <div class="entry-user">{{selectedEntry.user.name}}</div>
+                <div class="row row-no-margin comment-section-title">
+                  <div class="col l6 m6 s6">{{selectedEntry.title}}</div>
+                  <div class="col l6 m6 s6 user-date-column">
+                    <div class="row row-no-margin">
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry.user.name}}</div>
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry.date | date}} - {{selectedEntry.date | date:'H:mm' }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="col l1 m1 s1 no-padding-lateral right-align">

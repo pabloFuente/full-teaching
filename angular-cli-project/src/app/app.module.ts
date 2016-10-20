@@ -31,6 +31,7 @@ import { Constants }              from './constants';
 
 import { CalendarModule }         from 'angular2-calendar';
 import { CalendarComponent }      from './components/calendar/calendar.component';
+import { TimeAgoPipe }            from 'time-ago-pipe';
 
 // used to create fake backend
 import { fakeBackendProvider }         from './fake-backend';
@@ -59,6 +60,7 @@ import { BaseRequestOptions }          from '@angular/http';
     CommentComponent,
     FileGroupComponent,
     CalendarComponent,
+    TimeAgoPipe,
   ],
   providers: [
     AuthenticationService,
