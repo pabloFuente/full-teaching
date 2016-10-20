@@ -10,8 +10,6 @@ import { CalendarComponent } from '../calendar/calendar.component';
 import { CourseService }            from '../../services/course.service';
 import { AuthenticationService }    from '../../services/authentication.service';
 
-declare var $: any;
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

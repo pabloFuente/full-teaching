@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-declare var $: any;
-
 @Injectable()
 export class CourseDetailsModalDataService {
 

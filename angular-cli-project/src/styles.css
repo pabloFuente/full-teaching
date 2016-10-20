@@ -61,6 +61,11 @@ a {
   margin: 0 !important;
 }
 
+.zero-lateral-margin {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .add-element-icon{
   float: right;
   cursor: pointer;
@@ -116,14 +121,13 @@ a {
     top: 0 !important;
     width: 100% !important;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    background-color: rgb(231, 235, 233);
+    border: 10px solid rgb(55, 86, 70);
+    border-width:0 10px 10px 10px;
   }
 
   #course-details-modal {
     max-height: none !important;
-  }
-
-  .modal.my-modal-class {
-    background-color: rgb(231, 235, 233);
   }
 
   .modal.my-modal-class .modal-footer{

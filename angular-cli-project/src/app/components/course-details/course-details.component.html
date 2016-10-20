@@ -112,26 +112,48 @@
             <div *ngIf="this.courseDetails?.forum.activated">
 
           <!--Forum view-->
-          <ul class="entries-side-view col l3 m3 s12" [class.hide-on-small-only]="this.fadeAnim === 'commentsShown'">
+          <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
             <div *ngFor="let entry of this.courseDetails?.forum.entries; let last2 = last">
-              <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.entry-selected]="entry === this.selectedEntry"><a class="truncate" [title]="entry.title">{{entry.title}}</a></li>
+              <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
+                <div class="row row-no-margin">
+                  <div class="col l6 m6 s6">
+                    <a [title]="entry.title">{{entry.title}}</a>
+                  </div>
+                  <div class="col l6 m6 s6 user-date-column">
+                    <div class="row row-no-margin">
+                      <div class="col l6 m6 s6 user-name">{{entry.user.name}}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry.date | date}} - {{entry.date | date:'H:mm' }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row row-no-margin last-comment-row">
+                  <div class="col">Last comment:</div>
+                  <div class="col">{{getLastEntrytComment(entry).user.name}} - {{getLastEntrytComment(entry).date | date}} - {{getLastEntrytComment(entry).date | date:'H:mm' }}</div>
+                </div>
+              </li>
               <li *ngIf="!last2"><div class="divider"></div></li>
             </div>
-            <div class="center-align div-entry-icon"><a (click)="updateCourseDetailsModalMode(0, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a></div>
+            <div class="center-align div-entry-icon">
+              <a (click)="updateCourseDetailsModalMode(0, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                <i class="material-icons forum-icon">chat</i>
+              </a>
+            </div>
           </ul>
-          <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-            <a><i id="entries-sml-btn" class="material-icons center-align hide-on-med-and-up col s1" (click)="this.fadeAnim = 'commentsHidden';" [class.hide]="this.fadeAnim === 'commentsHidden'">arrow_back</i></a>
-            <div class="col l9 m9 s11">
-              <div class="col l11 m11 s10 no-padding-right no-padding-left">
-                <div class="comment-section-title" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">{{selectedEntry.title}}:
+          <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
+            <div class="row zero-lateral-margin">
+              <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
+              <div class="col l10 m10 s10 no-padding-lateral">
+                <div class="comment-section-title">{{selectedEntry.title}}:
                   <div class="entry-user">{{selectedEntry.user.name}}</div>
                 </div>
               </div>
-              <div class="col l1 m1 s2 no-padding-right right-align" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
-                <a [title]="'New comment'" (click)="updateCourseDetailsModalMode(1, selectedEntry, null); this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons forum-icon">chat</i></a>
+              <div class="col l1 m1 s1 no-padding-lateral right-align">
+                <a [title]="'New comment'" (click)="updateCourseDetailsModalMode(1, selectedEntry, null); this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                  <i class="material-icons forum-icon">chat</i>
+                </a>
               </div>
             </div>
-            <div class="col l9 m9 s12 comments-col" [class.hide-on-small-only]="this.fadeAnim === 'commentsHidden'">
+            <div class="row row-no-margin comments-col">
               <div *ngFor="let comment of this.selectedEntry?.comments; let last3 = last" class="comment-block" [class.comment-divider]="!last3">
                 <app-comment [comment]="comment"></app-comment>
               </div>

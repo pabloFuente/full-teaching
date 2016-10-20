@@ -28,3 +28,9 @@
 .replay-icon:hover {
   color: #91a59b;
 }
+
+.user-date-separator {
+  display: inline-block;
+  padding-right: 10px;
+  padding-left: 10px;
+}

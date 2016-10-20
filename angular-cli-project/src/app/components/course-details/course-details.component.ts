@@ -36,7 +36,7 @@ export class CourseDetailsComponent implements OnInit {
 
   selectedEntry: Entry;
 
-  fadeAnim = 'commentsShown';
+  fadeAnim = 'commentsHidden';
 
   //Forum Modal Data
   inputTitle: string;
@@ -81,6 +81,14 @@ export class CourseDetailsComponent implements OnInit {
   updateCourseDetailsModalMode(mode: number, header: string, commentReplay: string) {
     let objs = [mode, header, commentReplay];
     this.courseDetailsModalDataService.announceMode(objs);
+  }
+
+  getLastEntrytComment(entry: Entry){
+    let comment = entry.comments[0];
+    for (let c of entry.comments){
+      if (c.date > comment.date) comment = c;
+    }
+    return comment;
   }
 
   onCourseDetailsSubmit() {

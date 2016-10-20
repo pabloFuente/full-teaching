@@ -2,7 +2,8 @@
   <div class="row row-margin-bottom">
     <div class="col l11 m11 s11">
       <div class="message-itself">{{comment.message}}</div>
-      <div class="user-name">{{comment.user.name}}</div> |
+      <div class="user-name">{{comment.user.name}}</div>
+      <div class="user-date-separator">-</div>
       <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
     </div>
     <div class="col l1 m1 s1 no-padding-left right-align">

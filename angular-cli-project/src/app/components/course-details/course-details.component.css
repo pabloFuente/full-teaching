@@ -81,14 +81,32 @@ a.btn-floating {
   font-weight: bold;
 }
 
+.user-name {
+  display: inline-block;
+  font-size: small;
+  font-weight: 300;
+}
+
+.user-date-separator {
+  display: inline-block;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.user-date-column {
+  text-align: right;
+}
+
+.last-comment-row {
+  font-size: 13px;
+  font-weight: 300;
+  color: #375345;
+}
+
 .entry-user {
   display: inline-block;
   font-size: small;
   font-weight: 500;
-}
-
-.entry-selected {
-  background-color: #e0e0e0;
 }
 
 .comment-section-title {
