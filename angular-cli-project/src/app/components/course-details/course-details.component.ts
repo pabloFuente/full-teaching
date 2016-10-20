@@ -38,12 +38,12 @@ export class CourseDetailsComponent implements OnInit {
 
   fadeAnim = 'commentsHidden';
 
-  //Forum Modal Data
   inputTitle: string;
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-  courseDetailsModalMode: number; // 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session
+//courseDetailsModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
+  courseDetailsModalMode: number = 3;
   courseDetailsModalEntry: Entry;
   courseDetailsModalCommentReplay: Comment;
 
@@ -78,7 +78,7 @@ export class CourseDetailsComponent implements OnInit {
     });
   }
 
-  updateCourseDetailsModalMode(mode: number, header: string, commentReplay: string) {
+  updateCourseDetailsModalMode(mode: number, header: Entry, commentReplay: Comment) {
     let objs = [mode, header, commentReplay];
     this.courseDetailsModalDataService.announceMode(objs);
   }
@@ -89,6 +89,10 @@ export class CourseDetailsComponent implements OnInit {
       if (c.date > comment.date) comment = c;
     }
     return comment;
+  }
+
+  isCurrentMode(possibleModes: string[]): boolean {
+    return (possibleModes.indexOf(this.courseDetailsModalMode.toString()) > -1);
   }
 
   onCourseDetailsSubmit() {

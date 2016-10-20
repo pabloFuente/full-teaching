@@ -7,12 +7,12 @@
     <div class="modal-content">
       <h5 *ngIf="this.courseDetailsModalMode === 1">{{this.courseDetailsModalEntry?.title}}</h5>
       <p *ngIf="this.courseDetailsModalMode === 2">{{this.courseDetailsModalCommentReplay?.message}}</p>
-      <div class="row">
+      <div class="row row-no-margin">
 
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
           <div class="row row-no-margin">
 
-            <div *ngIf="this.courseDetailsModalMode === 0 || this.courseDetailsModalMode === 3" class="row">
+            <div *ngIf="isCurrentMode(['0', '3'])" class="row">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
                 <label *ngIf="this.courseDetailsModalMode === 0" for="inputTitle">Entry title</label>
@@ -20,10 +20,10 @@
               </div>
             </div>
 
-            <div class="row">
+            <div *ngIf="isCurrentMode(['0', '1', '2', '3'])" class="row">
               <div class="input-field col s12">
                 <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
-                <label *ngIf="this.courseDetailsModalMode != 3" for="inputComment">Write your comment here</label>
+                <label *ngIf="isCurrentMode('0', '1', '2')" for="inputComment">Write your comment here</label>
                 <label *ngIf="this.courseDetailsModalMode === 3" for="inputComment">Description</label>
               </div>
             </div>
@@ -48,7 +48,7 @@
             </div>
 
           </div>
-          <div class="row right-align">
+          <div class="row row-no-margin-bottom right-align">
             <a (click)="courseDetailsForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="row row-no-margin last-comment-row">
                   <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntrytComment(entry).user.name}} - {{getLastEntrytComment(entry).date | timeAgo}}</div>
+                  <div class="col">{{getLastEntrytComment(entry).user.name}}, {{getLastEntrytComment(entry).date | timeAgo}}</div>
                 </div>
               </li>
               <li *ngIf="!last2"><div class="divider"></div></li>
@@ -191,7 +191,7 @@
         <template md-tab-content>
           <div class="tab-template-content">
             <div class="row row-no-margin">
-              <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(3, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
+              <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(4, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
             </div>
             <div *ngFor="let attender of courseDetails?.attenders" class="row row-no-margin valign-wrapper">
               <div class="col l2 m2 s3 valign attender-col">

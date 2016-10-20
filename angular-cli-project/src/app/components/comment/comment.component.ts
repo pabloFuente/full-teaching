@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Comment } from '../../classes/comment';
+import { Entry } from '../../classes/entry';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 
@@ -22,7 +23,7 @@ export class CommentComponent implements OnInit {
 
   }
 
-  updateCourseDetailsModalMode(mode: number, header: string, commentReplay: string){
+  updateCourseDetailsModalMode(mode: number, header: Entry, commentReplay: Comment){
     let objs = [mode, header, commentReplay];
     this.courseDetailsModalDataService.announceMode(objs);
   }
