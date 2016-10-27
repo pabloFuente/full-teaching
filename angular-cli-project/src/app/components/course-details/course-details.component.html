@@ -115,7 +115,7 @@
           <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
             <div *ngFor="let entry of this.courseDetails?.forum.entries; let last2 = last">
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
-                <div class="row row-no-margin">
+                <div class="row row-no-margin entry-row-sep">
                   <div class="col l6 m6 s6">
                     <a [title]="entry.title">{{entry.title}}</a>
                   </div>
