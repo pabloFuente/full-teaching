@@ -27,6 +27,8 @@ public class Course {
 	
 	private String title;
 	
+	private String image;
+	
 	@ManyToOne
 	private User teacher;
 	
@@ -41,16 +43,18 @@ public class Course {
 	
 	public Course() {}
 	
-	public Course(String title, User teacher) {
+	public Course(String title, String image, User teacher) {
 		this.title = title;
+		this.image = image;
 		this.teacher = teacher;
 		this.courseDetails = null;
 		this.sessions = new ArrayList<>();
 		this.attenders = new ArrayList<>();
 	}
-	
-	public Course(String title, User teacher, CourseDetails courseDetails) {
+
+	public Course(String title, String image, User teacher, CourseDetails courseDetails) {
 		this.title = title;
+		this.image = image;
 		this.teacher = teacher;
 		this.courseDetails = courseDetails;
 		this.sessions = new ArrayList<>();
@@ -63,6 +67,14 @@ public class Course {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public User getTeacher() {

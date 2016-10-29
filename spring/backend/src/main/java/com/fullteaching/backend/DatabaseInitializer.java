@@ -138,8 +138,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 		cd2.getFiles().add(listFileGroups.get(3));
 		
 		//Sample courses
-		Course c1 = new Course("Pseudoscientific course for treating the evil eye", user3);
-		Course c2 = new Course("Don't mind. This is a real course", user3);
+		Course c1 = new Course("Pseudoscientific course for treating the evil eye", "", user3);
+		Course c2 = new Course("Don't mind. This is a real course", "", user3);
 		
 		c1.setCourseDetails(cd1);
 		c2.setCourseDetails(cd2);

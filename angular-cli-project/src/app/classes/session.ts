@@ -1,7 +1,11 @@
+import { Course } from './course';
+
 export class Session {
-  constructor(
-    public title: string,
-    public description: string,
-    public date: Date,
-    public courseID: number) { }
+
+  public id?: number;
+  public title: string;
+  public description: string;
+  public date: Date;
+  public course: Course;
+
 }

@@ -5,10 +5,11 @@ import { User }       from './user';
 import { FileGroup }  from './file-group';
 
 export class CourseDetails {
-  constructor(
-    public course: Course,
-    public sessions: Session[],
-    public forum: Forum,
-    public files: FileGroup[],
-    public attenders: User[]) { }
+
+  public id?: number;
+  public forum: Forum;
+  public files: FileGroup[];
+  public course: Course;
+
+
 }
