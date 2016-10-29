@@ -26,10 +26,10 @@ public class Entry {
 	
 	private long date;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> comments;
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne
 	private User user;
 	
 	public Entry() {}

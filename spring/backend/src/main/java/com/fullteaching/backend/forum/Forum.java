@@ -23,7 +23,7 @@ public class Forum {
 	
 	private boolean activated;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Entry> entries;
 	
 	public Forum(){}

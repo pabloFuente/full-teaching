@@ -30,10 +30,10 @@ public class Course {
 	@ManyToOne
 	private User teacher;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade=CascadeType.ALL)
 	private CourseDetails courseDetails;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="course")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="course")
 	private List<Session> sessions;
 	
 	@ManyToMany
@@ -45,13 +45,15 @@ public class Course {
 		this.title = title;
 		this.teacher = teacher;
 		this.courseDetails = null;
-		this.attenders = new ArrayList<User>();
+		this.sessions = new ArrayList<>();
+		this.attenders = new ArrayList<>();
 	}
 	
 	public Course(String title, User teacher, CourseDetails courseDetails) {
 		this.title = title;
 		this.teacher = teacher;
 		this.courseDetails = courseDetails;
+		this.sessions = new ArrayList<>();
 		this.attenders = new ArrayList<User>();
 	}
 

@@ -23,10 +23,10 @@ public class CourseDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade=CascadeType.ALL)
 	private Forum forum;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<FileGroup> files;
 	
 	@OneToOne(mappedBy="courseDetails")

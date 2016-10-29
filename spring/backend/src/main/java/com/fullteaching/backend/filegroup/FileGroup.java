@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
+import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.file.File;
 
 @Entity
@@ -23,22 +24,14 @@ public class FileGroup {
 	
 	private String title;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<File> files;
+	
+	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<FileGroup> fileGroups;
 	
 	@ManyToOne
 	private FileGroup fileGroupParent;
-	
-	public FileGroup getFileGroupParent() {
-		return fileGroupParent;
-	}
-
-	public void setFileGroupParent(FileGroup fileGroupParent) {
-		this.fileGroupParent = fileGroupParent;
-	}
-
-	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<FileGroup> fileGroups;
 	
 	public FileGroup() {}
 	
@@ -79,5 +72,14 @@ public class FileGroup {
 	public void setFileGroups(List<FileGroup> fileGroups) {
 		this.fileGroups = fileGroups;
 	}
+	
+	public FileGroup getFileGroupParent() {
+		return fileGroupParent;
+	}
+
+	public void setFileGroupParent(FileGroup fileGroupParent) {
+		this.fileGroupParent = fileGroupParent;
+	}
+	
 
 }

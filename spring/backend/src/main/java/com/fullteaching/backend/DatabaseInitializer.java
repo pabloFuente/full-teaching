@@ -35,24 +35,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 	@Autowired
 	private CourseRepository courseRepository;
 	
-	@Autowired
-	private SessionRepository sessionRepository;
-	
-	@Autowired
-	private ForumRepository forumRepository;
-	
-	@Autowired
-	private FileGroupRepository fileGroupRepository;
-	
-	@Autowired
-	private FileRepository fileRepository;
-	
-	@Autowired
-	private EntryRepository entryRepository;
-	
-	@Autowired
-	private CommentRepository commentRepository;
-	
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -78,13 +60,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		List<Comment> listComments = new LinkedList<>();
 		for (int i = 0; i < 30; i++){
 			int userRandom = rand.nextInt(3);
-			System.out.println(userRandom);
-			listComments.add(new Comment("This is comment" + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", 1477427508222L, listUsers.get(userRandom)));
-		}
-		
-		//Saving comments
-		for (int i = 0; i < listComments.size(); i++){
-			commentRepository.save(listComments.get(i));
+			listComments.add(new Comment("This is comment " + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", 1477427508222L, listUsers.get(userRandom)));
 		}
 		
 		//Sample entries
@@ -99,16 +75,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 		while ((!listComments.isEmpty()) && (iEntry < listEntries.size())){
 			int nRandom = rand.nextInt(7);
 			Entry e = listEntries.get(iEntry);
-			for (int i = 0; i < nRandom; i++){
+			int i = 0;
+			while ((i < nRandom) && (!listComments.isEmpty())){
 				e.getComments().add(listComments.get(0));
 				listComments.remove(0);
+				i++;
 			}
 			iEntry++;
-		}
-		
-		//Saving entries
-		for (int i = 0; i < listEntries.size(); i++){
-			entryRepository.save(listEntries.get(i));
 		}
 		
 		//Sample files
@@ -117,11 +90,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 		for (int i = 0; i < 20; i++){
 			int randomN = rand.nextInt(3);
 			listFiles.add(new File(randomN, nameArray[randomN], "www.awesomeurl.com"));
-		}
-		
-		//Saving files
-		for (int i = 0; i < listFiles.size(); i++){
-			fileRepository.save(listFiles.get(i));
 		}
 		
 		//Sample fileGroups
@@ -143,21 +111,21 @@ public class DatabaseInitializer implements CommandLineRunner {
 		listFileGroups.get(4).setFileGroupParent(listFileGroups.get(3));
 		listFileGroups.get(3).getFileGroups().add(listFileGroups.get(4));
 		
-		//Saving fileGroups
-		for (int i = 0; i < listFileGroups.size(); i++){
-			fileGroupRepository.save(listFileGroups.get(i));
-		}
+		/*//Saving root fileGroups (and children fileGroups and all files in cascade)
+		fileGroupRepository.save(listFileGroups.get(1));
+		fileGroupRepository.save(listFileGroups.get(2));
+		fileGroupRepository.save(listFileGroups.get(3));*/
 		
 		//Sample forums
 		Forum f1 = new Forum(true);
 		Forum f2 = new Forum(false);
 		
 		f1.setEntries(listEntries.subList(0, 6));
-		f1.setEntries(listEntries.subList(6, 10));
+		f2.setEntries(listEntries.subList(6, 10));
 		
-		//Saving forums
+		/*//Saving forums (and entries and comments in cascade)
 		forumRepository.save(f1);
-		forumRepository.save(f2);
+		forumRepository.save(f2);*/
 		
 		//Sample courseDetails
 		CourseDetails cd1 = new CourseDetails();
@@ -165,10 +133,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		cd1.setForum(f1);
 		cd2.setForum(f2);
-		cd1.setFiles(listFileGroups.subList(0, 3));
-		cd2.setFiles(listFileGroups.subList(3, 5));
-		
-		//[CourseDetail - File] relation should explicitly need to store courseDetails at this point
+		cd1.getFiles().add(listFileGroups.get(1));
+		cd1.getFiles().add(listFileGroups.get(2));
+		cd2.getFiles().add(listFileGroups.get(3));
 		
 		//Sample courses
 		Course c1 = new Course("Pseudoscientific course for treating the evil eye", user3);
@@ -177,13 +144,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		c1.setCourseDetails(cd1);
 		c2.setCourseDetails(cd2);
 		c1.setAttenders(listUsers);
-		c2.setAttenders(listUsers);
-		
-		//Saving courses
-		courseRepository.save(c1);
-		courseRepository.save(c2);
-		
-		
+		c2.setAttenders(listUsers);	
 		
 		//Sample sessions
 		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1520719320000L);
@@ -195,15 +156,17 @@ public class DatabaseInitializer implements CommandLineRunner {
 		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", 1457708400000L);
 		s4.setCourse(c2);
 		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", 1462978800000L);
-		s5.setCourse(c2);	
+		s5.setCourse(c2);
 		
-		//Saving sessions
-		sessionRepository.save(s1);
-		sessionRepository.save(s2);
-		sessionRepository.save(s3);
-		sessionRepository.save(s4);
-		sessionRepository.save(s5);
+		c1.getSessions().add(s1);
+		c1.getSessions().add(s2);
+		c1.getSessions().add(s3);
+		c2.getSessions().add(s4);
+		c2.getSessions().add(s5);
 		
+		//Saving courses
+		courseRepository.save(c1);
+		courseRepository.save(c2);
 	}
 
 }

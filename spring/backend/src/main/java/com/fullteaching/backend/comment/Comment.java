@@ -25,13 +25,13 @@ public class Comment {
 	
 	private long date;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> replies;
 	
 	@ManyToOne
 	private Comment commentParent;
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne
 	private User user;
 	
 	public Comment() {}
