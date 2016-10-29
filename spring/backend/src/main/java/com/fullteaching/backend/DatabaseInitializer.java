@@ -16,9 +16,13 @@ import com.fullteaching.backend.coursedetails.CourseDetails;
 import com.fullteaching.backend.comment.CommentRepository;
 import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.entry.Entry;
+import com.fullteaching.backend.entry.EntryRepository;
 import com.fullteaching.backend.file.File;
+import com.fullteaching.backend.file.FileRepository;
 import com.fullteaching.backend.filegroup.FileGroup;
+import com.fullteaching.backend.filegroup.FileGroupRepository;
 import com.fullteaching.backend.forum.Forum;
+import com.fullteaching.backend.forum.ForumRepository;
 import com.fullteaching.backend.session.Session;
 import com.fullteaching.backend.session.SessionRepository;
 
@@ -33,6 +37,21 @@ public class DatabaseInitializer implements CommandLineRunner {
 	
 	@Autowired
 	private SessionRepository sessionRepository;
+	
+	@Autowired
+	private ForumRepository forumRepository;
+	
+	@Autowired
+	private FileGroupRepository fileGroupRepository;
+	
+	@Autowired
+	private FileRepository fileRepository;
+	
+	@Autowired
+	private EntryRepository entryRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -54,11 +73,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 		userRepository.save(user2);
 		userRepository.save(user3);
 		
-		//Sample courses
-		Course c1 = new Course("Pseudoscientific course for treating the evil eye", user3);
-		Course c2 = new Course("Don't mind. This is a real course", user3);
-		c1.setAttenders(listUsers);
-		c2.setAttenders(listUsers);
 		
 		//Sample comments
 		List<Comment> listComments = new LinkedList<>();
@@ -66,6 +80,11 @@ public class DatabaseInitializer implements CommandLineRunner {
 			int userRandom = rand.nextInt(3);
 			System.out.println(userRandom);
 			listComments.add(new Comment("This is comment" + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", 1477427508222L, listUsers.get(userRandom)));
+		}
+		
+		//Saving comments
+		for (int i = 0; i < listComments.size(); i++){
+			commentRepository.save(listComments.get(i));
 		}
 		
 		//Sample entries
@@ -87,12 +106,22 @@ public class DatabaseInitializer implements CommandLineRunner {
 			iEntry++;
 		}
 		
+		//Saving entries
+		for (int i = 0; i < listEntries.size(); i++){
+			entryRepository.save(listEntries.get(i));
+		}
+		
 		//Sample files
 		List<File> listFiles = new LinkedList<>();
 		String[] nameArray = {"Interesting Web Link", "Cool PDF File", "This is a video"};
 		for (int i = 0; i < 20; i++){
 			int randomN = rand.nextInt(3);
 			listFiles.add(new File(randomN, nameArray[randomN], "www.awesomeurl.com"));
+		}
+		
+		//Saving files
+		for (int i = 0; i < listFiles.size(); i++){
+			fileRepository.save(listFiles.get(i));
 		}
 		
 		//Sample fileGroups
@@ -102,18 +131,59 @@ public class DatabaseInitializer implements CommandLineRunner {
 			listFileGroups.add(new FileGroup(titleArray[i]));
 		}
 		
-		//Allocation of files and fileGRoups inside fileGRoups
+		//Allocation of files and fileGroups inside fileGroups
 		listFileGroups.get(0).getFiles().addAll(listFiles.subList(0, 5));
 		listFileGroups.get(1).getFiles().addAll(listFiles.subList(5, 7));
 		listFileGroups.get(2).getFiles().addAll(listFiles.subList(7, 12));
 		listFileGroups.get(3).getFiles().addAll(listFiles.subList(12, 18));
 		listFileGroups.get(4).getFiles().addAll(listFiles.subList(18, 20));
+		
+		listFileGroups.get(0).setFileGroupParent(listFileGroups.get(1));
 		listFileGroups.get(1).getFileGroups().add(listFileGroups.get(0));
+		listFileGroups.get(4).setFileGroupParent(listFileGroups.get(3));
 		listFileGroups.get(3).getFileGroups().add(listFileGroups.get(4));
+		
+		//Saving fileGroups
+		for (int i = 0; i < listFileGroups.size(); i++){
+			fileGroupRepository.save(listFileGroups.get(i));
+		}
 		
 		//Sample forums
 		Forum f1 = new Forum(true);
 		Forum f2 = new Forum(false);
+		
+		f1.setEntries(listEntries.subList(0, 6));
+		f1.setEntries(listEntries.subList(6, 10));
+		
+		//Saving forums
+		forumRepository.save(f1);
+		forumRepository.save(f2);
+		
+		//Sample courseDetails
+		CourseDetails cd1 = new CourseDetails();
+		CourseDetails cd2 = new CourseDetails();
+		
+		cd1.setForum(f1);
+		cd2.setForum(f2);
+		cd1.setFiles(listFileGroups.subList(0, 3));
+		cd2.setFiles(listFileGroups.subList(3, 5));
+		
+		//[CourseDetail - File] relation should explicitly need to store courseDetails at this point
+		
+		//Sample courses
+		Course c1 = new Course("Pseudoscientific course for treating the evil eye", user3);
+		Course c2 = new Course("Don't mind. This is a real course", user3);
+		
+		c1.setCourseDetails(cd1);
+		c2.setCourseDetails(cd2);
+		c1.setAttenders(listUsers);
+		c2.setAttenders(listUsers);
+		
+		//Saving courses
+		courseRepository.save(c1);
+		courseRepository.save(c2);
+		
+		
 		
 		//Sample sessions
 		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1520719320000L);
@@ -125,15 +195,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", 1457708400000L);
 		s4.setCourse(c2);
 		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", 1462978800000L);
-		s5.setCourse(c2);
-		
-		List<Session> sessions1 = new LinkedList<>();
-		List<Session> sessions2 = new LinkedList<>();
-		sessions1.add(s1);
-		sessions1.add(s2);
-		sessions1.add(s3);
-		sessions2.add(s4);
-		sessions2.add(s5);
+		s5.setCourse(c2);	
 		
 		//Saving sessions
 		sessionRepository.save(s1);
@@ -141,25 +203,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 		sessionRepository.save(s3);
 		sessionRepository.save(s4);
 		sessionRepository.save(s5);
-		
-		
-		//Sample courseDetails
-		CourseDetails cd1 = new CourseDetails();
-		CourseDetails cd2 = new CourseDetails();
-		
-		cd1.setForum(f1);
-		cd2.setForum(f2);
-		cd1.setFiles(listFileGroups.subList(0, 3));
-		cd2.setFiles(listFileGroups.subList(3, 5));
-		cd1.setSessions(sessions1);
-		cd2.setSessions(sessions2);
-		
-		c1.setCourseDetails(cd1);
-		c2.setCourseDetails(cd2);
-		
-		//Saving courses
-		courseRepository.save(c1);
-		courseRepository.save(c2);
 		
 	}
 

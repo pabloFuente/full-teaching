@@ -3,13 +3,15 @@ package com.fullteaching.backend.coursedetails;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
-import com.fullteaching.backend.session.Session;
 import com.fullteaching.backend.forum.Forum;
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.filegroup.FileGroup;
@@ -21,10 +23,10 @@ public class CourseDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	private List<Session> sessions;
-	
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private Forum forum;
 	
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<FileGroup> files;
 	
 	@OneToOne(mappedBy="courseDetails")
@@ -33,22 +35,12 @@ public class CourseDetails {
 	public CourseDetails() {
 		this.forum = new Forum();
 		this.files =  new ArrayList<>();
-		this.sessions = new ArrayList<>();
 	}
 
 	public CourseDetails(Course course) {
 		this.course = course;
 		this.forum = new Forum();
 		this.files =  new ArrayList<>();
-		this.sessions = new ArrayList<>();
-	}
-
-	public List<Session> getSessions() {
-		return sessions;
-	}
-
-	public void setSessions(List<Session> sessions) {
-		this.sessions = sessions;
 	}
 
 	public Forum getForum() {

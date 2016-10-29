@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.session.Session;
@@ -26,6 +27,7 @@ public class Course {
 	
 	private String title;
 	
+	@ManyToOne
 	private User teacher;
 	
 	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
@@ -83,5 +85,13 @@ public class Course {
 
 	public void setAttenders(List<User> attenders) {
 		this.attenders = attenders;
+	}
+
+	public List<Session> getSessions() {
+		return sessions;
+	}
+
+	public void setSessions(List<Session> sessions) {
+		this.sessions = sessions;
 	}
 }

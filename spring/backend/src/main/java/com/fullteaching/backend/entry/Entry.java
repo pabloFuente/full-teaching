@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.user.User;
@@ -25,9 +26,10 @@ public class Entry {
 	
 	private long date;
 	
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comment> comments;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private User user;
 	
 	public Entry() {}
