@@ -33,11 +33,6 @@ import { CalendarModule }         from 'angular2-calendar';
 import { CalendarComponent }      from './components/calendar/calendar.component';
 import { TimeAgoPipe }            from 'time-ago-pipe';
 
-// used to create fake backend
-import { fakeBackendProvider }         from './fake-backend';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { BaseRequestOptions }          from '@angular/http';
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -71,11 +66,6 @@ import { BaseRequestOptions }          from '@angular/http';
     LoginModalService,
     AuthGuard,
     Constants,
-
-    // providers used to create fake backend
-    fakeBackendProvider,
-    MockBackend,
-    BaseRequestOptions
   ],
   bootstrap: [AppComponent]
 })

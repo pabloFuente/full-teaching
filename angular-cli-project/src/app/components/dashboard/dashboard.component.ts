@@ -32,7 +32,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authenticationService.checkCredentials();
-    this.getCourses();
+    this.courses = this.authenticationService.getCurrentUser().courses;
+    //this.getCourses();
   }
 
   goToCourseDetail(id): void {
@@ -43,7 +44,7 @@ export class DashboardComponent implements OnInit {
     this.authenticationService.logOut();
   }
 
-  getCourses(): void {
+  /*getCourses(): void {
     console.log(this.authenticationService.getCurrentUser());
     this.courseService.getCourses().subscribe(
       courses => {
@@ -51,7 +52,7 @@ export class DashboardComponent implements OnInit {
         this.courses = courses;
       },
       error => console.log(error));
-  }
+  }*/
 
 
   getImage(c: Course) {
@@ -59,7 +60,8 @@ export class DashboardComponent implements OnInit {
       return c.image;
     }
     else {
-      return c.teacher.picture;
+      //return c.teacher.picture;
+      return "/../assets/images/default_session_image.png";
     }
   }
 

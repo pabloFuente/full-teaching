@@ -121,14 +121,14 @@
                   </div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{entry.user.name}}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry.user.nickName}}</div>
                       <div class="col l6 m6 s6 user-name">{{entry.date | timeAgo}}</div>
                     </div>
                   </div>
                 </div>
                 <div class="row row-no-margin last-comment-row">
                   <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntrytComment(entry).user.name}}, {{getLastEntrytComment(entry).date | timeAgo}}</div>
+                  <div class="col">{{getLastEntrytComment(entry).user.nickName}}, {{getLastEntrytComment(entry).date | timeAgo}}</div>
                 </div>
               </li>
               <li *ngIf="!last2"><div class="divider"></div></li>
@@ -147,7 +147,7 @@
                   <div class="col l6 m6 s6">{{selectedEntry.title}}</div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry.user.name}}</div>
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry.user.nickName}}</div>
                       <div class="col l6 m6 s6 user-name">{{selectedEntry.date | date}} - {{selectedEntry.date | date:'H:mm' }}</div>
                     </div>
                   </div>
@@ -198,7 +198,7 @@
                 <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.user.picture}}>
               </div>
               <div class="col l5 m5 s9 valign attender-col">
-                <p>{{attender?.user.name}}</p>
+                <p>{{attender?.user.nickName}}</p>
               </div>
             </div>
         </div>

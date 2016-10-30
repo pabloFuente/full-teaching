@@ -17,22 +17,22 @@ export class AuthenticationService {
     this.reqIsLogged();
 
     // set token if saved in local storage
-    let auth_token = JSON.parse(localStorage.getItem('auth_token'));
-    this.token = auth_token && auth_token.token;
+    //let auth_token = JSON.parse(localStorage.getItem('auth_token'));
+    //this.token = auth_token && auth_token.token;
   }
 
-  logIn(email, pass) {
+  logIn(user: string, pass: string) {
 
     console.log("3 - LOGIN SERVICE STARTED");
 
-    let userPass = email + ":" + pass;
+    let userPass = user + ":" + pass;
     let headers = new Headers({
   			'Authorization': 'Basic '+ utf8_to_b64(userPass),
   			'X-Requested-With': 'XMLHttpRequest'});
     let options = new RequestOptions({headers});
 
     return this.http.get('logIn', options)
-      .map((response: Response) => {
+      .map(response => {
         this.processLogInResponse(response);
         return this.user;
 
@@ -56,19 +56,26 @@ export class AuthenticationService {
           this.user = null;
           return false;
         }*/
-      });
+      })
+      .catch(error => Observable.throw(error));
   }
 
   logOut() {
+
+    console.log("LOGGING OUT");
+
     return this.http.get('logOut').map(
 			response => {
+
+        console.log("LOGGED OUT");
+
 				this.user = null;
 				this.role = null;
 
         // clear token remove user from local storage to log user out and navigates to welcome page
         this.token = null;
-        localStorage.removeItem('current_user');
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('login');
+        localStorage.removeItem('rol');
         this.router.navigate(['']);
 
 				return response;
@@ -83,7 +90,9 @@ export class AuthenticationService {
       console.log("4 - LOGIN EXTREMELY SUCCESFUL");
       console.log(response.json());
 
-  		this.user = response.json();
+  		this.user = (response.json() as User);
+
+      console.log(this.user);
 
       localStorage.setItem("login", "FULLTEACHING");
       if(this.user.roles.indexOf("ROLE_ADMIN") !== -1){
@@ -101,6 +110,9 @@ export class AuthenticationService {
   	}
 
   reqIsLogged(){
+
+      console.log("ReqIsLogged called");
+
   		let headers = new Headers({
   			'X-Requested-With': 'XMLHttpRequest'
   		});
@@ -124,7 +136,7 @@ export class AuthenticationService {
   }
 
   isLoggedIn() {
-    return (!!localStorage.getItem('auth_token') && this.user && this.token);
+    return ((this.user != null) && (this.user != undefined));
   }
 
   getCurrentUser() {
@@ -132,15 +144,15 @@ export class AuthenticationService {
   }
 
   isTeacher() {
-    return ((this.user.roles.indexOf("ROLE_TEACHER")) !== -1) && (JSON.parse(localStorage.getItem('current_user')).roles.indexOF("ROLE_TEACHER")) !== -1;
+    return ((this.user.roles.indexOf("ROLE_TEACHER")) !== -1) && (localStorage.getItem('rol') === "ROLE_TEACHER");
   }
 
   isStudent() {
-    return ((this.user.roles.indexOf("ROLE_STUDENT")) !== -1) && (JSON.parse(localStorage.getItem('current_user')).roles.indexOF("ROLE_STUDENT")) !== -1;
+    return ((this.user.roles.indexOf("ROLE_STUDENT")) !== -1) && (localStorage.getItem('rol') === "ROLE_STUDENT");
   }
 
   isAdmin() {
-    return ((this.user.roles.indexOf("ROLE_ADMIN")) !== -1) && (JSON.parse(localStorage.getItem('current_user')).roles.indexOF("ROLE_ADMIN")) !== -1;
+    return ((this.user.roles.indexOf("ROLE_ADMIN")) !== -1) && (localStorage.getItem('rol') === "ROLE_ADMIN");
   }
 }
 

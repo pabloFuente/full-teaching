@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionService }   from '../../services/session.service';
+import { AuthenticationService }   from '../../services/authentication.service';
 import { Session } from '../../classes/session';
 import {
   startOfDay,
@@ -57,7 +57,7 @@ export class CalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = false;
 
-  constructor(private sessionService: SessionService, private router: Router) { }
+  constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
     this.getAllSessions();
@@ -103,29 +103,29 @@ export class CalendarComponent implements OnInit {
   }
 
   getAllSessions() {
-    this.sessionService.getAllSessions().subscribe(
-      sessions => {
-        console.log(sessions);
-        for (let s of sessions) {
-          let min = s.date.getMinutes();
-          if (min < 10) { min = "0" + min; }
-          this.events.push({
-            start: s.date,
-            title: s.title + '  |  ' + s.date.getHours() + ':' + min,
-            color: colors.red,
-            actions: [
-              {
-                label: '<i class="material-icons calendar-event-icon">forward</i>',
-                onClick: ({event}: { event: CalendarEvent }): void => {
-                  this.router.navigateByUrl('/courses/' + s.courseID);
-                }
-              }],
-              session: s,
-          });
-        }
-      },
-      error => console.log(error)
-    );
+    let userCourses = this.authenticationService.getCurrentUser().courses;
+    for (let c of userCourses){
+      for (let s of c.sessions) {
+        let d: Date;
+        d = new Date(s.date);
+        let min = d.getMinutes();
+        let minutesString = min.toString();
+        if (min < 10) { minutesString = "0" + minutesString; }
+        this.events.push({
+          start: s.date,
+          title: s.title + '  |  ' + d.getHours() + ':' + minutesString,
+          color: colors.red,
+          actions: [
+            {
+              label: '<i class="material-icons calendar-event-icon">forward</i>',
+              onClick: ({event}: { event: CalendarEvent }): void => {
+                this.router.navigateByUrl('/courses/' + s.course.id);
+              }
+            }],
+            session: s,
+        });
+          }
+      }
   }
 
 }

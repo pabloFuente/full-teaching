@@ -1,7 +1,9 @@
 package com.fullteaching.backend.course;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.session.Session;
 import com.fullteaching.backend.coursedetails.CourseDetails;
@@ -29,15 +32,18 @@ public class Course {
 	
 	private String image;
 	
+	@JsonIgnore
 	@ManyToOne
 	private User teacher;
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OneToOne(cascade=CascadeType.ALL)
 	private CourseDetails courseDetails;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="course")
-	private List<Session> sessions;
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="course")
+	private Set<Session> sessions;
 	
+	@JsonIgnore
 	@ManyToMany
 	private List<User> attenders;
 	
@@ -48,7 +54,7 @@ public class Course {
 		this.image = image;
 		this.teacher = teacher;
 		this.courseDetails = null;
-		this.sessions = new ArrayList<>();
+		this.sessions = new HashSet<>();
 		this.attenders = new ArrayList<>();
 	}
 
@@ -57,7 +63,7 @@ public class Course {
 		this.image = image;
 		this.teacher = teacher;
 		this.courseDetails = courseDetails;
-		this.sessions = new ArrayList<>();
+		this.sessions = new HashSet<>();
 		this.attenders = new ArrayList<User>();
 	}
 
@@ -101,11 +107,11 @@ public class Course {
 		this.attenders = attenders;
 	}
 
-	public List<Session> getSessions() {
+	public Set<Session> getSessions() {
 		return sessions;
 	}
 
-	public void setSessions(List<Session> sessions) {
+	public void setSessions(Set<Session> sessions) {
 		this.sessions = sessions;
 	}
 }

@@ -11,7 +11,8 @@ export class Session {
   constructor(title: string, description: string, date: Date, course: Course){
     this.title = title;
     this.description = description;
-    this.date = date;this.course = course;
+    this.date = date;
+    this.course = course;
   }
 
 }

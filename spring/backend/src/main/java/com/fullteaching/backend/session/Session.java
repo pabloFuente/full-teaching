@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fullteaching.backend.course.Course;
 
 @Entity
@@ -21,6 +22,7 @@ public class Session {
 	
 	private long date;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Course course;
 	
@@ -47,6 +49,14 @@ public class Session {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public String getDescription() {
 		return description;
@@ -71,7 +81,5 @@ public class Session {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-	
-	
 	
 }

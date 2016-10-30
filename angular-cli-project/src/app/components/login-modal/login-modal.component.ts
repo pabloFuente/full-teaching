@@ -82,21 +82,13 @@ export class LoginModalComponent {
       this.authenticationService.logIn(this.email, this.password).subscribe(
         result => {
           this.submitProcessing = false;
-          if (result instanceof User) {
 
-            console.log("2 - LOGIN SUCCESFUL");
+          console.log("2 - LOGIN SUCCESFUL");
 
-            // Login successful
-            this.fieldsIncorrect = false;
-            this.actions.emit("closeModal");
-            this.router.navigate(['/courses']);
-          } else {
-
-            console.log("2 - LOGIN FAILED (response not a user)");
-
-            // Login failed
-            this.logInFailed(result);
-          }
+          // Login successful
+          this.fieldsIncorrect = false;
+          this.actions.emit("closeModal");
+          this.router.navigate(['/courses']);
         },
         error => {
 
@@ -116,6 +108,7 @@ export class LoginModalComponent {
   }
 
   logInFailed(error){
+    this.submitProcessing = false;
     if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
       Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
     } else { // On desktop error on error-message

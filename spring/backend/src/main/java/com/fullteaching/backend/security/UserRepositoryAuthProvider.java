@@ -14,10 +14,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.fullteaching.backend.user.User;
-import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
-
+import com.fullteaching.backend.user.UserComponent;
+import com.fullteaching.backend.user.User;
 /**
  * This class is used to check http credentials against database data. Also it
  * is responsible to set database user info into userComponent, a session scoped
@@ -37,10 +36,10 @@ public class UserRepositoryAuthProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-		String email = authentication.getName();
+		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
 
-		User user = userRepository.findByEmail(email);
+		User user = userRepository.findByName(username);
 
 		if (user == null) {
 			throw new BadCredentialsException("User not found");
@@ -58,7 +57,7 @@ public class UserRepositoryAuthProvider implements AuthenticationProvider {
 				roles.add(new SimpleGrantedAuthority(role));
 			}
 
-			return new UsernamePasswordAuthenticationToken(email, password, roles);
+			return new UsernamePasswordAuthenticationToken(username, password, roles);
 		}
 	}
 

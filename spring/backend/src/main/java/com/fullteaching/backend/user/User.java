@@ -1,10 +1,11 @@
 package com.fullteaching.backend.user;
 
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,8 +16,7 @@ import javax.persistence.ManyToMany;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fullteaching.backend.course.Course;
 
@@ -25,51 +25,37 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	
-	private String email;
-	
+	private Long id;
+
 	private String name;
-	
+
+	@JsonIgnore
+	private String passwordHash;
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles;
+	
+	private String nickName;
 	
 	private String picture;
 	
 	private long registrationDate;
 	
-	@JsonProperty(access = Access.WRITE_ONLY)
-	private String passwordHash;
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy="attenders")
+	private Set<Course> courses;
+
+	public User() {
+	}
 	
-	@ManyToMany(mappedBy="attenders")
-	private List<Course> courses;
-	
-	public User() {}
-	
-	public User(String email, String password, String name, String picture, String... roles){
-		this.email = email;
+	public User(String name, String password, String nickName, String picture, String... roles){
 		this.name = name;
+		this.passwordHash = new BCryptPasswordEncoder().encode(password);
 		this.roles = new ArrayList<>(Arrays.asList(roles));
+		
+		this.nickName = nickName;
 		this.picture = picture;
 		this.registrationDate = System.currentTimeMillis();
-		this.passwordHash = new BCryptPasswordEncoder().encode(password);
-		this.courses = new ArrayList<>();
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+		this.courses = new HashSet<>();
 	}
 
 	public String getName() {
@@ -80,20 +66,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getPicture() {
-		return picture;
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
-
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
 	public List<String> getRoles() {
@@ -104,6 +82,22 @@ public class User {
 		this.roles = roles;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
 	public long getRegistrationDate() {
 		return registrationDate;
 	}
@@ -112,12 +106,12 @@ public class User {
 		this.registrationDate = registrationDate;
 	}
 
-	public String getPasswordHash() {
-		return passwordHash;
+	public Set<Course> getCourses() {
+		return courses;
 	}
 
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
 	}
 
 }

@@ -16,7 +16,7 @@
         <!-- Dropdown Content -->
         <ul id="dropdown1" class="dropdown-content">
           <li class="divider"></li>
-          <li class="dropdown-menu-button"><a class="waves-effect" (click)="this.authenticationService.logout()">Logout</a></li>
+          <li class="dropdown-menu-button"><a class="waves-effect" (click)="logout()">Logout</a></li>
           <li class="divider"></li>
           <li class="dropdown-menu-button"><a class="waves-effect">Contact</a></li>
         </ul>
@@ -30,7 +30,7 @@
         <li><a routerLink="/settings" class="waves-effect">Settings</a></li>
         <li class="divider"></li>
         <li><a class="waves-effect">Contact</a></li>
-        <li><a class="waves-effect" (click)="this.authenticationService.logout()">Logout</a></li>
+        <li><a class="waves-effect" (click)="logout()">Logout</a></li>
       </ul>
       <a *ngIf="this.authenticationService.isLoggedIn()" class="button-collapse" materialize="sideNav" data-activates="nav-mobile" [materializeParams]="[{closeOnClick: true}]"><i class="material-icons">menu</i></a>
     </div>
