@@ -2,12 +2,14 @@ package com.fullteaching.backend.user;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -29,7 +31,8 @@ public class User {
 	
 	private String name;
 	
-	private String role;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles;
 	
 	private String picture;
 	
@@ -43,10 +46,10 @@ public class User {
 	
 	public User() {}
 	
-	public User(String email, String password, String name, String role, String picture){
+	public User(String email, String password, String name, String picture, String... roles){
 		this.email = email;
 		this.name = name;
-		this.role = role;
+		this.roles = new ArrayList<>(Arrays.asList(roles));
 		this.picture = picture;
 		this.registrationDate = System.currentTimeMillis();
 		this.passwordHash = new BCryptPasswordEncoder().encode(password);
@@ -91,6 +94,30 @@ public class User {
 
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	public long getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(long registrationDate) {
+		this.registrationDate = registrationDate;
+	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
 }

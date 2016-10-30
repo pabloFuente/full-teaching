@@ -11,5 +11,10 @@ export class CourseDetails {
   public files: FileGroup[];
   public course: Course;
 
+  constructor(course: Course, forum: Forum, files: FileGroup[]){
+    this.course = course;
+    this.forum = forum;
+    this.files = files;
+  }
 
 }

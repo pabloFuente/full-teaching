@@ -112,8 +112,8 @@ export class CourseDetailsComponent implements OnInit {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
-      let s = new Session(this.inputTitle, this.inputComment, date, this.courseDetails.course.id);
-      this.courseDetails.sessions.push(s);
+      let s = new Session(this.inputTitle, this.inputComment, date, this.courseDetails.course);
+      this.courseDetails.course.sessions.push(s);
       this.actions2.emit("closeModal");
     }
     //If modal is opened in "New Comment" mode (replaying or not replaying)

@@ -9,5 +9,12 @@ export class Entry {
   public comments: Comment[];
   public user: User;
 
+  constructor(title: string, comments: Comment[], date: Date, user: User){
+    this.title = title;
+    this.comments = comments;
+    this.date = date;
+    this.user = user;
+  }
+
 
 }

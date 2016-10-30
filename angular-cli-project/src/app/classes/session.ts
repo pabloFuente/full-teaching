@@ -8,4 +8,10 @@ export class Session {
   public date: Date;
   public course: Course;
 
+  constructor(title: string, description: string, date: Date, course: Course){
+    this.title = title;
+    this.description = description;
+    this.date = date;this.course = course;
+  }
+
 }

@@ -5,6 +5,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { LoginModalService } from '../../services/login-modal.service';
 import { Constants } from '../../constants';
 
+import { User } from '../../classes/user';
+
 declare var Materialize : any;
 
 @Component({
@@ -74,22 +76,34 @@ export class LoginModalComponent {
 
     // If login view is activated
     if (this.loginView) {
-      this.authenticationService.login(this.email, this.password).subscribe(
+
+      console.log("1 - LOGIN STARTED");
+
+      this.authenticationService.logIn(this.email, this.password).subscribe(
         result => {
           this.submitProcessing = false;
-          if (result) {
+          if (result instanceof User) {
+
+            console.log("2 - LOGIN SUCCESFUL");
+
             // Login successful
             this.fieldsIncorrect = false;
             this.actions.emit("closeModal");
             this.router.navigate(['/courses']);
           } else {
+
+            console.log("2 - LOGIN FAILED (response not a user)");
+
             // Login failed
-            if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
-              Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
-            } else { // On desktop error on error-message
-              this.fieldsIncorrect = true;
-            }
+            this.logInFailed(result);
           }
+        },
+        error => {
+
+          console.log("2 - LOGIN FAILED (error)");
+
+          // Login failed
+          this.logInFailed(error);
         }
       );
     }
@@ -97,6 +111,15 @@ export class LoginModalComponent {
     // If signup view is activated
     else {
       // Sign up
+
+    }
+  }
+
+  logInFailed(error){
+    if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
+      Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
+    } else { // On desktop error on error-message
+      this.fieldsIncorrect = true;
     }
   }
 

@@ -32,7 +32,7 @@ public class Course {
 	@ManyToOne
 	private User teacher;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	private CourseDetails courseDetails;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="course")

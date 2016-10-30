@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.authenticationService.logOut();
   }
 
   getCourses(): void {
@@ -64,8 +64,8 @@ export class DashboardComponent implements OnInit {
   }
 
   onCourseSubmit() {
-    let newCourse = new Course(3, this.inputCourseName, this.authenticationService.getCurrentUser(), this.authenticationService.getCurrentUser().picture, undefined);
-    newCourse.courseDetails = new CourseDetails(newCourse, [], undefined, [], [this.authenticationService.getCurrentUser()]);
+    let newCourse = new Course(this.inputCourseName, this.authenticationService.getCurrentUser(), this.authenticationService.getCurrentUser().picture, undefined);
+    newCourse.courseDetails = new CourseDetails(newCourse, undefined, []);
     this.courses.push(newCourse);
     this.actions1.emit("closeModal");
   }
