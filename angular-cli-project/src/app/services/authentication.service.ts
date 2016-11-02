@@ -88,11 +88,8 @@ export class AuthenticationService {
   private processLogInResponse(response){
       // Correctly logged in
       console.log("4 - LOGIN EXTREMELY SUCCESFUL");
-      console.log(response.json());
 
   		this.user = (response.json() as User);
-
-      console.log(this.user);
 
       localStorage.setItem("login", "FULLTEACHING");
       if(this.user.roles.indexOf("ROLE_ADMIN") !== -1){

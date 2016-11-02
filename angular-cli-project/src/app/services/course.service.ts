@@ -3,7 +3,8 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable }                              from 'rxjs/Observable';
 
 import { Course }                from '../classes/course';
-import { CourseDetails } from '../classes/course-details';
+import { User }                  from '../classes/user';
+import { CourseDetails }         from '../classes/course-details';
 import { AuthenticationService } from './authentication.service';
 
 import 'rxjs/Rx';
@@ -11,23 +12,25 @@ import 'rxjs/Rx';
 @Injectable()
 export class CourseService {
 
-  private urlCourses = '/api/courses';
+  private urlCourses = '/courses';
   private urlCourseDetails = '/api/course-details';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  getCourses() {
+  getCourses(user: User) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.get(this.urlCourses, options) //Must send userId
+    return this.http.get(this.urlCourses + "/user/" + user.id, options) //Must send userId
       .map((response: Response) => response.json() as Course[])
       .catch(error => this.handleError(error));
   }
 
-  getCourse(courseId) {
+  getCourse(courseId: number) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.getCourses().subscribe(courses => courses.find(course => course.id === courseId));
+    return this.http.get(this.urlCourses + "/course/" + courseId, options) //Must send userId
+      .map((response: Response) => response.json() as Course)
+      .catch(error => this.handleError(error));
   }
 
   getCourseDetails(courseId) {

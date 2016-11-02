@@ -7,19 +7,25 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fullteaching.backend.course.Course;
+import com.fullteaching.backend.course.Course.SimpleCourseList;
 
 @Entity
 public class Session {
-
+	
+	@JsonView(SimpleCourseList.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@JsonView(SimpleCourseList.class)
 	private String title;
 	
+	@JsonView(SimpleCourseList.class)
 	private String description;
 	
+	@JsonView(SimpleCourseList.class)
 	private long date;
 	
 	@JsonIgnore

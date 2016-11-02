@@ -9,7 +9,7 @@ import { CourseService }         from '../../services/course.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { Session }       from '../../classes/session';
-import { CourseDetails } from '../../classes/course-details';
+import { Course }        from '../../classes/course';
 import { Entry }         from '../../classes/entry';
 import { Comment }       from '../../classes/comment';
 
@@ -32,7 +32,7 @@ import { Comment }       from '../../classes/comment';
 })
 export class CourseDetailsComponent implements OnInit {
 
-  courseDetails: CourseDetails;
+  course: Course;
 
   selectedEntry: Entry;
 
@@ -68,11 +68,11 @@ export class CourseDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
-      this.courseService.getCourseDetails(id).subscribe(
-        courseDetails => {
-          console.log(courseDetails);
-          this.courseDetails = courseDetails;
-          this.selectedEntry = this.courseDetails.forum.entries[0];
+      this.courseService.getCourse(id).subscribe(
+        course => {
+          console.log(course);
+          this.course = course;
+          this.selectedEntry = this.course.courseDetails.forum.entries[0];
         },
         error => console.log(error));
     });
@@ -83,7 +83,7 @@ export class CourseDetailsComponent implements OnInit {
     this.courseDetailsModalDataService.announceMode(objs);
   }
 
-  getLastEntrytComment(entry: Entry){
+  getLastEntryComment(entry: Entry){
     let comment = entry.comments[0];
     for (let c of entry.comments){
       if (c.date > comment.date) comment = c;
@@ -103,7 +103,7 @@ export class CourseDetailsComponent implements OnInit {
       console.log(e);
 
       /*this.forumService.newEntry(e, this.lessonDetails.lesson).suscribe( //POST method requires an Entry and the Lesson (its forum) which it belongs
-        response => */this.courseDetails.forum.entries.push(e); this.actions2.emit("closeModal");//Only on succesful post we locally save the new entry
+        response => */this.course.courseDetails.forum.entries.push(e); this.actions2.emit("closeModal");//Only on succesful post we locally save the new entry
       /*error =>
     );*/
     }
@@ -112,8 +112,8 @@ export class CourseDetailsComponent implements OnInit {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
-      let s = new Session(this.inputTitle, this.inputComment, date, this.courseDetails.course);
-      this.courseDetails.course.sessions.push(s);
+      let s = new Session(this.inputTitle, this.inputComment, date, this.course.courseDetails.course);
+      this.course.courseDetails.course.sessions.push(s);
       this.actions2.emit("closeModal");
     }
     //If modal is opened in "New Comment" mode (replaying or not replaying)

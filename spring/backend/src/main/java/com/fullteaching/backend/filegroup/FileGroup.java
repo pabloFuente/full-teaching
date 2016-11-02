@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.file.File;
 
@@ -30,6 +31,7 @@ public class FileGroup {
 	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<FileGroup> fileGroups;
 	
+	@JsonIgnore
 	@ManyToOne
 	private FileGroup fileGroupParent;
 	

@@ -41,7 +41,10 @@ public class User {
 	
 	private long registrationDate;
 	
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy="attenders")
+	//It is ignored in order to avoid infinite recursiveness
+	//This makes necessary another interaction with the database (after login to retrieve the user courses)
+	@JsonIgnore
+	@ManyToMany(mappedBy="attenders")
 	private Set<Course> courses;
 
 	public User() {
@@ -56,6 +59,14 @@ public class User {
 		this.picture = picture;
 		this.registrationDate = System.currentTimeMillis();
 		this.courses = new HashSet<>();
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

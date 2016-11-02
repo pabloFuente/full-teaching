@@ -10,17 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /**
  * Security configuration. In this class can be configured several aspects
  * related to security:
- * <ul>
- * <li>Security behavior: Login method, session management, CSRF, etc..</li>
- * <li>Authentication provider: Responsible to authenticate users. In this
+ * Security behavior: Login method, session management, CSRF, etc..
+ * Authentication provider: Responsible to authenticate users. In this
  * example, we use an instance of UserRepositoryAuthProvider, that authenticate
- * users stored in a Spring Data database.</li>
- * <li>URL Access Authorization: Access to http URLs depending on Authenticated
- * vs anonymous users and also based on user role.</li>
- * </ul>
+ * users stored in a Spring Data database.
+ * URL Access Authorization: Access to http URLs depending on Authenticated
+ * vs anonymous users and also based on user role.
+ * 
  * 
  * NOTE: The only part of this class intended for app developer customization is
- * the method <code>configureUrlAuthorization</code>. App developer should
+ * the method configureUrlAuthorization. App developer should
  * decide what URLs are accessible by what user role.
  */
 @Configuration

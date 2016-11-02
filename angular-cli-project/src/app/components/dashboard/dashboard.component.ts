@@ -32,8 +32,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authenticationService.checkCredentials();
-    this.courses = this.authenticationService.getCurrentUser().courses;
-    //this.getCourses();
+    //this.courses = this.authenticationService.getCurrentUser().courses;
+    //One more interaction with the database!
+    this.getCourses();
   }
 
   goToCourseDetail(id): void {
@@ -44,15 +45,15 @@ export class DashboardComponent implements OnInit {
     this.authenticationService.logOut();
   }
 
-  /*getCourses(): void {
-    console.log(this.authenticationService.getCurrentUser());
-    this.courseService.getCourses().subscribe(
+  getCourses(): void {
+    this.courseService.getCourses(this.authenticationService.getCurrentUser()).subscribe(
       courses => {
         console.log(courses);
+        this.authenticationService.getCurrentUser().courses = courses;
         this.courses = courses;
       },
       error => console.log(error));
-  }*/
+  }
 
 
   getImage(c: Course) {

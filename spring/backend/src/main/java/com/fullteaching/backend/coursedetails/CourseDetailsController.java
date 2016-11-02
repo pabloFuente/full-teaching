@@ -16,16 +16,7 @@ import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.user.UserRepository;
 
 @RestController
-@RequestMapping("/coursedetails")
 public class CourseDetailsController {
 	
-	@Autowired
-	private CourseDetailsRepository courseDetailsRepository;
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<CourseDetails> getCourseDetails(Course c) {
-		CourseDetails courseDetails = courseDetailsRepository.findByCourse(c);
-		return new ResponseEntity<>(courseDetails ,HttpStatus.OK);
-	}
 	
 }

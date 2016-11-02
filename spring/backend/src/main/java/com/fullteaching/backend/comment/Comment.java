@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fullteaching.backend.user.User;
 
 @Entity
@@ -28,6 +29,7 @@ public class Comment {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> replies;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Comment commentParent;
 	

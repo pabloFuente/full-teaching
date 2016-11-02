@@ -1,8 +1,10 @@
 package com.fullteaching.backend;
 
 import java.util.List;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -45,6 +47,11 @@ public class DatabaseInitializer implements CommandLineRunner {
 		User user1 = new User("student1@gmail.com", "pass", "Student Imprudent", defPicture, "ROLE_STUDENT");
 		User user2 = new User("student2@gmail.com", "pass", "Student Concludent", defPicture, "ROLE_STUDENT");
 		User user3 = new User("teacher@gmail.com",  "pass", "Teacher Cheater",  defPicture, "ROLE_TEACHER");
+		Set<User> setUsers = new HashSet<>();
+		setUsers.add(user1);
+		setUsers.add(user2);
+		setUsers.add(user3);
+		
 		List<User> listUsers = new LinkedList<>();
 		listUsers.add(user1);
 		listUsers.add(user2);
@@ -118,7 +125,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		//Sample forums
 		Forum f1 = new Forum(true);
-		Forum f2 = new Forum(false);
+		Forum f2 = new Forum(true);
 		
 		f1.setEntries(listEntries.subList(0, 6));
 		f2.setEntries(listEntries.subList(6, 10));
@@ -143,8 +150,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		c1.setCourseDetails(cd1);
 		c2.setCourseDetails(cd2);
-		c1.setAttenders(listUsers);
-		c2.setAttenders(listUsers);	
+		c1.setAttenders(setUsers);
+		c2.getAttenders().add(user1);
+		c2.getAttenders().add(user3);
 		
 		//Sample sessions
 		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1520719320000L);

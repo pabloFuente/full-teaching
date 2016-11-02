@@ -28,9 +28,6 @@ public class LoginController {
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private UserComponent userComponent;
 
 	@RequestMapping("/logIn")

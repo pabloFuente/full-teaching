@@ -106,6 +106,11 @@ export class CalendarComponent implements OnInit {
     let userCourses = this.authenticationService.getCurrentUser().courses;
     for (let c of userCourses){
       for (let s of c.sessions) {
+
+        /*By default when selecting sessions from the database their field
+        "Course" is not retrieved in order to avoid inifinite recursiveness*/
+        s.course = c;
+
         let d: Date;
         d = new Date(s.date);
         let min = d.getMinutes();

@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 
 import com.fullteaching.backend.forum.Forum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.filegroup.FileGroup;
 
@@ -29,6 +30,7 @@ public class CourseDetails {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<FileGroup> files;
 	
+	@JsonIgnore
 	@OneToOne(mappedBy="courseDetails")
 	private Course course;
 	

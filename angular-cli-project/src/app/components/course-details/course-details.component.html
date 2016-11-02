@@ -1,6 +1,6 @@
-<div *ngIf="!this.courseDetails" class="loading"></div>
+<div *ngIf="!this.course" class="loading"></div>
 
-<div *ngIf="this.courseDetails" class="container course-detail-div">
+<div *ngIf="this.course" class="container course-detail-div">
 
   <!--MODAL DIALOG-->
   <div id="course-details-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions2">
@@ -63,7 +63,7 @@
   <div class="row valign-wrapper">
     <div class="col l1 m1 s2 valign"><a routerLink="/courses" [title]="'Back to courses'" class="btn-floating"><i class="material-icons medium back-icon">arrow_back</i></a></div>
     <div class="col l11 m11 s10 valign">
-      <h4 class="course-title">{{courseDetails.course.title}}</h4></div>
+      <h4 class="course-title">{{course.title}}</h4></div>
   </div>
 
   <!--TABS-->
@@ -78,7 +78,7 @@
                 <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(3, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
               </div>
               <ul>
-                <div *ngFor="let session of this.courseDetails?.sessions; let last1 = last">
+                <div *ngFor="let session of this.course.sessions; let last1 = last">
                   <li class="session-data waves-effect">
                     <div class="row row-no-margin">
                       <div class="col l8 m7 s7">
@@ -109,11 +109,11 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
-            <div *ngIf="this.courseDetails?.forum.activated">
+            <div *ngIf="this.course.courseDetails?.forum.activated">
 
           <!--Forum view-->
           <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
-            <div *ngFor="let entry of this.courseDetails?.forum.entries; let last2 = last">
+            <div *ngFor="let entry of this.course.courseDetails?.forum.entries; let last2 = last">
               <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
                 <div class="row row-no-margin entry-row-sep">
                   <div class="col l6 m6 s6">
@@ -121,14 +121,17 @@
                   </div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{entry.user.nickName}}</div>
-                      <div class="col l6 m6 s6 user-name">{{entry.date | timeAgo}}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry?.user.nickName}}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
                     </div>
                   </div>
                 </div>
-                <div class="row row-no-margin last-comment-row">
+                <div *ngIf="entry.comments.length > 0" class="row row-no-margin last-comment-row">
                   <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntrytComment(entry).user.nickName}}, {{getLastEntrytComment(entry).date | timeAgo}}</div>
+                  <div class="col">{{getLastEntryComment(entry)?.user.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
+                </div>
+                <div *ngIf="entry.comments.length === 0" class="row row-no-margin last-comment-row">
+                  <div class="col">No comments</div>
                 </div>
               </li>
               <li *ngIf="!last2"><div class="divider"></div></li>
@@ -147,8 +150,8 @@
                   <div class="col l6 m6 s6">{{selectedEntry.title}}</div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry.user.nickName}}</div>
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry.date | date}} - {{selectedEntry.date | date:'H:mm' }}</div>
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.user.nickName}}</div>
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry.date | date:'H:mm' }}</div>
                     </div>
                   </div>
                 </div>
@@ -168,7 +171,7 @@
           <!--Forum view-->
 
         </div>
-        <div *ngIf="!this.courseDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+        <div *ngIf="!this.course.courseDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
       </template>
       </md-tab>
@@ -177,11 +180,11 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
-            <div *ngFor="let fileG of courseDetails?.files; let last4 = last">
+            <div *ngFor="let fileG of this.course.courseDetails?.files; let last4 = last">
               <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
               <div *ngIf="!last4" class="divider"></div>
             </div>
-            <div *ngIf="this.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+            <div *ngIf="this.course.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>
         </template>
       </md-tab>
@@ -193,12 +196,12 @@
             <div class="row row-no-margin">
               <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(4, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
             </div>
-            <div *ngFor="let attender of courseDetails?.attenders" class="row row-no-margin valign-wrapper">
+            <div *ngFor="let attender of this.course.attenders" class="row row-no-margin valign-wrapper">
               <div class="col l2 m2 s3 valign attender-col">
-                <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.user.picture}}>
+                <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.picture}}>
               </div>
               <div class="col l5 m5 s9 valign attender-col">
-                <p>{{attender?.user.nickName}}</p>
+                <p>{{attender?.nickName}}</p>
               </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.session.Session;
 import com.fullteaching.backend.coursedetails.CourseDetails;
@@ -24,28 +25,31 @@ import com.fullteaching.backend.coursedetails.CourseDetails;
 @Entity
 public class Course {
 	
+	public interface SimpleCourseList {}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonView(SimpleCourseList.class)
 	private long id;
 	
+	@JsonView(SimpleCourseList.class)
 	private String title;
 	
+	@JsonView(SimpleCourseList.class)
 	private String image;
 	
-	@JsonIgnore
 	@ManyToOne
 	private User teacher;
 	
-	@JsonIgnore
 	@OneToOne(cascade=CascadeType.ALL)
 	private CourseDetails courseDetails;
 	
+	@JsonView(SimpleCourseList.class)
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="course")
 	private Set<Session> sessions;
 	
-	@JsonIgnore
 	@ManyToMany
-	private List<User> attenders;
+	private Set<User> attenders;
 	
 	public Course() {}
 	
@@ -55,7 +59,7 @@ public class Course {
 		this.teacher = teacher;
 		this.courseDetails = null;
 		this.sessions = new HashSet<>();
-		this.attenders = new ArrayList<>();
+		this.attenders = new HashSet<>();
 	}
 
 	public Course(String title, String image, User teacher, CourseDetails courseDetails) {
@@ -64,7 +68,15 @@ public class Course {
 		this.teacher = teacher;
 		this.courseDetails = courseDetails;
 		this.sessions = new HashSet<>();
-		this.attenders = new ArrayList<User>();
+		this.attenders = new HashSet<User>();
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -99,11 +111,11 @@ public class Course {
 		this.courseDetails = courseDetails;
 	}
 
-	public List<User> getAttenders() {
+	public Set<User> getAttenders() {
 		return attenders;
 	}
 
-	public void setAttenders(List<User> attenders) {
+	public void setAttenders(Set<User> attenders) {
 		this.attenders = attenders;
 	}
 
