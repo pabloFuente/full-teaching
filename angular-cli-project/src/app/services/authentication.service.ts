@@ -23,7 +23,7 @@ export class AuthenticationService {
 
   logIn(user: string, pass: string) {
 
-    console.log("3 - LOGIN SERVICE STARTED");
+    console.log("Login service started...");
 
     let userPass = user + ":" + pass;
     let headers = new Headers({
@@ -62,12 +62,12 @@ export class AuthenticationService {
 
   logOut() {
 
-    console.log("LOGGING OUT");
+    console.log("Logging out...");
 
     return this.http.get('logOut').map(
 			response => {
 
-        console.log("LOGGED OUT");
+        console.log("Logout succesful!");
 
 				this.user = null;
 				this.role = null;
@@ -79,15 +79,15 @@ export class AuthenticationService {
         this.router.navigate(['']);
 
 				return response;
-			}
-		);
+			})
+      .catch(error => Observable.throw(error));
 
 
   }
 
   private processLogInResponse(response){
       // Correctly logged in
-      console.log("4 - LOGIN EXTREMELY SUCCESFUL");
+      console.log("Login succesful processing...");
 
   		this.user = (response.json() as User);
 

@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
   getCourses(): void {
     this.courseService.getCourses(this.authenticationService.getCurrentUser()).subscribe(
       courses => {
+        console.log("User's courses: ");
         console.log(courses);
         this.authenticationService.getCurrentUser().courses = courses;
         this.courses = courses;

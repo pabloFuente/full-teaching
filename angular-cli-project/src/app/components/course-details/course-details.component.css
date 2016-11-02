@@ -66,7 +66,7 @@ a.btn-floating {
 
 .entry-title {
   cursor: pointer;
-  padding: 8px 0px 8px 0px;
+  padding: 8px 0 8px 0;
   display: list-item !important;
   transition: all .2s ease-out !important;
 }
@@ -113,7 +113,7 @@ a.btn-floating {
 }
 
 .comment-block {
-  padding: 8px 0px 4px 0px;
+  padding: 8px 0 4px 0;
 }
 
 .comment-divider {

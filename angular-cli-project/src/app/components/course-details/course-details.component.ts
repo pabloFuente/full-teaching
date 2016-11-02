@@ -70,6 +70,7 @@ export class CourseDetailsComponent implements OnInit {
       let id = +params['id'];
       this.courseService.getCourse(id).subscribe(
         course => {
+          console.log("Course " + course.id + ":");
           console.log(course);
           this.course = course;
           this.selectedEntry = this.course.courseDetails.forum.entries[0];

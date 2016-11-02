@@ -71,19 +71,19 @@ export class LoginModalComponent {
   }
 
   onSubmit() {
-    console.log("Submit!: email = " + this.email + " , password = " + this.password + " , confirmPassword = " + this.confirmPassword);
+    console.log("Submit: email = " + this.email + " , password = " + this.password + ", confirmPassword = " + this.confirmPassword);
     this.submitProcessing = true;
 
     // If login view is activated
     if (this.loginView) {
 
-      console.log("1 - LOGIN STARTED");
+      console.log("Logging in...");
 
       this.authenticationService.logIn(this.email, this.password).subscribe(
         result => {
           this.submitProcessing = false;
 
-          console.log("2 - LOGIN SUCCESFUL");
+          console.log("Login succesful! LOGGED AS " + this.authenticationService.getCurrentUser().name);
 
           // Login successful
           this.fieldsIncorrect = false;
@@ -92,7 +92,7 @@ export class LoginModalComponent {
         },
         error => {
 
-          console.log("2 - LOGIN FAILED (error)");
+          console.log("Login failed (error): " + error);
 
           // Login failed
           this.logInFailed(error);
