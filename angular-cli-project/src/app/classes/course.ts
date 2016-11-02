@@ -13,13 +13,13 @@ export class Course {
   public sessions: Session[];
   public attenders: User[];
 
-  constructor(title: string, teacher: User, image: string, courseDetails: CourseDetails){
+  constructor(title: string, image: string, courseDetails: CourseDetails){
     this.title = title;
-    this.teacher = teacher;
+    this.teacher = undefined;
     this.image = image;
     this.courseDetails = courseDetails;
     this.sessions = [];
-    this.attenders = [this.teacher];
+    this.attenders = [];
   }
 
 }

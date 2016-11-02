@@ -44,7 +44,7 @@ public class User {
 	//It is ignored in order to avoid infinite recursiveness
 	//This makes necessary another interaction with the database (after login to retrieve the user courses)
 	@JsonIgnore
-	@ManyToMany(mappedBy="attenders")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy="attenders")
 	private Set<Course> courses;
 
 	public User() {

@@ -6,4 +6,9 @@ export class Forum {
   public activated: boolean;
   public entries: Entry[];
 
+  constructor(activated: boolean){
+    this.activated = activated;
+    this.entries = [];
+  }
+
 }

@@ -33,13 +33,16 @@ export class CourseService {
       .catch(error => this.handleError(error));
   }
 
-  getCourseDetails(courseId) {
-    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-    let options = new RequestOptions({ headers });
-    let urlId = this.urlCourseDetails + '/' + courseId;
-    return this.http.get(urlId, options)
-      .map((response: Response) => response.json() as CourseDetails)
-      .catch(error => this.handleError(error));
+  newCourse(course: Course){
+      let body = JSON.stringify(course);
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      });
+      let options = new RequestOptions({ headers });
+      return this.http.post(this.urlCourses + "/new", body, options)
+        .map(response => response.json() as Course)
+        .catch(error => this.handleError(error));
   }
 
   private handleError(error: any) {

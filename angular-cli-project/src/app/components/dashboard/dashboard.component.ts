@@ -2,8 +2,9 @@ import { Component, OnInit, EventEmitter }  from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Course }         from '../../classes/course';
-import { CourseDetails }         from '../../classes/course-details';
-import { Session }         from '../../classes/session';
+import { CourseDetails }  from '../../classes/course-details';
+import { Session }        from '../../classes/session';
+import { Forum }          from '../../classes/forum';
 
 import { CalendarComponent } from '../calendar/calendar.component';
 
@@ -68,10 +69,19 @@ export class DashboardComponent implements OnInit {
   }
 
   onCourseSubmit() {
-    let newCourse = new Course(this.inputCourseName, this.authenticationService.getCurrentUser(), this.authenticationService.getCurrentUser().picture, undefined);
-    newCourse.courseDetails = new CourseDetails(newCourse, undefined, []);
-    this.courses.push(newCourse);
-    this.actions1.emit("closeModal");
+    let newForum = new Forum(true);
+    let newCourseDetails = new CourseDetails(newForum, []);
+    let newCourse = new Course(this.inputCourseName, this.authenticationService.getCurrentUser().picture, newCourseDetails);
+    console.log(JSON.stringify(newCourse));
+    this.courseService.newCourse(newCourse).subscribe(
+      course => {
+        console.log("New course added: ");
+        console.log(course);
+        this.courses.push(course);
+        this.actions1.emit("closeModal");
+      },
+      error => console.log(error)
+    )
   }
 
 }

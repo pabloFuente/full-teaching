@@ -93,6 +93,7 @@
                   <li *ngIf="!last1"><div class="divider"></div></li>
                 </div>
             </ul>
+            <div *ngIf="this.course.sessions.length === 0"><app-error-message [errorTitle]="'There are no sessions'" [errorContent]="''" [customClass]="'warning'" [closable]="false"></app-error-message></div>
             </div>
           </template>
       </md-tab>
@@ -147,11 +148,11 @@
               <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1 no-padding-lateral" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
               <div class="col l10 m10 s10 no-padding-lateral">
                 <div class="row row-no-margin comment-section-title">
-                  <div class="col l6 m6 s6">{{selectedEntry.title}}</div>
+                  <div class="col l6 m6 s6">{{selectedEntry?.title}}</div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
                       <div class="col l6 m6 s6 user-name">{{selectedEntry?.user.nickName}}</div>
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry.date | date:'H:mm' }}</div>
+                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry?.date | date:'H:mm' }}</div>
                     </div>
                   </div>
                 </div>
@@ -172,6 +173,7 @@
 
         </div>
         <div *ngIf="!this.course.courseDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+        <div *ngIf="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length === 0"><app-error-message [errorTitle]="'There are no entries yet'" [errorContent]="'Be the first one! Just click on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
       </div>
       </template>
       </md-tab>
