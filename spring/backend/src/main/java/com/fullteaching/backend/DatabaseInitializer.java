@@ -70,6 +70,39 @@ public class DatabaseInitializer implements CommandLineRunner {
 			listComments.add(new Comment("This is comment " + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", 1477427508222L, listUsers.get(userRandom)));
 		}
 		
+		//Recursiveness of comments
+		//Entry 1
+		listComments.get(0).getReplies().add(listComments.get(1));
+		listComments.get(1).setCommentParent(listComments.get(0));
+		listComments.get(0).getReplies().add(listComments.get(2));
+		listComments.get(2).setCommentParent(listComments.get(0));
+		listComments.get(4).getReplies().add(listComments.get(5));
+		listComments.get(5).setCommentParent(listComments.get(4));
+		listComments.get(5).getReplies().add(listComments.get(6));
+		listComments.get(6).setCommentParent(listComments.get(5));
+		//Entry 2
+		listComments.get(8).getReplies().add(listComments.get(9));
+		listComments.get(9).setCommentParent(listComments.get(8));
+		//Entry 3
+		listComments.get(12).getReplies().add(listComments.get(13));
+		listComments.get(13).setCommentParent(listComments.get(12));
+		listComments.get(13).getReplies().add(listComments.get(14));
+		listComments.get(14).setCommentParent(listComments.get(13));
+		//Entry 5
+		listComments.get(16).getReplies().add(listComments.get(17));
+		listComments.get(17).setCommentParent(listComments.get(16));
+		listComments.get(17).getReplies().add(listComments.get(18));
+		listComments.get(18).setCommentParent(listComments.get(17));
+		listComments.get(16).getReplies().add(listComments.get(19));
+		listComments.get(19).setCommentParent(listComments.get(16));
+		//Entry 7
+		listComments.get(23).getReplies().add(listComments.get(24));
+		listComments.get(24).setCommentParent(listComments.get(23));
+		//Entry 8
+		listComments.get(25).getReplies().add(listComments.get(26));
+		listComments.get(26).setCommentParent(listComments.get(25));
+		
+		
 		//Sample entries
 		List<Entry> listEntries = new LinkedList<>();
 		for (int i = 0; i < 10; i++){
@@ -77,19 +110,35 @@ public class DatabaseInitializer implements CommandLineRunner {
 			listEntries.add(new Entry("This is entry number " + (i+1), 1477427508222L, listUsers.get(userRandom)));
 		}
 		
-		//Random allocation of comments inside entries
-		int iEntry = 0;
-		while ((!listComments.isEmpty()) && (iEntry < listEntries.size())){
-			int nRandom = rand.nextInt(7);
-			Entry e = listEntries.get(iEntry);
-			int i = 0;
-			while ((i < nRandom) && (!listComments.isEmpty())){
-				e.getComments().add(listComments.get(0));
-				listComments.remove(0);
-				i++;
-			}
-			iEntry++;
-		}
+		//Allocation of comments inside entries
+		//Entry 1
+		listEntries.get(0).getComments().add(listComments.get(0));
+		listEntries.get(0).getComments().add(listComments.get(3));
+		listEntries.get(0).getComments().add(listComments.get(4));
+		//Entry 2
+		listEntries.get(1).getComments().add(listComments.get(7));
+		listEntries.get(1).getComments().add(listComments.get(8));
+		//Entry 3
+		listEntries.get(2).getComments().add(listComments.get(10));
+		listEntries.get(2).getComments().add(listComments.get(11));
+		listEntries.get(2).getComments().add(listComments.get(12));
+		//Entry 4
+		listEntries.get(3).getComments().add(listComments.get(15));
+		//Entry 5
+		listEntries.get(4).getComments().add(listComments.get(16));
+		listEntries.get(4).getComments().add(listComments.get(20));
+		//Entry 6
+		listEntries.get(5).getComments().add(listComments.get(21));
+		listEntries.get(5).getComments().add(listComments.get(22));
+		//Entry 7
+		listEntries.get(6).getComments().add(listComments.get(23));
+		//Entry 8
+		listEntries.get(7).getComments().add(listComments.get(25));
+		listEntries.get(7).getComments().add(listComments.get(27));
+		//Entry 9
+		listEntries.get(8).getComments().add(listComments.get(28));
+		//Entry 10
+		listEntries.get(9).getComments().add(listComments.get(29));
 		
 		//Sample files
 		List<File> listFiles = new LinkedList<>();
@@ -117,11 +166,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 		listFileGroups.get(1).getFileGroups().add(listFileGroups.get(0));
 		listFileGroups.get(4).setFileGroupParent(listFileGroups.get(3));
 		listFileGroups.get(3).getFileGroups().add(listFileGroups.get(4));
-		
-		/*//Saving root fileGroups (and children fileGroups and all files in cascade)
-		fileGroupRepository.save(listFileGroups.get(1));
-		fileGroupRepository.save(listFileGroups.get(2));
-		fileGroupRepository.save(listFileGroups.get(3));*/
 		
 		//Sample forums
 		Forum f1 = new Forum(true);

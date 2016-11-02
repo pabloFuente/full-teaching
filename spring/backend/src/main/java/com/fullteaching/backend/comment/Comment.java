@@ -17,7 +17,7 @@ import com.fullteaching.backend.user.User;
 
 @Entity
 public class Comment {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -43,6 +43,23 @@ public class Comment {
 		this.date = date;
 		this.user = user;
 		this.replies = new ArrayList<Comment>();
+		this.commentParent = null;
+	}
+	
+	public Comment(String message, long date, User user, Comment commentParent) {
+		this.message = message;
+		this.date = date;
+		this.user = user;
+		this.replies = new ArrayList<Comment>();
+		this.commentParent = commentParent;
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	public String getMessage() {
@@ -75,6 +92,14 @@ public class Comment {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public Comment getCommentParent() {
+		return commentParent;
+	}
+
+	public void setCommentParent(Comment commentParent) {
+		this.commentParent = commentParent;
 	}
 
 }
