@@ -1,7 +1,5 @@
 package com.fullteaching.backend.security;
 
-import java.util.Collection;
-
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserComponent;
-import com.fullteaching.backend.user.UserRepository;
 
 /**
  * This class is used to provide REST endpoints to logIn and logOut to the

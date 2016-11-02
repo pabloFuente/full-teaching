@@ -15,18 +15,12 @@ import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.coursedetails.CourseDetails;
-import com.fullteaching.backend.comment.CommentRepository;
 import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.entry.Entry;
-import com.fullteaching.backend.entry.EntryRepository;
 import com.fullteaching.backend.file.File;
-import com.fullteaching.backend.file.FileRepository;
 import com.fullteaching.backend.filegroup.FileGroup;
-import com.fullteaching.backend.filegroup.FileGroupRepository;
 import com.fullteaching.backend.forum.Forum;
-import com.fullteaching.backend.forum.ForumRepository;
 import com.fullteaching.backend.session.Session;
-import com.fullteaching.backend.session.SessionRepository;
 
 @Controller
 public class DatabaseInitializer implements CommandLineRunner {

@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.file.File;
 
 @Entity

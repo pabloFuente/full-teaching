@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
-import com.fullteaching.backend.coursedetails.CourseDetails;
-import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fullteaching.backend.course.Course.SimpleCourseList;
 import com.fullteaching.backend.user.User;
@@ -27,9 +25,6 @@ public class CourseController {
 	
 	@Autowired
 	private CourseRepository courseRepository;
-	
-	@Autowired
-	private CourseDetailsRepository courseDetailsRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
