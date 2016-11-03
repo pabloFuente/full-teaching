@@ -57,6 +57,8 @@ export class CalendarComponent implements OnInit {
 
   activeDayIsOpen: boolean = false;
 
+  loadingSessions: boolean = true;
+
   constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
@@ -131,6 +133,7 @@ export class CalendarComponent implements OnInit {
         });
           }
       }
+      this.loadingSessions = false;
   }
 
 }

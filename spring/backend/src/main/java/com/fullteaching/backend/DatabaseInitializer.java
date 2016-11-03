@@ -36,6 +36,11 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		Random rand = new Random();
 		
+		long[] dateArray = new long[3];
+		dateArray[0] = 1478202152681L;
+		dateArray[1] = 1477427508222L;
+		dateArray[2] = 1478029352681L;
+		
 		//Sample users
 		String defPicture = "/../assets/images/default_session_image.png";
 		User user1 = new User("student1@gmail.com", "pass", "Student Imprudent", defPicture, "ROLE_STUDENT");
@@ -61,7 +66,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		List<Comment> listComments = new LinkedList<>();
 		for (int i = 0; i < 30; i++){
 			int userRandom = rand.nextInt(3);
-			listComments.add(new Comment("This is comment " + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", 1477427508222L, listUsers.get(userRandom)));
+			listComments.add(new Comment("This is comment " + (i+1) + ". Roses are red. Violets are blue. Comments have no color. They are just words. This does not rhyme.", dateArray[userRandom], listUsers.get(userRandom)));
 		}
 		
 		//Recursiveness of comments
@@ -101,7 +106,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		List<Entry> listEntries = new LinkedList<>();
 		for (int i = 0; i < 10; i++){
 			int userRandom = rand.nextInt(3);
-			listEntries.add(new Entry("This is entry number " + (i+1), 1477427508222L, listUsers.get(userRandom)));
+			listEntries.add(new Entry("This is entry number " + (i+1), dateArray[userRandom], listUsers.get(userRandom)));
 		}
 		
 		//Allocation of comments inside entries
@@ -193,15 +198,15 @@ public class DatabaseInitializer implements CommandLineRunner {
 		c2.getAttenders().add(user3);
 		
 		//Sample sessions
-		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1520719320000L);
+		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1478202152681L);
 		s1.setCourse(c1);
-		Session s2 = new Session("Nice examples", "This is a nice description about this session.", 1525964400000L);
+		Session s2 = new Session("Nice examples", "This is a nice description about this session.", 1478374952681L);
 		s2.setCourse(c1);
-		Session s3 = new Session("Project analisys", "This is a nice description about this session.", 1520805840000L);
+		Session s3 = new Session("Project analisys", "This is a nice description about this session.", 1478367752681L);
 		s3.setCourse(c1);
-		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", 1457708400000L);
+		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", 1478547752681L);
 		s4.setCourse(c2);
-		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", 1462978800000L);
+		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", 1478634152681L);
 		s5.setCourse(c2);
 		
 		c1.getSessions().add(s1);

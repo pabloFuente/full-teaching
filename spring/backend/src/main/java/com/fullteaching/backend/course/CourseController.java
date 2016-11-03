@@ -32,10 +32,15 @@ public class CourseController {
 	@Autowired
 	private UserComponent user;
 	
+	@Autowired
+	private UserComponent userComponent;
+	
 	
 	@JsonView(SimpleCourseList.class)
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Course>> getCourses(@PathVariable(value="id") String id){
+		this.checkBackendLogged();
+		
 		long id_i = -1;
 		try{
 			id_i = Long.parseLong(id);
@@ -53,6 +58,8 @@ public class CourseController {
 	
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Course> getCourse(@PathVariable(value="id") String id){
+		this.checkBackendLogged();
+		
 		long id_i = -1;
 		try{
 			id_i = Long.parseLong(id);
@@ -66,6 +73,8 @@ public class CourseController {
 	
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public ResponseEntity<Course> newCourse(@RequestBody Course course) {
+		this.checkBackendLogged();
+		
 		User userLogged = user.getLoggedUser();
 		
 		//Updating course ('teacher', 'attenders')
@@ -85,6 +94,8 @@ public class CourseController {
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public ResponseEntity<Course> modifyCourse(@RequestBody Course course) {
+		this.checkBackendLogged();
+		
 		if(courseRepository.findOne(course.getId()) != null){
 			courseRepository.save(course);
 			return new ResponseEntity<>(course, HttpStatus.OK);
@@ -96,6 +107,8 @@ public class CourseController {
 	
 	@RequestMapping(value = "/delete-{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Course> deleteCourse(@PathVariable(value="id") String id) {
+		this.checkBackendLogged();
+		
 		long id_i = -1;
 		try{
 			id_i = Long.parseLong(id);
@@ -111,6 +124,15 @@ public class CourseController {
 		return new ResponseEntity<>(course, HttpStatus.OK);
 	}
 	
+	
+	//Login checking method for the backend
+	private ResponseEntity<Object> checkBackendLogged(){
+		if (!userComponent.isLoggedUser()) {
+			System.out.println("Not user logged");
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		return null; 
+	}
 	
 }
 

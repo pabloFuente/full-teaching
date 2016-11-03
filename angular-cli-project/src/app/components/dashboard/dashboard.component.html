@@ -45,6 +45,8 @@
         <i href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon">add_circle_outline</i>
       </div>
       <ul class="collection">
+        <li *ngIf="courses.length === 0 && this.authenticationService.isStudent()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'Your teacher must invite you'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
+        <li *ngIf="courses.length === 0 && this.authenticationService.isTeacher()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'You can add one by clicking on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
         <li *ngFor="let course of courses; let i = index" class="collection-item">
           <div class="row session-list-item valign-wrapper">
 

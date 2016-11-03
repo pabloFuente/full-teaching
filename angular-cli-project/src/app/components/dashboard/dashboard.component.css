@@ -38,6 +38,11 @@ li.collection-item {
   display: inline;
 }
 
+li.li-warning {
+  padding-left: 7.5px;
+  padding-right: 7.5px;
+}
+
 @media only screen and (min-width: 993px) {
   .sessionImage {
     width: 70px;

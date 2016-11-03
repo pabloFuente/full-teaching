@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+import { User } from '../classes/user';
 
 @Injectable()
 export class UserService {
 
+  private url = '/users';
+
   constructor(private http: Http) { }
 
-  create(user) {
-    return this.http.post('/api/users', user, this.jwt()).map((response: Response) => response.json());
-  }
-
-  update(user) {
-    return this.http.put('/api/users/' + user.id, user, this.jwt()).map((response: Response) => response.json());
-  }
-
-  delete(id) {
-    return this.http.delete('/api/users/' + id, this.jwt()).map((response: Response) => response.json());
+  newUser(name: string, pass: string, nickName: string) {
+    let body = JSON.stringify([name, pass, nickName]);
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    });
+    let options = new RequestOptions({ headers });
+    return this.http.post(this.url + "/new", body, options)
+    .map(response => response.json() as User)
+    .catch(error => this.handleError(error));
   }
 
   // private helper methods
@@ -27,5 +32,10 @@ export class UserService {
       let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
       return new RequestOptions({ headers: headers });
     }
+  }
+
+  private handleError(error: any) {
+    console.error(error);
+    return Observable.throw("Server error (" + error.status + "): " + error.text())
   }
 }

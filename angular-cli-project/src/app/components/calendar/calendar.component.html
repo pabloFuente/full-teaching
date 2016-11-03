@@ -3,7 +3,7 @@
       <div class="col l7 m7 s7 no-padding-lateral">
         <h3 class="calendar-title">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
       </div>
-      <div *ngIf="this.events.length > 0" class="col l5 m5 s5 no-padding-lateral">
+      <div *ngIf="!loadingSessions" class="col l5 m5 s5 no-padding-lateral">
         <div class="calendar-icon-group">
           <i class="material-icons no-padding-left" (click)="decrement()">chevron_left</i>
           <i class="material-icons" (click)="today()">today</i>
@@ -11,8 +11,8 @@
         </div>
       </div>
     </div>
-    <div *ngIf="this.events.length > 0">
+    <div *ngIf="!loadingSessions">
       <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"></mwl-calendar-month-view>
     </div>
-    <div *ngIf="!(this.events.length > 0)" class="loader-calendar"></div>
+    <div *ngIf="loadingSessions" class="loader-calendar"></div>
 </div>

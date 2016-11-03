@@ -12,15 +12,14 @@ import 'rxjs/Rx';
 @Injectable()
 export class CourseService {
 
-  private urlCourses = '/courses';
-  private urlCourseDetails = '/api/course-details';
+  private url = '/courses';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
   getCourses(user: User) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.get(this.urlCourses + "/user/" + user.id, options) //Must send userId
+    return this.http.get(this.url + "/user/" + user.id, options) //Must send userId
       .map((response: Response) => response.json() as Course[])
       .catch(error => this.handleError(error));
   }
@@ -28,7 +27,7 @@ export class CourseService {
   getCourse(courseId: number) {
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.get(this.urlCourses + "/course/" + courseId, options) //Must send userId
+    return this.http.get(this.url + "/course/" + courseId, options) //Must send userId
       .map((response: Response) => response.json() as Course)
       .catch(error => this.handleError(error));
   }
@@ -40,7 +39,7 @@ export class CourseService {
         'X-Requested-With': 'XMLHttpRequest'
       });
       let options = new RequestOptions({ headers });
-      return this.http.post(this.urlCourses + "/new", body, options)
+      return this.http.post(this.url + "/new", body, options)
         .map(response => response.json() as Course)
         .catch(error => this.handleError(error));
   }

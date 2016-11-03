@@ -42,13 +42,12 @@ public class User {
 	private long registrationDate;
 	
 	//It is ignored in order to avoid infinite recursiveness
-	//This makes necessary another interaction with the database (after login to retrieve the user courses)
+	//This makes necessary another interaction with the database (after login to retrieve the courses of the user)
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy="attenders")
 	private Set<Course> courses;
 
-	public User() {
-	}
+	public User() {}
 	
 	public User(String name, String password, String nickName, String picture, String... roles){
 		this.name = name;

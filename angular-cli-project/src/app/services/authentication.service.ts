@@ -81,8 +81,6 @@ export class AuthenticationService {
 				return response;
 			})
       .catch(error => Observable.throw(error));
-
-
   }
 
   private processLogInResponse(response){

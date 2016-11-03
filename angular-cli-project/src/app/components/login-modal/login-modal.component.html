@@ -7,10 +7,18 @@
     <div class="row">
 
       <form materialize #myForm class="col s12" (ngSubmit)="onSubmit()">
+        
         <div class="row">
           <div class="input-field col s12">
             <input [(ngModel)]="email" name="email" id="email" type="email" class="validate" required>
             <label for="email" data-error="Not an e-mail format!">Email</label>
+          </div>
+        </div>
+
+        <div *ngIf="!loginView" class="row">
+          <div class="input-field col s12">
+            <input [(ngModel)]="nickName" name="nickName" id="nickName" type="text" class="validate" required>
+            <label for="nickName">Name</label>
           </div>
         </div>
 
@@ -35,6 +43,7 @@
           <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
           <a (click)="setLoginView(true); myForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
+
       </form>
 
     </div>
