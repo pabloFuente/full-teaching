@@ -57,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//Forum API
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/entries/**").hasAnyRole("TEACHER", "STUDENT");
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/comments/**").hasAnyRole("TEACHER", "STUDENT");
-
+		//Session API
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/sessions/**").hasRole("TEACHER");
 		// Other URLs can be accessed without authentication
 		http.authorizeRequests().anyRequest().permitAll();
 	}

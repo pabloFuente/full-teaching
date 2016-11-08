@@ -3,32 +3,25 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable }                              from 'rxjs/Observable';
 
 import { Session }                from '../classes/session';
-import { CourseDetails } from '../classes/course-details';
-import { AuthenticationService } from './authentication.service';
+import { Course }                 from '../classes/course';
+import { AuthenticationService }  from './authentication.service';
 
 import 'rxjs/Rx';
 
 @Injectable()
 export class SessionService {
 
-  private urlSessions = '/api/sessions';
-  private urlCourseDetails = '/api/course-details';
+  private urlSessions = '/sessions';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  getAllSessions() {
+  //POST new session. On success returns the updated Course that owns the posted session
+  public newSession(session: Session, courseId: number){
+    let body = JSON.stringify(session);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.get(this.urlSessions) //Must send userId
-      .map((response: Response) => response.json() as Session[])
-      .catch(error => this.handleError(error));
-  }
-
-  getSessions(courseId) {
-    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-    let options = new RequestOptions({ headers });
-    return this.http.get(this.urlSessions + '/' + courseId, options) //Must send userId
-      .map((response: Response) => response.json() as Session[])
+    return this.http.post(this.urlSessions + "/course/" + courseId, body, options)
+      .map(response => response.json() as Course)
       .catch(error => this.handleError(error));
   }
 

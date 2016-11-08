@@ -6,6 +6,7 @@ import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 import { CourseService }         from '../../services/course.service';
+import { SessionService }        from '../../services/session.service';
 import { ForumService }          from '../../services/forum.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -55,6 +56,7 @@ export class CourseDetailsComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private forumService: ForumService,
+    private sessionService: SessionService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private courseDetailsModalDataService: CourseDetailsModalDataService) {
@@ -74,6 +76,7 @@ export class CourseDetailsComponent implements OnInit {
         course => {
           console.log("Course " + course.id + ":");
           console.log(course);
+          this.sortSessionsByDate(course.sessions);
           this.course = course;
           this.selectedEntry = this.course.courseDetails.forum.entries[0];
         },
@@ -92,6 +95,14 @@ export class CourseDetailsComponent implements OnInit {
       if (c.date > comment.date) comment = c;
     }
     return comment;
+  }
+
+  numberToDate(d: number){
+    return new Date(d);
+  }
+
+  sortSessionsByDate(sessionArray: Session[]){
+    sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
   }
 
   isCurrentMode(possibleModes: string[]): boolean {
@@ -120,9 +131,17 @@ export class CourseDetailsComponent implements OnInit {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
-      let s = new Session(this.inputTitle, this.inputComment, date, this.course.courseDetails.course);
-      this.course.courseDetails.course.sessions.push(s);
-      this.actions2.emit("closeModal");
+      let s = new Session(this.inputTitle, this.inputComment, date.getTime());
+      console.log(s);
+      this.sessionService.newSession(s, this.course.id).subscribe(
+        response => {
+          console.log(response);
+          this.sortSessionsByDate(response.sessions);
+          this.course = response;
+          this.actions2.emit("closeModal");
+        },
+        error => console.log(error)
+      );
     }
 
     //If modal is opened in "New Comment" mode (replaying or not replaying)

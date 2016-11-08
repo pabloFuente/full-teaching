@@ -86,7 +86,7 @@
                         <div class="session-description">{{session.description}}</div>
                       </div>
                       <div class="col l4 m5 s5 right-align">
-                        {{session.date | date}} - {{session.date | date:'H:mm' }}
+                        {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
                       </div>
                     </div>
                   </li>

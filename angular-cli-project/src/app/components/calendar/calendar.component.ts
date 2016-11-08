@@ -119,7 +119,7 @@ export class CalendarComponent implements OnInit {
         let minutesString = min.toString();
         if (min < 10) { minutesString = "0" + minutesString; }
         this.events.push({
-          start: s.date,
+          start: d,
           title: s.title + '  |  ' + d.getHours() + ':' + minutesString,
           color: colors.red,
           actions: [
