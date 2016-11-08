@@ -32,9 +32,6 @@ public class CourseController {
 	@Autowired
 	private UserComponent user;
 	
-	@Autowired
-	private UserComponent userComponent;
-	
 	
 	@JsonView(SimpleCourseList.class)
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
@@ -127,7 +124,7 @@ public class CourseController {
 	
 	//Login checking method for the backend
 	private ResponseEntity<Object> checkBackendLogged(){
-		if (!userComponent.isLoggedUser()) {
+		if (!user.isLoggedUser()) {
 			System.out.println("Not user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}

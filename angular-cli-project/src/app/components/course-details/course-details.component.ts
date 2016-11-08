@@ -6,6 +6,7 @@ import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 import { CourseService }         from '../../services/course.service';
+import { ForumService }          from '../../services/forum.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { Session }       from '../../classes/session';
@@ -53,6 +54,7 @@ export class CourseDetailsComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
+    private forumService: ForumService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private courseDetailsModalDataService: CourseDetailsModalDataService) {
@@ -97,17 +99,22 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   onCourseDetailsSubmit() {
+
     //If modal is opened in "New Entry" mode
     if (this.courseDetailsModalMode === 0) {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
-      let e = new Entry(this.inputTitle, [new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), [])], new Date(), this.authenticationService.getCurrentUser());
-      console.log(e);
+      let e = new Entry(this.inputTitle, [new Comment(this.inputComment, null)]);
 
-      /*this.forumService.newEntry(e, this.lessonDetails.lesson).suscribe( //POST method requires an Entry and the Lesson (its forum) which it belongs
-        response => */this.course.courseDetails.forum.entries.push(e); this.actions2.emit("closeModal");//Only on succesful post we locally save the new entry
-      /*error =>
-    );*/
+      this.forumService.newEntry(e, this.course.courseDetails.forum.id).subscribe( //POST method requires an Entry and the Forum id which it belongs
+        response  => {
+          console.log(response);
+          this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
+          this.actions2.emit("closeModal");
+        },
+        error => console.log(error)
+      );
     }
+
     //If modal is opened in "New Session" mode
     else if (this.courseDetailsModalMode === 3) {
       let date = new Date(this.inputDate);
@@ -117,19 +124,27 @@ export class CourseDetailsComponent implements OnInit {
       this.course.courseDetails.course.sessions.push(s);
       this.actions2.emit("closeModal");
     }
+
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else {
-      let c = new Comment(this.authenticationService.getCurrentUser(), this.inputComment, new Date(), []);
-      /*this.forumService.newComment(c, this.courseDetailsModalEntry, this.courseDetailsModalCommentReplay).suscribe( //POST method requires the Comment, the ENtry which it belongs and the replayed comment
-        response =>*/if (this.courseDetailsModalMode === 2) { //Only on succesful post we locally save the new comment
-        this.courseDetailsModalCommentReplay.replies.push(c);
-      }
-      else {
-        this.courseDetailsModalEntry.comments.push(c);
-      }
-      this.actions2.emit("closeModal");
-      /*error =>
-    );*/
+      let c = new Comment(this.inputComment, this.courseDetailsModalCommentReplay);
+      console.log(c);
+      this.forumService.newComment(c, this.selectedEntry.id).subscribe(
+        response => {
+          console.log(response);
+          //Only on succesful post we locally update the entry
+          let ents = this.course.courseDetails.forum.entries;
+          for (let i = 0; i < ents.length; i++) {
+            if (ents[i].id == this.selectedEntry.id) {
+              this.course.courseDetails.forum.entries[i] = response; //The entry with the required ID is updated
+              this.selectedEntry = this.course.courseDetails.forum.entries[i];
+              break;
+            }
+          }
+          this.actions2.emit("closeModal");
+        },
+        error => console.log(error)
+      );
     }
   }
 

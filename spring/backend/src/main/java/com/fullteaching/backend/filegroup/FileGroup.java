@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fullteaching.backend.file.File;
 
 @Entity
@@ -27,11 +27,12 @@ public class FileGroup {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<File> files;
 	
-	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL)
+	@JsonManagedReference
 	private List<FileGroup> fileGroups;
 	
-	@JsonIgnore
 	@ManyToOne
+	@JsonBackReference
 	private FileGroup fileGroupParent;
 	
 	public FileGroup() {}
@@ -48,6 +49,14 @@ public class FileGroup {
 		this.files = new ArrayList<>();
 		this.fileGroups = new ArrayList<>();
 		this.fileGroupParent = fileGroupParent;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

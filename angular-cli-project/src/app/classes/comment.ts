@@ -6,13 +6,14 @@ export class Comment {
   public message: string;
   public date: Date;
   public replies: Comment[];
+  public commentParent: Comment;
   public user: User;
 
-  constructor(user: User, message: string, date: Date, replies: Comment[]){
-    this.user = user;
+  constructor(message: string, commentParent: Comment){
     this.message = message;
-    this.date = date;
-    this.replies = replies;
+    this.replies = [];
+    this.commentParent = commentParent;
+    this.user = null; //Backend will take care of it
   }
 
 }

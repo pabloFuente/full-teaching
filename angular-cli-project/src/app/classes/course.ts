@@ -15,7 +15,7 @@ export class Course {
 
   constructor(title: string, image: string, courseDetails: CourseDetails){
     this.title = title;
-    this.teacher = undefined;
+    this.teacher = null; //Backend will take care of it
     this.image = image;
     this.courseDetails = courseDetails;
     this.sessions = [];

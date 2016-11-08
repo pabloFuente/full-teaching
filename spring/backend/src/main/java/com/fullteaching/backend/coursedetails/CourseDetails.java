@@ -43,6 +43,14 @@ public class CourseDetails {
 		this.forum = new Forum();
 		this.files =  new ArrayList<>();
 	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public Forum getForum() {
 		return forum;

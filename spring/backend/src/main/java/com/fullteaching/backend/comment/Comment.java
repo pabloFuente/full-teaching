@@ -11,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fullteaching.backend.user.User;
 
 @Entity
 public class Comment {
+	
+	public interface CommentNoParent {}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,11 +28,12 @@ public class Comment {
 	
 	private long date;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="commentParent", cascade=CascadeType.ALL)
+	@JsonManagedReference
 	private List<Comment> replies;
 	
-	@JsonIgnore
 	@ManyToOne
+	@JsonBackReference
 	private Comment commentParent;
 	
 	@ManyToOne

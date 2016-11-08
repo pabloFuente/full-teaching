@@ -122,14 +122,14 @@
                   </div>
                   <div class="col l6 m6 s6 user-date-column">
                     <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{entry?.user.nickName}}</div>
+                      <div class="col l6 m6 s6 user-name">{{entry?.user?.nickName}}</div>
                       <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
                     </div>
                   </div>
                 </div>
                 <div *ngIf="entry.comments.length > 0" class="row row-no-margin last-comment-row">
                   <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntryComment(entry)?.user.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
+                  <div class="col">{{getLastEntryComment(entry)?.user?.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
                 </div>
                 <div *ngIf="entry.comments.length === 0" class="row row-no-margin last-comment-row">
                   <div class="col">No comments</div>
@@ -158,7 +158,7 @@
                 </div>
               </div>
               <div class="col l1 m1 s1 no-padding-lateral right-align">
-                <a [title]="'New comment'" (click)="updateCourseDetailsModalMode(1, selectedEntry, null); this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                <a [title]="'New comment'" (click)="updateCourseDetailsModalMode(1, selectedEntry, null); this.courseDetailsModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                   <i class="material-icons forum-icon">chat</i>
                 </a>
               </div>

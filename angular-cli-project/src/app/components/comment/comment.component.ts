@@ -15,13 +15,9 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  constructor(private courseDetailsModalDataService: CourseDetailsModalDataService) {
+  constructor(private courseDetailsModalDataService: CourseDetailsModalDataService) {}
 
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   updateCourseDetailsModalMode(mode: number, header: Entry, commentReplay: Comment){
     let objs = [mode, header, commentReplay];

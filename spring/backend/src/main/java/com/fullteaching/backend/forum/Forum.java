@@ -31,6 +31,14 @@ public class Forum {
 		this.entries = new ArrayList<>();
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public boolean isActivated() {
 		return activated;
 	}
