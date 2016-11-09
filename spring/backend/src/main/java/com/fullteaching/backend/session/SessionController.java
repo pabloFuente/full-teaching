@@ -52,17 +52,13 @@ public class SessionController {
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public ResponseEntity<Session> modifySession(@RequestBody Session session) {
-		
 		Session s = sessionRepository.findOne(session.getId());
-		if(s != null){
-			
+		if(s != null){		
 			s.setTitle(session.getTitle());
 			s.setDescription(session.getDescription());
 			s.setDate(session.getDate());
-			
-			/*Saving the modified session*/
+			//Saving the modified session
 			sessionRepository.save(s);
-			
 			return new ResponseEntity<>(s, HttpStatus.OK);
 		}else{
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);

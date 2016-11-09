@@ -84,6 +84,21 @@ a {
   pointer-events: none;
 }
 
+.put-delete-modal-header{
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.float-to-left{
+  float: left !important;
+}
+
+.delete-div {
+  display: inline-flex;
+  float: left;
+}
+
 /*Loader*/
 @keyframes spinLoader {
   0% {

@@ -29,21 +29,6 @@ a.btn-floating {
   background-color: #e0e0e0;
 }
 
-.put-delete-modal-header{
-  font-weight: 600;
-  font-size: 20px;
-  margin-top: 10px;
-}
-
-.float-to-left{
-  float: left !important;
-}
-
-.delete-div {
-  display: inline-flex;
-  float: left;
-}
-
 
 /*Forum view*/
 

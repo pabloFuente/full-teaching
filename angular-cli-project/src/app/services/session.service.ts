@@ -25,7 +25,7 @@ export class SessionService {
       .catch(error => this.handleError(error));
   }
 
-  //PUT existing session. On success returns the updated Course that owns the updated session
+  //PUT existing session. On success returns the updated session
   public editSession(session: Session){
     let body = JSON.stringify(session);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
@@ -35,11 +35,12 @@ export class SessionService {
       .catch(error => this.handleError(error));
   }
 
+  //DELETE existing session. On success returns the deleted session
   public deleteSession(sessionId: number){
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.delete(this.urlSessions + "/delete/" + sessionId, options)
-      .map(response => response.json())
+      .map(response => response.json() as Session)
       .catch(error => this.handleError(error));
   }
 

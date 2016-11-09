@@ -153,7 +153,7 @@
                       <div class="col l4 m5 s5 right-align">
                         {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
                       </div>
-                      <div class="col l1 m1 s1 right-align no-padding-right">
+                      <div class="col l1 m1 s1 right-align no-padding-lateral">
                         <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                           <i class="material-icons forum-icon">mode_edit</i>
                         </a>

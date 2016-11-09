@@ -191,8 +191,6 @@ export class CourseDetailsComponent implements OnInit {
 
   //PUT existing Session
   onPutDeleteSubmit(){
-    console.log(this.allowDeletion);
-
     let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
     let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
     s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
@@ -201,7 +199,7 @@ export class CourseDetailsComponent implements OnInit {
         console.log(response);
         //Only on succesful put we locally update the modified session
         for (let i = 0; i < this.course.sessions.length; i++) {
-          if (this.course.sessions[i].id == this.updatedSession.id) {
+          if (this.course.sessions[i].id == response.id) {
             this.course.sessions[i] = response; //The session with the required ID is updated
             this.updatedSession = this.course.sessions[i];
             break;

@@ -1,74 +1,128 @@
 <div *ngIf="!this.courses" class="loading"></div>
 
-<!--Course modal-->
-<div id="course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions1">
-  <div class="modal-content">
-    <h5>New course</h5>
-    <div class="row">
+<div *ngIf="this.courses">
 
-      <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
-        <div class="row row-no-margin">
+  <!--POST COURSE DIALOG-->
+  <div id="course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions1">
+    <div class="modal-content">
+      <h5>New course</h5>
+      <div class="row">
 
-          <div class="row">
-            <div class="input-field col s12">
-              <input [(ngModel)]="inputCourseName" name="inputCourseName" id="inputCourseName" type="text" class="validate" required>
-              <label for="inputCourseName">Course name</label>
-            </div>
-          </div>
+        <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
+          <div class="row row-no-margin">
 
-          <div class="row">
-            <div class="input-field file-field col s12">
-              <div>
-                <img class="circle" src="../assets/images/default_session_image.png">
-                <input type="file" name="inputCourseImage" id="inputCourseImage">
+            <div class="row">
+              <div class="input-field col s12">
+                <input [(ngModel)]="inputPostCourseName" name="inputPostCourseName" id="inputPostCourseName" type="text" class="validate" required>
+                <label for="inputPostCourseName">Course name</label>
               </div>
             </div>
-          </div>
 
-        </div>
-        <div class="row right-align">
-          <a (click)="courseForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
-          <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-</div>
-<!--Course modal-->
-
-<div *ngIf="this.courses" class="container container-ul margins-top-bottom">
-  <div class="row row-no-margin">
-
-    <div class="col l6 m5 s12 dashboard-col">
-      <div class="dashboard-title">MY COURSES
-        <i href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon">add_circle_outline</i>
-      </div>
-      <ul class="collection">
-        <li *ngIf="courses.length === 0 && this.authenticationService.isStudent()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'Your teacher must invite you'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
-        <li *ngIf="courses.length === 0 && this.authenticationService.isTeacher()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'You can add one by clicking on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
-        <li *ngFor="let course of courses; let i = index" class="collection-item">
-          <div class="row session-list-item valign-wrapper">
-
-            <div class="col l4 s3 valign center-align">
-              <img materialize="materialbox" class="circle materialboxed sessionImage" src={{this.getImage(course)}}>
-            </div>
-
-            <div (click)="goToCourseDetail(course.id)" class="col l8 s9 valign course-title">
-              <span class="title">{{course?.title}}</span>
+            <div class="row">
+              <div class="input-field file-field col s12">
+                <div>
+                  <img class="circle" src="../assets/images/default_session_image.png">
+                  <input type="file" name="inputPostCourseImage" id="inputPostCourseImage">
+                </div>
+              </div>
             </div>
 
           </div>
-        </li>
-      </ul>
-    </div>
+          <div class="row right-align">
+            <a (click)="courseForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+          </div>
+        </form>
 
-    <div class="col l6 m7 s12 dashboard-col">
-      <div class="dashboard-title">MY CALENDAR</div>
-      <div class="calendar-div">
-        <calendar-app></calendar-app>
       </div>
     </div>
-
   </div>
+  <!--POST COURSE DIALOG-->
+
+  <!--PUT/DELETE COURSE DIALOG-->
+  <div *ngIf="this.courses.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions4">
+    <div class="modal-content">
+      <p class="put-delete-modal-header">Modify course</p>
+      <div class="row row-no-margin">
+
+        <form materialize #putDeleteCourseForm class="col s12" (ngSubmit)="onPutDeleteCourseSubmit(); putDeleteCourseForm.reset(); this.allowCourseDeletion = false;">
+          <div class="row row-no-margin">
+
+            <div class="row">
+              <label for="inputPutCourseName">Course name</label>
+              <div class="input-field col s12">
+                <input [(ngModel)]="inputPutCourseName" name="inputPutCourseName" id="inputPutCourseName" type="text" class="validate" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field file-field col s12">
+                <div>
+                  <img class="circle" src="../assets/images/default_session_image.png">
+                  <input type="file" name="inputPutCourseImage" id="inputPutCourseImage">
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row row-no-margin-bottom right-align">
+            <div class="valign-wrapper delete-div">
+              <a (click)="this.deleteElement(); putDeleteCourseForm.reset();" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowCourseDeletion">Delete</a>
+              <div class="float-to-left">
+                <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowCourseDeletion = deleteCheckbox.checked"/>
+                <label for="delete-checkbox">Allow deletion?</label>
+              </div>
+            </div>
+            <a (click)="putDeleteCourseForm.reset(); this.allowCourseDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <!--PUT/DELETE COURSE DIALOG-->
+
+  <div class="container container-ul margins-top-bottom">
+    <div class="row row-no-margin">
+
+      <div class="col l6 m5 s12 dashboard-col">
+        <div class="dashboard-title">MY COURSES
+          <i href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon">add_circle_outline</i>
+        </div>
+        <ul class="collection">
+          <li *ngIf="courses.length === 0 && this.authenticationService.isStudent()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'Your teacher must invite you'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
+          <li *ngIf="courses.length === 0 && this.authenticationService.isTeacher()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'You can add one by clicking on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
+          <li *ngFor="let course of courses; let i = index" class="collection-item">
+            <div class="row session-list-item valign-wrapper">
+
+              <div class="col l4 m3 s3 valign center-align">
+                <img materialize="materialbox" class="circle materialboxed sessionImage" src={{this.getImage(course)}}>
+              </div>
+
+              <div (click)="goToCourseDetail(course.id)" class="col l6 m7 s7 valign course-title">
+                <span class="title">{{course?.title}}</span>
+              </div>
+
+              <div class="col l2 m2 s2 right-align no-padding-lateral">
+                <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedCourse(course)" [title]="'Modify course'" href="#put-delete-course-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                  <i class="material-icons course-put-icon">mode_edit</i>
+                </a>
+              </div>
+
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col l6 m7 s12 dashboard-col">
+        <div class="dashboard-title">MY CALENDAR</div>
+        <div class="calendar-div">
+          <calendar-app></calendar-app>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>

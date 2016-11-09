@@ -92,9 +92,13 @@ public class CourseController {
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public ResponseEntity<Course> modifyCourse(@RequestBody Course course) {
 		this.checkBackendLogged();
-		
-		if(courseRepository.findOne(course.getId()) != null){
-			courseRepository.save(course);
+
+		Course c = courseRepository.findOne(course.getId());
+		if(c != null){
+			c.setImage(course.getImage());
+			c.setTitle(course.getTitle());
+			//Saving the modified course
+			courseRepository.save(c);
 			return new ResponseEntity<>(course, HttpStatus.OK);
 		}else{
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -102,7 +106,7 @@ public class CourseController {
 	}
 	
 	
-	@RequestMapping(value = "/delete-{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Course> deleteCourse(@PathVariable(value="id") String id) {
 		this.checkBackendLogged();
 		
@@ -112,13 +116,27 @@ public class CourseController {
 		}catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Course course = courseRepository.findOne(id_i);
-		courseRepository.delete(id_i);
 		
-		//Should userRepository be updated by removing from each user the deleted course?
-		//PS: Course is the owner of the ManyToMany bidirectional relationship
-		
-		return new ResponseEntity<>(course, HttpStatus.OK);
+		Course c = courseRepository.findOne(id_i);
+		if (c != null){
+			
+			//Removing the deleted course from its attenders
+			Collection<Course> courses = new HashSet<>();
+			courses.add(c);
+			Collection<User> users = userRepository.findByCourses(courses);
+			for(User u: users){
+				u.getCourses().remove(c);
+			}
+			userRepository.save(users);
+			c.getAttenders().clear();
+			
+			
+			courseRepository.delete(c);
+			return new ResponseEntity<>(c, HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	

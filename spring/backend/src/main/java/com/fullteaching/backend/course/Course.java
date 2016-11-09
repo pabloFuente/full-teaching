@@ -123,4 +123,14 @@ public class Course {
 	public void setSessions(Set<Session> sessions) {
 		this.sessions = sessions;
 	}
+	
+	//To make 'user.getCourse().remove(course)' possible
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Course))return false;
+	    Course otherCourse = (Course)other;
+	    return (otherCourse.id == this.id);
+	}
 }

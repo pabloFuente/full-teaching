@@ -43,6 +43,16 @@ li.li-warning {
   padding-right: 7.5px;
 }
 
+.course-put-icon {
+  font-size: 20px;
+  color: #5e615f;
+  cursor: pointer;
+}
+
+.course-put-icon:hover {
+  color: #91a59b;
+}
+
 @media only screen and (min-width: 993px) {
   .sessionImage {
     width: 70px;
