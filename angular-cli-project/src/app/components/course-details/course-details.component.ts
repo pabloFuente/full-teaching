@@ -55,7 +55,7 @@ export class CourseDetailsComponent implements OnInit {
   inputSessionDate: Date;
   inputSessionTime: string;
   updatedSession: Session;
-  updatedSessionDate: String;
+  updatedSessionDate: string;
 
 
   private actions2 = new EventEmitter<string>();
@@ -118,7 +118,7 @@ export class CourseDetailsComponent implements OnInit {
 
   changeUpdatedSession(session: Session){
     this.updatedSession = session;
-    this.updatedSessionDate = this.setUpdatedSessionDate(new Date(this.updatedSession.date));
+    this.updatedSessionDate = (new Date(this.updatedSession.date)).toISOString().split("T")[0]; //YYYY-MM-DD format
     this.inputSessionTitle = this.updatedSession.title;
     this.inputSessionDescription = this.updatedSession.description;
     this.inputSessionDate = new Date(this.updatedSession.date);
@@ -171,7 +171,7 @@ export class CourseDetailsComponent implements OnInit {
       this.forumService.newComment(c, this.selectedEntry.id).subscribe(
         response => {
           console.log(response);
-          //Only on succesful post we locally update the entry
+          //Only on succesful post we locally update the created entry
           let ents = this.course.courseDetails.forum.entries;
           for (let i = 0; i < ents.length; i++) {
             if (ents[i].id == this.selectedEntry.id) {
@@ -189,28 +189,46 @@ export class CourseDetailsComponent implements OnInit {
 
 
   onPutDeleteSubmit(){
-
+    let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
+    let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
+    s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
+    this.sessionService.editSession(s).subscribe(
+      response => {
+        console.log(response);
+        //Only on succesful put we locally update the modified session
+        for (let i = 0; i < this.course.sessions.length; i++) {
+          if (this.course.sessions[i].id == this.updatedSession.id) {
+            this.course.sessions[i] = response; //The session with the required ID is updated
+            this.updatedSession = this.course.sessions[i];
+            break;
+          }
+        }
+        this.actions3.emit("closeModal");
+      },
+      error => console.log(error)
+    );
   }
 
 
 //PRIVATE AUXILIAR METHODS
-  private sortSessionsByDate(sessionArray: Session[]){
+  private sortSessionsByDate(sessionArray: Session[]): void {
     sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
   }
 
-  private setUpdatedSessionDate(date: Date){
-    let day = date.getDate().toString();
-    let month = (date.getMonth() + 1).toString();
-    let year = date.getFullYear().toString();
-    if (parseInt(month) < 10) month = "0" + month;
-    if (parseInt(day) < 10) day = "0" + day;
-    return(year + "-" + month + "-" + day);
-  }
-
-  private dateToTimeInputFormat(date:Date){
+  //Transforms a Date object into a single string ("HH:MM")
+  private dateToTimeInputFormat(date:Date): string {
     let hours = date.getHours() < 10 ? "0" + date.getHours().toString() : date.getHours().toString();
     let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString() : date.getMinutes().toString();
     return(hours + ":" + minutes);
+  }
+
+  //Transforms two strings ("YYYY-MM-DD", "HH:MM") into a new Date object
+  private fromInputToNumberDate(date: string, time: string): number {
+    let newDate: Date = new Date(date); //date parameter has a valid ISO format: YYYY-MM-DD
+    let timeArray = time.split(":");
+    newDate.setHours(parseInt(timeArray[0]));
+    newDate.setMinutes(parseInt(timeArray[1]));
+    return newDate.getTime(); //returning miliseconds
   }
 
 }

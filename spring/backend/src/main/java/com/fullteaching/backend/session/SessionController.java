@@ -19,6 +19,9 @@ public class SessionController {
 	@Autowired
 	private CourseRepository courseRepository;
 	
+	@Autowired
+	private SessionRepository sessionRepository;
+	
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.POST)
 	public ResponseEntity<Course> newSession(@RequestBody Session session, @PathVariable(value="id") String id) {
 		long id_i = -1;
@@ -43,6 +46,26 @@ public class SessionController {
 			return new ResponseEntity<>(course, HttpStatus.CREATED);
 		}else{
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
+	public ResponseEntity<Session> modifySession(@RequestBody Session session) {
+		
+		Session s = sessionRepository.findOne(session.getId());
+		if(s != null){
+			
+			s.setTitle(session.getTitle());
+			s.setDescription(session.getDescription());
+			s.setDate(session.getDate());
+			
+			/*Saving the modified session*/
+			sessionRepository.save(s);
+			
+			return new ResponseEntity<>(s, HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 		}
 	}
 	

@@ -25,6 +25,16 @@ export class SessionService {
       .catch(error => this.handleError(error));
   }
 
+  //PUT existing session. On success returns the updated Course that owns the updated session
+  public editSession(session: Session){
+    let body = JSON.stringify(session);
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.put(this.urlSessions + "/edit", body, options)
+      .map(response => response.json() as Session)
+      .catch(error => this.handleError(error));
+  }
+
   private handleError(error: any) {
     console.error(error);
     return Observable.throw("Server error (" + error.status + "): " + error.text())
