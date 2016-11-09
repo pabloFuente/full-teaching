@@ -35,6 +35,14 @@ export class SessionService {
       .catch(error => this.handleError(error));
   }
 
+  public deleteSession(sessionId: number){
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.delete(this.urlSessions + "/delete/" + sessionId, options)
+      .map(response => response.json())
+      .catch(error => this.handleError(error));
+  }
+
   private handleError(error: any) {
     console.error(error);
     return Observable.throw("Server error (" + error.status + "): " + error.text())

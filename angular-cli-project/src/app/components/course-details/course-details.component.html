@@ -65,20 +65,20 @@
   <!--PUT/DELETE DIALOG-->
   <div *ngIf="this.course.sessions.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
     <div class="modal-content">
-      <p>Modify session</p>
+      <p class="put-delete-modal-header">Modify session</p>
       <div class="row row-no-margin">
 
-        <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset();">
+        <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowDeletion = false;">
           <div class="row row-no-margin">
 
-            <div *ngIf="isCurrentMode(['0', '3'])" class="row">
+            <div class="row">
               <label for="inputSessionTitle">Session title</label>
               <div class="input-field col s12">
                 <input [(ngModel)]="inputSessionTitle" name="inputSessionTitle" id="inputSessionTitle" type="text" class="validate" required>
               </div>
             </div>
 
-            <div *ngIf="isCurrentMode(['0', '1', '2', '3'])" class="row">
+            <div class="row">
               <label for="inputSessionDescription">Description</label>
               <div class="input-field col s12">
                 <textarea [(ngModel)]="inputSessionDescription" name="inputSessionDescription" id="inputSessionDescription" class="materialize-textarea validate" required></textarea>
@@ -106,7 +106,14 @@
 
           </div>
           <div class="row row-no-margin-bottom right-align">
-            <a (click)="putDeleteForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <div class="valign-wrapper delete-div">
+              <a (click)="this.deleteElement(); putDeleteForm.reset();" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowDeletion">Delete</a>
+              <div class="float-to-left">
+                <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowDeletion = deleteCheckbox.checked"/>
+                <label for="delete-checkbox">Allow deletion?</label>
+              </div>
+            </div>
+            <a (click)="putDeleteForm.reset(); this.allowDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>

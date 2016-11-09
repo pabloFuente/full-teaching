@@ -88,4 +88,14 @@ public class Session {
 		this.course = course;
 	}
 	
+	//To make 'course.getSessions().remove(session)' possible
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Session))return false;
+	    Session otherSession = (Session)other;
+	    return (otherSession.id == this.id);
+	}
+	
 }

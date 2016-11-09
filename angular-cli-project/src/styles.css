@@ -80,6 +80,10 @@ a {
   color: #91a59b;
 }
 
+.btn-flat.disabled{
+  pointer-events: none;
+}
+
 /*Loader*/
 @keyframes spinLoader {
   0% {

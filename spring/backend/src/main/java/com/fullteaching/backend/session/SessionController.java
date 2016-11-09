@@ -69,4 +69,33 @@ public class SessionController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Session> deleteSession(@PathVariable(value="id") String id) {
+		long id_i = -1;
+		try{
+			id_i = Long.parseLong(id);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Session session = sessionRepository.findOne(id_i);
+		if(session != null){
+			Course course = courseRepository.findOne(session.getCourse().getId());
+			if (course != null){
+				course.getSessions().remove(session);
+				sessionRepository.delete(id_i);
+				courseRepository.save(course);
+				return new ResponseEntity<>(session, HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}
+		else{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
 }

@@ -56,6 +56,7 @@ export class CourseDetailsComponent implements OnInit {
   inputSessionTime: string;
   updatedSession: Session;
   updatedSessionDate: string;
+  allowDeletion: boolean = false;
 
 
   private actions2 = new EventEmitter<string>();
@@ -93,7 +94,7 @@ export class CourseDetailsComponent implements OnInit {
           this.selectedEntry = this.course.courseDetails.forum.entries[0];
 
           //updatedSession default to first session
-          this.changeUpdatedSession(this.course.sessions[0]);
+          if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]);
         },
         error => console.log(error));
     });
@@ -129,6 +130,7 @@ export class CourseDetailsComponent implements OnInit {
     return (possibleModes.indexOf(this.courseDetailsModalMode.toString()) > -1);
   }
 
+  //POST new Entry, Comment or Session
   onCourseDetailsSubmit() {
 
     //If modal is opened in "New Entry" mode
@@ -187,8 +189,10 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
-
+  //PUT existing Session
   onPutDeleteSubmit(){
+    console.log(this.allowDeletion);
+
     let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
     let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
     s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
@@ -200,6 +204,26 @@ export class CourseDetailsComponent implements OnInit {
           if (this.course.sessions[i].id == this.updatedSession.id) {
             this.course.sessions[i] = response; //The session with the required ID is updated
             this.updatedSession = this.course.sessions[i];
+            break;
+          }
+        }
+        this.actions3.emit("closeModal");
+      },
+      error => console.log(error)
+    );
+  }
+
+  //DELETE existing Session
+  deleteElement(){
+    this.sessionService.deleteSession(this.updatedSession.id).subscribe(
+      response => {
+        console.log("Session deleted");
+        console.log(response);
+        //Only on succesful put we locally delete the session
+        for (let i = 0; i < this.course.sessions.length; i++) {
+          if (this.course.sessions[i].id == response.id) {
+            this.course.sessions.splice(i, 1); //The session with the required ID is deleted
+            this.updatedSession = this.course.sessions[0];
             break;
           }
         }
