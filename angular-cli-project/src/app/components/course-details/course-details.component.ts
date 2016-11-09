@@ -40,16 +40,26 @@ export class CourseDetailsComponent implements OnInit {
 
   fadeAnim = 'commentsHidden';
 
+  //POST MODAL
   inputTitle: string;
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-//courseDetailsModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
-  courseDetailsModalMode: number = 3;
+  courseDetailsModalMode: number = 3; //courseDetailsModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
   courseDetailsModalEntry: Entry;
   courseDetailsModalCommentReplay: Comment;
 
+  //PUT-DELETE MODAL
+  inputSessionTitle: string;
+  inputSessionDescription: string;
+  inputSessionDate: Date;
+  inputSessionTime: string;
+  updatedSession: Session;
+  updatedSessionDate: String;
+
+
   private actions2 = new EventEmitter<string>();
+  private actions3 = new EventEmitter<string>();
 
   subscription: Subscription;
 
@@ -78,7 +88,12 @@ export class CourseDetailsComponent implements OnInit {
           console.log(course);
           this.sortSessionsByDate(course.sessions);
           this.course = course;
+
+          //selectedEntry default to first entry
           this.selectedEntry = this.course.courseDetails.forum.entries[0];
+
+          //updatedSession default to first session
+          this.changeUpdatedSession(this.course.sessions[0]);
         },
         error => console.log(error));
     });
@@ -101,8 +116,13 @@ export class CourseDetailsComponent implements OnInit {
     return new Date(d);
   }
 
-  sortSessionsByDate(sessionArray: Session[]){
-    sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
+  changeUpdatedSession(session: Session){
+    this.updatedSession = session;
+    this.updatedSessionDate = this.setUpdatedSessionDate(new Date(this.updatedSession.date));
+    this.inputSessionTitle = this.updatedSession.title;
+    this.inputSessionDescription = this.updatedSession.description;
+    this.inputSessionDate = new Date(this.updatedSession.date);
+    this.inputSessionTime = this.dateToTimeInputFormat(this.inputSessionDate);
   }
 
   isCurrentMode(possibleModes: string[]): boolean {
@@ -165,6 +185,32 @@ export class CourseDetailsComponent implements OnInit {
         error => console.log(error)
       );
     }
+  }
+
+
+  onPutDeleteSubmit(){
+
+  }
+
+
+//PRIVATE AUXILIAR METHODS
+  private sortSessionsByDate(sessionArray: Session[]){
+    sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
+  }
+
+  private setUpdatedSessionDate(date: Date){
+    let day = date.getDate().toString();
+    let month = (date.getMonth() + 1).toString();
+    let year = date.getFullYear().toString();
+    if (parseInt(month) < 10) month = "0" + month;
+    if (parseInt(day) < 10) day = "0" + day;
+    return(year + "-" + month + "-" + day);
+  }
+
+  private dateToTimeInputFormat(date:Date){
+    let hours = date.getHours() < 10 ? "0" + date.getHours().toString() : date.getHours().toString();
+    let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString() : date.getMinutes().toString();
+    return(hours + ":" + minutes);
   }
 
 }

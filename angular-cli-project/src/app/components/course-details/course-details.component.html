@@ -2,7 +2,8 @@
 
 <div *ngIf="this.course" class="container course-detail-div">
 
-  <!--MODAL DIALOG-->
+
+  <!--POST DIALOG-->
   <div id="course-details-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions2">
     <div class="modal-content">
       <h5 *ngIf="this.courseDetailsModalMode === 1">{{this.courseDetailsModalEntry?.title}}</h5>
@@ -57,7 +58,64 @@
       </div>
     </div>
   </div>
-  <!--MODAL DIALOG-->
+  <!--POST DIALOG-->
+
+
+
+  <!--PUT/DELETE DIALOG-->
+  <div *ngIf="this.course.sessions.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
+    <div class="modal-content">
+      <p>Modify session</p>
+      <div class="row row-no-margin">
+
+        <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset();">
+          <div class="row row-no-margin">
+
+            <div *ngIf="isCurrentMode(['0', '3'])" class="row">
+              <label for="inputSessionTitle">Session title</label>
+              <div class="input-field col s12">
+                <input [(ngModel)]="inputSessionTitle" name="inputSessionTitle" id="inputSessionTitle" type="text" class="validate" required>
+              </div>
+            </div>
+
+            <div *ngIf="isCurrentMode(['0', '1', '2', '3'])" class="row">
+              <label for="inputSessionDescription">Description</label>
+              <div class="input-field col s12">
+                <textarea [(ngModel)]="inputSessionDescription" name="inputSessionDescription" id="inputSessionDescription" class="materialize-textarea validate" required></textarea>
+              </div>
+            </div>
+
+            <div class="row row-no-margin">
+              <div class="col l6 m6 s6">
+                <div class="row">
+                  <label for="inputSessionDate">Date</label>
+                  <div class="input-field col s12">
+                    <input [(ngModel)]="this.updatedSessionDate" name="inputSessionDate" id="inputSessionDate" type="date" [value]="this.updatedSessionDate" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col l6 m6 s6">
+                <div class="row">
+                  <label for="inputSessionTime">Time</label>
+                  <div class="input-field col s12">
+                    <input [(ngModel)]="this.inputSessionTime" type="time" id="inputSessionTime" name="inputSessionTime" class="validate" [value]="this.inputSessionTime" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row row-no-margin-bottom right-align">
+            <a (click)="putDeleteForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <!--PUT/DELETE DIALOG-->
+
 
 
   <div class="row valign-wrapper">
@@ -81,12 +139,17 @@
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
                   <li class="session-data waves-effect">
                     <div class="row row-no-margin">
-                      <div class="col l8 m7 s7">
+                      <div class="col l7 m6 s6">
                         <div class="session-title">{{session.title}}</div>
                         <div class="session-description">{{session.description}}</div>
                       </div>
                       <div class="col l4 m5 s5 right-align">
                         {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
+                      </div>
+                      <div class="col l1 m1 s1 right-align no-padding-right">
+                        <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                          <i class="material-icons forum-icon">mode_edit</i>
+                        </a>
                       </div>
                     </div>
                   </li>
@@ -138,7 +201,7 @@
               <li *ngIf="!last2"><div class="divider"></div></li>
             </div>
             <div class="center-align div-entry-icon">
-              <a (click)="updateCourseDetailsModalMode(0, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal{{this.sessionIndex}}" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+              <a (click)="updateCourseDetailsModalMode(0, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                 <i class="material-icons forum-icon">chat</i>
               </a>
             </div>

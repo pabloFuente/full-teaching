@@ -136,6 +136,10 @@ a {
     max-height: none !important;
   }
 
+  #put-delete-modal {
+    max-height: none !important;
+  }
+
   .modal.my-modal-class .modal-footer{
     background-color: rgb(231, 235, 233);
   }
