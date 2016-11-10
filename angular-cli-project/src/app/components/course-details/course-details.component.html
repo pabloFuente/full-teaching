@@ -68,7 +68,7 @@
       <p class="put-delete-modal-header">Modify session</p>
       <div class="row row-no-margin">
 
-        <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowDeletion = false;">
+        <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowSessionDeletion = false;">
           <div class="row row-no-margin">
 
             <div class="row">
@@ -107,13 +107,13 @@
           </div>
           <div class="row row-no-margin-bottom right-align">
             <div class="valign-wrapper delete-div">
-              <a (click)="this.deleteElement(); putDeleteForm.reset();" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowDeletion">Delete</a>
+              <a (click)="this.deleteElement(); putDeleteForm.reset(); this.allowSessionDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowSessionDeletion">Delete</a>
               <div class="float-to-left">
-                <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowDeletion = deleteCheckbox.checked"/>
+                <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowSessionDeletion = deleteCheckbox.checked"/>
                 <label for="delete-checkbox">Allow deletion?</label>
               </div>
             </div>
-            <a (click)="putDeleteForm.reset(); this.allowDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>

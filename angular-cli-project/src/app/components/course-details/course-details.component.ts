@@ -56,7 +56,7 @@ export class CourseDetailsComponent implements OnInit {
   inputSessionTime: string;
   updatedSession: Session;
   updatedSessionDate: string;
-  allowDeletion: boolean = false;
+  allowSessionDeletion: boolean = false;
 
 
   private actions2 = new EventEmitter<string>();

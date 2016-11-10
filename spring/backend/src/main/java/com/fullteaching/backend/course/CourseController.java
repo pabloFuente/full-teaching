@@ -94,15 +94,15 @@ public class CourseController {
 		this.checkBackendLogged();
 
 		Course c = courseRepository.findOne(course.getId());
-		if(c != null){
-			c.setImage(course.getImage());
-			c.setTitle(course.getTitle());
-			//Saving the modified course
-			courseRepository.save(c);
-			return new ResponseEntity<>(course, HttpStatus.OK);
-		}else{
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		//Modifying the course attributes
+		c.setImage(course.getImage());
+		c.setTitle(course.getTitle());
+		//Saving the modified course
+		courseRepository.save(c);
+		return new ResponseEntity<>(course, HttpStatus.OK);
 	}
 	
 	
@@ -118,25 +118,22 @@ public class CourseController {
 		}
 		
 		Course c = courseRepository.findOne(id_i);
-		if (c != null){
-			
-			//Removing the deleted course from its attenders
-			Collection<Course> courses = new HashSet<>();
-			courses.add(c);
-			Collection<User> users = userRepository.findByCourses(courses);
-			for(User u: users){
-				u.getCourses().remove(c);
-			}
-			userRepository.save(users);
-			c.getAttenders().clear();
-			
-			
-			courseRepository.delete(c);
-			return new ResponseEntity<>(c, HttpStatus.OK);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		//Removing the deleted course from its attenders
+		Collection<Course> courses = new HashSet<>();
+		courses.add(c);
+		Collection<User> users = userRepository.findByCourses(courses);
+		for(User u: users){
+			u.getCourses().remove(c);
 		}
-		else{
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		userRepository.save(users);
+		c.getAttenders().clear();
+		
+		
+		courseRepository.delete(c);
+		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 	
 	
@@ -147,6 +144,19 @@ public class CourseController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		return null; 
+	}
+	
+	//Authorization checking for editing and deleting courses (the teacher must own the Course)
+	private ResponseEntity<Object> checkAuthorization(Object o, User u){
+		if(o == null){
+			//The object does not exist
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+		}
+		if(!this.user.getLoggedUser().equals(u)){
+			//The teacher is not authorized to edit it if he is not its owner
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
+		}
+		return null;
 	}
 	
 }

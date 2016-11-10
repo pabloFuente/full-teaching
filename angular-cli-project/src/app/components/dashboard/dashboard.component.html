@@ -67,7 +67,7 @@
           </div>
           <div class="row row-no-margin-bottom right-align">
             <div class="valign-wrapper delete-div">
-              <a (click)="this.deleteElement(); putDeleteCourseForm.reset();" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowCourseDeletion">Delete</a>
+              <a (click)="this.deleteElement(); putDeleteCourseForm.reset();  this.allowCourseDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowCourseDeletion">Delete</a>
               <div class="float-to-left">
                 <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowCourseDeletion = deleteCheckbox.checked"/>
                 <label for="delete-checkbox">Allow deletion?</label>

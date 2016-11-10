@@ -123,5 +123,14 @@ public class User {
 	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
 	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof User))return false;
+	    User otherUser = (User)other;
+	    return ((otherUser.id == this.id) && (otherUser.name.equals(this.name)));
+	}
 
 }
