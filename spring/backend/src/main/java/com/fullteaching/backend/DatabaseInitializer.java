@@ -168,7 +168,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		//Sample forums
 		Forum f1 = new Forum(true);
-		Forum f2 = new Forum(true);
+		Forum f2 = new Forum(false);
 		
 		f1.setEntries(listEntries.subList(0, 6));
 		f2.setEntries(listEntries.subList(6, 10));

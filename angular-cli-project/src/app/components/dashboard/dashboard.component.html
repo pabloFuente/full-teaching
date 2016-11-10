@@ -5,7 +5,7 @@
   <!--POST COURSE DIALOG-->
   <div id="course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions1">
     <div class="modal-content">
-      <h5>New course</h5>
+      <p class="p-bold-modal-header">New course</p>
       <div class="row">
 
         <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
@@ -42,7 +42,7 @@
   <!--PUT/DELETE COURSE DIALOG-->
   <div *ngIf="this.courses.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions4">
     <div class="modal-content">
-      <p class="put-delete-modal-header">Modify course</p>
+      <p class="p-bold-modal-header">Modify course</p>
       <div class="row row-no-margin">
 
         <form materialize #putDeleteCourseForm class="col s12" (ngSubmit)="onPutDeleteCourseSubmit(); putDeleteCourseForm.reset(); this.allowCourseDeletion = false;">

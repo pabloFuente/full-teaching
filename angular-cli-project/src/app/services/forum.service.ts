@@ -19,6 +19,7 @@ export class ForumService {
 
   private urlNewEntry = "/entries";
   private urlNewComment = "/comments";
+  private urlEditForum = "/forum"
 
   //POST new entry. On success returns the updated Forum that owns the posted entry
   public newEntry(entry: Entry, forumId: number){
@@ -37,6 +38,15 @@ export class ForumService {
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlNewComment + "/forum/" + entryId, body, options)
       .map(response => response.json() as Entry)
+      .catch(error => this.handleError(error));
+  }
+
+  public editForum(activated: boolean, courseId: number){
+    let body = JSON.stringify(activated);
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.put(this.urlEditForum + "/edit/" + courseId, body, options)
+      .map(response => response.json() as boolean)
       .catch(error => this.handleError(error));
   }
 

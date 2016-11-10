@@ -6,32 +6,33 @@
   <!--POST DIALOG-->
   <div id="course-details-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions2">
     <div class="modal-content">
-      <h5 *ngIf="this.courseDetailsModalMode === 1">{{this.courseDetailsModalEntry?.title}}</h5>
-      <p *ngIf="this.courseDetailsModalMode === 2">{{this.courseDetailsModalCommentReplay?.message}}</p>
+      <p class="p-bold-modal-header">{{this.postModalTitle}}</p>
+      <h5 *ngIf="isCurrentPostMode(['1'])">{{this.postModalEntry?.title}}</h5>
+      <p *ngIf="isCurrentPostMode(['2'])">{{this.postModalCommentReplay?.message}}</p>
       <div class="row row-no-margin">
 
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
           <div class="row row-no-margin">
 
-            <div *ngIf="isCurrentMode(['0', '3'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '3'])" class="row">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
-                <label *ngIf="this.courseDetailsModalMode === 0" for="inputTitle">Entry title</label>
-                <label *ngIf="this.courseDetailsModalMode === 3" for="inputTitle">Session title</label>
+                <label *ngIf="isCurrentPostMode(['0'])" for="inputTitle">Entry title</label>
+                <label *ngIf="isCurrentPostMode(['3'])" for="inputTitle">Session title</label>
               </div>
             </div>
 
-            <div *ngIf="isCurrentMode(['0', '1', '2', '3'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '1', '2', '3'])" class="row">
               <div class="input-field col s12">
                 <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
-                <label *ngIf="isCurrentMode('0', '1', '2')" for="inputComment">Write your comment here</label>
-                <label *ngIf="this.courseDetailsModalMode === 3" for="inputComment">Description</label>
+                <label *ngIf="isCurrentPostMode('0', '1', '2')" for="inputComment">Write your comment here</label>
+                <label *ngIf="isCurrentPostMode(['3'])" for="inputComment">Description</label>
               </div>
             </div>
 
             <div class="row row-no-margin">
               <div class="col l6 m6 s6">
-                <div *ngIf="this.courseDetailsModalMode === 3" class="row">
+                <div *ngIf="isCurrentPostMode(['3'])" class="row">
                   <label for="inputDate">Date</label>
                   <div class="input-field col s12">
                     <input [(ngModel)]="inputDate" name="inputDate" id="inputDate" type="date" required>
@@ -39,7 +40,7 @@
                 </div>
               </div>
               <div class="col l6 m6 s6">
-                <div *ngIf="this.courseDetailsModalMode === 3" class="row">
+                <div *ngIf="isCurrentPostMode(['3'])" class="row">
                   <label for="inputTime">Time</label>
                   <div class="input-field col s12">
                     <input type="time" [(ngModel)]="inputTime" id="inputTime" name="inputTime" class="validate" required>
@@ -63,14 +64,14 @@
 
 
   <!--PUT/DELETE DIALOG-->
-  <div *ngIf="this.course.sessions.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
+  <div *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
     <div class="modal-content">
-      <p class="put-delete-modal-header">Modify session</p>
+      <p class="p-bold-modal-header">{{this.putdeleteModalTitle}}</p>
       <div class="row row-no-margin">
 
         <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowSessionDeletion = false;">
-          <div class="row row-no-margin">
 
+          <div *ngIf="isCurrentPutdeleteMode(['0'])" class="row row-no-margin">
             <div class="row">
               <label for="inputSessionTitle">Session title</label>
               <div class="input-field col s12">
@@ -103,18 +104,23 @@
                 </div>
               </div>
             </div>
-
           </div>
+
+          <div *ngIf="isCurrentPutdeleteMode(['1'])" class="row row-no-margin">
+            <input #forumCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowForumEdition = forumCheckbox.checked"/>
+            <label for="delete-checkbox">Allow forum {{this.checkboxForumEdition}}?</label>
+          </div>
+
           <div class="row row-no-margin-bottom right-align">
-            <div class="valign-wrapper delete-div">
+            <div *ngIf="isCurrentPutdeleteMode(['0'])" class="valign-wrapper delete-div">
               <a (click)="this.deleteElement(); putDeleteForm.reset(); this.allowSessionDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowSessionDeletion">Delete</a>
               <div class="float-to-left">
                 <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowSessionDeletion = deleteCheckbox.checked"/>
                 <label for="delete-checkbox">Allow deletion?</label>
               </div>
             </div>
-            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
-            <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <button type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
           </div>
         </form>
 
@@ -140,7 +146,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(3, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
+                <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePostModalMode(3, 'New session', null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
               </div>
               <ul>
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
@@ -154,7 +160,7 @@
                         {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
                       </div>
                       <div class="col l1 m1 s1 right-align no-padding-lateral">
-                        <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                        <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(0, 'Modify session'); this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                           <i class="material-icons forum-icon">mode_edit</i>
                         </a>
                       </div>
@@ -179,73 +185,79 @@
       <md-tab>
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
-          <div class="tab-template-content row row-no-margin">
-            <div *ngIf="this.course.courseDetails?.forum.activated">
+          <div class="tab-template-content-2 row row-no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated">
 
-          <!--Forum view-->
-          <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
-            <div *ngFor="let entry of this.course.courseDetails?.forum.entries; let last2 = last">
-              <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
-                <div class="row row-no-margin entry-row-sep">
-                  <div class="col l6 m6 s6">
-                    <a [title]="entry.title">{{entry.title}}</a>
-                  </div>
-                  <div class="col l6 m6 s6 user-date-column">
-                    <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{entry?.user?.nickName}}</div>
-                      <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
+            <!--Forum view-->
+            <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
+              <div *ngIf="this.course.courseDetails?.forum.activated">
+                <div *ngFor="let entry of this.course.courseDetails?.forum.entries; let last2 = last">
+                  <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
+                    <div class="row row-no-margin entry-row-sep">
+                      <div class="col l6 m6 s6">
+                        <a [title]="entry.title">{{entry.title}}</a>
+                      </div>
+                      <div class="col l6 m6 s6 user-date-column">
+                        <div class="row row-no-margin">
+                          <div class="col l6 m6 s6 user-name">{{entry?.user?.nickName}}</div>
+                          <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div *ngIf="entry.comments.length > 0" class="row row-no-margin last-comment-row">
-                  <div class="col">Last comment:</div>
-                  <div class="col">{{getLastEntryComment(entry)?.user?.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
-                </div>
-                <div *ngIf="entry.comments.length === 0" class="row row-no-margin last-comment-row">
-                  <div class="col">No comments</div>
-                </div>
-              </li>
-              <li *ngIf="!last2"><div class="divider"></div></li>
-            </div>
-            <div class="center-align div-entry-icon">
-              <a (click)="updateCourseDetailsModalMode(0, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
-                <i class="material-icons forum-icon">chat</i>
-              </a>
-            </div>
-          </ul>
-          <div id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
-            <div class="row zero-lateral-margin">
-              <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1 no-padding-lateral" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
-              <div class="col l10 m10 s10 no-padding-lateral">
-                <div class="row row-no-margin comment-section-title">
-                  <div class="col l6 m6 s6">{{selectedEntry?.title}}</div>
-                  <div class="col l6 m6 s6 user-date-column">
-                    <div class="row row-no-margin">
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.user.nickName}}</div>
-                      <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry?.date | date:'H:mm' }}</div>
+                    <div *ngIf="entry.comments.length > 0" class="row row-no-margin last-comment-row">
+                      <div class="col">Last comment:</div>
+                      <div class="col">{{getLastEntryComment(entry)?.user?.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
                     </div>
-                  </div>
+                    <div *ngIf="entry.comments.length === 0" class="row row-no-margin last-comment-row">
+                      <div class="col">No comments</div>
+                    </div>
+                  </li>
+                  <li *ngIf="!last2"><div class="divider"></div></li>
                 </div>
               </div>
-              <div class="col l1 m1 s1 no-padding-lateral right-align">
-                <a [title]="'New comment'" (click)="updateCourseDetailsModalMode(1, selectedEntry, null); this.courseDetailsModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+              <div class="center-align div-entry-icon">
+                <a *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                   <i class="material-icons forum-icon">chat</i>
                 </a>
-              </div>
-            </div>
-            <div class="row row-no-margin comments-col">
-              <div *ngFor="let comment of this.selectedEntry?.comments; let last3 = last" class="comment-block" [class.comment-divider]="!last3">
-                <app-comment [comment]="comment"></app-comment>
-              </div>
-            </div>
-          </div>
-          <!--Forum view-->
 
-        </div>
-        <div *ngIf="!this.course.courseDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
-        <div *ngIf="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length === 0"><app-error-message [errorTitle]="'There are no entries yet'" [errorContent]="'Be the first one! Just click on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
-      </div>
-      </template>
+                <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.courseDetailsModalDataService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                    <i class="material-icons forum-icon">mode_edit</i>
+                </a>
+
+              </div>
+            </ul>
+
+            <div *ngIf="this.course.courseDetails?.forum.activated" id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
+              <div class="row zero-lateral-margin">
+                <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1 no-padding-lateral" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
+                <div class="col l10 m10 s10 no-padding-lateral">
+                  <div class="row row-no-margin comment-section-title">
+                    <div class="col l6 m6 s6">{{selectedEntry?.title}}</div>
+                    <div class="col l6 m6 s6 user-date-column">
+                      <div class="row row-no-margin">
+                        <div class="col l6 m6 s6 user-name">{{selectedEntry?.user.nickName}}</div>
+                        <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry?.date | date:'H:mm' }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col l1 m1 s1 no-padding-lateral right-align">
+                  <a [title]="'New comment'" (click)="updatePostModalMode(1, 'New comment', selectedEntry, null); this.postModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                    <i class="material-icons forum-icon">chat</i>
+                  </a>
+                </div>
+              </div>
+              <div class="row row-no-margin comments-col">
+                <div *ngFor="let comment of this.selectedEntry?.comments; let last3 = last" class="comment-block" [class.comment-divider]="!last3">
+                  <app-comment [comment]="comment"></app-comment>
+                </div>
+              </div>
+            </div>
+            <!--Forum view-->
+
+            <div *ngIf="!this.course.courseDetails?.forum.activated"><app-error-message [errorTitle]="'The forum is not activated!'" [errorContent]="'The teacher must activate it before you can comment'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+            <div *ngIf="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length === 0"><app-error-message [errorTitle]="'There are no entries yet'" [errorContent]="'Be the first one! Just click on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+          </div>
+        </template>
       </md-tab>
 
       <md-tab>
@@ -266,7 +278,7 @@
         <template md-tab-content>
           <div class="tab-template-content">
             <div class="row row-no-margin">
-              <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updateCourseDetailsModalMode(4, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
+              <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePostModalMode(4, 'Edit attenders', null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
             </div>
             <div *ngFor="let attender of this.course.attenders" class="row row-no-margin valign-wrapper">
               <div class="col l2 m2 s3 valign attender-col">

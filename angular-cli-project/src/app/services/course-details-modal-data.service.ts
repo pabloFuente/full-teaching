@@ -4,14 +4,20 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class CourseDetailsModalDataService {
 
-  modeAnnounced$: Subject<any>;
+  postModeAnnounced$: Subject<any>;
+  putdeleteModeAnnounced$: Subject<any>;
 
   constructor(){
-    this.modeAnnounced$ = new Subject<any>();
+    this.postModeAnnounced$ = new Subject<any>();
+    this.putdeleteModeAnnounced$ = new Subject<any>();
   }
 
-  announceMode(objs){
-    this.modeAnnounced$.next(objs);
+  announcePostMode(objs){
+    this.postModeAnnounced$.next(objs);
+  }
+
+  announcePutdeleteMode(objs){
+    this.putdeleteModeAnnounced$.next(objs);
   }
 
   animateIfSmall(){

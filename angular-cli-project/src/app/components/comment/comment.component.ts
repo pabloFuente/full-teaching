@@ -19,9 +19,9 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {}
 
-  updateCourseDetailsModalMode(mode: number, header: Entry, commentReplay: Comment){
-    let objs = [mode, header, commentReplay];
-    this.courseDetailsModalDataService.announceMode(objs);
+  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment){
+    let objs = [mode, title, header, commentReplay];
+    this.courseDetailsModalDataService.announcePostMode(objs);
   }
 
 }

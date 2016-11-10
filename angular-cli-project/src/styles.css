@@ -84,7 +84,7 @@ a {
   pointer-events: none;
 }
 
-.put-delete-modal-header{
+.p-bold-modal-header{
   font-weight: 600;
   font-size: 20px;
   margin-top: 10px;
@@ -92,6 +92,10 @@ a {
 
 .float-to-left{
   float: left !important;
+}
+
+.float-to-right{
+  float: right !important;
 }
 
 .delete-div {

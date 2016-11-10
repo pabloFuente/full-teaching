@@ -45,9 +45,10 @@ export class CourseDetailsComponent implements OnInit {
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-  courseDetailsModalMode: number = 3; //courseDetailsModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
-  courseDetailsModalEntry: Entry;
-  courseDetailsModalCommentReplay: Comment;
+  postModalMode: number = 3; //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
+  postModalTitle: string = "New session";
+  postModalEntry: Entry;
+  postModalCommentReplay: Comment;
 
   //PUT-DELETE MODAL
   inputSessionTitle: string;
@@ -57,12 +58,16 @@ export class CourseDetailsComponent implements OnInit {
   updatedSession: Session;
   updatedSessionDate: string;
   allowSessionDeletion: boolean = false;
-
+  allowForumEdition: boolean = false;
+  checkboxForumEdition: string;
+  putdeleteModalMode: number = 0; //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify files
+  putdeleteModalTitle: string = "Modify session";
 
   private actions2 = new EventEmitter<string>();
   private actions3 = new EventEmitter<string>();
 
-  subscription: Subscription;
+  subscription1: Subscription;
+  subscription2: Subscription;
 
   constructor(
     private courseService: CourseService,
@@ -71,12 +76,19 @@ export class CourseDetailsComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private courseDetailsModalDataService: CourseDetailsModalDataService) {
-    this.subscription = courseDetailsModalDataService.modeAnnounced$.subscribe(
+    this.subscription1 = courseDetailsModalDataService.postModeAnnounced$.subscribe(
       objs => {
-        //objs is an array containing courseDetailsModalMode, courseDetailsModalEntry and courseDetailsModalCommentReplay, in that specific order
-        this.courseDetailsModalMode = objs[0];
-        if (objs[1]) this.courseDetailsModalEntry = objs[1]; //Only if the string is not empty
-        if (objs[2]) this.courseDetailsModalCommentReplay = objs[2]; //Only if the string is not empty
+        //objs is an array containing postModalMode, postModalEntry and postModalCommentReplay, in that specific order
+        this.postModalMode = objs[0];
+        this.postModalTitle = objs[1];
+        if (objs[2]) this.postModalEntry = objs[2]; //Only if the string is not empty
+        if (objs[3]) this.postModalCommentReplay = objs[3]; //Only if the string is not empty
+      });
+    this.subscription2 = courseDetailsModalDataService.putdeleteModeAnnounced$.subscribe(
+      objs => {
+        //objs is an array containing putdeleteModalMode and putdeleteModalTitle, in that specific order
+        this.putdeleteModalMode = objs[0];
+        if (objs[1]) this.putdeleteModalTitle = objs[1]; //Only if the string is not empty
       });
   }
 
@@ -89,20 +101,22 @@ export class CourseDetailsComponent implements OnInit {
           console.log(course);
           this.sortSessionsByDate(course.sessions);
           this.course = course;
-
-          //selectedEntry default to first entry
-          this.selectedEntry = this.course.courseDetails.forum.entries[0];
-
-          //updatedSession default to first session
-          if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]);
+          this.selectedEntry = this.course.courseDetails.forum.entries[0]; //selectedEntry default to first entry
+          if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]); //updatedSession default to first session
+          this.updateCheckboxForumEdition(this.course.courseDetails.forum.activated);
         },
         error => console.log(error));
     });
   }
 
-  updateCourseDetailsModalMode(mode: number, header: Entry, commentReplay: Comment) {
-    let objs = [mode, header, commentReplay];
-    this.courseDetailsModalDataService.announceMode(objs);
+  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment) {
+    let objs = [mode, title, header, commentReplay];
+    this.courseDetailsModalDataService.announcePostMode(objs);
+  }
+
+  updatePutDeleteModalMode(mode: number, title: string){
+    let objs = [mode, title];
+    this.courseDetailsModalDataService.announcePutdeleteMode(objs);
   }
 
   getLastEntryComment(entry: Entry){
@@ -126,15 +140,27 @@ export class CourseDetailsComponent implements OnInit {
     this.inputSessionTime = this.dateToTimeInputFormat(this.inputSessionDate);
   }
 
-  isCurrentMode(possibleModes: string[]): boolean {
-    return (possibleModes.indexOf(this.courseDetailsModalMode.toString()) > -1);
+  isCurrentPostMode(possiblePostModes: string[]): boolean {
+    return (possiblePostModes.indexOf(this.postModalMode.toString()) > -1);
+  }
+
+  isCurrentPutdeleteMode(possiblePutdeleteModes: string[]): boolean {
+    return (possiblePutdeleteModes.indexOf(this.putdeleteModalMode.toString()) > -1);
+  }
+
+  updateCheckboxForumEdition(b: boolean){
+    if (b){
+      this.checkboxForumEdition = "DEACTIVATION";
+    } else {
+      this.checkboxForumEdition = "ACTIVATION";
+    }
   }
 
   //POST new Entry, Comment or Session
   onCourseDetailsSubmit() {
 
     //If modal is opened in "New Entry" mode
-    if (this.courseDetailsModalMode === 0) {
+    if (this.postModalMode === 0) {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
       let e = new Entry(this.inputTitle, [new Comment(this.inputComment, null)]);
 
@@ -149,7 +175,7 @@ export class CourseDetailsComponent implements OnInit {
     }
 
     //If modal is opened in "New Session" mode
-    else if (this.courseDetailsModalMode === 3) {
+    else if (this.postModalMode === 3) {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
@@ -168,7 +194,7 @@ export class CourseDetailsComponent implements OnInit {
 
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else {
-      let c = new Comment(this.inputComment, this.courseDetailsModalCommentReplay);
+      let c = new Comment(this.inputComment, this.postModalCommentReplay);
       console.log(c);
       this.forumService.newComment(c, this.selectedEntry.id).subscribe(
         response => {
@@ -189,26 +215,45 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
-  //PUT existing Session
+  //PUT existing Session or Forum
   onPutDeleteSubmit(){
-    let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
-    let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
-    s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
-    this.sessionService.editSession(s).subscribe(
-      response => {
-        console.log(response);
-        //Only on succesful put we locally update the modified session
-        for (let i = 0; i < this.course.sessions.length; i++) {
-          if (this.course.sessions[i].id == response.id) {
-            this.course.sessions[i] = response; //The session with the required ID is updated
-            this.updatedSession = this.course.sessions[i];
-            break;
+
+    //If modal is opened in PUT existing Session
+    if(this.putdeleteModalMode === 0){
+      let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
+      let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
+      s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
+      this.sessionService.editSession(s).subscribe(
+        response => {
+          console.log(response);
+          //Only on succesful put we locally update the modified session
+          for (let i = 0; i < this.course.sessions.length; i++) {
+            if (this.course.sessions[i].id == response.id) {
+              this.course.sessions[i] = response; //The session with the required ID is updated
+              this.updatedSession = this.course.sessions[i];
+              break;
+            }
           }
-        }
-        this.actions3.emit("closeModal");
-      },
-      error => console.log(error)
-    );
+          this.actions3.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
+
+    //If modal is opened in PUT existing Forum
+    else if (this.putdeleteModalMode === 1){
+      this.forumService.editForum(!this.course.courseDetails.forum.activated, this.course.id).subscribe(
+        response => {
+          console.log("Forum updated: active = " + response);
+          //Only on succesful put we locally update the modified session
+          this.course.courseDetails.forum.activated = response;
+          this.allowForumEdition = false;
+          this.updateCheckboxForumEdition(response);
+          this.actions3.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
   }
 
   //DELETE existing Session
@@ -233,6 +278,8 @@ export class CourseDetailsComponent implements OnInit {
 
 
 //PRIVATE AUXILIAR METHODS
+
+//Sorts an array of Session by their 'date' attribute (the first are the erliest)
   private sortSessionsByDate(sessionArray: Session[]): void {
     sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
   }
