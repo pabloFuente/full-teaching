@@ -21,31 +21,35 @@ export class ForumService {
   private urlNewComment = "/comments";
   private urlEditForum = "/forum"
 
-  //POST new entry. On success returns the updated Forum that owns the posted entry
-  public newEntry(entry: Entry, forumId: number){
+  //POST new Entry. Requires an Entry and the id of the CourseDetails that owns the Forum
+  //On success returns the updated Forum that owns the posted entry
+  public newEntry(entry: Entry, courseDetailsId: number){
     let body = JSON.stringify(entry);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.post(this.urlNewEntry + "/forum/" + forumId, body, options)
+    return this.http.post(this.urlNewEntry + "/forum/" + courseDetailsId, body, options)
       .map(response => response.json() as Forum)
       .catch(error => this.handleError(error));
   }
 
-  //POST new comment. On success returns the update Entry that owns the posted comment
-  public newComment(comment: Comment, entryId: number){
+  //POST new Comment. Requires a Comment, the id of the Entry that owns it and the id of the CourseDetails that owns the Forum
+  //On success returns the update Entry that owns the posted comment
+  public newComment(comment: Comment, entryId: number, courseDetailsId: number){
     let body = JSON.stringify(comment);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.post(this.urlNewComment + "/forum/" + entryId, body, options)
+    return this.http.post(this.urlNewComment + "/entry/" + entryId + "/forum/" + courseDetailsId, body, options)
       .map(response => response.json() as Entry)
       .catch(error => this.handleError(error));
   }
 
-  public editForum(activated: boolean, courseId: number){
+  //PUT existing Forum. Requires a boolean value for activating/deactivating the Forum and the id of the CourseDetails that owns it
+  //On success returns the updated 'activated' attribute
+  public editForum(activated: boolean, courseDetailsId: number){
     let body = JSON.stringify(activated);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.put(this.urlEditForum + "/edit/" + courseId, body, options)
+    return this.http.put(this.urlEditForum + "/edit/" + courseDetailsId, body, options)
       .map(response => response.json() as boolean)
       .catch(error => this.handleError(error));
   }

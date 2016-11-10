@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fullteaching.backend.user.UserComponent;
-import com.fullteaching.backend.course.Course;
-import com.fullteaching.backend.course.CourseRepository;
+import com.fullteaching.backend.coursedetails.CourseDetails;
+import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
 import com.fullteaching.backend.user.User;
 
 @RestController
@@ -22,27 +22,27 @@ public class ForumController {
 	private UserComponent user;
 	
 	@Autowired
-	private CourseRepository courseRepository;
+	private CourseDetailsRepository courseDetailsRepository;
 	
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Boolean> modifyForum(@RequestBody boolean activated, @PathVariable(value="id") String courseId) {
+	@RequestMapping(value = "/edit/{courseDetailsId}", method = RequestMethod.PUT)
+	public ResponseEntity<Boolean> modifyForum(@RequestBody boolean activated, @PathVariable(value="courseDetailsId") String courseDetailsId) {
 		this.checkBackendLogged();
 		
 		long id_i = -1;
 		try{
-			id_i = Long.parseLong(courseId);
+			id_i = Long.parseLong(courseDetailsId);
 		}catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
-		Course c = courseRepository.findOne(id_i);
+		CourseDetails cd = courseDetailsRepository.findOne(id_i);
 		
-		checkAuthorization(c, c.getTeacher());
+		checkAuthorization(cd, cd.getCourse().getTeacher());
 		
 		//Modifying the forum
-		c.getCourseDetails().getForum().setActivated(activated);
+		cd.getForum().setActivated(activated);
 		//Saving the modified course
-		courseRepository.save(c);
+		courseDetailsRepository.save(cd);
 		return new ResponseEntity<>(new Boolean(activated), HttpStatus.OK);
 	}
 	

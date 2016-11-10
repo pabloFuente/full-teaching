@@ -123,6 +123,7 @@ export class CourseDetailsComponent implements OnInit {
     let comment = entry.comments[0];
     for (let c of entry.comments){
       if (c.date > comment.date) comment = c;
+      comment = this.recursiveReplyDateCheck(comment);
     }
     return comment;
   }
@@ -164,7 +165,7 @@ export class CourseDetailsComponent implements OnInit {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
       let e = new Entry(this.inputTitle, [new Comment(this.inputComment, null)]);
 
-      this.forumService.newEntry(e, this.course.courseDetails.forum.id).subscribe( //POST method requires an Entry and the Forum id which it belongs
+      this.forumService.newEntry(e, this.course.courseDetails.id).subscribe( //POST method requires an Entry and the CourseDetails id which contains its Forum
         response  => {
           console.log(response);
           this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
@@ -196,7 +197,7 @@ export class CourseDetailsComponent implements OnInit {
     else {
       let c = new Comment(this.inputComment, this.postModalCommentReplay);
       console.log(c);
-      this.forumService.newComment(c, this.selectedEntry.id).subscribe(
+      this.forumService.newComment(c, this.selectedEntry.id, this.course.courseDetails.id).subscribe(
         response => {
           console.log(response);
           //Only on succesful post we locally update the created entry
@@ -242,7 +243,7 @@ export class CourseDetailsComponent implements OnInit {
 
     //If modal is opened in PUT existing Forum
     else if (this.putdeleteModalMode === 1){
-      this.forumService.editForum(!this.course.courseDetails.forum.activated, this.course.id).subscribe(
+      this.forumService.editForum(!this.course.courseDetails.forum.activated, this.course.courseDetails.id).subscribe(
         response => {
           console.log("Forum updated: active = " + response);
           //Only on succesful put we locally update the modified session
@@ -298,6 +299,15 @@ export class CourseDetailsComponent implements OnInit {
     newDate.setHours(parseInt(timeArray[0]));
     newDate.setMinutes(parseInt(timeArray[1]));
     return newDate.getTime(); //returning miliseconds
+  }
+
+  //Returns the earliest Comment (by 'date' attribute) in the recursive structure of comments which has Comment 'c' as root
+  recursiveReplyDateCheck(c: Comment): Comment{
+    for (let r of c.replies){
+      if (r.date > c.date) c = r;
+      c = this.recursiveReplyDateCheck(r);
+    }
+    return c;
   }
 
 }
