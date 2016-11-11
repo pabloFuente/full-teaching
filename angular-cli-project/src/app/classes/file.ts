@@ -5,4 +5,10 @@ export class File {
   public name: string;
   public link: string;
 
+  constructor(type: number, name: string, link: string){
+    this.type = type;
+    this.name = name;
+    this.link = link;
+  }
+
 }

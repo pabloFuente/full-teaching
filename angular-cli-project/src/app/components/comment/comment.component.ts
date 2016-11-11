@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Comment } from '../../classes/comment';
-import { Entry } from '../../classes/entry';
+import { Comment }    from '../../classes/comment';
+import { Entry }      from '../../classes/entry';
+import { FileGroup }  from '../../classes/file-group';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 
@@ -19,8 +20,8 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {}
 
-  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment){
-    let objs = [mode, title, header, commentReplay];
+  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup){
+    let objs = [mode, title, header, commentReplay, fileGroup];
     this.courseDetailsModalDataService.announcePostMode(objs);
   }
 

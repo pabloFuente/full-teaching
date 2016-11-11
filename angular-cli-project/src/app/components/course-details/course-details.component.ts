@@ -5,15 +5,19 @@ import { Subscription }             from 'rxjs/Subscription';
 import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
+import { FilesEditionService }   from '../../services/files-edition.service';
 import { CourseService }         from '../../services/course.service';
 import { SessionService }        from '../../services/session.service';
 import { ForumService }          from '../../services/forum.service';
+import { FileService }           from '../../services/file.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { Session }       from '../../classes/session';
 import { Course }        from '../../classes/course';
 import { Entry }         from '../../classes/entry';
 import { Comment }       from '../../classes/comment';
+import { FileGroup }     from '../../classes/file-group';
+import { File }          from '../../classes/file';
 
 @Component({
   selector: 'app-course-details',
@@ -45,10 +49,12 @@ export class CourseDetailsComponent implements OnInit {
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-  postModalMode: number = 3; //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New replay | 3 -> New session | 4 -> Add attenders
+  //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New session | 3 -> Add attenders | 4 -> Add fileGroup | 5 -> Add file
+  postModalMode: number = 3;
   postModalTitle: string = "New session";
   postModalEntry: Entry;
   postModalCommentReplay: Comment;
+  postModalFileGroup: FileGroup;
 
   //PUT-DELETE MODAL
   inputSessionTitle: string;
@@ -59,9 +65,13 @@ export class CourseDetailsComponent implements OnInit {
   updatedSessionDate: string;
   allowSessionDeletion: boolean = false;
   allowForumEdition: boolean = false;
+  allowFilesEdition: boolean = false;
   checkboxForumEdition: string;
-  putdeleteModalMode: number = 0; //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify files
+  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify files
+  putdeleteModalMode: number = 0;
   putdeleteModalTitle: string = "Modify session";
+
+  filesEditionIcon: string = "mode_edit";
 
   private actions2 = new EventEmitter<string>();
   private actions3 = new EventEmitter<string>();
@@ -72,17 +82,21 @@ export class CourseDetailsComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private forumService: ForumService,
+    private fileService: FileService,
     private sessionService: SessionService,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private courseDetailsModalDataService: CourseDetailsModalDataService) {
+    private courseDetailsModalDataService: CourseDetailsModalDataService,
+    private filesEditionService: FilesEditionService) {
+
     this.subscription1 = courseDetailsModalDataService.postModeAnnounced$.subscribe(
       objs => {
-        //objs is an array containing postModalMode, postModalEntry and postModalCommentReplay, in that specific order
+        //objs is an array containing postModalMode, postModalTitle, postModalEntry, postModalCommentReplay and postModalFileGroup in that specific order
         this.postModalMode = objs[0];
         this.postModalTitle = objs[1];
-        if (objs[2]) this.postModalEntry = objs[2]; //Only if the string is not empty
-        if (objs[3]) this.postModalCommentReplay = objs[3]; //Only if the string is not empty
+        this.postModalEntry = objs[2];
+        this.postModalCommentReplay = objs[3];
+        this.postModalFileGroup = objs[4];
       });
     this.subscription2 = courseDetailsModalDataService.putdeleteModeAnnounced$.subscribe(
       objs => {
@@ -109,8 +123,8 @@ export class CourseDetailsComponent implements OnInit {
     });
   }
 
-  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment) {
-    let objs = [mode, title, header, commentReplay];
+  updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup) {
+    let objs = [mode, title, header, commentReplay, fileGroup];
     this.courseDetailsModalDataService.announcePostMode(objs);
   }
 
@@ -139,6 +153,17 @@ export class CourseDetailsComponent implements OnInit {
     this.inputSessionDescription = this.updatedSession.description;
     this.inputSessionDate = new Date(this.updatedSession.date);
     this.inputSessionTime = this.dateToTimeInputFormat(this.inputSessionDate);
+  }
+
+  changeModeEdition(){
+    this.allowFilesEdition = !this.allowFilesEdition;
+    if (this.allowFilesEdition) {
+      this.filesEditionIcon = "clear";
+    }
+    else {
+      this.filesEditionIcon = "mode_edit";
+    }
+    this.filesEditionService.announceModeEdit(this.allowFilesEdition);
   }
 
   isCurrentPostMode(possiblePostModes: string[]): boolean {
@@ -176,7 +201,7 @@ export class CourseDetailsComponent implements OnInit {
     }
 
     //If modal is opened in "New Session" mode
-    else if (this.postModalMode === 3) {
+    else if (this.postModalMode === 2) {
       let date = new Date(this.inputDate);
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
@@ -194,7 +219,7 @@ export class CourseDetailsComponent implements OnInit {
     }
 
     //If modal is opened in "New Comment" mode (replaying or not replaying)
-    else {
+    else if (this.postModalMode === 1) {
       let c = new Comment(this.inputComment, this.postModalCommentReplay);
       console.log(c);
       this.forumService.newComment(c, this.selectedEntry.id, this.course.courseDetails.id).subscribe(
@@ -206,6 +231,43 @@ export class CourseDetailsComponent implements OnInit {
             if (ents[i].id == this.selectedEntry.id) {
               this.course.courseDetails.forum.entries[i] = response; //The entry with the required ID is updated
               this.selectedEntry = this.course.courseDetails.forum.entries[i];
+              break;
+            }
+          }
+          this.actions2.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
+
+    //If modal is opened in "New FileGroup" mode
+    else if (this.postModalMode === 4) {
+      let f = new FileGroup(this.inputTitle, this.postModalFileGroup);
+      console.log(f);
+      this.fileService.newFileGroup(f, this.course.courseDetails.id).subscribe(
+        response => {
+          console.log(response);
+          //Only on succesful post we locally update the entire course details
+          this.course.courseDetails = response;
+
+          this.actions2.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
+
+    //If modal is opened in "New File" mode
+    else if (this.postModalMode === 5) {
+      let file = new File(1, this.inputTitle, "www.newlink.com");
+      console.log(file);
+      this.fileService.newFile(file, this.postModalFileGroup.id, this.course.courseDetails.id).subscribe(
+        response => {
+          console.log(response);
+
+          //Only on succesful post we locally update the root filegroup that contains the created file
+          for (let i = 0; i < this.course.courseDetails.files.length; i++) {
+            if (this.course.courseDetails.files[i].id == response.id) {
+              this.course.courseDetails.files[i] = response;
               break;
             }
           }

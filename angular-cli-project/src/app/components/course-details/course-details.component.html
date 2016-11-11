@@ -14,11 +14,13 @@
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
           <div class="row row-no-margin">
 
-            <div *ngIf="isCurrentPostMode(['0', '3'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '3', '4', '5'])" class="row">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
                 <label *ngIf="isCurrentPostMode(['0'])" for="inputTitle">Entry title</label>
                 <label *ngIf="isCurrentPostMode(['3'])" for="inputTitle">Session title</label>
+                <label *ngIf="isCurrentPostMode(['4'])" for="inputTitle">File group title</label>
+                <label *ngIf="isCurrentPostMode(['5'])" for="inputTitle">File name</label>
               </div>
             </div>
 
@@ -64,7 +66,7 @@
 
 
   <!--PUT/DELETE DIALOG-->
-  <div *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
+  <div *ngIf="this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize [materializeActions]="actions3">
     <div class="modal-content">
       <p class="p-bold-modal-header">{{this.putdeleteModalTitle}}</p>
       <div class="row row-no-margin">
@@ -146,7 +148,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePostModalMode(3, 'New session', null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
+                <i href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New session'">add_circle_outline</i>
               </div>
               <ul>
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
@@ -160,7 +162,7 @@
                         {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
                       </div>
                       <div class="col l1 m1 s1 right-align no-padding-lateral">
-                        <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(0, 'Modify session'); this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                        <a *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(0, 'Modify session'); this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                           <i class="material-icons forum-icon">mode_edit</i>
                         </a>
                       </div>
@@ -185,7 +187,7 @@
       <md-tab>
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
-          <div class="tab-template-content-2 row row-no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated">
+          <div class="tab-template-content-2 row row-no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
 
             <!--Forum view-->
             <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
@@ -215,11 +217,11 @@
                 </div>
               </div>
               <div class="center-align div-entry-icon">
-                <a *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                <a *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                   <i class="material-icons forum-icon">chat</i>
                 </a>
 
-                <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.courseDetailsModalDataService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                <a *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.courseDetailsModalDataService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                     <i class="material-icons forum-icon">mode_edit</i>
                 </a>
 
@@ -241,7 +243,7 @@
                   </div>
                 </div>
                 <div class="col l1 m1 s1 no-padding-lateral right-align">
-                  <a [title]="'New comment'" (click)="updatePostModalMode(1, 'New comment', selectedEntry, null); this.postModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                  <a [title]="'New comment'" (click)="updatePostModalMode(1, 'New comment', selectedEntry, null, null); this.postModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
                     <i class="material-icons forum-icon">chat</i>
                   </a>
                 </div>
@@ -264,6 +266,10 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
+            <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
+              <i *ngIf="!allowFilesEdition" href="#course-details-modal" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New file group'">add_circle_outline</i>
+              <i (click)="this.changeModeEdition()" class="material-icons add-element-icon right" [title]="'Modify file groups'">{{this.filesEditionIcon}}</i>
+            </div>
             <div *ngFor="let fileG of this.course.courseDetails?.files; let last4 = last">
               <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
               <div *ngIf="!last4" class="divider"></div>
@@ -278,7 +284,7 @@
         <template md-tab-content>
           <div class="tab-template-content">
             <div class="row row-no-margin">
-              <i href="#course-details-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="updatePostModalMode(4, 'Edit attenders', null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
+              <i href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(3, 'Edit attenders', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'Add attenders'">add_circle_outline</i>
             </div>
             <div *ngFor="let attender of this.course.attenders" class="row row-no-margin valign-wrapper">
               <div class="col l2 m2 s3 valign attender-col">

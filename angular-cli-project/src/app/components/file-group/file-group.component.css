@@ -18,7 +18,7 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  max-width: 300px;
+  min-width: 300px;
   cursor: pointer;
   padding-left: 0;
 }
@@ -30,3 +30,21 @@
   font-size: 22px;
   border: 3px solid #e0e0e0;
 }
+
+ h5 {
+   display: inline-block;
+ }
+
+ .disp-inline-flex {
+   display: inline-flex;
+ }
+
+ .button-add-file {
+   padding-left: 20px;
+   padding-right: 20px;
+   font-size: smaller;
+ }
+
+ .del-file-icon {
+   cursor: pointer;
+ }
