@@ -1,3 +1,0 @@
-#!/bin/sh
-cd angular-cli-project
-ng build --output-path ./../Backend/src/main/resources/static
