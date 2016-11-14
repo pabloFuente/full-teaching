@@ -76,8 +76,9 @@ export class CourseDetailsComponent implements OnInit {
   private actions2 = new EventEmitter<string>();
   private actions3 = new EventEmitter<string>();
 
-  subscription1: Subscription;
-  subscription2: Subscription;
+  subscription1: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving POST modal dialog changes
+  subscription2: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving PUT/DELETE modal dialog changes
+  subscription3: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup deletions
 
   constructor(
     private courseService: CourseService,
@@ -89,6 +90,7 @@ export class CourseDetailsComponent implements OnInit {
     private courseDetailsModalDataService: CourseDetailsModalDataService,
     private filesEditionService: FilesEditionService) {
 
+    //Subscription for receiving POST modal dialog changes
     this.subscription1 = courseDetailsModalDataService.postModeAnnounced$.subscribe(
       objs => {
         //objs is an array containing postModalMode, postModalTitle, postModalEntry, postModalCommentReplay and postModalFileGroup in that specific order
@@ -98,15 +100,29 @@ export class CourseDetailsComponent implements OnInit {
         this.postModalCommentReplay = objs[3];
         this.postModalFileGroup = objs[4];
       });
+
+    //Subscription for receiving PUT/DELETE modal dialog changes
     this.subscription2 = courseDetailsModalDataService.putdeleteModeAnnounced$.subscribe(
       objs => {
         //objs is an array containing putdeleteModalMode and putdeleteModalTitle, in that specific order
         this.putdeleteModalMode = objs[0];
         if (objs[1]) this.putdeleteModalTitle = objs[1]; //Only if the string is not empty
       });
+
+    //Subscription for receiving FileGroup deletions
+    this.subscription3 = filesEditionService.fileGroupDeletedAnnounced$.subscribe(
+      fileGroupDeletedId => {
+        //fileGroupDeletedId is the id of the FileGroup that has been deleted by the child component (FileGroupComponent)
+        if (this.recursiveFileGroupDeletion(this.course.courseDetails.files, fileGroupDeletedId)){
+          console.log("Succesful local deletion of FileGroup with id " + fileGroupDeletedId);
+          if (this.course.courseDetails.files.length == 0) changeModeEdition(); //If there are no fileGroups, mode edit is closed
+        }
+      });
   }
 
   ngOnInit() {
+    this.filesEditionService.fixModeEdit(false); //Initializing to false the possibility of editing files
+
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
       this.courseService.getCourse(id).subscribe(
@@ -158,7 +174,7 @@ export class CourseDetailsComponent implements OnInit {
   changeModeEdition(){
     this.allowFilesEdition = !this.allowFilesEdition;
     if (this.allowFilesEdition) {
-      this.filesEditionIcon = "clear";
+      this.filesEditionIcon = "keyboard_arrow_left";
     }
     else {
       this.filesEditionIcon = "mode_edit";
@@ -190,7 +206,7 @@ export class CourseDetailsComponent implements OnInit {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
       let e = new Entry(this.inputTitle, [new Comment(this.inputComment, null)]);
 
-      this.forumService.newEntry(e, this.course.courseDetails.id).subscribe( //POST method requires an Entry and the CourseDetails id which contains its Forum
+      this.forumService.newEntry(e, this.course.courseDetails.id).subscribe( //POST method requires an Entry and the CourseDetails id that contains its Forum
         response  => {
           console.log(response);
           this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
@@ -370,6 +386,21 @@ export class CourseDetailsComponent implements OnInit {
       c = this.recursiveReplyDateCheck(r);
     }
     return c;
+  }
+
+  //Delets a fileGroup from this.course.courseDetails.files recursively, given a fileGroup id
+  recursiveFileGroupDeletion(fileGroupLevel: FileGroup[], fileGroupDeletedId: number): boolean{
+    if (fileGroupLevel){
+      for (let i = 0; i < fileGroupLevel.length; i++) {
+        console.log("ONE STEP IN THE SEARCH");
+        if (fileGroupLevel[i].id == fileGroupDeletedId){
+          fileGroupLevel.splice(i, 1);
+          return true;
+        }
+        let deleted = this.recursiveFileGroupDeletion(fileGroupLevel[i].fileGroups, fileGroupDeletedId);
+        if (deleted) return deleted;
+      }
+    }
   }
 
 }

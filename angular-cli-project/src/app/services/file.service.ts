@@ -17,8 +17,8 @@ export class FileService {
 
   private url = "/files";
 
-  //POST new FileGroup. Requires
-  //On success returns
+  //POST new FileGroup. Requires the FileGroup and the courseDetails id that owns it
+  //On success returns the entire updated CourseDetails
   public newFileGroup(fileGroup: FileGroup, courseDetailsId: number){
     let body = JSON.stringify(fileGroup);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
@@ -28,13 +28,33 @@ export class FileService {
       .catch(error => this.handleError(error));
   }
 
-  //POST new File. Requires
+  //POST new File. Requires the File, the FileGroup id that owns it and their courseDetails id
   //On success returns
   public newFile(file: File, fileGroupId: number, courseDetailsId: number){
     let body = JSON.stringify(file);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.url + "/file-group/" + fileGroupId + "/course/" + courseDetailsId, body, options)
+      .map(response => response.json() as FileGroup)
+      .catch(error => this.handleError(error));
+  }
+
+  //DELETE existing File. Requires the file id, the fileGroup id that owns it and their course's id
+  //On succes returns the deleted File
+  public deleteFile(fileId: number, fileGroupId: number, courseId: number){
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.delete(this.url + "/delete/file/" + fileId + "/file-group/" + fileGroupId + "/course/" + courseId, options)
+      .map(response => response.json() as File)
+      .catch(error => this.handleError(error));
+  }
+
+  //DELETE existing FileGroup. Requires the fileGroup id and its course's id
+  //On succes returns the deleted FileGroup
+  public deleteFileGroup(fileGroupId: number, courseId: number){
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.delete(this.url + "/delete/file-group/" + fileGroupId + "/course/" + courseId, options)
       .map(response => response.json() as FileGroup)
       .catch(error => this.handleError(error));
   }

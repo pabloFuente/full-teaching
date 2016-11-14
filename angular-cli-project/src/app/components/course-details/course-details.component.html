@@ -268,10 +268,10 @@
           <div class="tab-template-content row row-no-margin">
             <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
               <i *ngIf="!allowFilesEdition" href="#course-details-modal" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon right" [title]="'New file group'">add_circle_outline</i>
-              <i (click)="this.changeModeEdition()" class="material-icons add-element-icon right" [title]="'Modify file groups'">{{this.filesEditionIcon}}</i>
+              <i *ngIf="this.course.courseDetails.files.length > 0" (click)="this.changeModeEdition()" class="material-icons add-element-icon right" [title]="'Modify file groups'">{{this.filesEditionIcon}}</i>
             </div>
             <div *ngFor="let fileG of this.course.courseDetails?.files; let last4 = last">
-              <app-file-group [fileGroup]="fileG" [depth]="0"></app-file-group>
+              <app-file-group [fileGroup]="fileG" [courseId]="this.course.id" [depth]="0"></app-file-group>
               <div *ngIf="!last4" class="divider"></div>
             </div>
             <div *ngIf="this.course.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>

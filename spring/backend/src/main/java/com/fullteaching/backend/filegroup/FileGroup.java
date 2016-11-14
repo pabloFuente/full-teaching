@@ -91,5 +91,14 @@ public class FileGroup {
 		this.fileGroupParent = fileGroupParent;
 	}
 	
-
+	//To make 'courseDetails.getFiles().remove(file)' possible
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof FileGroup))return false;
+	    FileGroup otherFileGroup = (FileGroup)other;
+	    return (otherFileGroup.id == this.id);
+	}
+	
 }

@@ -61,6 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/sessions/**").hasRole("TEACHER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/sessions/**").hasRole("TEACHER");
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/sessions/**").hasRole("TEACHER");
+		//Files API
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/files/**").hasRole("TEACHER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/files/**").hasRole("TEACHER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/files/**").hasRole("TEACHER");
+		
 		// Other URLs can be accessed without authentication
 		http.authorizeRequests().anyRequest().permitAll();
 	}

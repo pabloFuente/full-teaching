@@ -1,7 +1,5 @@
 package com.fullteaching.backend.filegroup;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fullteaching.backend.course.Course;
+import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.coursedetails.CourseDetails;
 import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
 import com.fullteaching.backend.file.File;
+import com.fullteaching.backend.file.FileRepository;
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserComponent;
 
@@ -25,10 +26,17 @@ public class FileGroupController {
 	private FileGroupRepository fileGroupRepository;
 	
 	@Autowired
+	private FileRepository fileRepository;
+	
+	@Autowired
+	private CourseRepository courseRepository;
+	
+	@Autowired
 	private CourseDetailsRepository courseDetailsRepository;
 	
 	@Autowired
 	private UserComponent user;
+	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<CourseDetails> newFileGroup(@RequestBody FileGroup fileGroup, @PathVariable(value="id") String courseDetailsId) {
@@ -43,7 +51,7 @@ public class FileGroupController {
 		
 		CourseDetails cd = courseDetailsRepository.findOne(id_i);
 		
-		checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
+		checkAuthorization(cd, cd.getCourse().getTeacher());
 		
 		//fileGroup is a root FileGroup
 		if (fileGroup.getFileGroupParent() == null){
@@ -92,7 +100,7 @@ public class FileGroupController {
 		
 		CourseDetails cd = courseDetailsRepository.findOne(id_courseDetails);
 		
-		checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
+		checkAuthorization(cd, cd.getCourse().getTeacher());
 		
 		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
 		
@@ -112,6 +120,96 @@ public class FileGroupController {
 	}
 	
 	
+	@RequestMapping(value = "/delete/file/{fileId}/file-group/{fileGroupId}/course/{courseId}", method = RequestMethod.DELETE)
+	public ResponseEntity<File> deleteFile(
+			@PathVariable(value="fileId") String fileId,
+			@PathVariable(value="fileGroupId") String fileGroupId,
+			@PathVariable(value="courseId") String courseId
+	) {
+		
+		this.checkBackendLogged();
+		
+		long id_file = -1;
+		long id_fileGroup = -1;
+		long id_course = -1;
+		try{
+			id_file = Long.parseLong(fileId);
+			id_fileGroup = Long.parseLong(fileGroupId);
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+		
+		if (fg != null){
+			File file = null;
+			for(File f : fg.getFiles()) {
+		        if(f.getId() == id_file) {
+		            file = f;
+		            break;
+		        }
+		    }
+			if (file != null){
+				fg.getFiles().remove(file);
+				fileGroupRepository.save(fg);
+				return new ResponseEntity<>(file, HttpStatus.OK);
+			}else{
+				//The file to delete does not exist or does not have a fileGroup parent
+				fileRepository.delete(id_file);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}else{
+			//The fileGroup parent does not exist
+			fileRepository.delete(id_file);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/delete/file-group/{fileGroupId}/course/{courseId}", method = RequestMethod.DELETE)
+	public ResponseEntity<FileGroup> deleteFileGroup(
+			@PathVariable(value="fileGroupId") String fileGroupId,
+			@PathVariable(value="courseId") String courseId
+	) {
+		
+		this.checkBackendLogged();
+		
+		long id_fileGroup = -1;
+		long id_course = -1;
+		try{
+			id_fileGroup = Long.parseLong(fileGroupId);
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+		
+		if (fg != null){
+			//It is necessary to remove the FileGroup from the CourseDetails that owns it
+			CourseDetails cd = c.getCourseDetails();
+			cd.getFiles().remove(fg);
+			courseDetailsRepository.save(cd);
+			fileGroupRepository.delete(fg);
+			return new ResponseEntity<>(fg, HttpStatus.OK);
+		}
+		else{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	
 	//Login checking method for the backend
 	private ResponseEntity<Object> checkBackendLogged(){
 		if (!user.isLoggedUser()) {
@@ -121,14 +219,14 @@ public class FileGroupController {
 		return null; 
 	}
 	
-	//Authorization checking for adding new Entries (the user must be an attender)
-	private ResponseEntity<Object> checkAuthorizationUsers(Object o, Collection<User> users){
+	//Authorization checking for editing and deleting courses (the teacher must own the Course)
+	private ResponseEntity<Object> checkAuthorization(Object o, User u){
 		if(o == null){
 			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 		}
-		if(!users.contains(this.user.getLoggedUser())){
-			//The user is not authorized to edit if it is not an attender of the Course
+		if(!this.user.getLoggedUser().equals(u)){
+			//The teacher is not authorized to edit it if he is not its owner
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
 		}
 		return null;
