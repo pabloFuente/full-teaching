@@ -74,42 +74,8 @@ export class LoginModalComponent {
 
     // If signup view is activated
     else {
-
-      //Passwords don't match
-      if (this.password !== this.confirmPassword) {
-        this.errorTitle = 'Your passwords don\'t match!';
-        this.errorContent = '';
-        this.customClass = 'fail';
-        this.toastMessage = 'Your passwords don\'t match!';
-        this.handleError();
-      }
-
-      else {
-
-        let userNameFixed = this.email;
-        let userPasswordFixed = this.password;
-
-        console.log("Signing up...");
-
-        this.userService.newUser(userNameFixed, userPasswordFixed, this.nickName).subscribe(
-          result => {
-            this.logIn(userNameFixed, userPasswordFixed);
-            console.log("Sing up succesful!");
-          },
-          error => {
-
-            console.log("Sign up failed (error): " + error);
-
-            this.errorTitle = 'Invalid email';
-            this.errorContent = 'That email is already in use';
-            this.customClass = 'fail';
-            this.toastMessage = 'That email is already in used!';
-
-            // Login failed
-            this.handleError();
-          }
-        );
-      }
+      console.log("Signing up...");
+      this.signUp();
     }
   }
 
@@ -138,6 +104,71 @@ export class LoginModalComponent {
         this.handleError();
       }
     );
+  }
+
+  signUp() {
+
+    //Passwords don't match
+    if (this.password !== this.confirmPassword) {
+      this.errorTitle = 'Your passwords don\'t match!';
+      this.errorContent = '';
+      this.customClass = 'fail';
+      this.toastMessage = 'Your passwords don\'t match!';
+      this.handleError();
+    }
+
+    else {
+
+      let regex = new RegExp('^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})$');
+
+      if (!(this.password.match(regex))){
+        this.errorTitle = 'Your password does not have a valid format!';
+        this.errorContent = 'It must be at least 8 characters long and include one uppercase, one lowercase and a number';
+        this.customClass = 'fail';
+        this.toastMessage = 'Password must be 8 characters long, one upperCase, one lowerCase and a number';
+        this.handleError();
+      }
+
+      else {
+
+        let userNameFixed = this.email;
+        let userPasswordFixed = this.password;
+
+        this.userService.newUser(userNameFixed, userPasswordFixed, this.nickName).subscribe(
+          result => {
+
+            //Sign up succesful
+            this.logIn(userNameFixed, userPasswordFixed);
+            console.log("Sign up succesful!");
+          },
+          error => {
+
+            console.log("Sign up failed (error): " + error);
+            if (error === 409){ //CONFLICT: Email already in use
+              this.errorTitle = 'Invalid email';
+              this.errorContent = 'That email is already in use';
+              this.customClass = 'fail';
+              this.toastMessage = 'That email is already in use!';
+            }
+            else if (error === 400){ //BAD_REQUEST: Invalid password format
+              this.errorTitle = 'Invalid password format';
+              this.errorContent = 'Our server has rejected that password';
+              this.customClass = 'fail';
+              this.toastMessage = 'That password has not a valid format according to our server!';
+            }
+            else if (error === 403){ //FORBIDDEN: Invalid email format
+              this.errorTitle = 'Invalid email format';
+              this.errorContent = 'Our server has rejected that email';
+              this.customClass = 'fail';
+              this.toastMessage = 'That email has not a valid format according to our server!';
+            }
+
+            // Sign up failed
+            this.handleError();
+          }
+        );
+      }
+    }
   }
 
   handleError(){

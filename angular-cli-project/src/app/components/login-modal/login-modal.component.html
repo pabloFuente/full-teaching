@@ -40,7 +40,7 @@
 
         <div class="row center">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
-          <button type="submit" *ngIf="!loginView" class="modal-action modal-close waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
+          <button type="submit" *ngIf="!loginView" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
           <a (click)="setLoginView(true); myForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
 
