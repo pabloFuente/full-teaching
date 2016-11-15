@@ -59,6 +59,16 @@ export class FileGroupComponent implements OnInit {
     this.courseDetailsModalDataService.announcePutdeleteMode(objs);
   }
 
+  changeUpdatedFileGroup(){
+    let objs = [this.fileGroup, null];
+    this.filesEditionService.announceFileFilegroupUpdated(objs);
+  }
+
+  changeUpdatedFile(file: File){
+    let objs = [this.fileGroup, file];
+    this.filesEditionService.announceFileFilegroupUpdated(objs);
+  }
+
   deleteFileGroup(){
     console.log(this.fileGroup);
     console.log(this.fileGroup.id, this.courseId);

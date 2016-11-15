@@ -29,12 +29,22 @@ export class FileService {
   }
 
   //POST new File. Requires the File, the FileGroup id that owns it and their courseDetails id
-  //On success returns
+  //On success returns the root FileGroup that owns the created file or the descendant FileGroup that owns it
   public newFile(file: File, fileGroupId: number, courseDetailsId: number){
     let body = JSON.stringify(file);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.url + "/file-group/" + fileGroupId + "/course/" + courseDetailsId, body, options)
+      .map(response => response.json() as FileGroup)
+      .catch(error => this.handleError(error));
+  }
+
+  //DELETE existing FileGroup. Requires the fileGroup id and its course's id
+  //On succes returns the deleted FileGroup
+  public deleteFileGroup(fileGroupId: number, courseId: number){
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.delete(this.url + "/delete/file-group/" + fileGroupId + "/course/" + courseId, options)
       .map(response => response.json() as FileGroup)
       .catch(error => this.handleError(error));
   }
@@ -49,37 +59,27 @@ export class FileService {
       .catch(error => this.handleError(error));
   }
 
-  //DELETE existing FileGroup. Requires the fileGroup id and its course's id
-  //On succes returns the deleted FileGroup
-  public deleteFileGroup(fileGroupId: number, courseId: number){
+  //PUT existing FileGroup. Requires the modified FileGroup and the course id
+  //On success returns the updated root FileGroup
+  public editFileGroup(fileGroup: FileGroup, courseId: number){
+    let body = JSON.stringify(fileGroup);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.delete(this.url + "/delete/file-group/" + fileGroupId + "/course/" + courseId, options)
+    return this.http.put(this.url + "/edit/file-group/course/" + courseId, body, options)
       .map(response => response.json() as FileGroup)
       .catch(error => this.handleError(error));
   }
 
-  /*//PUT existing FileGroup. Requires
-  //On success returns
-  public editFileGroup(){
-    let body = JSON.stringify(comment);
+  //PUT existing File. Requires the modified File and the course id
+  //On success returns the updated root FileGroup
+  public editFile(file: File, fileGroupId: number, courseId: number){
+    let body = JSON.stringify(file);
     let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
-    return this.http.put(this.urlNewComment + "/entry/" + entryId + "/forum/" + courseDetailsId, body, options)
-      .map(response => response.json() as Entry)
+    return this.http.put(this.url + "/edit/file/file-group/" + fileGroupId + "/course/" + courseId, body, options)
+      .map(response => response.json() as FileGroup)
       .catch(error => this.handleError(error));
   }
-
-  //DELETE existing FileGroup. Requires
-  //On success returns
-  public deleteFileGroup(){
-    let body = JSON.stringify(activated);
-    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-    let options = new RequestOptions({ headers });
-    return this.http.delete(this.urlEditForum + "/edit/" + courseDetailsId, body, options)
-      .map(response => response.json() as boolean)
-      .catch(error => this.handleError(error));
-  }*/
 
   private handleError(error: any) {
     console.error(error);

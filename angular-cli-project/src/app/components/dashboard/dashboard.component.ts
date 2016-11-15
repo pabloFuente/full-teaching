@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
   }
 
   //DELETE existing Course
-  deleteElement() {
+  deleteCourse() {
     this.courseService.deleteCourse(this.updatedCourse.id).subscribe(
       response => {
         console.log("Course deleted");

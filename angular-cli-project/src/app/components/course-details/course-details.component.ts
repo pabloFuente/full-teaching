@@ -65,7 +65,12 @@ export class CourseDetailsComponent implements OnInit {
   updatedSession: Session;
   updatedSessionDate: string;
   allowSessionDeletion: boolean = false;
+
   allowForumEdition: boolean = false;
+
+  inputFileTitle: string;
+  updatedFileGroup: FileGroup;
+  updatedFile: File;
   allowFilesEdition: boolean = false;
   checkboxForumEdition: string;
   //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file
@@ -80,6 +85,7 @@ export class CourseDetailsComponent implements OnInit {
   subscription1: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving POST modal dialog changes
   subscription2: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving PUT/DELETE modal dialog changes
   subscription3: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup deletions
+  subscription4: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup and File objects that are being updated
 
   constructor(
     private courseService: CourseService,
@@ -92,7 +98,7 @@ export class CourseDetailsComponent implements OnInit {
     private filesEditionService: FilesEditionService) {
 
     //Subscription for receiving POST modal dialog changes
-    this.subscription1 = courseDetailsModalDataService.postModeAnnounced$.subscribe(
+    this.subscription1 = this.courseDetailsModalDataService.postModeAnnounced$.subscribe(
       objs => {
         //objs is an array containing postModalMode, postModalTitle, postModalEntry, postModalCommentReplay and postModalFileGroup in that specific order
         this.postModalMode = objs[0];
@@ -103,7 +109,7 @@ export class CourseDetailsComponent implements OnInit {
       });
 
     //Subscription for receiving PUT/DELETE modal dialog changes
-    this.subscription2 = courseDetailsModalDataService.putdeleteModeAnnounced$.subscribe(
+    this.subscription2 = this.courseDetailsModalDataService.putdeleteModeAnnounced$.subscribe(
       objs => {
         //objs is an array containing putdeleteModalMode and putdeleteModalTitle, in that specific order
         this.putdeleteModalMode = objs[0];
@@ -111,12 +117,26 @@ export class CourseDetailsComponent implements OnInit {
       });
 
     //Subscription for receiving FileGroup deletions
-    this.subscription3 = filesEditionService.fileGroupDeletedAnnounced$.subscribe(
+    this.subscription3 = this.filesEditionService.fileGroupDeletedAnnounced$.subscribe(
       fileGroupDeletedId => {
         //fileGroupDeletedId is the id of the FileGroup that has been deleted by the child component (FileGroupComponent)
         if (this.recursiveFileGroupDeletion(this.course.courseDetails.files, fileGroupDeletedId)){
           console.log("Succesful local deletion of FileGroup with id " + fileGroupDeletedId);
           if (this.course.courseDetails.files.length == 0) this.changeModeEdition(); //If there are no fileGroups, mode edit is closed
+        }
+      });
+
+    //Subscription for receiving FileGroup and File objects that are being updated by the child component (FileGroupComponent)
+    this.subscription4 = this.filesEditionService.fileFilegroupUpdatedAnnounced$.subscribe(
+      objs => {
+        //objs is an array containing updatedFileGroup and updatedFile, in that specific order
+        if (objs[0]) {
+          this.updatedFileGroup = objs[0];
+          this.inputFileTitle = this.updatedFileGroup.title;
+        }
+        if (objs[1]) {
+          this.updatedFile = objs[1];
+          this.inputFileTitle = this.updatedFile.name;
         }
       });
   }
@@ -332,10 +352,52 @@ export class CourseDetailsComponent implements OnInit {
         error => console.log(error)
       );
     }
+
+    //If modal is opened in PUT existing FileGroup
+    else if (this.putdeleteModalMode === 2){
+      let fg: FileGroup = new FileGroup(this.inputFileTitle, null);
+      fg.id = this.updatedFileGroup.id;
+      this.fileService.editFileGroup(fg, this.course.id).subscribe(
+        response => {
+          console.log("FileGroup updated");
+          console.log(response);
+          for (let i = 0; i < this.course.courseDetails.files.length; i++) {
+            if (this.course.courseDetails.files[i].id == response.id) {
+              this.course.courseDetails.files[i] = response; //The root fileGroup with the required ID is updated
+              //this.updatedFileGroup = this.course.courseDetails.files[i];
+              break;
+            }
+          }
+          this.actions3.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
+
+    //If modal is opened in PUT existing File
+    else if (this.putdeleteModalMode === 3){
+      let f: File = new File(1, this.inputFileTitle, "www.newlink.com");
+      f.id = this.updatedFile.id;
+      this.fileService.editFile(f, this.updatedFileGroup.id, this.course.id).subscribe(
+        response => {
+          console.log("File updated");
+          console.log(response);
+          for (let i = 0; i < this.course.courseDetails.files.length; i++) {
+            if (this.course.courseDetails.files[i].id == response.id) {
+              this.course.courseDetails.files[i] = response; //The root fileGroup with the required ID is updated
+              //this.updatedFileGroup = this.course.courseDetails.files[i];
+              break;
+            }
+          }
+          this.actions3.emit("closeModal");
+        },
+        error => console.log(error)
+      );
+    }
   }
 
   //DELETE existing Session
-  deleteElement(){
+  deleteSession(){
     this.sessionService.deleteSession(this.updatedSession.id).subscribe(
       response => {
         console.log("Session deleted");

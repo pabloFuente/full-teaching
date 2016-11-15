@@ -113,9 +113,19 @@
             <label for="delete-checkbox">Allow forum {{this.checkboxForumEdition}}?</label>
           </div>
 
+          <div *ngIf="isCurrentPutdeleteMode(['2', '3'])" class="row row-no-margin">
+            <div class="row">
+              <label *ngIf="isCurrentPutdeleteMode(['2'])" for="inputFileTitle">File group title</label>
+              <label *ngIf="isCurrentPutdeleteMode(['3'])" for="inputFileTitle">File title</label>
+              <div class="input-field col s12">
+                <input [(ngModel)]="inputFileTitle" name="inputFileTitle" id="inputFileTitle" type="text" class="validate" required>
+              </div>
+            </div>
+          </div>
+
           <div class="row row-no-margin-bottom right-align">
             <div *ngIf="isCurrentPutdeleteMode(['0'])" class="valign-wrapper delete-div">
-              <a (click)="this.deleteElement(); putDeleteForm.reset(); this.allowSessionDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowSessionDeletion">Delete</a>
+              <a (click)="this.deleteSession(); putDeleteForm.reset(); this.allowSessionDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowSessionDeletion">Delete</a>
               <div class="float-to-left">
                 <input #deleteCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowSessionDeletion = deleteCheckbox.checked"/>
                 <label for="delete-checkbox">Allow deletion?</label>

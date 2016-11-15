@@ -109,10 +109,114 @@ public class FileGroupController {
 			fileGroupRepository.save(fg);
 			
 			//Returning the root FileGroup of the added file
-			while (fg.getFileGroupParent() != null){
-				fg = fg.getFileGroupParent();
+			return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.CREATED);
+		}
+		else{
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	@RequestMapping(value = "/edit/file-group/course/{courseId}", method = RequestMethod.PUT)
+	public ResponseEntity<FileGroup> modifyFileGroup(@RequestBody FileGroup fileGroup, @PathVariable(value="courseId") String courseId) {
+		this.checkBackendLogged();
+		
+		long id_course = -1;
+		try{
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup fg = fileGroupRepository.findOne(fileGroup.getId());
+		
+		if (fg != null){
+			fg.setTitle(fileGroup.getTitle());
+			fileGroupRepository.save(fg);
+			
+			//Returning the root FileGroup of the added file
+			return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
+		}
+	}
+	
+	
+	@RequestMapping(value = "/edit/file/file-group/{fileGroupId}/course/{courseId}", method = RequestMethod.PUT)
+	public ResponseEntity<FileGroup> modifyFile(
+			@RequestBody File file,
+			@PathVariable(value="fileGroupId") String fileGroupId,
+			@PathVariable(value="courseId") String courseId) 
+	{
+		
+		this.checkBackendLogged();
+		
+		long id_fileGroup = -1;
+		long id_course = -1;
+		try{
+			id_fileGroup = Long.parseLong(fileGroupId);
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+		
+		if (fg != null){
+			for (int i = 0; i < fg.getFiles().size(); i++){
+				if (fg.getFiles().get(i).getId() == file.getId()){
+					fg.getFiles().get(i).setName(file.getName());
+					fileGroupRepository.save(fg);
+					//Returning the root FileGroup of the added file
+					return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.OK);
+				}
 			}
-			return new ResponseEntity<>(fg, HttpStatus.CREATED);
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
+		}
+	}
+	
+	
+	@RequestMapping(value = "/delete/file-group/{fileGroupId}/course/{courseId}", method = RequestMethod.DELETE)
+	public ResponseEntity<FileGroup> deleteFileGroup(
+			@PathVariable(value="fileGroupId") String fileGroupId,
+			@PathVariable(value="courseId") String courseId
+	) {
+		
+		this.checkBackendLogged();
+		
+		long id_fileGroup = -1;
+		long id_course = -1;
+		try{
+			id_fileGroup = Long.parseLong(fileGroupId);
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+		
+		if (fg != null){
+			//It is necessary to remove the FileGroup from the CourseDetails that owns it
+			CourseDetails cd = c.getCourseDetails();
+			cd.getFiles().remove(fg);
+			courseDetailsRepository.save(cd);
+			fileGroupRepository.delete(fg);
+			return new ResponseEntity<>(fg, HttpStatus.OK);
 		}
 		else{
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -171,43 +275,6 @@ public class FileGroupController {
 		}
 	}
 	
-	@RequestMapping(value = "/delete/file-group/{fileGroupId}/course/{courseId}", method = RequestMethod.DELETE)
-	public ResponseEntity<FileGroup> deleteFileGroup(
-			@PathVariable(value="fileGroupId") String fileGroupId,
-			@PathVariable(value="courseId") String courseId
-	) {
-		
-		this.checkBackendLogged();
-		
-		long id_fileGroup = -1;
-		long id_course = -1;
-		try{
-			id_fileGroup = Long.parseLong(fileGroupId);
-			id_course = Long.parseLong(courseId);
-		}catch(NumberFormatException e){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		
-		Course c = courseRepository.findOne(id_course);
-		
-		checkAuthorization(c, c.getTeacher());
-		
-		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
-		
-		if (fg != null){
-			//It is necessary to remove the FileGroup from the CourseDetails that owns it
-			CourseDetails cd = c.getCourseDetails();
-			cd.getFiles().remove(fg);
-			courseDetailsRepository.save(cd);
-			fileGroupRepository.delete(fg);
-			return new ResponseEntity<>(fg, HttpStatus.OK);
-		}
-		else{
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
 	
 	
 	//Login checking method for the backend
@@ -230,6 +297,14 @@ public class FileGroupController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
 		}
 		return null;
+	}
+	
+	//Method to get the root FileGroup of a FileGroup tree structure, given a FileGroup
+	private FileGroup getRootFileGroup(FileGroup fg) {
+		while(fg.getFileGroupParent() != null){
+			fg = fg.getFileGroupParent();
+		}
+		return fg;
 	}
 
 }

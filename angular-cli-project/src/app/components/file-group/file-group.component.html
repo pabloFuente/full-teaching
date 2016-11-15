@@ -3,7 +3,7 @@
     <h5>{{fileGroup?.title}}</h5>
     <a *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" href="#course-details-modal" (click)="updatePostModalMode(5, 'New file'); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]">Add file</a>
     <a *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" href="#course-details-modal" (click)="updatePostModalMode(4, 'New subgroup'); this.courseDetailsModalDataService.animateIfSmall()" materialize="leanModal"  [materializeParams]="[{dismissible: false}]">Add subgroup</a>
-    <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons del-file-icon" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file group'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">mode_edit</i>
+    <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons del-file-icon" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file group'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">mode_edit</i>
     <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons del-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
   </div>
   <div *ngFor="let f of fileGroup?.files">
@@ -11,7 +11,7 @@
       <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
     </div>
     <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="disp-inline-flex">
-      <i class="material-icons del-file-icon" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">mode_edit</i>
+      <i class="material-icons del-file-icon" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file'" href="#put-delete-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">mode_edit</i>
       <i (click)="deleteFile(f)" class="material-icons del-file-icon" [title]="'Delete file'">clear</i>
     </div>
   </div>
