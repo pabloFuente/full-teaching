@@ -43,8 +43,13 @@
    padding-left: 20px;
    padding-right: 20px;
    font-size: smaller;
+   margin-left: 5px;
+   margin-right: 2.5px;
+   border: 1px solid #e4e4e4;
  }
 
  .del-file-icon {
    cursor: pointer;
+   margin-left: 3px;
+   margin-right: 3px;
  }

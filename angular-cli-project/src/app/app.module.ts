@@ -26,7 +26,6 @@ import { SessionService }         from './services/session.service';
 import { ForumService }           from './services/forum.service';
 import { FileService }            from './services/file.service';
 import { CourseDetailsModalDataService }  from './services/course-details-modal-data.service';
-import { FilesEditionService }    from './services/files-edition.service';
 import { LoginModalService }      from './services/login-modal.service';
 import { UserService }            from './services/user.service';
 import { AuthGuard }              from './auth.guard';
@@ -67,7 +66,6 @@ import { TimeAgoPipe }            from 'time-ago-pipe';
     ForumService,
     FileService,
     CourseDetailsModalDataService,
-    FilesEditionService,
     LoginModalService,
     UserService,
     AuthGuard,

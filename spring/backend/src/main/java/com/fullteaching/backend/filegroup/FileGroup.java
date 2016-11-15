@@ -24,7 +24,7 @@ public class FileGroup {
 	
 	private String title;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<File> files;
 	
 	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL)

@@ -46,12 +46,17 @@ export class FileGroupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modeEditActive = this.filesEditionService.modeEdit;
+    this.modeEditActive = this.filesEditionService.currentModeEdit;
   }
 
   updatePostModalMode(mode: number, title: string) {
     let objs = [mode, title, null, null, this.fileGroup];
     this.courseDetailsModalDataService.announcePostMode(objs);
+  }
+
+  updatePutdeleteModalMode(mode: number, title: string) {
+    let objs = [mode, title];
+    this.courseDetailsModalDataService.announcePutdeleteMode(objs);
   }
 
   deleteFileGroup(){
@@ -63,7 +68,6 @@ export class FileGroupComponent implements OnInit {
         console.log(response);
         //Only on succesful DELETE we locally delete the fileGroup sending an event to the suscribed parent component (CourseDetailsComponent)
         this.filesEditionService.announceFileGroupDeleted(response.id);
-        this.fileGroup = undefined;
       },
       error => console.log(error)
     );

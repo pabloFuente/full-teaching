@@ -21,6 +21,7 @@ import { File }          from '../../classes/file';
 
 @Component({
   selector: 'app-course-details',
+  providers: [FilesEditionService],
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.css'],
   animations: [
@@ -67,7 +68,7 @@ export class CourseDetailsComponent implements OnInit {
   allowForumEdition: boolean = false;
   allowFilesEdition: boolean = false;
   checkboxForumEdition: string;
-  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify files
+  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file
   putdeleteModalMode: number = 0;
   putdeleteModalTitle: string = "Modify session";
 
@@ -115,14 +116,12 @@ export class CourseDetailsComponent implements OnInit {
         //fileGroupDeletedId is the id of the FileGroup that has been deleted by the child component (FileGroupComponent)
         if (this.recursiveFileGroupDeletion(this.course.courseDetails.files, fileGroupDeletedId)){
           console.log("Succesful local deletion of FileGroup with id " + fileGroupDeletedId);
-          if (this.course.courseDetails.files.length == 0) changeModeEdition(); //If there are no fileGroups, mode edit is closed
+          if (this.course.courseDetails.files.length == 0) this.changeModeEdition(); //If there are no fileGroups, mode edit is closed
         }
       });
   }
 
   ngOnInit() {
-    this.filesEditionService.fixModeEdit(false); //Initializing to false the possibility of editing files
-
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
       this.courseService.getCourse(id).subscribe(

@@ -8,7 +8,7 @@
     <div class="modal-content">
       <p class="p-bold-modal-header">{{this.postModalTitle}}</p>
       <h5 *ngIf="isCurrentPostMode(['1'])">{{this.postModalEntry?.title}}</h5>
-      <p *ngIf="isCurrentPostMode(['2'])">{{this.postModalCommentReplay?.message}}</p>
+      <p *ngIf="isCurrentPostMode(['1'])">{{this.postModalCommentReplay?.message}}</p>
       <div class="row row-no-margin">
 
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
