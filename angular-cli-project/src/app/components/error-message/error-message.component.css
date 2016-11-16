@@ -18,6 +18,10 @@
   border-color: #af6e00 !important;
 }
 
+.card-panel.warning {
+  margin-bottom: 0.5rem;
+}
+
 .correct {
   background-color: rgba(55, 86, 70, 0.5);
 }

@@ -164,7 +164,7 @@
               </div>
               <ul>
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
-                  <li class="session-data waves-effect">
+                  <li class="session-data">
                     <div class="row row-no-margin">
                       <div class="col l7 m6 s6">
                         <div class="session-title">{{session.title}}</div>
@@ -297,17 +297,29 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content">
-            <div class="row row-no-margin">
-              <a  href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(3, 'Edit attenders', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'Add attenders'">
+            <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
+              <a  href="#course-details-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePostModalMode(3, 'Add attenders', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'Add attenders'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
+              <i *ngIf="this.course.attenders.length > 1" (click)="this.changeModeAttenders()" class="material-icons add-element-icon right" [title]="'Modify attenders'">{{this.attendersEditionIcon}}</i>
             </div>
-            <div *ngFor="let attender of this.course.attenders" class="row row-no-margin valign-wrapper">
+            <div class="row row-no-margin valign-wrapper user-attender-row">
               <div class="col l2 m2 s3 valign attender-col">
-                <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.picture}}>
+                <img materialize="materialbox" class="circle materialboxed userImage" src={{this.authenticationService.getCurrentUser().picture}}>
               </div>
               <div class="col l5 m5 s9 valign attender-col">
-                <p>{{attender?.nickName}}</p>
+                <p>{{this.authenticationService.getCurrentUser().nickName}}</p>
+              </div>
+            </div>
+            <div *ngFor="let attender of this.course.attenders">
+              <div *ngIf="attender.id != this.authenticationService.getCurrentUser().id" class="row row-no-margin valign-wrapper">
+                <div class="col l2 m2 s3 valign attender-col">
+                  <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.picture}}>
+                </div>
+                <div class="col l5 m5 s9 valign attender-col">
+                  <p>{{attender?.nickName}}</p>
+                </div>
+                <i *ngIf="this.allowAttendersEdition && this.authenticationService.isTeacher()" (click)="deleteAttender(attender)" class="material-icons del-attender-icon" [title]="'Remove ' + attender.nickName">clear</i>
               </div>
             </div>
         </div>

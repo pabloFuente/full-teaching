@@ -106,18 +106,18 @@ public class CourseController {
 	}
 	
 	
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Course> deleteCourse(@PathVariable(value="id") String id) {
+	@RequestMapping(value = "/delete/{courseId}", method = RequestMethod.DELETE)
+	public ResponseEntity<Course> deleteCourse(@PathVariable(value="courseId") String courseId) {
 		this.checkBackendLogged();
 		
-		long id_i = -1;
+		long id_course = -1;
 		try{
-			id_i = Long.parseLong(id);
+			id_course = Long.parseLong(courseId);
 		}catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_i);
+		Course c = courseRepository.findOne(id_course);
 		
 		checkAuthorization(c, c.getTeacher());
 		
@@ -134,6 +134,34 @@ public class CourseController {
 		
 		courseRepository.delete(c);
 		return new ResponseEntity<>(c, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/edit/delete-attenders", method = RequestMethod.PUT)
+	public ResponseEntity<Set<User>> deleteAttenders(@RequestBody Course course) {
+		this.checkBackendLogged();
+
+		Course c = courseRepository.findOne(course.getId());
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		Set<Course> setCourse = new HashSet<>();
+		setCourse.add(c);
+		Collection<User> courseAttenders = userRepository.findByCourses(setCourse);
+		
+		for (User attender : courseAttenders){
+			if (!course.getAttenders().contains(attender)){
+				attender.getCourses().remove(c);
+			}
+		}
+		
+		userRepository.save(courseAttenders);
+		
+		//Modifying the course attenders
+		c.setAttenders(course.getAttenders());
+		//Saving the modified course
+		courseRepository.save(c);
+		return new ResponseEntity<>(c.getAttenders(), HttpStatus.OK);
 	}
 	
 	

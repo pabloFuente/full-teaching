@@ -53,3 +53,7 @@
    margin-left: 3px;
    margin-right: 3px;
  }
+
+ .del-file-icon:hover {
+   color: #91a59b;
+ }

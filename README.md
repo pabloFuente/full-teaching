@@ -22,6 +22,7 @@ To run the application is necessary:
     
         $ node -v
         $ npm -v
+        $ ng --version
       
      *Install*:
   

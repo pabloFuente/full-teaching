@@ -20,6 +20,7 @@ import { Entry }         from '../../classes/entry';
 import { Comment }       from '../../classes/comment';
 import { FileGroup }     from '../../classes/file-group';
 import { File }          from '../../classes/file';
+import { User }          from '../../classes/user';
 
 @Component({
   selector: 'app-course-details',
@@ -79,7 +80,10 @@ export class CourseDetailsComponent implements OnInit {
   putdeleteModalMode: number = 0;
   putdeleteModalTitle: string = "Modify session";
 
+  allowAttendersEdition: boolean = false;
+
   filesEditionIcon: string = "mode_edit";
+  attendersEditionIcon: string = "mode_edit";
 
   private actions2 = new EventEmitter<string|MaterializeAction>();
   private actions3 = new EventEmitter<string|MaterializeAction>();
@@ -201,6 +205,16 @@ export class CourseDetailsComponent implements OnInit {
       this.filesEditionIcon = "mode_edit";
     }
     this.filesEditionService.announceModeEdit(this.allowFilesEdition);
+  }
+
+  changeModeAttenders(){
+    this.allowAttendersEdition = !this.allowAttendersEdition;
+    if (this.allowAttendersEdition) {
+      this.attendersEditionIcon = "keyboard_arrow_left";
+    }
+    else {
+      this.attendersEditionIcon = "mode_edit";
+    }
   }
 
   isCurrentPostMode(possiblePostModes: string[]): boolean {
@@ -418,9 +432,29 @@ export class CourseDetailsComponent implements OnInit {
     );
   }
 
+  //Remove attender from course
+  deleteAttender(attender: User){
+    let c = new Course(this.course.title, this.course.image, this.course.courseDetails);
+    c.id = this.course.id;
+    for (let i = 0; i < this.course.attenders.length; i++){
+      if (this.course.attenders[i].id !== attender.id) {
+        c.attenders.push(new User(this.course.attenders[i])); //Inserting a new User object equal to the attender but "courses" array empty
+      }
+    }
+    console.log(this.course);
+    console.log(c);
+    this.courseService.deleteCourseAttenders(c).subscribe(
+      response => {
+        console.log("Course attenders modified");
+        console.log(response);
+        this.course.attenders = response;
+        if (this.course.attenders.length <= 1) this.changeModeAttenders(); //If there are no attenders, mode edit is closed
+      },
+      error => console.log(error));
+  }
+
 
 //PRIVATE AUXILIAR METHODS
-
 //Sorts an array of Session by their 'date' attribute (the first are the erliest)
   private sortSessionsByDate(sessionArray: Session[]): void {
     sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );

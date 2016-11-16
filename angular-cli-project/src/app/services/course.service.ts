@@ -64,6 +64,16 @@ export class CourseService {
       .catch(error => this.handleError(error));
   }
 
+  //PUT existing course, modifying its attenders (deleting them). On success returns the updated course.attenders array
+  public deleteCourseAttenders(course: Course){
+    let body = JSON.stringify(course);
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.put(this.url + "/edit/delete-attenders", body, options)
+      .map(response => response.json() as User[])
+      .catch(error => this.handleError(error));
+  }
+
   private handleError(error: any) {
     console.error(error);
     return Observable.throw("Server error (" + error.status + "): " + error.text())

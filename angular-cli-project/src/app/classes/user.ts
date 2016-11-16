@@ -11,4 +11,14 @@ export class User {
   public passwordHash?: string;
   public courses: Course[];
 
+  constructor(u: User){
+    this.id = u.id;
+    this.name = u.name;
+    this.nickName = u.nickName;
+    this.roles = u.roles;
+    this.picture = u.picture;
+    this.registrationDate = u.registrationDate;
+    this.courses = [];
+  }
+
 }
