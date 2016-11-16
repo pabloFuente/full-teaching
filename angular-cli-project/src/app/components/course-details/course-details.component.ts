@@ -2,6 +2,8 @@ import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, anim
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Subscription }             from 'rxjs/Subscription';
 
+import { MaterializeAction } from 'angular2-materialize';
+
 import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
@@ -79,8 +81,8 @@ export class CourseDetailsComponent implements OnInit {
 
   filesEditionIcon: string = "mode_edit";
 
-  private actions2 = new EventEmitter<string>();
-  private actions3 = new EventEmitter<string>();
+  private actions2 = new EventEmitter<string|MaterializeAction>();
+  private actions3 = new EventEmitter<string|MaterializeAction>();
 
   subscription1: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving POST modal dialog changes
   subscription2: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving PUT/DELETE modal dialog changes
@@ -229,7 +231,7 @@ export class CourseDetailsComponent implements OnInit {
         response  => {
           console.log(response);
           this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
-          this.actions2.emit("closeModal");
+          this.actions2.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -247,7 +249,7 @@ export class CourseDetailsComponent implements OnInit {
           console.log(response);
           this.sortSessionsByDate(response.sessions);
           this.course = response;
-          this.actions2.emit("closeModal");
+          this.actions2.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -269,7 +271,7 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
-          this.actions2.emit("closeModal");
+          this.actions2.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -285,7 +287,7 @@ export class CourseDetailsComponent implements OnInit {
           //Only on succesful post we locally update the entire course details
           this.course.courseDetails = response;
 
-          this.actions2.emit("closeModal");
+          this.actions2.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -306,7 +308,7 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
-          this.actions2.emit("closeModal");
+          this.actions2.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -332,7 +334,7 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
-          this.actions3.emit("closeModal");
+          this.actions3.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -347,7 +349,7 @@ export class CourseDetailsComponent implements OnInit {
           this.course.courseDetails.forum.activated = response;
           this.allowForumEdition = false;
           this.updateCheckboxForumEdition(response);
-          this.actions3.emit("closeModal");
+          this.actions3.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -368,7 +370,7 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
-          this.actions3.emit("closeModal");
+          this.actions3.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -389,7 +391,7 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
-          this.actions3.emit("closeModal");
+          this.actions3.emit({action:"modal",params:['close']});
         },
         error => console.log(error)
       );
@@ -410,7 +412,7 @@ export class CourseDetailsComponent implements OnInit {
             break;
           }
         }
-        this.actions3.emit("closeModal");
+        this.actions3.emit({action:"modal",params:['close']});
       },
       error => console.log(error)
     );

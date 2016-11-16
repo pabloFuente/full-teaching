@@ -5,8 +5,8 @@
 
       <!--Logout view-->
       <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
-        <li><a (click)="updateLoginModalView(false)" id="signUpButton" class="navbar-button waves-effect white-text" href="#login-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">Sign up</a></li>
-        <li><a (click)="updateLoginModalView(true)" class="navbar-button waves-effect white-text" href="#login-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">Log in</a></li>
+        <li><a href="#login-modal" (click)="updateLoginModalView(false)" id="signUpButton" class="navbar-button waves-effect white-text">Sign up</a></li>
+        <li><a href="#login-modal" (click)="updateLoginModalView(true)" class="navbar-button waves-effect white-text">Log in</a></li>
       </ul>
 
       <!--Login view-->

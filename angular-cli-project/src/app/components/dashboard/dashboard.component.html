@@ -3,7 +3,7 @@
 <div *ngIf="this.courses">
 
   <!--POST COURSE DIALOG-->
-  <div id="course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions1">
+  <div id="course-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions1">
     <div class="modal-content">
       <p class="p-bold-modal-header">New course</p>
       <div class="row">
@@ -40,7 +40,7 @@
   <!--POST COURSE DIALOG-->
 
   <!--PUT/DELETE COURSE DIALOG-->
-  <div *ngIf="this.courses.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-course-modal" class="modal my-modal-class course-modal" materialize [materializeActions]="actions4">
+  <div *ngIf="this.courses.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-course-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions4">
     <div class="modal-content">
       <p class="p-bold-modal-header">Modify course</p>
       <div class="row row-no-margin">
@@ -88,7 +88,9 @@
 
       <div class="col l6 m5 s12 dashboard-col">
         <div class="dashboard-title">MY COURSES
-          <i href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" materialize="leanModal" [materializeParams]="[{dismissible: false}]" class="material-icons add-element-icon">add_circle_outline</i>
+          <a href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()">
+            <i class="material-icons add-element-icon">add_circle_outline</i>
+          </a>
         </div>
         <ul class="collection">
           <li *ngIf="courses.length === 0 && this.authenticationService.isStudent()" class="li-warning"><app-error-message [errorTitle]="'You do not have any courses'" [errorContent]="'Your teacher must invite you'" [customClass]="'warning'" [closable]="false"></app-error-message></li>
@@ -105,7 +107,7 @@
               </div>
 
               <div class="col l2 m2 s2 right-align no-padding-lateral">
-                <a *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedCourse(course)" [title]="'Modify course'" href="#put-delete-course-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]">
+                <a href="#put-delete-course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedCourse(course)" [title]="'Modify course'">
                   <i class="material-icons course-put-icon">mode_edit</i>
                 </a>
               </div>

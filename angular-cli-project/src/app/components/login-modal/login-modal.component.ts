@@ -1,6 +1,8 @@
 import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { MaterializeAction } from 'angular2-materialize';
+
 import { AuthenticationService } from '../../services/authentication.service';
 import { LoginModalService } from '../../services/login-modal.service';
 import { UserService } from '../../services/user.service';
@@ -26,7 +28,7 @@ export class LoginModalComponent {
   private loginView: boolean;
   private fieldsIncorrect: boolean;
   private submitProcessing: boolean;
-  private actions = new EventEmitter<string>();
+  private actions = new EventEmitter<string|MaterializeAction>();
 
   //Error message content
   private errorTitle: string;
@@ -88,7 +90,7 @@ export class LoginModalComponent {
 
         // Login successful
         this.fieldsIncorrect = false;
-        this.actions.emit("closeModal");
+        this.actions.emit({action:"modal",params:['close']});
         this.router.navigate(['/courses']);
       },
       error => {

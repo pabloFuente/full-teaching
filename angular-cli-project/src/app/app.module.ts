@@ -31,7 +31,7 @@ import { UserService }            from './services/user.service';
 import { AuthGuard }              from './auth.guard';
 import { Constants }              from './constants';
 
-import { CalendarModule }         from 'angular2-calendar';
+import { CalendarModule }         from 'angular-calendar';
 import { CalendarComponent }      from './components/calendar/calendar.component';
 import { TimeAgoPipe }            from 'time-ago-pipe';
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter }  from '@angular/core';
 import { Router } from '@angular/router';
 
+import { MaterializeAction } from 'angular2-materialize';
+
 import { Course }         from '../../classes/course';
 import { CourseDetails }  from '../../classes/course-details';
 import { Session }        from '../../classes/session';
@@ -29,8 +31,8 @@ export class DashboardComponent implements OnInit {
   updatedCourse: Course;
   allowCourseDeletion: boolean = false;
 
-  actions1 = new EventEmitter<string>();
-  actions4 = new EventEmitter<string>();
+  actions1 = new EventEmitter<string|MaterializeAction>();
+  actions4 = new EventEmitter<string|MaterializeAction>();
 
   constructor(
     private courseService: CourseService,
@@ -87,7 +89,7 @@ export class DashboardComponent implements OnInit {
         console.log("New course added: ");
         console.log(course);
         this.courses.push(course);
-        this.actions1.emit("closeModal");
+        this.actions1.emit({action:"modal",params:['close']});
       },
       error => console.log(error)
     )
@@ -110,7 +112,7 @@ export class DashboardComponent implements OnInit {
             break;
           }
         }
-        this.actions4.emit("closeModal");
+        this.actions4.emit({action:"modal",params:['close']});
       },
       error => console.log(error)
     )
@@ -130,7 +132,7 @@ export class DashboardComponent implements OnInit {
             break;
           }
         }
-        this.actions4.emit("closeModal");
+        this.actions4.emit({action:"modal",params:['close']});
       },
       error => console.log(error)
     );

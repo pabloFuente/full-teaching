@@ -28,6 +28,7 @@ main {
 
 a {
   text-decoration: none !important;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .app-title-header {

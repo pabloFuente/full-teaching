@@ -1,4 +1,4 @@
-<div id="login-modal" class="modal my-modal-class" materialize [materializeActions]="actions">
+<div id="login-modal" class="modal my-modal-class" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions">
 
   <div *ngIf="submitProcessing" class="loading"></div>
 
@@ -7,7 +7,7 @@
     <div class="row">
 
       <form materialize #myForm class="col s12" (ngSubmit)="onSubmit()">
-        
+
         <div class="row">
           <div class="input-field col s12">
             <input [(ngModel)]="email" name="email" id="email" type="email" class="validate" required>

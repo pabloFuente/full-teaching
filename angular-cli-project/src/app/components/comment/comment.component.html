@@ -7,7 +7,9 @@
       <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
     </div>
     <div class="col l1 m1 s1 no-padding-left right-align">
-      <a [title]="'Send replay'" (click)="updatePostModalMode(1, 'New replay', null, this.comment, null); this.courseDetailsModalDataService.animateIfSmall()" href="#course-details-modal" materialize="leanModal" [materializeParams]="[{dismissible: false}]"><i class="material-icons replay-icon">feedback</i></a>
+      <a href="#course-details-modal" [title]="'Send replay'" (click)="updatePostModalMode(1, 'New replay', null, this.comment, null); this.courseDetailsModalDataService.animateIfSmall()">
+        <i class="material-icons replay-icon">feedback</i>
+      </a>
     </div>
   </div>
 
