@@ -58,6 +58,10 @@ a.btn-floating {
   padding: 20px;
 }
 
+.att-info-tooltip {
+  cursor: pointer;
+}
+
 /*Forum view*/
 
 .entries-side-view {

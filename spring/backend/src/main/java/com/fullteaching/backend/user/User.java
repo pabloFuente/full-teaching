@@ -55,7 +55,11 @@ public class User {
 		this.roles = new ArrayList<>(Arrays.asList(roles));
 		
 		this.nickName = nickName;
-		this.picture = picture;
+		if (picture != null && picture != "") {
+			this.picture = picture;
+		} else {
+			this.picture = "/../assets/images/default_session_image.png";
+		}
 		this.registrationDate = System.currentTimeMillis();
 		this.courses = new HashSet<>();
 	}

@@ -26,7 +26,7 @@
 
             <div *ngIf="isCurrentPostMode(['0', '1', '2'])" class="row">
               <div class="input-field col s12">
-                <textarea [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
+                <textarea maxlength="2500" [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
                 <label *ngIf="isCurrentPostMode(['0', '1'])" for="inputComment">Write your comment here</label>
                 <label *ngIf="isCurrentPostMode(['2'])" for="inputComment">Description</label>
               </div>
@@ -143,8 +143,13 @@
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">MULTIPLE</div></template>
                 <template md-tab-content>
                   <div class="row row-no-margin att-row-padding">
+                    <div class="input-field col l4 m4 s6">
+                      <input [(ngModel)]="inputAttenderSeparator" name="inputAttenderSeparator" id="inputAttenderSeparator" type="text" class="validate">
+                      <label for="inputAttenderSeparator">SEPARATOR</label>
+                    </div>
+                    <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by WHITE SPACES and NEW LINES<br/>If there's any other combination of characters that<br/>should be taken into account as separator, include it here</p>">info</i>
                     <div class="input-field col s12">
-                      <textarea [(ngModel)]="inputAttenderMultiple" name="inputAttenderMultiple" id="inputAttenderMultiple" class="materialize-textarea validate" required></textarea>
+                      <textarea maxlength="1500" [(ngModel)]="inputAttenderMultiple" name="inputAttenderMultiple" id="inputAttenderMultiple" class="materialize-textarea validate" required></textarea>
                       <label for="inputAttenderMultiple">Attender emails</label>
                     </div>
                   </div>
@@ -342,6 +347,7 @@
               </a>
               <i *ngIf="this.course.attenders.length > 1" (click)="this.changeModeAttenders()" class="material-icons add-element-icon right" [title]="'Modify attenders'">{{this.attendersEditionIcon}}</i>
             </div>
+            <app-error-message *ngIf="addAttendersError" (eventShowable)="addAttendersError = false" [errorTitle]="attErrorTitle" [errorContent]="attErrorContent" [customClass]="'fail'" [closable]="true"></app-error-message>
             <div class="row row-no-margin valign-wrapper user-attender-row">
               <div class="col l2 m2 s3 valign attender-col">
                 <img materialize="materialbox" class="circle materialboxed userImage" src={{this.authenticationService.getCurrentUser().picture}}>

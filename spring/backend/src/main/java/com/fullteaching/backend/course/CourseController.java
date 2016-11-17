@@ -34,7 +34,8 @@ public class CourseController {
 	private UserComponent user;
 	
 	private class AddAttendersResponse {
-		public Collection<User> modifiedAttenders;
+		public Collection<User> attendersAdded;
+		public Collection<User> attendersAlreadyAdded;
 		public Collection<String> emailsInvalid;
 		public Collection<String> emailsValidNotRegistered;
 	}
@@ -183,26 +184,31 @@ public class CourseController {
 			}
 		}
 		
-		Collection<User> newAttenders = userRepository.findByNameIn(attenderEmailsValid);
+		Collection<User> newPossibleAttenders = userRepository.findByNameIn(attenderEmailsValid);
+		Collection<User> newAddedAttenders = new HashSet<>();
+		Collection<User> alreadyAddedAttenders = new HashSet<>();
 		
 		for (String s : attenderEmailsValid){
-			if (!this.userListContainsEmail(newAttenders, s)){
+			if (!this.userListContainsEmail(newPossibleAttenders, s)){
 				attenderEmailsNotRegistered.add(s);
 			}
 		}
 		
-		for (User attender : newAttenders){
-			attender.getCourses().add(c);
-			c.getAttenders().add(attender);
+		for (User attender : newPossibleAttenders){
+			boolean newAtt = true;
+			if (!attender.getCourses().contains(c)) attender.getCourses().add(c); else newAtt = false;
+			if (!c.getAttenders().contains(attender)) c.getAttenders().add(attender); else newAtt = false;
+			if (newAtt) newAddedAttenders.add(attender); else alreadyAddedAttenders.add(attender);
 		}
 		
-		//Saving the modified attenders
-		userRepository.save(newAttenders);	
+		//Saving the attenders (all of them, just in case a field of the bidirectional relationship is missing in a Course or a User)
+		userRepository.save(newPossibleAttenders);	
 		//Saving the modified course
 		courseRepository.save(c);
 		
 		AddAttendersResponse customResponse = new AddAttendersResponse();
-		customResponse.modifiedAttenders = newAttenders;
+		customResponse.attendersAdded = newAddedAttenders;
+		customResponse.attendersAlreadyAdded = alreadyAddedAttenders;
 		customResponse.emailsInvalid = attenderEmailsInvalid;
 		customResponse.emailsValidNotRegistered = attenderEmailsNotRegistered;
 		

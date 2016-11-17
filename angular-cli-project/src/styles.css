@@ -31,6 +31,14 @@ a {
   color: rgba(0, 0, 0, 0.87);
 }
 
+i {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
 .app-title-header {
   font-family: 'Molle', cursive;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.71);
@@ -229,6 +237,12 @@ md-ink-bar {
 
 div.drag-target {
   max-width: 30% !important;
+}
+
+.att-tooltip-text {
+  margin: 10px;
+  font-size: 0.95rem;
+  text-align: justify;
 }
 /*End Library Overwrite*/
 

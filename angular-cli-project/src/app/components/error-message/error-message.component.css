@@ -3,19 +3,13 @@
 }
 
 .fail {
-  background-color: #FFFFFF;
+  background-color: rgba(167, 56, 65, 0.2);
   color: #a73841;
-  border-style: solid !important;
-  border-width: 1px !important;
-  border-color: #a73841 !important;
 }
 
 .warning {
-  background-color: #FFFFFF;
+  background-color: rgba(175, 110, 0, 0.2);
   color: #af6e00;
-  border-style: solid !important;
-  border-width: 1px !important;
-  border-color: #af6e00 !important;
 }
 
 .card-panel.warning {

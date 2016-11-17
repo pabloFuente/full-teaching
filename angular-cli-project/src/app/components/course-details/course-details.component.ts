@@ -84,7 +84,12 @@ export class CourseDetailsComponent implements OnInit {
 
   inputAttenderSimple: string;
   inputAttenderMultiple: string;
+  inputAttenderSeparator: string = "";
   attenderTabSelected: number = 0;
+
+  addAttendersError: boolean = false;
+  attErrorTitle: string;
+  attErrorContent: string;
 
   filesEditionIcon: string = "mode_edit";
   attendersEditionIcon: string = "mode_edit";
@@ -425,8 +430,10 @@ export class CourseDetailsComponent implements OnInit {
           response => {
             console.log("Course attenders modified (one attender added)");
             console.log(response);
-            let newAttenders = response.modifiedAttenders as User[];
+            let newAttenders = response.attendersAdded as User[];
             this.course.attenders = this.course.attenders.concat(newAttenders);
+            this.handleAttendersMessage(response);
+            this.actions3.emit({action:"modal",params:['close']});
           },
           error => console.log(error));
       }
@@ -434,11 +441,28 @@ export class CourseDetailsComponent implements OnInit {
       else if (this.attenderTabSelected === 1){
         console.log("Adding multiple attenders in the MULTIPLE tab");
 
+        //The input text is divided into entire words (by whitespaces, new lines and the custom separator)
+        let emailsFiltered = this.inputAttenderMultiple.replace('\n', ' ').replace('\r', ' ');
+        if (this.inputAttenderSeparator) {
+          let regExSeparator = new RegExp(this.inputAttenderSeparator,'g');
+          emailsFiltered = emailsFiltered.replace(regExSeparator, ' ');
+        }
+        let arrayNewAttenders = emailsFiltered.split(/\s+/).filter(v => v != '');
+
+        this.courseService.addCourseAttenders(this.course.id, arrayNewAttenders).subscribe(
+          response => { //response is an object with 4 arrays: attenders added, attenders that were already added, emails invalid and emails not registered
+            console.log("Course attenders modified (multiple attenders added)");
+            console.log(response);
+            let newAttenders = response.attendersAdded as User[];
+            this.course.attenders = this.course.attenders.concat(newAttenders);
+            this.handleAttendersMessage(response);
+            this.actions3.emit({action:"modal",params:['close']});
+          },
+          error => console.log(error));
       }
       //If the attenders are being added in the FILE UPLOAD tab
       else if (this.attenderTabSelected === 2){
         console.log("Adding attenders by file upload in the FILE UPLOAD tab");
-
       }
     }
   }
@@ -528,6 +552,40 @@ export class CourseDetailsComponent implements OnInit {
         let deleted = this.recursiveFileGroupDeletion(fileGroupLevel[i].fileGroups, fileGroupDeletedId);
         if (deleted) return deleted;
       }
+    }
+  }
+
+  //Creates an error message when there is some problem when adding Attenders to a Course
+  handleAttendersMessage(response) {
+    let isError: boolean = false;
+    this.attErrorContent = "";
+    if (response.attendersAlreadyAdded.length > 0){
+      this.attErrorContent += "The following users were already added to the course:";
+      for (let user of response.attendersAlreadyAdded){
+        this.attErrorContent += "<br/> - " + user.name;
+      }
+      isError = true;
+    }
+    if (response.emailsValidNotRegistered.length > 0){
+      this.attErrorContent += "<br/><br/>The following users are not registered:";
+      for (let email of response.emailsValidNotRegistered){
+        this.attErrorContent += "<br/> - " + email;
+      }
+      isError = true;
+    }
+    if (response.emailsInvalid.length > 0){
+      this.attErrorContent += "<br/><br/>These are not valid emails:";
+      for (let email of response.emailsInvalid){
+        this.attErrorContent += "<br/> - " + email;
+      }
+      isError = true;
+    }
+    if (isError) {
+      this.attErrorTitle = "There have been some problems";
+      this.addAttendersError = true;
+    } else if(response.attendersAdded.length == 0){
+      this.attErrorTitle = "No email has been sent!";
+      this.addAttendersError = true;
     }
   }
 
