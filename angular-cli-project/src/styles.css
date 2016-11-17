@@ -140,8 +140,13 @@ a {
   .indicators {
     display: none !important;
   }
-  .lean-overlay {
+
+  .modal-overlay {
     display: none !important;
+  }
+
+  #sidenav-overlay{
+    z-index: 995;
   }
 
   .modal.my-modal-class {
