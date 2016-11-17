@@ -3,7 +3,7 @@
   <div *ngIf="submitProcessing" class="loading"></div>
 
   <div class="modal-content" [class.filtered]="submitProcessing">
-    <h4 *ngIf="loginView" class="center">Welcome to <a class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
+    <h4 *ngIf="loginView" class="center">Welcome to <a id="modal-title-trade" class="app-title-header secondaryColor-color">FullTeaching</a> !</h4>
     <div class="row">
 
       <form materialize #myForm class="col s12" (ngSubmit)="onSubmit()">

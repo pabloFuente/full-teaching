@@ -53,7 +53,7 @@ export class CourseDetailsComponent implements OnInit {
   inputComment: string;
   inputDate: Date;
   inputTime: string;
-  //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New session | 3 -> Add attenders | 4 -> Add fileGroup | 5 -> Add file
+  //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file
   postModalMode: number = 3;
   postModalTitle: string = "New session";
   postModalEntry: Entry;
@@ -76,11 +76,15 @@ export class CourseDetailsComponent implements OnInit {
   updatedFile: File;
   allowFilesEdition: boolean = false;
   checkboxForumEdition: string;
-  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file
+  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file | 4 -> Add attenders
   putdeleteModalMode: number = 0;
   putdeleteModalTitle: string = "Modify session";
 
   allowAttendersEdition: boolean = false;
+
+  inputAttenderSimple: string;
+  inputAttenderMultiple: string;
+  attenderTabSelected: number = 0;
 
   filesEditionIcon: string = "mode_edit";
   attendersEditionIcon: string = "mode_edit";
@@ -410,6 +414,33 @@ export class CourseDetailsComponent implements OnInit {
         error => console.log(error)
       );
     }
+
+    //If modal is opened in Add attenders
+    else if (this.putdeleteModalMode === 4){
+      //If the attenders are being added in the SIMPLE tab
+      if (this.attenderTabSelected === 0){
+        console.log("Adding one attender in the SIMPLE tab");
+        let arrayNewAttenders = [this.inputAttenderSimple];
+        this.courseService.addCourseAttenders(this.course.id, arrayNewAttenders).subscribe(
+          response => {
+            console.log("Course attenders modified (one attender added)");
+            console.log(response);
+            let newAttenders = response.modifiedAttenders as User[];
+            this.course.attenders = this.course.attenders.concat(newAttenders);
+          },
+          error => console.log(error));
+      }
+      //If the attenders are being added in the MULTIPLE tab
+      else if (this.attenderTabSelected === 1){
+        console.log("Adding multiple attenders in the MULTIPLE tab");
+
+      }
+      //If the attenders are being added in the FILE UPLOAD tab
+      else if (this.attenderTabSelected === 2){
+        console.log("Adding attenders by file upload in the FILE UPLOAD tab");
+
+      }
+    }
   }
 
   //DELETE existing Session
@@ -445,7 +476,7 @@ export class CourseDetailsComponent implements OnInit {
     console.log(c);
     this.courseService.deleteCourseAttenders(c).subscribe(
       response => {
-        console.log("Course attenders modified");
+        console.log("Course attenders modified (one attender deleted)");
         console.log(response);
         this.course.attenders = response;
         if (this.course.attenders.length <= 1) this.changeModeAttenders(); //If there are no attenders, mode edit is closed

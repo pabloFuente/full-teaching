@@ -75,7 +75,7 @@ This clones the project in your working directory, installs dependencies with `n
 
 The script `BuildFrontJarAndRun.sh` builds the FrontEnd with angular-cli, copies all generated files to the Backend `static` folder, builds and generates the jar with maven and runs the jar file.
 
-Go to `http://localhost:5000/` and there you have it!
+Go to `http://localhost:5000/` and there you have it! Every time you modify the Front or Back, you can just execute `BuildFrontJarAndRun.sh` and all the changes will be applied.
 
 
 ## :heavy_exclamation_mark: **IMPORTANT**:

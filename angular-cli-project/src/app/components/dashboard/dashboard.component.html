@@ -6,7 +6,7 @@
   <div id="course-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions1">
     <div class="modal-content">
       <p class="p-bold-modal-header">New course</p>
-      <div class="row">
+      <div class="row row-no-margin">
 
         <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
           <div class="row row-no-margin">

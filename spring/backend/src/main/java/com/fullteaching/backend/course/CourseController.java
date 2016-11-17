@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,12 @@ public class CourseController {
 	@Autowired
 	private UserComponent user;
 	
+	private class AddAttendersResponse {
+		public Collection<User> modifiedAttenders;
+		public Collection<String> emailsInvalid;
+		public Collection<String> emailsValidNotRegistered;
+	}
+	
 	
 	@JsonView(SimpleCourseList.class)
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
@@ -53,6 +60,7 @@ public class CourseController {
 	}
 	
 	
+	
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Course> getCourse(@PathVariable(value="id") String id){
 		this.checkBackendLogged();
@@ -66,6 +74,7 @@ public class CourseController {
 		Course course = courseRepository.findOne(id_i);
 		return new ResponseEntity<>(course ,HttpStatus.OK);
 	}
+	
 	
 	
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -89,6 +98,7 @@ public class CourseController {
 	}
 	
 	
+	
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public ResponseEntity<Course> modifyCourse(@RequestBody Course course) {
 		this.checkBackendLogged();
@@ -104,6 +114,7 @@ public class CourseController {
 		courseRepository.save(c);
 		return new ResponseEntity<>(course, HttpStatus.OK);
 	}
+	
 	
 	
 	@RequestMapping(value = "/delete/{courseId}", method = RequestMethod.DELETE)
@@ -135,6 +146,69 @@ public class CourseController {
 		courseRepository.delete(c);
 		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
+	
+
+	
+	@RequestMapping(value = "/edit/add-attenders/course/{courseId}", method = RequestMethod.PUT)
+	public ResponseEntity<AddAttendersResponse> addAttenders(
+			@RequestBody String[] attenderEmails, 
+			@PathVariable(value="courseId") String courseId) 
+	{
+		
+		this.checkBackendLogged();
+		
+		long id_course = -1;
+		try{
+			id_course = Long.parseLong(courseId);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		//Strings with a valid email format
+		Set<String> attenderEmailsValid = new HashSet<>();
+		//Strings with an invalid email format
+		Set<String> attenderEmailsInvalid = new HashSet<>();
+		//Strings with a valid email format but no registered in the application
+		Set<String> attenderEmailsNotRegistered = new HashSet<>();
+		
+		for (int i = 0; i < attenderEmails.length; i++){
+			if (EmailValidator.getInstance().isValid(attenderEmails[i])) {
+				attenderEmailsValid.add(attenderEmails[i]);
+			} else {
+				attenderEmailsInvalid.add(attenderEmails[i]);
+			}
+		}
+		
+		Collection<User> newAttenders = userRepository.findByNameIn(attenderEmailsValid);
+		
+		for (String s : attenderEmailsValid){
+			if (!this.userListContainsEmail(newAttenders, s)){
+				attenderEmailsNotRegistered.add(s);
+			}
+		}
+		
+		for (User attender : newAttenders){
+			attender.getCourses().add(c);
+			c.getAttenders().add(attender);
+		}
+		
+		//Saving the modified attenders
+		userRepository.save(newAttenders);	
+		//Saving the modified course
+		courseRepository.save(c);
+		
+		AddAttendersResponse customResponse = new AddAttendersResponse();
+		customResponse.modifiedAttenders = newAttenders;
+		customResponse.emailsInvalid = attenderEmailsInvalid;
+		customResponse.emailsValidNotRegistered = attenderEmailsNotRegistered;
+		
+		return new ResponseEntity<>(customResponse, HttpStatus.OK);
+	}
+	
 	
 	
 	@RequestMapping(value = "/edit/delete-attenders", method = RequestMethod.PUT)
@@ -185,6 +259,18 @@ public class CourseController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
 		}
 		return null;
+	}
+	
+	//Checks if a User collection contains a user with certain email
+	private boolean userListContainsEmail(Collection<User> users, String email){
+		boolean isContained = false;
+		for (User u : users){
+			if (u.getName().equals(email)) {
+				isContained = true;
+				break;
+			}
+		}
+		return isContained;
 	}
 	
 }

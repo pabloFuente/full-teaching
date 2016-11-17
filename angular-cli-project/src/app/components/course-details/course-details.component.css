@@ -54,6 +54,10 @@ a.btn-floating {
   margin-bottom: 5px !important;
 }
 
+.att-row-padding {
+  padding: 20px;
+}
+
 /*Forum view*/
 
 .entries-side-view {

@@ -64,6 +64,16 @@ export class CourseService {
       .catch(error => this.handleError(error));
   }
 
+  //PUT existing course, modifying its attenders (adding them). On success returns the updated course.attenders array
+  public addCourseAttenders(courseId: number, userEmails: string[]){
+    let body = JSON.stringify(userEmails);
+    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+    let options = new RequestOptions({ headers });
+    return this.http.put(this.url + "/edit/add-attenders/course/" + courseId, body, options)
+      .map(response => response.json())
+      .catch(error => this.handleError(error));
+  }
+
   //PUT existing course, modifying its attenders (deleting them). On success returns the updated course.attenders array
   public deleteCourseAttenders(course: Course){
     let body = JSON.stringify(course);

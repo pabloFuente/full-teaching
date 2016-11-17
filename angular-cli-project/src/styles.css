@@ -173,8 +173,9 @@ a {
     background-color: rgb(231, 235, 233);
   }
 
-  .app-title-header{
-    font-size: 3.9rem;
+  #modal-title-trade{
+    font-size: 3rem;
+    line-height: 1.3;
   }
 }
 /*End mobile phones*/
@@ -184,9 +185,18 @@ a {
   background-color: #375646 !important;
 }
 
-.md-tab-label {
+div#tabs-course-details .md-tab-label {
   min-width: 25% !important;
   font-weight: normal !important;
+}
+
+div#tabs-attenders .md-tab-label {
+  min-width: 33.33% !important;
+  font-weight: normal !important;
+}
+
+div#tabs-attenders div.md-tab-body-wrapper{
+  margin-bottom: 24px;
 }
 
 .md-tab-header {

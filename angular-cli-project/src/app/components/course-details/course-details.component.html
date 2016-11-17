@@ -123,6 +123,45 @@
             </div>
           </div>
 
+
+
+
+          <div *ngIf="isCurrentPutdeleteMode(['4'])" id="tabs-attenders" class="row row-no-margin">
+            <md-tab-group [(selectedIndex)]="this.attenderTabSelected">
+              <md-tab>
+                <template md-tab-label><div class="md-tab-label-aux waves-effect">SIMPLE</div></template>
+                <template md-tab-content>
+                  <div class="row row-no-margin att-row-padding">
+                    <div class="input-field col s12">
+                      <input [(ngModel)]="inputAttenderSimple" name="inputAttenderSimple" id="inputAttenderSimple" type="email" class="validate" required>
+                      <label for="inputAttenderSimple">Attender email</label>
+                    </div>
+                  </div>
+                </template>
+              </md-tab>
+              <md-tab>
+                <template md-tab-label><div class="md-tab-label-aux waves-effect">MULTIPLE</div></template>
+                <template md-tab-content>
+                  <div class="row row-no-margin att-row-padding">
+                    <div class="input-field col s12">
+                      <textarea [(ngModel)]="inputAttenderMultiple" name="inputAttenderMultiple" id="inputAttenderMultiple" class="materialize-textarea validate" required></textarea>
+                      <label for="inputAttenderMultiple">Attender emails</label>
+                    </div>
+                  </div>
+                </template>
+              </md-tab>
+              <md-tab>
+                <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
+                <template md-tab-content>
+
+                </template>
+              </md-tab>
+            </md-tab-group>
+          </div>
+
+
+
+
           <div class="row row-no-margin-bottom right-align">
             <div *ngIf="isCurrentPutdeleteMode(['0'])" class="valign-wrapper delete-div">
               <a (click)="this.deleteSession(); putDeleteForm.reset(); this.allowSessionDeletion = false;" class="waves-effect btn-flat modal-footer-button float-to-left" [class.disabled]="!this.allowSessionDeletion">Delete</a>
@@ -150,7 +189,7 @@
   </div>
 
   <!--TABS-->
-  <div class="row">
+  <div id="tabs-course-details" class="row">
     <md-tab-group [selectedIndex]="0">
 
       <md-tab>
@@ -298,7 +337,7 @@
         <template md-tab-content>
           <div class="tab-template-content">
             <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
-              <a  href="#course-details-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePostModalMode(3, 'Add attenders', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'Add attenders'">
+              <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'Add attenders'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
               <i *ngIf="this.course.attenders.length > 1" (click)="this.changeModeAttenders()" class="material-icons add-element-icon right" [title]="'Modify attenders'">{{this.attendersEditionIcon}}</i>
