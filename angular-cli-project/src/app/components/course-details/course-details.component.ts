@@ -3,6 +3,7 @@ import { ActivatedRoute, Params }   from '@angular/router';
 import { Subscription }             from 'rxjs/Subscription';
 
 import { MaterializeAction } from 'angular2-materialize';
+import { FileUploader }      from 'ng2-file-upload';
 
 import { CommentComponent } from '../comment/comment.component';
 
@@ -21,6 +22,8 @@ import { Comment }       from '../../classes/comment';
 import { FileGroup }     from '../../classes/file-group';
 import { File }          from '../../classes/file';
 import { User }          from '../../classes/user';
+
+const URL_UPLOAD = 'http://localhost:5000/load-files/upload';
 
 @Component({
   selector: 'app-course-details',
@@ -94,6 +97,9 @@ export class CourseDetailsComponent implements OnInit {
   filesEditionIcon: string = "mode_edit";
   attendersEditionIcon: string = "mode_edit";
 
+  public uploader:FileUploader = new FileUploader({url: URL_UPLOAD});
+  public hasBaseDropZoneOver:boolean = false;
+
   private actions2 = new EventEmitter<string|MaterializeAction>();
   private actions3 = new EventEmitter<string|MaterializeAction>();
 
@@ -148,6 +154,20 @@ export class CourseDetailsComponent implements OnInit {
         if (objs[0]) {
           this.updatedFileGroup = objs[0];
           this.inputFileTitle = this.updatedFileGroup.title;
+          this.uploader.destroy();
+          this.uploader = new FileUploader({url: (URL_UPLOAD + "/" + this.updatedFileGroup.id)});
+          this.uploader.onCompleteItem = (item:any, response:string, status:number, headers:any)=> {
+            console.log("Item uploaded successfully" + response);
+            let fg = JSON.parse(response) as FileGroup;
+            console.log(fg);
+            for (let i = 0; i < this.course.courseDetails.files.length; i++){
+              if (this.course.courseDetails.files[i].id == fg.id){
+                this.course.courseDetails.files[i] = fg;
+                this.updatedFileGroup = fg;
+                break;
+              }
+            }
+          }
         }
         if (objs[1]) {
           this.updatedFile = objs[1];
@@ -240,6 +260,10 @@ export class CourseDetailsComponent implements OnInit {
     } else {
       this.checkboxForumEdition = "ACTIVATION";
     }
+  }
+
+  public fileOverBase(e:any):void {
+    this.hasBaseDropZoneOver = e;
   }
 
   //POST new Entry, Comment or Session

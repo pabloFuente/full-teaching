@@ -5,7 +5,9 @@ import { HttpModule }    from '@angular/http';
 
 import { routing } from './app.routing';
 
-import { MaterializeModule } from 'angular2-materialize';
+import { MaterializeModule }   from 'angular2-materialize';
+import { FileSelectDirective } from 'ng2-file-upload';
+import { FileDropDirective }   from 'ng2-file-upload';
 
 import { MaterialModule } from '@angular/material';
 
@@ -58,6 +60,8 @@ import { TimeAgoPipe }            from 'time-ago-pipe';
     FileGroupComponent,
     CalendarComponent,
     TimeAgoPipe,
+    FileSelectDirective,
+    FileDropDirective,
   ],
   providers: [
     AuthenticationService,

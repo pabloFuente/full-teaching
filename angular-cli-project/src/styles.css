@@ -112,6 +112,20 @@ i {
   float: left;
 }
 
+.file-drop-zone {
+  display: block;
+  border: dotted 3px lightgray;
+  min-height: 5rem;
+  text-align: center;
+  font-weight: 300;
+  line-height: 5rem;
+}
+
+.nv-file-over {
+  border: dotted 3px rgba(55, 86, 70, 0.74);
+  background-color: rgba(55, 86, 70, 0.1);
+}
+
 /*Loader*/
 @keyframes spinLoader {
   0% {
@@ -157,8 +171,13 @@ i {
     z-index: 995;
   }
 
+  ul#nav-mobile{
+    z-index: 1005;
+  }
+
   .modal.my-modal-class {
     position: absolute !important;
+    z-index: 995 !important;
     top: 0 !important;
     width: 100% !important;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -185,10 +204,18 @@ i {
     font-size: 3rem;
     line-height: 1.3;
   }
+
+  .file-drop-zone {
+    display: none !important;
+  }
 }
 /*End mobile phones*/
 
 /*Library Overwrite*/
+.modal {
+  max-height: 80% !important;
+}
+
 .slider .indicators .indicator-item.active {
   background-color: #375646 !important;
 }

@@ -62,6 +62,14 @@ a.btn-floating {
   cursor: pointer;
 }
 
+.label-input-file {
+  cursor: pointer;
+}
+
+#input-file {
+  display: none;
+}
+
 /*Forum view*/
 
 .entries-side-view {

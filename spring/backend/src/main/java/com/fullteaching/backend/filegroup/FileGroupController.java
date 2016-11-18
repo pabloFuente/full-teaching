@@ -1,5 +1,13 @@
 package com.fullteaching.backend.filegroup;
 
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +44,8 @@ public class FileGroupController {
 	
 	@Autowired
 	private UserComponent user;
+	
+	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
 	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
@@ -173,6 +183,11 @@ public class FileGroupController {
 		if (fg != null){
 			for (int i = 0; i < fg.getFiles().size(); i++){
 				if (fg.getFiles().get(i).getId() == file.getId()){
+					
+					//Renaming the stored file...
+					java.io.File f = new java.io.File(FILES_FOLDER.toFile(), fg.getFiles().get(i).getName());
+					f.renameTo(new java.io.File(FILES_FOLDER.toFile(), file.getName()));
+					
 					fg.getFiles().get(i).setName(file.getName());
 					fileGroupRepository.save(fg);
 					//Returning the root FileGroup of the added file
@@ -211,6 +226,13 @@ public class FileGroupController {
 		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
 		
 		if (fg != null){
+			
+			//Removing all stored files of the tree structure...
+			for (File f : fg.getFiles()){
+				this.deleteStoredFile(f);
+			}
+			this.recursiveStoredFileDeletion(fg.getFileGroups());
+			
 			//It is necessary to remove the FileGroup from the CourseDetails that owns it
 			CourseDetails cd = c.getCourseDetails();
 			cd.getFiles().remove(fg);
@@ -260,6 +282,10 @@ public class FileGroupController {
 		        }
 		    }
 			if (file != null){
+				
+				//Deleting stored file...
+				this.deleteStoredFile(file);
+				
 				fg.getFiles().remove(file);
 				fileGroupRepository.save(fg);
 				return new ResponseEntity<>(file, HttpStatus.OK);
@@ -305,6 +331,33 @@ public class FileGroupController {
 			fg = fg.getFileGroupParent();
 		}
 		return fg;
+	}
+	
+	private void recursiveStoredFileDeletion(List<FileGroup> fileGroup){
+		if (fileGroup != null){
+			for (FileGroup fg : fileGroup){
+				for (File f: fg.getFiles()){
+					this.deleteStoredFile(f);
+				}
+				this.recursiveStoredFileDeletion(fg.getFileGroups());
+			}
+		}
+		return;
+	}
+	
+	private void deleteStoredFile(File file){
+		//Deleting stored file...
+		try {
+			Path path = Paths.get(FILES_FOLDER.toString(), file.getName());
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
+		}
 	}
 
 }

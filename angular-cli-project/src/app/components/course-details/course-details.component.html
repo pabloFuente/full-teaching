@@ -14,13 +14,12 @@
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
           <div class="row row-no-margin">
 
-            <div *ngIf="isCurrentPostMode(['0', '2', '4', '5'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '2', '4'])" class="row">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
                 <label *ngIf="isCurrentPostMode(['0'])" for="inputTitle">Entry title</label>
                 <label *ngIf="isCurrentPostMode(['2'])" for="inputTitle">Session title</label>
                 <label *ngIf="isCurrentPostMode(['4'])" for="inputTitle">File group title</label>
-                <label *ngIf="isCurrentPostMode(['5'])" for="inputTitle">File name</label>
               </div>
             </div>
 
@@ -51,9 +50,104 @@
               </div>
             </div>
 
+            <div *ngIf="isCurrentPostMode(['5'])" class="row">
+
+
+              <div class="row row-no-margin  valign-wrapper">
+                <div class="col l4 m4 s12">
+                  <label class="label-input-file waves-effect btn" for="input-file">Select files</label>
+                  <input type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" multiple/>
+                </div>
+                <div class="col l8 m8">
+                  <div class="input-field col s12">
+                    <div ng2FileDrop
+                         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                         (fileOver)="fileOverBase($event)"
+                         [uploader]="uploader"
+                         class="file-drop-zone">
+                        Or drop your files here
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-no-margin">
+                <div *ngIf="uploader.queue.length > 0" class="col s12" style="margin-top: 20px;">
+
+                  <h5 style="display: inline-block;">Files to upload</h5>
+                  <p style="display: inline-block; padding-left: 20px;">You have {{ uploader?.queue?.length }} files in the queue</p>
+
+                  <table class="table">
+                    <thead>
+                    <tr>
+                         <th width="50%">Name</th>
+                         <th>Size</th>
+                         <th>Progress</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr *ngFor="let item of uploader.queue">
+                         <td style="padding: 7px 5px;"><strong>{{ item?.file?.name }}</strong></td>
+                         <td *ngIf="uploader.isHTML5" nowrap style="padding: 7px 5px;">{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                         <td *ngIf="uploader.isHTML5" style="padding: 7px 5px;">
+                             <div class="progress" style="margin-bottom: 0;">
+                                 <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                             </div>
+                         </td>
+                         <td class="text-center" style="padding: 7px 5px;">
+                             <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                             <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                             <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                         </td>
+                         <td nowrap style="padding: 7px 5px;">
+                             <button type="button" class="btn btn-success btn-xs" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                                     (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                 <span class="glyphicon glyphicon-upload"></span> Upload
+                             </button>
+                             <button type="button" class="btn btn-warning btn-xs" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                                     (click)="item.cancel()" [disabled]="!item.isUploading">
+                                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                             </button>
+                             <button type="button" class="btn btn-danger btn-xs" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                                     (click)="item.remove()">
+                                 <span class="glyphicon glyphicon-trash"></span> Remove
+                             </button>
+                         </td>
+                     </tr>
+                     </tbody>
+                 </table>
+
+                 <div style="margin-top: 15px;">
+                     <div>
+                         Queue progress:
+                         <div class="progress">
+                             <div class="determinate" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                         </div>
+                     </div>
+                     <button type="button" class="btn btn-success btn-s" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                             (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                         <span class="glyphicon glyphicon-upload"></span> Upload all
+                     </button>
+                     <button type="button" class="btn btn-warning btn-s" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                             (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                         <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                     </button>
+                     <button type="button" class="btn btn-danger btn-s" style="font-size: 11px; font-weight: 600; padding-left: 12px; padding-right: 12px; height: 27px; line-height: 27px;"
+                             (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                         <span class="glyphicon glyphicon-trash"></span> Remove all
+                     </button>
+                 </div>
+
+             </div>
+           </div>
+
+
+
+            </div>
+
           </div>
           <div class="row row-no-margin-bottom right-align">
-            <a (click)="courseDetailsForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <a (click)="courseDetailsForm.reset(); uploader.clearQueue()" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>
@@ -116,7 +210,7 @@
           <div *ngIf="isCurrentPutdeleteMode(['2', '3'])" class="row row-no-margin">
             <div class="row">
               <label *ngIf="isCurrentPutdeleteMode(['2'])" for="inputFileTitle">File group title</label>
-              <label *ngIf="isCurrentPutdeleteMode(['3'])" for="inputFileTitle">File title</label>
+              <label *ngIf="isCurrentPutdeleteMode(['3'])" for="inputFileTitle">File name</label>
               <div class="input-field col s12">
                 <input [(ngModel)]="inputFileTitle" name="inputFileTitle" id="inputFileTitle" type="text" class="validate" required>
               </div>
