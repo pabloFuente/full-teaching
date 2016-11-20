@@ -355,7 +355,7 @@ export class CourseDetailsComponent implements OnInit {
       );
     }
 
-    //If modal is opened in "New File" mode
+    /*//If modal is opened in "New File" mode
     else if (this.postModalMode === 5) {
       let file = new File(1, this.inputTitle, "www.newlink.com");
       console.log(file);
@@ -374,7 +374,7 @@ export class CourseDetailsComponent implements OnInit {
         },
         error => console.log(error)
       );
-    }
+    }*/
   }
 
   //PUT existing Session or Forum
