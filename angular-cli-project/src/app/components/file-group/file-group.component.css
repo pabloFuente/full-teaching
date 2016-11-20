@@ -64,10 +64,14 @@
  }
 
  .draggable {
-     cursor: move;
-     cursor: grab;
-     cursor: -moz-grab;
-     cursor: -webkit-grab;
+   cursor: move;
+   cursor: grab;
+   cursor: -moz-grab;
+   cursor: -webkit-grab;
+ }
+
+ .draggable:hover{
+   background-color: #cccccc;
  }
 
  .drag-bag-editable {
