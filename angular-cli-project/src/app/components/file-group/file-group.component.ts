@@ -103,7 +103,7 @@ export class FileGroupComponent implements OnInit {
   }
 
   downloadFile(s: string){
-    this.fileService.downloadFile(s);
+    this.fileService.downloadFile(this.courseId, s);
   }
 
 }

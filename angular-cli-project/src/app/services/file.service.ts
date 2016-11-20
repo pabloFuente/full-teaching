@@ -94,7 +94,7 @@ export class FileService {
       .catch(error => this.handleError(error));
   }
 
-  public downloadFile(s:string){
+  public downloadFile(courseId: number, s:string){
 
       // Xhr creates new context so we need to create reference to this
         let self = this;
@@ -104,7 +104,7 @@ export class FileService {
 
         // Create the Xhr request object
         let xhr = new XMLHttpRequest();
-        let url =  "/load-files/download/" + s;
+        let url =  "/load-files/course/" + courseId + "/download/" + s;
         xhr.open('GET', url, true);
         xhr.responseType = 'blob';
 

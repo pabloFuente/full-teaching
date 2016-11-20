@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,6 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,8 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.fullteaching.backend.course.Course;
+import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.filegroup.FileGroup;
 import com.fullteaching.backend.filegroup.FileGroupRepository;
+import com.fullteaching.backend.user.User;
+import com.fullteaching.backend.user.UserComponent;
 
 @RestController
 @RequestMapping("/load-files")
@@ -34,20 +38,34 @@ public class FileController {
 	
 	@Autowired
 	private FileGroupRepository fileGroupRepository;
+	
+	@Autowired
+	private CourseRepository courseRepository;
+	
+	@Autowired
+	private UserComponent user;
 
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
-	
-	private static final MimeTypes MIME_TYPES = new MimeTypes();
 
-	@RequestMapping(value = "/upload/{fileGroupId}", method = RequestMethod.POST)
-	public ResponseEntity<FileGroup> handleFileUpload(MultipartHttpServletRequest request, @PathVariable(value="fileGroupId") String fileGroupId) throws IOException {
+	@RequestMapping(value = "/upload/course/{courseId}/file-group/{fileGroupId}", method = RequestMethod.POST)
+	public ResponseEntity<FileGroup> handleFileUpload(
+			MultipartHttpServletRequest request,
+			@PathVariable(value="courseId") String courseId,
+			@PathVariable(value="fileGroupId") String fileGroupId
+		) throws IOException {
 		
+		long id_course = -1;
 		long id_fileGroup = -1;
 		try {
+			id_course = Long.parseLong(courseId);
 			id_fileGroup = Long.parseLong(fileGroupId);
 		} catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
 		
 		FileGroup fg = null;
 		Iterator<String> i = request.getFileNames();
@@ -89,9 +107,23 @@ public class FileController {
 	}
 
 	
-	@RequestMapping("/download/{fileName:.+}")
-	public void handleFileDownload(@PathVariable String fileName, HttpServletResponse response)
-			throws FileNotFoundException, IOException {
+	@RequestMapping("/course/{courseId}/download/{fileName:.+}")
+	public void handleFileDownload(
+			@PathVariable String fileName, 
+			@PathVariable(value="courseId") String courseId, 
+			HttpServletResponse response)
+		throws FileNotFoundException, IOException {
+		
+		long id_course = -1;
+		try {
+			id_course = Long.parseLong(courseId);
+		} catch(NumberFormatException e){
+			return;
+		}
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorizationUsers(c, c.getAttenders());
 		
 		Path file = FILES_FOLDER.resolve(fileName);
 
@@ -133,6 +165,32 @@ public class FileController {
 		String[] aux = name.split("\\.");
 		String ext = aux[aux.length - 1];
 		return MimeTypes.getMimeType(ext);
+	}
+	
+	//Authorization checking for uploading new files (the user must be an attender)
+	private ResponseEntity<Object> checkAuthorizationUsers(Object o, Collection<User> users){
+		if(o == null){
+			//The object does not exist
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		if(!users.contains(this.user.getLoggedUser())){
+			//The user is not authorized to edit if it is not an attender of the Course
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
+		}
+		return null;
+	}
+	
+	//Authorization checking for editing and deleting courses (the teacher must own the Course)
+	private ResponseEntity<Object> checkAuthorization(Object o, User u){
+		if(o == null){
+			//The object does not exist
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+		}
+		if(!this.user.getLoggedUser().equals(u)){
+			//The teacher is not authorized to edit it if he is not its owner
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
+		}
+		return null;
 	}
 
 }

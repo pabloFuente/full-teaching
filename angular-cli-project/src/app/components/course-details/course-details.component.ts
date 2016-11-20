@@ -24,7 +24,7 @@ import { FileGroup }     from '../../classes/file-group';
 import { File }          from '../../classes/file';
 import { User }          from '../../classes/user';
 
-const URL_UPLOAD = 'http://localhost:5000/load-files/upload';
+const URL_UPLOAD = 'http://localhost:5000/load-files/upload/course/';
 
 @Component({
   selector: 'app-course-details',
@@ -158,7 +158,7 @@ export class CourseDetailsComponent implements OnInit {
           this.updatedFileGroup = objs[0];
           this.inputFileTitle = this.updatedFileGroup.title;
           this.uploader.destroy();
-          this.uploader = new FileUploader({url: (URL_UPLOAD + "/" + this.updatedFileGroup.id)});
+          this.uploader = new FileUploader({url: (URL_UPLOAD + this.course.id + "/file-group/" + this.updatedFileGroup.id)});
           this.uploader.onCompleteItem = (item:any, response:string, status:number, headers:any)=> {
             console.log("Item uploaded successfully" + response);
             let fg = JSON.parse(response) as FileGroup;
