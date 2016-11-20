@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -25,6 +28,8 @@ public class FileGroup {
 	private String title;
 	
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+	@OrderBy("indexOrder ASC")
+	@JoinColumn
 	private List<File> files;
 	
 	@OneToMany(mappedBy="fileGroupParent", cascade=CascadeType.ALL)
@@ -100,5 +105,13 @@ public class FileGroup {
 	    FileGroup otherFileGroup = (FileGroup)other;
 	    return (otherFileGroup.id == this.id);
 	}
+	
+	public void updateFileIndexOrder (){
+		int i = 0;
+		for (File f : this.getFiles()){
+			f.setIndexOrder(i);
+			i++;
+		}
+	} 
 	
 }

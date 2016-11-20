@@ -62,3 +62,14 @@
  .del-file-icon:hover {
    color: #91a59b;
  }
+
+ .draggable {
+     cursor: move;
+     cursor: grab;
+     cursor: -moz-grab;
+     cursor: -webkit-grab;
+ }
+
+ .drag-bag-editable {
+   min-height: 35px;
+ }

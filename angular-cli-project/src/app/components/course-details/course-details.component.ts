@@ -4,6 +4,7 @@ import { Subscription }             from 'rxjs/Subscription';
 
 import { MaterializeAction } from 'angular2-materialize';
 import { FileUploader }      from 'ng2-file-upload';
+import { DragulaService }    from 'ng2-dragula/ng2-dragula';
 
 import { CommentComponent } from '../comment/comment.component';
 
@@ -107,6 +108,7 @@ export class CourseDetailsComponent implements OnInit {
   subscription2: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving PUT/DELETE modal dialog changes
   subscription3: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup deletions
   subscription4: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup and File objects that are being updated
+  subscription5: Subscription; //Subscription to Drag and Drop 'drop' event
 
   constructor(
     private courseService: CourseService,
@@ -116,7 +118,8 @@ export class CourseDetailsComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private courseDetailsModalDataService: CourseDetailsModalDataService,
-    private filesEditionService: FilesEditionService) {
+    private filesEditionService: FilesEditionService,
+    private dragulaService: DragulaService) {
 
     //Subscription for receiving POST modal dialog changes
     this.subscription1 = this.courseDetailsModalDataService.postModeAnnounced$.subscribe(
@@ -174,6 +177,10 @@ export class CourseDetailsComponent implements OnInit {
           this.inputFileTitle = this.updatedFile.name;
         }
       });
+
+      this.subscription5 = this.dragulaService.dropModel.subscribe((value) => {
+        this.changeFilesOrder(value);
+      });
   }
 
   ngOnInit() {
@@ -191,6 +198,14 @@ export class CourseDetailsComponent implements OnInit {
         },
         error => console.log(error));
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription1.unsubscribe();
+    this.subscription2.unsubscribe();
+    this.subscription3.unsubscribe();
+    this.subscription4.unsubscribe();
+    this.subscription5.unsubscribe();
   }
 
   updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup) {
@@ -533,21 +548,21 @@ export class CourseDetailsComponent implements OnInit {
   }
 
 
-//PRIVATE AUXILIAR METHODS
+//INTERNAL AUXILIAR METHODS
 //Sorts an array of Session by their 'date' attribute (the first are the erliest)
-  private sortSessionsByDate(sessionArray: Session[]): void {
+  sortSessionsByDate(sessionArray: Session[]): void {
     sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
   }
 
   //Transforms a Date object into a single string ("HH:MM")
-  private dateToTimeInputFormat(date:Date): string {
+  dateToTimeInputFormat(date:Date): string {
     let hours = date.getHours() < 10 ? "0" + date.getHours().toString() : date.getHours().toString();
     let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString() : date.getMinutes().toString();
     return(hours + ":" + minutes);
   }
 
   //Transforms two strings ("YYYY-MM-DD", "HH:MM") into a new Date object
-  private fromInputToNumberDate(date: string, time: string): number {
+  fromInputToNumberDate(date: string, time: string): number {
     let newDate: Date = new Date(date); //date parameter has a valid ISO format: YYYY-MM-DD
     let timeArray = time.split(":");
     newDate.setHours(parseInt(timeArray[0]));
@@ -611,6 +626,60 @@ export class CourseDetailsComponent implements OnInit {
       this.attErrorTitle = "No email has been sent!";
       this.addAttendersError = true;
     }
+  }
+
+  changeFilesOrder(dragAndDropArray){
+    const [bagName, el, target, source] = dragAndDropArray;
+    let fileMoved = el.dataset.id;
+    let fileGroupSource = source.dataset.id;
+    let fileGroupTarget = target.dataset.id;
+    console.log(this.course.courseDetails.files);
+    let fileNewPosition: number = this.getFilePosition(fileMoved, fileGroupTarget);
+    this.fileService.editFileOrder(fileMoved, fileGroupSource, fileGroupTarget, fileNewPosition, this.course.id).subscribe(
+      response => {
+        console.log("Order of files updated");
+        console.log(response);
+        this.course.courseDetails.files = response;
+      },
+      error => console.log(error)
+    );
+  }
+
+  getFilePosition(fileMoved: number, fileGroupTarget: number): number{
+    let fileGroupFound: FileGroup = null;
+    let i = 0;
+    while (!fileGroupFound && i < this.course.courseDetails.files.length){
+      fileGroupFound = this.findFileGroup(fileGroupTarget, this.course.courseDetails.files[i]);
+      i++;
+    }
+    if (fileGroupFound){
+      for (let j = 0; j < fileGroupFound.files.length; j++){
+        if (fileGroupFound.files[j].id == fileMoved){
+          return j;
+        }
+      }
+    }
+    else return -1;
+  }
+
+
+  findFileGroup(id: number, currentFileGroup: FileGroup): FileGroup {
+      let i: number;
+      let currentChildFileGroup: FileGroup;
+      let result: FileGroup;
+
+      if (id == currentFileGroup.id) {
+          return currentFileGroup;
+      } else {
+          for (i = 0; i < currentFileGroup.fileGroups.length; i++) {
+              currentChildFileGroup = currentFileGroup.fileGroups[i];
+              result = this.findFileGroup(id, currentChildFileGroup);
+              if (result !== null) {
+                  return result;
+              }
+          }
+          return null;
+      }
   }
 
 }

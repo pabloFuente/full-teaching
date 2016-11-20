@@ -1,4 +1,5 @@
 @import "../node_modules/materialize-css/dist/css/materialize.css";
+@import "../node_modules/dragula/dist/dragula.css";
 
 html {
   overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
@@ -70,7 +71,7 @@ i {
   margin: 0 !important;
 }
 
-.row-no-margin-bottom {
+.no-margin-bottom {
   margin-bottom: 0 !important;
 }
 

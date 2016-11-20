@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +93,7 @@ public class FileGroupController {
 	}
 	
 	
-	@RequestMapping(value = "/file-group/{fileGroupId}/course/{courseDetailsId}", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/file-group/{fileGroupId}/course/{courseDetailsId}", method = RequestMethod.POST)
 	public ResponseEntity<FileGroup> newFile(
 			@RequestBody File file, 
 			@PathVariable(value="fileGroupId") String fileGroupId,
@@ -115,7 +117,10 @@ public class FileGroupController {
 		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
 		
 		if (fg != null){
+			
 			fg.getFiles().add(file);
+			fg.updateFileIndexOrder();
+			
 			fileGroupRepository.save(fg);
 			
 			//Returning the root FileGroup of the added file
@@ -124,7 +129,7 @@ public class FileGroupController {
 		else{
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-	}
+	}*/
 	
 	
 	@RequestMapping(value = "/edit/file-group/course/{courseId}", method = RequestMethod.PUT)
@@ -153,6 +158,56 @@ public class FileGroupController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
 		}
+	}
+	
+	
+	@RequestMapping(value = "/edit/file-order/course/{courseId}/file/{fileId}/from/{sourceID}/to/{targetId}/pos/{position}", method = RequestMethod.PUT)
+	public ResponseEntity<List<FileGroup>> editFileOrder(
+			@PathVariable(value="courseId") String courseId,
+			@PathVariable(value="fileId") String fileId,
+			@PathVariable(value="sourceID") String sourceId,
+			@PathVariable(value="targetId") String targetId,
+			@PathVariable(value="position") String position
+		) {
+		
+		this.checkBackendLogged();
+		
+		long id_course = -1;
+		long id_file = -1;
+		long id_source = -1;
+		long id_target = -1;
+		int pos = 0;
+		try{
+			id_course = Long.parseLong(courseId);
+			id_file = Long.parseLong(fileId);
+			id_source = Long.parseLong(sourceId);
+			id_target = Long.parseLong(targetId);
+			pos = Integer.parseInt(position);
+		}catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Course c = courseRepository.findOne(id_course);
+		
+		checkAuthorization(c, c.getTeacher());
+		
+		FileGroup sourceFg = fileGroupRepository.findOne(id_source);
+		FileGroup targetFg = fileGroupRepository.findOne(id_target);
+		File fileMoved = fileRepository.findOne(id_file);
+		
+		sourceFg.getFiles().remove(fileMoved);
+		targetFg.getFiles().add(pos, fileMoved);
+		
+		sourceFg.updateFileIndexOrder();
+		targetFg.updateFileIndexOrder();
+		
+		List<FileGroup> l = new ArrayList<>();
+		l.add(sourceFg);
+		l.add(targetFg);
+		fileGroupRepository.save(l);
+		
+		//Returning the FileGroups of the course
+		return new ResponseEntity<>(c.getCourseDetails().getFiles(), HttpStatus.OK);
 	}
 	
 	
@@ -287,6 +342,8 @@ public class FileGroupController {
 				this.deleteStoredFile(file);
 				
 				fg.getFiles().remove(file);
+				fg.updateFileIndexOrder();
+				
 				fileGroupRepository.save(fg);
 				return new ResponseEntity<>(file, HttpStatus.OK);
 			}else{
@@ -333,6 +390,8 @@ public class FileGroupController {
 		return fg;
 	}
 	
+	
+	//Delets all the real stored files given a list of FileGroups
 	private void recursiveStoredFileDeletion(List<FileGroup> fileGroup){
 		if (fileGroup != null){
 			for (FileGroup fg : fileGroup){

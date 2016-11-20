@@ -1,14 +1,18 @@
 package com.fullteaching.backend.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,8 @@ public class FileController {
 	private FileGroupRepository fileGroupRepository;
 
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
+	
+	private static final MimeTypes MIME_TYPES = new MimeTypes();
 
 	@RequestMapping(value = "/upload/{fileGroupId}", method = RequestMethod.POST)
 	public ResponseEntity<FileGroup> handleFileUpload(MultipartHttpServletRequest request, @PathVariable(value="fileGroupId") String fileGroupId) throws IOException {
@@ -72,6 +78,7 @@ public class FileController {
 			
 			fg = fileGroupRepository.findOne(id_fileGroup);
 			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
+			fg.updateFileIndexOrder();
 			
 			System.out.println("FILE UPLOADED SUCCESFULL TO " + uploadedFile.getPath());
 		}
@@ -83,19 +90,34 @@ public class FileController {
 
 	
 	@RequestMapping("/download/{fileName:.+}")
-	public void handleFileDownload(@PathVariable String fileName, HttpServletResponse res)
+	public void handleFileDownload(@PathVariable String fileName, HttpServletResponse response)
 			throws FileNotFoundException, IOException {
 		
 		Path file = FILES_FOLDER.resolve(fileName);
 
 		if (Files.exists(file)) {
-			System.out.println("DOWNLOADING FILE "+ file.toString());
-			res.setContentType("text/plain");
-			res.setContentLength((int) file.toFile().length());
-			FileCopyUtils.copy(Files.newInputStream(file), res.getOutputStream());
+			try {
+				String fileExt = this.getFileExtension(fileName);
+				switch (fileExt){
+					case "pdf": 
+						response.setContentType(MimeTypes.MIME_APPLICATION_PDF);
+						break;
+					case "txt":
+						response.setContentType(MimeTypes.MIME_TEXT_PLAIN);
+						break;
+				}
+						
+				// get your file as InputStream
+				InputStream is = new FileInputStream(file.toString());
+				// copy it to response's OutputStream
+				IOUtils.copy(is, response.getOutputStream());
+				response.flushBuffer();
+			} catch (IOException ex) {
+				throw new RuntimeException("IOError writing file to output stream");
+			}
 			
 		} else {
-			res.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
+			response.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
 		}
 	}
 	
@@ -105,6 +127,12 @@ public class FileController {
 			fg = fg.getFileGroupParent();
 		}
 		return fg;
+	}
+	
+	private String getFileExtension(String name){
+		String[] aux = name.split("\\.");
+		String ext = aux[aux.length - 1];
+		return MimeTypes.getMimeType(ext);
 	}
 
 }

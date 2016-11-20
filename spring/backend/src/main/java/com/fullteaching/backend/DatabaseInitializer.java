@@ -161,6 +161,15 @@ public class DatabaseInitializer implements CommandLineRunner {
 		listFileGroups.get(3).getFiles().addAll(listFiles.subList(12, 18));
 		listFileGroups.get(4).getFiles().addAll(listFiles.subList(18, 20));
 		
+		//Setting index order in each group of files
+		for (FileGroup fgAux : listFileGroups){
+			int i = 0;
+			for (File fAux : fgAux.getFiles()){
+				fAux.setIndexOrder(i);
+				i++;
+			}
+		}
+		
 		listFileGroups.get(0).setFileGroupParent(listFileGroups.get(1));
 		listFileGroups.get(1).getFileGroups().add(listFileGroups.get(0));
 		listFileGroups.get(4).setFileGroupParent(listFileGroups.get(3));

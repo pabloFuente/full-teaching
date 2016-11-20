@@ -4,3 +4,4 @@
 
 declare var System: any;
 declare var $: any;
+declare module "file-saver";

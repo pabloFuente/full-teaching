@@ -36,6 +36,7 @@ import { Constants }              from './constants';
 import { CalendarModule }         from 'angular-calendar';
 import { CalendarComponent }      from './components/calendar/calendar.component';
 import { TimeAgoPipe }            from 'time-ago-pipe';
+import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { TimeAgoPipe }            from 'time-ago-pipe';
     MaterialModule.forRoot(),
     routing,
     CalendarModule.forRoot(),
+    DragulaModule,
   ],
   declarations: [
     AppComponent,
