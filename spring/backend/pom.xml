@@ -4,7 +4,7 @@
 
   <groupId>com.fullteaching</groupId>
   <artifactId>full-teaching</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>backend</name>
@@ -23,7 +23,7 @@
   
   <build>
   
-  	<finalName>${project.artifactId}</finalName>
+  	<finalName>${project.artifactId}-${project.version}</finalName>
   
   	<plugins>
   	
