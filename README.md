@@ -88,7 +88,8 @@ Go to `http://localhost:5000/` and there you have it! Every time you modify the 
   - You may have to change permissions in order to execute the scripts.
 
 
-### Running FullTeaching with Docker
+
+## Running FullTeaching with Docker
 
 To get FullTeaching working in the easiest way, you just have to download the file above `docker-compose.yml` and run `docker-compose up` in its directory. This will pull all the necessary images from DockerHub and will execute everything (it will take one minute after the pull ends). Go to `http://localhost:5000/` and there you have it!
 
