@@ -1,0 +1,16 @@
+full-teaching-mysql:
+  container_name: docker-compose-full-teaching-mysql
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=pass
+    - MYSQL_DATABASE=full_teaching
+    - MYSQL_USER=ft-root
+    - MYSQL_PASSWORD=pass
+
+full-teaching:
+  container_name: docker-compose-full-teaching
+  image: pablofuente/full-teaching
+  links:
+    - full-teaching-mysql:mysql
+  ports:
+    - 5000:5000

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.fullteaching</groupId>
-  <artifactId>backend</artifactId>
+  <artifactId>full-teaching</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -22,11 +22,38 @@
   </properties>
   
   <build>
+  
+  	<finalName>${project.artifactId}</finalName>
+  
   	<plugins>
+  	
 	    <plugin>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-maven-plugin</artifactId>
 	    </plugin>
+	 
+	    <plugin>
+		    <groupId>com.spotify</groupId>
+		    <artifactId>docker-maven-plugin</artifactId>
+		    <version>0.4.11</version>
+		    <configuration>
+		        <imageName>pablofuente/${project.artifactId}</imageName>
+		        <dockerDirectory>src/main/docker</dockerDirectory>
+		        <resources>
+		            <resource>
+		                <targetPath>/</targetPath>
+		                <directory>${project.build.directory}</directory>
+		                <include>${project.build.finalName}.jar</include>
+		            </resource>
+		            <resource>
+			        	<targetPath>/</targetPath>
+			        	<directory>src/main/docker</directory>
+			        	<include>init.sh</include>
+			      	</resource>
+		        </resources>
+		    </configuration>
+		</plugin>
+	    
    	</plugins>
    </build>
 

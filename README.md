@@ -2,7 +2,7 @@
 
 ## Quick start guide
 
-### Prerequisites
+### Prerequisites for running without Docker
 To run the application is necessary:
   - **Java 8**
 
@@ -53,7 +53,7 @@ To run the application is necessary:
         $ sudo mysql_secure_installation
         $ sudo mysql_install_db
 
-### Running FullTeaching
+### Running FullTeaching without Docker
 
 Just execute the following commands:
 
@@ -78,7 +78,7 @@ The script `BuildFrontJarAndRun.sh` builds the FrontEnd with angular-cli, copies
 Go to `http://localhost:5000/` and there you have it! Every time you modify the Front or Back, you can just execute `BuildFrontJarAndRun.sh` and all the changes will be applied.
 
 
-## :heavy_exclamation_mark: **IMPORTANT**:
+### :heavy_exclamation_mark: **IMPORTANT**:
 
   - Before executing the script to build and run the app, it is necessary to change the following properties of `application.properties` file to match your credentials for MySQL:
 
@@ -86,5 +86,10 @@ Go to `http://localhost:5000/` and there you have it! Every time you modify the 
         spring.datasource.password=YOUR_PASS
 
   - You may have to change permissions in order to execute the scripts.
+
+
+### Running FullTeaching with Docker
+
+To get FullTeaching working in the easiest way, you just have to download the file above `docker-compose.yml` and run `docker-compose up` in its directory. This will pull all the necessary images from DockerHub and will execute everything (it will take one minute after the pull ends). Go to `http://localhost:5000/` and there you have it!
 
 *These instructions have been tested for Ubuntu 14.04*

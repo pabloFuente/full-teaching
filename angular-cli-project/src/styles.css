@@ -227,7 +227,8 @@ div#tabs-course-details .md-tab-label {
 }
 
 div#tabs-attenders .md-tab-label {
-  min-width: 33.33% !important;
+  /*min-width: 33.33% !important;*/
+  min-width: 50% !important;
   font-weight: normal !important;
 }
 
