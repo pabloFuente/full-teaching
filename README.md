@@ -1,9 +1,58 @@
 # FullTeaching
 
-## Quick start guide
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/presentation.png?raw=true"/></p>
 
-### Prerequisites for running without Docker
-To run the application is necessary:
+
+## What is FullTeaching?
+FullTeaching is an educational web application to make online classes easy for teachers as well as students. Its current main features are the following:
+
+- Teachers can create all the **courses** they want and easily invite their students. Every user will see their courses and sessions well ordered on their dashboards.
+
+- Teachers can stablish an unlimited number of **classes** for each course, indicating the content and date for each one of them.
+
+- A **calendar** view is provided in order to check all your classes at a glance.
+
+- Every course has a **forum** where the users can open entries, write comments and reply others so they can share doubts and knowledge.
+
+- Teachers have an advanced system for attaching **files** to a course. They can customize groups of files, name them as they want and reorder them at any moment. The uploading process has been greatly simplified.
+
+*Dashboard: all your courses and your calendar*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/dashboard.png?raw=true"/></p>
+
+*Calendar: here you have all your sessions, with direct access to their specific course*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/calendar.png?raw=true"/></p>
+
+*Classes: ordered by date, teachers can easily add new ones and modify existing ones*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/sessions.png?raw=true"/></p>
+
+*Forum: unlimited entries for posting all your questions*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/forum.png?raw=true"/></p>
+
+*Files: advanced tree structure to keep all the course's files clear and tidy*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/files.png?raw=true"/></p>
+
+*Adding students to the course is as simple as pasting their emails. FullTeaching will automatically do the rest*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/addattedners.png?raw=true"/></p>
+
+# Quick start guide
+
+## How to execute a demo FullTeaching service (Docker)
+
+To get FullTeaching working in the easiest way, you just have to download the file above `docker-compose.yml` and run `docker-compose up` in its directory. This will pull all the necessary images from DockerHub and will execute everything (it will take one minute after the pull ends). Go to `http://localhost:5000/` and there you have it!
+
+You will need some user data to test the features. These are the default users for the demo:
+- Email: `teacher@gmail.com`   Pass: `pass`  (Teacher account)
+- Email: `student1@gmail.com`  Pass: `pass`  (Student account) 
+- Email: `student2@gmail.com`  Pass: `pass`  (Student account)
+
+
+## How to develop FullTeaching
+
+To get a full development version of the app just execute the following commands:
+
+
+### Prerequisites
+
   - **Java 8**
 
     *Check version*:
@@ -53,9 +102,7 @@ To run the application is necessary:
         $ sudo mysql_secure_installation
         $ sudo mysql_install_db
 
-### Running FullTeaching without Docker
-
-Just execute the following commands:
+### Installation and execution
 
   First of all, it is necessary to create a schema for MySQL:
 
@@ -86,11 +133,5 @@ Go to `http://localhost:5000/` and there you have it! Every time you modify the 
         spring.datasource.password=YOUR_PASS
 
   - You may have to change permissions in order to execute the scripts.
-
-
-
-## Running FullTeaching with Docker
-
-To get FullTeaching working in the easiest way, you just have to download the file above `docker-compose.yml` and run `docker-compose up` in its directory. This will pull all the necessary images from DockerHub and will execute everything (it will take one minute after the pull ends). Go to `http://localhost:5000/` and there you have it!
 
 *These instructions have been tested for Ubuntu 14.04*
