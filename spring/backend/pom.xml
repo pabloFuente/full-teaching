@@ -30,6 +30,17 @@
 	    <plugin>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-maven-plugin</artifactId>
+	        
+	        <!-- ONLY ON DEVELOPMENT -->
+	        <dependencies>
+            	<dependency>
+                	<groupId>org.springframework</groupId>
+                	<artifactId>springloaded</artifactId>
+                	<version>1.2.6</version>
+            	</dependency>
+        	</dependencies>
+        	<!-- ONLY ON DEVELOPMENT -->
+	        
 	    </plugin>
 	 
 	    <plugin>

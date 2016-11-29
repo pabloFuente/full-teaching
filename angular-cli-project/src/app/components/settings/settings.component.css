@@ -13,15 +13,6 @@
   display: inline-block;
 }
 
-.btn-change-pass {
-  font-size: 11px;
-  font-weight: 600;
-  padding-left: 12px;
-  padding-right: 12px;
-  height: 27px;
-  line-height: 27px;
-}
-
 .setting-li {
   padding: 15px 20px !important;
 }
@@ -34,4 +25,8 @@
 
 .profile-row {
   margin-bottom: 30px;
+}
+
+#input-file {
+  display: none;
 }

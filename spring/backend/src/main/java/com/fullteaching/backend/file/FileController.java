@@ -18,6 +18,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.filegroup.FileGroup;
 import com.fullteaching.backend.filegroup.FileGroupRepository;
 import com.fullteaching.backend.user.User;
+import com.fullteaching.backend.user.UserRepository;
 import com.fullteaching.backend.user.UserComponent;
 
 @RestController
@@ -43,9 +45,13 @@ public class FileController {
 	private CourseRepository courseRepository;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private UserComponent user;
 
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
+	private static final Path PICTURES_FOLDER = Paths.get(System.getProperty("user.dir"), "pictures");
 
 	@RequestMapping(value = "/upload/course/{courseId}/file-group/{fileGroupId}", method = RequestMethod.POST)
 	public ResponseEntity<FileGroup> handleFileUpload(
@@ -98,7 +104,7 @@ public class FileController {
 			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
 			fg.updateFileIndexOrder();
 			
-			System.out.println("FILE UPLOADED SUCCESFULL TO " + uploadedFile.getPath());
+			System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
 		}
 		
 		fileGroupRepository.save(fg);
@@ -130,14 +136,7 @@ public class FileController {
 		if (Files.exists(file)) {
 			try {
 				String fileExt = this.getFileExtension(fileName);
-				switch (fileExt){
-					case "pdf": 
-						response.setContentType(MimeTypes.MIME_APPLICATION_PDF);
-						break;
-					case "txt":
-						response.setContentType(MimeTypes.MIME_TEXT_PLAIN);
-						break;
-				}
+				response.setContentType(MimeTypes.getMimeType(fileExt));
 						
 				// get your file as InputStream
 				InputStream is = new FileInputStream(file.toString());
@@ -153,6 +152,62 @@ public class FileController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/upload/picture/{userId}", method = RequestMethod.POST)
+	public ResponseEntity<String> handlePictureUpload(
+			MultipartHttpServletRequest request,
+			@PathVariable(value="userId") String userId
+		) throws IOException {
+		
+		long id_user = -1;
+		try {
+			id_user = Long.parseLong(userId);
+		} catch(NumberFormatException e){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		User u = userRepository.findOne(id_user);
+		
+		if (!u.equals(this.user.getLoggedUser())){
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		Iterator<String> i = request.getFileNames();
+		while (i.hasNext()) {
+			String name = i.next();
+			System.out.println("X - " + name);
+			MultipartFile file = request.getFile(name);
+			System.out.println("PICTURE: " + file.getOriginalFilename());
+			
+			if (file.isEmpty()) {
+				System.out.println("EXCEPTION!");	
+				throw new RuntimeException("The picture is empty");
+			}
+	
+			if (!Files.exists(PICTURES_FOLDER)) {			
+				System.out.println("PATH CREATED FOR PICTURE");
+				Files.createDirectories(PICTURES_FOLDER);
+			}
+
+			File uploadedPicture = new File(PICTURES_FOLDER.toFile(), getEncodedPictureName(file.getOriginalFilename()));
+			file.transferTo(uploadedPicture);
+			
+			//ONLY ON DEVELOPMENT
+			u.setPicture(this.developingImageSaver(file));
+			//ONLY ON DEVELOPMENT
+			
+			//ON PRODUCTION u.setPicture(uploadedPicture.getPath());
+			userRepository.save(u);
+			
+			System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
+		}
+		
+		return new ResponseEntity<>(u.getPicture(), HttpStatus.CREATED);
+	}
+	
+	
+	
+	
 	//Method to get the root FileGroup of a FileGroup tree structure, given a FileGroup
 	private FileGroup getRootFileGroup(FileGroup fg) {
 		while(fg.getFileGroupParent() != null){
@@ -163,8 +218,21 @@ public class FileController {
 	
 	private String getFileExtension(String name){
 		String[] aux = name.split("\\.");
-		String ext = aux[aux.length - 1];
-		return MimeTypes.getMimeType(ext);
+		return aux[aux.length - 1];
+	}
+	
+	private String getEncodedPictureName(String originalFileName){
+		//Getting the image extension
+		String picExtension = this.getFileExtension(originalFileName);
+		//Appending a random integer to the name
+		originalFileName += (Math.random() * (Integer.MIN_VALUE - Integer.MAX_VALUE));
+		//Encoding original file name + random integer
+		originalFileName = new BCryptPasswordEncoder().encode(originalFileName);
+		//Deleting all non alphanumeric characters
+		originalFileName = originalFileName.replaceAll("[^A-Za-z0-9]", "");
+		//Adding the extension
+		originalFileName += "." + picExtension;
+		return originalFileName;
 	}
 	
 	//Authorization checking for uploading new files (the user must be an attender)
@@ -191,6 +259,18 @@ public class FileController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
 		}
 		return null;
+	}
+	
+	//ONLY ON DEVELOPMENT
+	private String developingImageSaver(MultipartFile file) throws IllegalStateException, IOException{
+		Path DEV_PIC_FOLDER = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/assets/pictures");
+		if (!Files.exists(DEV_PIC_FOLDER)) {			
+			Files.createDirectories(DEV_PIC_FOLDER);
+		}
+		String encodedName = getEncodedPictureName(file.getOriginalFilename());
+		File uploadedPicture = new File(DEV_PIC_FOLDER.toFile(), encodedName);
+		file.transferTo(uploadedPicture);
+		return "/assets/pictures/" + encodedName;
 	}
 
 }

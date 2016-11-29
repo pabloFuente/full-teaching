@@ -108,6 +108,10 @@ i {
   float: right !important;
 }
 
+.text-centered {
+  text-align: center;
+}
+
 .delete-div {
   display: inline-flex;
   float: left;
@@ -125,6 +129,15 @@ i {
 .nv-file-over {
   border: dotted 3px rgba(55, 86, 70, 0.74);
   background-color: rgba(55, 86, 70, 0.1);
+}
+
+.button-small{
+  font-size: 11px;
+  font-weight: 600;
+  padding-left: 12px;
+  padding-right: 12px;
+  height: 27px;
+  line-height: 27px;
 }
 
 /*Loader*/

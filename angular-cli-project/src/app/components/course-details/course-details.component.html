@@ -93,13 +93,13 @@
                              <span *ngIf="item.isError"><i class="material-icons">clear</i></span>
                          </td>
                          <td nowrap class="table-td">
-                             <button *ngIf="!(item.isReady || item.isUploading || item.isSuccess)" type="button" class="btn btn-file-table" (click)="item.upload()">
+                             <button *ngIf="!(item.isReady || item.isUploading || item.isSuccess)" type="button" class="btn button-small" (click)="item.upload()">
                                  Upload
                              </button>
-                             <button *ngIf="item.isUploading" type="button" class="btn btn-file-table" (click)="item.cancel()">
+                             <button *ngIf="item.isUploading" type="button" class="btn button-small" (click)="item.cancel()">
                                  Cancel
                              </button>
-                             <button *ngIf="!item.isSuccess" type="button" class="btn btn-file-table" (click)="item.remove()">
+                             <button *ngIf="!item.isSuccess" type="button" class="btn button-small" (click)="item.remove()">
                                  Remove
                              </button>
                          </td>
@@ -431,7 +431,7 @@
             <div *ngFor="let attender of this.course.attenders">
               <div *ngIf="attender.id != this.authenticationService.getCurrentUser().id" class="row row-no-margin valign-wrapper">
                 <div class="col l2 m2 s3 valign attender-col">
-                  <img materialize="materialbox" class="circle materialboxed userImage" src={{attender?.picture}}>
+                  <img materialize="materialbox" class="circle materialboxed userImage" src={{attender.picture}}>
                 </div>
                 <div class="col l5 m5 s9 valign attender-col">
                   <p>{{attender?.nickName}}</p>
