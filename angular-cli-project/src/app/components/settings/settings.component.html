@@ -1,5 +1,49 @@
 <div class="container margins-top-bottom">
 
+  <div class="setting-section">PROFILE
+    <div class="row divider"></div>
+  </div>
+
+  <div class="row profile-row">
+
+    <div class="col l4 m6 s12">
+      <div class="input-field file-field col s12">
+        <div>
+          <img class="circle profile-pic" src="../assets/images/default_session_image.png">
+          <input type="file" name="inputPostCourseImage" id="inputPostCourseImage">
+        </div>
+      </div>
+    </div>
+
+    <div class="col l8 m6 s12">
+      <ul class="collection">
+        <li class="collection-item setting-li">
+          <div class="setting-title">Mail</div>
+          <div class="setting-content right">{{this.user.name}}</div>
+        </li>
+        <li class="collection-item setting-li">
+          <div class="setting-title">Name</div>
+          <div class="setting-content right">{{this.user.nickName}}</div>
+        </li>
+        <li class="collection-item setting-li">
+          <div class="setting-title">Registration date</div>
+          <div class="setting-content right">{{this.user.registrationDate | date}}</div>
+        </li>
+        <li class="collection-item setting-li">
+          <div class="setting-title">Password</div>
+          <div class="setting-content right">
+            <div class="btn waves-effect btn-change-pass">Change password</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="setting-section">DEFAULT SETTINGS
+    <div class="row divider"></div>
+  </div>
+
   <div class="row">
 
     <div class="col l4 m6 s12">

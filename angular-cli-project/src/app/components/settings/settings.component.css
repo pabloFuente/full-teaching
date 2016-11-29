@@ -1,0 +1,37 @@
+.profile-pic {
+  width: 100%;
+}
+
+.setting-title {
+  display: inline-block;
+  font-size: large;
+  font-variant: small-caps;
+  font-weight: 500;
+}
+
+.setting-content {
+  display: inline-block;
+}
+
+.btn-change-pass {
+  font-size: 11px;
+  font-weight: 600;
+  padding-left: 12px;
+  padding-right: 12px;
+  height: 27px;
+  line-height: 27px;
+}
+
+.setting-li {
+  padding: 15px 20px !important;
+}
+
+.setting-section {
+  font-size: 1.5rem;
+  font-weight: 300;
+  padding-bottom: 15px;
+}
+
+.profile-row {
+  margin-bottom: 30px;
+}
