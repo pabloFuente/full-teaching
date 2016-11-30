@@ -24,6 +24,10 @@ import { FileGroup }     from '../../classes/file-group';
 import { File }          from '../../classes/file';
 import { User }          from '../../classes/user';
 
+//ONLY ON PRODUCTION
+//const URL_UPLOAD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/course/';
+
+//ONLY ON DEVELOPMENT
 const URL_UPLOAD = 'http://localhost:5000/load-files/upload/course/';
 
 @Component({

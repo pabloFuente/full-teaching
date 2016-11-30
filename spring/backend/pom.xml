@@ -40,7 +40,7 @@
             	</dependency>
         	</dependencies>
         	<!-- ONLY ON DEVELOPMENT -->
-	        
+        	
 	    </plugin>
 	 
 	    <plugin>
@@ -106,6 +106,14 @@
 	    <artifactId>commons-validator</artifactId>
 	    <version>1.5.1</version>
 	</dependency>
+	
+	<!--ONLY ON PRODUCTION-->
+	<!--<dependency>
+	    <groupId>com.amazonaws</groupId>
+	    <artifactId>aws-java-sdk</artifactId>
+	    <version>1.11.60</version>
+	</dependency>-->
+	<!--ONLY ON PRODUCTION-->
 		 
   </dependencies>
 </project>

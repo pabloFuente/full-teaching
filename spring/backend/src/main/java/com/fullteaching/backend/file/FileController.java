@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -25,6 +27,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+/*//ONLY ON PRODUCTION
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
+import org.springframework.beans.factory.annotation.Value;
+//ONLY ON PRODUCTION*/
 
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
@@ -49,7 +62,14 @@ public class FileController {
 	
 	@Autowired
 	private UserComponent user;
-
+	
+	/*//ONLY ON PRODUCTION
+	@Autowired
+	private AmazonS3 amazonS3;
+    @Value("${aws_namecard_bucket}")
+    private String bucketAWS;
+    //ONLY ON PRODUCTION*/
+    
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
 	private static final Path PICTURES_FOLDER = Paths.get(System.getProperty("user.dir"), "pictures");
 
@@ -100,9 +120,24 @@ public class FileController {
 			File uploadedFile = new File(FILES_FOLDER.toFile(), fileName);
 			file.transferTo(uploadedFile);
 			
+			//ONLY ON DEVELOPMENT
 			fg = fileGroupRepository.findOne(id_fileGroup);
 			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
 			fg.updateFileIndexOrder();
+			//ONLY ON DEVELOPMENT
+			
+			/*//ONLY ON PRODUCTION
+			try {
+				this.productionFileSaver(fileName, "files", uploadedFile);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			fg = fileGroupRepository.findOne(id_fileGroup);
+			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
+			fg.updateFileIndexOrder();
+			this.deleteStoredFile(uploadedFile);
+			//ONLY ON PRODUCTION*/
 			
 			System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
 		}
@@ -131,6 +166,8 @@ public class FileController {
 		
 		checkAuthorizationUsers(c, c.getAttenders());
 		
+		
+		//ONLY ON DEVELOPMENT
 		Path file = FILES_FOLDER.resolve(fileName);
 
 		if (Files.exists(file)) {
@@ -150,6 +187,13 @@ public class FileController {
 		} else {
 			response.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
 		}
+		//ONLY ON DEVELOPMENT
+		
+		
+		/*//ONLY ON PRODUCTION
+		this.productionFileDownloader(fileName, response);
+		//ONLY ON PRODUCTION*/
+		
 	}
 	
 	
@@ -188,15 +232,27 @@ public class FileController {
 				System.out.println("PATH CREATED FOR PICTURE");
 				Files.createDirectories(PICTURES_FOLDER);
 			}
+			
+			String encodedName = getEncodedPictureName(file.getOriginalFilename());
 
-			File uploadedPicture = new File(PICTURES_FOLDER.toFile(), getEncodedPictureName(file.getOriginalFilename()));
+			File uploadedPicture = new File(PICTURES_FOLDER.toFile(), encodedName);
 			file.transferTo(uploadedPicture);
 			
 			//ONLY ON DEVELOPMENT
 			u.setPicture(this.developingImageSaver(file));
 			//ONLY ON DEVELOPMENT
 			
-			//ON PRODUCTION u.setPicture(uploadedPicture.getPath());
+			/*//ONLY ON PRODUCTION
+			try {
+				this.productionFileSaver(encodedName, "pictures", uploadedPicture);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			u.setPicture("http://elasticbeanstalk-eu-west-1-511115514439.s3.amazonaws.com/pictures/" + encodedName);
+			//this.deleteStoredFile(uploadedPicture);
+			//ONLY ON PRODUCTION*/
+			
 			userRepository.save(u);
 			
 			System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
@@ -272,5 +328,82 @@ public class FileController {
 		file.transferTo(uploadedPicture);
 		return "/assets/pictures/" + encodedName;
 	}
+	//ONLY ON DEVELOPMENT
+	
+	/*//ONLY ON PRODUCTION
+	private void productionFileSaver(String keyName, String folderName, File f) throws InterruptedException {
+		String bucketName = this.bucketAWS + "/" + folderName;
+		TransferManager tm = new TransferManager(this.amazonS3);        
+        System.out.println("Hello");
+        // TransferManager processes all transfers asynchronously, 
+        // so this call will return immediately
+        Upload upload = tm.upload(bucketName, keyName, f);
+        System.out.println("Hello2");
+
+        try {
+        	// Or you can block and wait for the upload to finish
+        	upload.waitForCompletion();
+        	System.out.println("Upload complete.");
+        } catch (AmazonClientException amazonClientException) {
+        	System.out.println("Unable to upload file, upload was aborted.");
+        	amazonClientException.printStackTrace();
+        }
+    }
+	
+	private void productionFileDownloader(String fileName, HttpServletResponse response) {
+		String bucketName = this.bucketAWS + "/files";
+        try {
+            System.out.println("Downloading an object");
+            S3Object s3object = this.amazonS3.getObject(new GetObjectRequest(bucketName, fileName));
+            System.out.println("Content-Type: "  + s3object.getObjectMetadata().getContentType());
+            
+            if (s3object != null) {
+    			try {
+    				String fileExt = this.getFileExtension(fileName);
+    				response.setContentType(MimeTypes.getMimeType(fileExt));
+    				InputStream objectData = s3object.getObjectContent();
+    				IOUtils.copy(objectData, response.getOutputStream());
+    				response.flushBuffer();
+    				objectData.close();
+    			} catch (IOException ex) {
+    				throw new RuntimeException("IOError writing file to output stream");
+    			}
+    		}
+            
+        } catch (AmazonServiceException ase) {
+            System.out.println("Caught an AmazonServiceException, which" +
+            		" means your request made it " +
+                    "to Amazon S3, but was rejected with an error response" +
+                    " for some reason.");
+            System.out.println("Error Message:    " + ase.getMessage());
+            System.out.println("HTTP Status Code: " + ase.getStatusCode());
+            System.out.println("AWS Error Code:   " + ase.getErrorCode());
+            System.out.println("Error Type:       " + ase.getErrorType());
+            System.out.println("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException ace) {
+            System.out.println("Caught an AmazonClientException, which means"+
+            		" the client encountered " +
+                    "an internal error while trying to " +
+                    "communicate with S3, " +
+                    "such as not being able to access the network.");
+            System.out.println("Error Message: " + ace.getMessage());
+        }
+    }
+	
+	private void deleteStoredFile(File file){
+		//Deleting stored file...
+		try {
+			Path path = Paths.get(FILES_FOLDER.toString(), file.getName());
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
+		}
+	}
+	//ONLY ON PRODUCTION*/
 
 }

@@ -5,6 +5,10 @@ import { FileUploader }      from 'ng2-file-upload';
 import { AuthenticationService }   from '../../services/authentication.service';
 import { User }                    from '../../classes/user';
 
+//ONLY ON PRODUCTION
+//const URL_PIC_UPLOAD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/picture/';
+
+//ONLY ON DEVELOPMENT
 const URL_PIC_UPLOAD = 'http://localhost:5000/load-files/upload/picture/';
 
 @Component({
