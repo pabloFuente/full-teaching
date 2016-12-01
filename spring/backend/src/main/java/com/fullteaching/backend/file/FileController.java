@@ -250,7 +250,7 @@ public class FileController {
 				e.printStackTrace();
 			} 
 			u.setPicture("http://elasticbeanstalk-eu-west-1-511115514439.s3.amazonaws.com/pictures/" + encodedName);
-			//this.deleteStoredFile(uploadedPicture);
+			this.deleteStoredFile(uploadedPicture);
 			//ONLY ON PRODUCTION*/
 			
 			userRepository.save(u);
