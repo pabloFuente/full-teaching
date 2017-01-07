@@ -14,7 +14,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-//ONLY ON PRODUCTION
+//ONLY ON PRODUCTION 
 
 @SpringBootApplication
 public class Application 
