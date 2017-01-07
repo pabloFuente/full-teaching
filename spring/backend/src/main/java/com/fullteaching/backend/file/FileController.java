@@ -129,7 +129,7 @@ public class FileController {
 				fg = fileGroupRepository.findOne(id_fileGroup);
 				fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
 				fg.updateFileIndexOrder();
-				this.deleteStoredFile(uploadedFile);
+				this.deleteStoredFile(uploadedFile, FILES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
@@ -247,7 +247,7 @@ public class FileController {
 					e.printStackTrace();
 				} 
 				u.setPicture("http://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
-				this.deleteStoredFile(uploadedPicture);
+				this.deleteStoredFile(uploadedPicture, PICTURES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
@@ -392,16 +392,16 @@ public class FileController {
         }
     }
 	
-	private void deleteStoredFile(File file){
-		System.out.println("Deleting stored file");
+	private void deleteStoredFile(File file, Path folder){
+		System.out.println("Deleting stored file: ");
 		//Deleting stored file...
 		try {
-			Path path = Paths.get(FILES_FOLDER.toString(), file.getName());
+			Path path = Paths.get(folder.toString(), file.getName());
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), file.getName()));
 		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		    System.err.format("%s not empty%n", Paths.get(folder.toString(), file.getName()));
 		} catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);
