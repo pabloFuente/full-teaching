@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, animate, transition, style } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Subscription }             from 'rxjs/Subscription';
+import { environment } from '../../../environments/environment';
 
 import { MaterializeAction } from 'angular2-materialize';
 import { FileUploader }      from 'ng2-file-upload';
@@ -25,10 +26,10 @@ import { File }          from '../../classes/file';
 import { User }          from '../../classes/user';
 
 //ONLY ON PRODUCTION
-//const URL_UPLOAD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/course/';
+const URL_UPLOAD_PROD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/course/';
 
 //ONLY ON DEVELOPMENT
-const URL_UPLOAD = 'http://localhost:5000/load-files/upload/course/';
+const URL_UPLOAD_DEV = 'http://localhost:5000/load-files/upload/course/';
 
 @Component({
   selector: 'app-course-details',
@@ -102,7 +103,7 @@ export class CourseDetailsComponent implements OnInit {
   filesEditionIcon: string = "mode_edit";
   attendersEditionIcon: string = "mode_edit";
 
-  public uploader:FileUploader = new FileUploader({url: URL_UPLOAD});
+  public uploader:FileUploader;
   public hasBaseDropZoneOver:boolean = false;
 
   private actions2 = new EventEmitter<string|MaterializeAction>();
@@ -114,6 +115,8 @@ export class CourseDetailsComponent implements OnInit {
   subscription4: Subscription; //Subscription to service 'filesEditionService' for receiving FileGroup and File objects that are being updated
   subscription5: Subscription; //Subscription to Drag and Drop 'drop' event
 
+  private URL_UPLOAD: string;
+
   constructor(
     private courseService: CourseService,
     private forumService: ForumService,
@@ -124,6 +127,17 @@ export class CourseDetailsComponent implements OnInit {
     private courseDetailsModalDataService: CourseDetailsModalDataService,
     private filesEditionService: FilesEditionService,
     private dragulaService: DragulaService) {
+
+    //URL for uploading files changes between development stage and production stage
+    if (environment.production) {
+      console.log("PRODUCTION!");
+      this.URL_UPLOAD = URL_UPLOAD_PROD;
+    } else {
+      console.log("DEVELOPMENT!");
+      this.URL_UPLOAD = URL_UPLOAD_DEV;
+    }
+
+    this.uploader = new FileUploader({url: this.URL_UPLOAD});
 
     //Subscription for receiving POST modal dialog changes
     this.subscription1 = this.courseDetailsModalDataService.postModeAnnounced$.subscribe(
@@ -162,7 +176,7 @@ export class CourseDetailsComponent implements OnInit {
           this.updatedFileGroup = objs[0];
           this.inputFileTitle = this.updatedFileGroup.title;
           this.uploader.destroy();
-          this.uploader = new FileUploader({url: (URL_UPLOAD + this.course.id + "/file-group/" + this.updatedFileGroup.id)});
+          this.uploader = new FileUploader({url: (this.URL_UPLOAD + this.course.id + "/file-group/" + this.updatedFileGroup.id)});
           this.uploader.onCompleteItem = (item:any, response:string, status:number, headers:any)=> {
             console.log("Item uploaded successfully" + response);
             let fg = JSON.parse(response) as FileGroup;

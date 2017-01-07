@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-/*//ONLY ON PRODUCTION
+//ONLY ON PRODUCTION
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -37,7 +37,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import org.springframework.beans.factory.annotation.Value;
-//ONLY ON PRODUCTION*/
+//ONLY ON PRODUCTION
 
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
@@ -63,12 +63,16 @@ public class FileController {
 	@Autowired
 	private UserComponent user;
 	
-	/*//ONLY ON PRODUCTION
+	@Value("${profile_stage}")
+    private String profileStage;
+	
+	//ONLY ON PRODUCTION
 	@Autowired
 	private AmazonS3 amazonS3;
+	
     @Value("${aws_namecard_bucket}")
     private String bucketAWS;
-    //ONLY ON PRODUCTION*/
+    //ONLY ON PRODUCTION
     
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
 	private static final Path PICTURES_FOLDER = Paths.get(System.getProperty("user.dir"), "pictures");
@@ -99,20 +103,14 @@ public class FileController {
 			String name = i.next();
 			System.out.println("X - " + name);
 			MultipartFile file = request.getFile(name);
-			
+		
 			System.out.println("FILE: " + file.getOriginalFilename());
 		
 			if (file.isEmpty()) {
-				
-				System.out.println("EXCEPTION!");
-				
 				throw new RuntimeException("The file is empty");
 			}
 	
 			if (!Files.exists(FILES_FOLDER)) {
-				
-				System.out.println("PATH CREATED");
-				
 				Files.createDirectories(FILES_FOLDER);
 			}
 	
@@ -120,25 +118,26 @@ public class FileController {
 			File uploadedFile = new File(FILES_FOLDER.toFile(), fileName);
 			file.transferTo(uploadedFile);
 			
-			//ONLY ON DEVELOPMENT
-			fg = fileGroupRepository.findOne(id_fileGroup);
-			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
-			fg.updateFileIndexOrder();
-			//ONLY ON DEVELOPMENT
-			
-			/*//ONLY ON PRODUCTION
-			try {
-				this.productionFileSaver(fileName, "files", uploadedFile);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (this.isProductionStage()){
+				//ONLY ON PRODUCTION
+				try {
+					this.productionFileSaver(fileName, "files", uploadedFile);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				fg = fileGroupRepository.findOne(id_fileGroup);
+				fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
+				fg.updateFileIndexOrder();
+				this.deleteStoredFile(uploadedFile);
+				//ONLY ON PRODUCTION
+			} else {
+				//ONLY ON DEVELOPMENT
+				fg = fileGroupRepository.findOne(id_fileGroup);
+				fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
+				fg.updateFileIndexOrder();
+				//ONLY ON DEVELOPMENT
 			}
-			fg = fileGroupRepository.findOne(id_fileGroup);
-			fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
-			fg.updateFileIndexOrder();
-			this.deleteStoredFile(uploadedFile);
-			//ONLY ON PRODUCTION*/
-			
 			System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
 		}
 		
@@ -166,34 +165,35 @@ public class FileController {
 		
 		checkAuthorizationUsers(c, c.getAttenders());
 		
-		
-		//ONLY ON DEVELOPMENT
-		Path file = FILES_FOLDER.resolve(fileName);
-
-		if (Files.exists(file)) {
-			try {
-				String fileExt = this.getFileExtension(fileName);
-				response.setContentType(MimeTypes.getMimeType(fileExt));
-						
-				// get your file as InputStream
-				InputStream is = new FileInputStream(file.toString());
-				// copy it to response's OutputStream
-				IOUtils.copy(is, response.getOutputStream());
-				response.flushBuffer();
-			} catch (IOException ex) {
-				throw new RuntimeException("IOError writing file to output stream");
-			}
-			
+		if (this.isProductionStage()){
+			//ONLY ON PRODUCTION
+			System.out.println("Production DOWNLOAD!");
+			this.productionFileDownloader(fileName, response);
+			//ONLY ON PRODUCTION
 		} else {
-			response.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
+			//ONLY ON DEVELOPMENT
+			System.out.println("Development DOWNLOAD!");
+			Path file = FILES_FOLDER.resolve(fileName);
+
+			if (Files.exists(file)) {
+				try {
+					String fileExt = this.getFileExtension(fileName);
+					response.setContentType(MimeTypes.getMimeType(fileExt));
+							
+					// get your file as InputStream
+					InputStream is = new FileInputStream(file.toString());
+					// copy it to response's OutputStream
+					IOUtils.copy(is, response.getOutputStream());
+					response.flushBuffer();
+				} catch (IOException ex) {
+					throw new RuntimeException("IOError writing file to output stream");
+				}
+				
+			} else {
+				response.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
+			}
+			//ONLY ON DEVELOPMENT
 		}
-		//ONLY ON DEVELOPMENT
-		
-		
-		/*//ONLY ON PRODUCTION
-		this.productionFileDownloader(fileName, response);
-		//ONLY ON PRODUCTION*/
-		
 	}
 	
 	
@@ -238,21 +238,23 @@ public class FileController {
 			File uploadedPicture = new File(PICTURES_FOLDER.toFile(), encodedName);
 			file.transferTo(uploadedPicture);
 			
-			//ONLY ON DEVELOPMENT
-			u.setPicture(this.developingImageSaver(file));
-			//ONLY ON DEVELOPMENT
-			
-			/*//ONLY ON PRODUCTION
-			try {
-				this.productionFileSaver(encodedName, "pictures", uploadedPicture);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			u.setPicture("http://elasticbeanstalk-eu-west-1-511115514439.s3.amazonaws.com/pictures/" + encodedName);
-			this.deleteStoredFile(uploadedPicture);
-			//ONLY ON PRODUCTION*/
-			
+			if (this.isProductionStage()){
+				//ONLY ON PRODUCTION
+				try {
+					this.productionFileSaver(encodedName, "pictures", uploadedPicture);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				u.setPicture("http://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
+				this.deleteStoredFile(uploadedPicture);
+				//ONLY ON PRODUCTION
+			} else {
+				//ONLY ON DEVELOPMENT
+				u.setPicture(this.developingImageSaver(file));
+				//ONLY ON DEVELOPMENT
+			}
+
 			userRepository.save(u);
 			
 			System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
@@ -330,7 +332,7 @@ public class FileController {
 	}
 	//ONLY ON DEVELOPMENT
 	
-	/*//ONLY ON PRODUCTION
+	//ONLY ON PRODUCTION
 	private void productionFileSaver(String keyName, String folderName, File f) throws InterruptedException {
 		String bucketName = this.bucketAWS + "/" + folderName;
 		TransferManager tm = new TransferManager(this.amazonS3);        
@@ -391,6 +393,7 @@ public class FileController {
     }
 	
 	private void deleteStoredFile(File file){
+		System.out.println("Deleting stored file");
 		//Deleting stored file...
 		try {
 			Path path = Paths.get(FILES_FOLDER.toString(), file.getName());
@@ -404,6 +407,10 @@ public class FileController {
 		    System.err.println(x);
 		}
 	}
-	//ONLY ON PRODUCTION*/
+	
+	private boolean isProductionStage(){
+		return this.profileStage.equals("prod");
+	}
+	//ONLY ON PRODUCTION
 
 }

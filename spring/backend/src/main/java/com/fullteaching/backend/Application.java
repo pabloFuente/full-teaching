@@ -3,7 +3,7 @@ package com.fullteaching.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/*//ONLY ON PRODUCTION
+//ONLY ON PRODUCTION
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-//ONLY ON PRODUCTION*/
+//ONLY ON PRODUCTION
 
 @SpringBootApplication
 public class Application 
@@ -24,7 +24,7 @@ public class Application
     	SpringApplication.run(Application.class, args);
     }
     
-    /*//ONLY ON PRODUCTION
+    //ONLY ON PRODUCTION
     @Value("${aws_access_key_id}")
     private String awsId;
  	
@@ -33,11 +33,11 @@ public class Application
     
     @Bean
     public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
- 	PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
- 	ppc.setLocations(new Resource[] {
- 		new ClassPathResource("/amazon.properties")
-         });
- 	return ppc;
+	 	PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
+	 	ppc.setLocations(new Resource[] {
+	 		new ClassPathResource("/amazon.properties")
+	         });
+	 	return ppc;
     }
     
     @Bean
@@ -49,6 +49,6 @@ public class Application
     public AmazonS3 s3client() {
     	return new AmazonS3Client(credential()); 
     }
-    //ONLY ON PRODUCTION*/
+    //ONLY ON PRODUCTION
     
 }

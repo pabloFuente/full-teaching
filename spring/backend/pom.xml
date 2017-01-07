@@ -36,7 +36,7 @@
             	<dependency>
                 	<groupId>org.springframework</groupId>
                 	<artifactId>springloaded</artifactId>
-                	<version>1.2.6</version>
+                	<version>1.2.6.RELEASE</version>
             	</dependency>
         	</dependencies>
         	<!-- ONLY ON DEVELOPMENT -->
@@ -108,11 +108,11 @@
 	</dependency>
 	
 	<!--ONLY ON PRODUCTION-->
-	<!--<dependency>
+	<dependency>
 	    <groupId>com.amazonaws</groupId>
 	    <artifactId>aws-java-sdk</artifactId>
 	    <version>1.11.60</version>
-	</dependency>-->
+	</dependency>
 	<!--ONLY ON PRODUCTION-->
 		 
   </dependencies>
