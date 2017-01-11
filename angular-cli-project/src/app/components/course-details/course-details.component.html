@@ -280,7 +280,7 @@
               </div>
               <ul>
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
-                  <li class="session-data">
+                  <li (click)="goToSessionVideo(session.id)" class="session-data">
                     <div class="row row-no-margin">
                       <div class="col l7 m6 s6">
                         <div class="session-title">{{session.title}}</div>

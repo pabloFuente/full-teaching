@@ -5,6 +5,7 @@ import { PresentationComponent }    from './components/presentation/presentation
 import { DashboardComponent }       from './components/dashboard/dashboard.component';
 import { CourseDetailsComponent }   from './components/course-details/course-details.component';
 import { SettingsComponent }        from './components/settings/settings.component';
+import { VideoSessionComponent }    from './components/video-session/video-session.component';
 import { AuthGuard }                from './auth.guard';
 
 const appRoutes: Routes = [
@@ -26,6 +27,11 @@ const appRoutes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'session/:id',
+    component: VideoSessionComponent,
     canActivate: [AuthGuard]
   },
 ];

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, animate, transition, style } from '@angular/core';
-import { ActivatedRoute, Params }   from '@angular/router';
+import { ActivatedRoute, Router, Params }   from '@angular/router';
 import { Subscription }             from 'rxjs/Subscription';
 import { environment } from '../../../environments/environment';
 
@@ -123,6 +123,7 @@ export class CourseDetailsComponent implements OnInit {
     private fileService: FileService,
     private sessionService: SessionService,
     private authenticationService: AuthenticationService,
+    private router: Router,
     private route: ActivatedRoute,
     private courseDetailsModalDataService: CourseDetailsModalDataService,
     private filesEditionService: FilesEditionService,
@@ -224,6 +225,10 @@ export class CourseDetailsComponent implements OnInit {
     this.subscription3.unsubscribe();
     this.subscription4.unsubscribe();
     this.subscription5.unsubscribe();
+  }
+
+  goToSessionVideo(sessionId: number){
+    this.router.navigate(['/session', sessionId]);
   }
 
   updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup) {

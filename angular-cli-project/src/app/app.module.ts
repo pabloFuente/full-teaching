@@ -13,6 +13,7 @@ import { MaterialModule } from '@angular/material';
 
 import { AppComponent }           from './app.component';
 import { NavbarComponent }        from './components/navbar/navbar.component';
+import { FooterComponent }        from './components/footer/footer.component';
 import { LoginModalComponent }    from './components/login-modal/login-modal.component';
 import { PresentationComponent }  from './components/presentation/presentation.component';
 import { DashboardComponent }     from './components/dashboard/dashboard.component';
@@ -21,6 +22,7 @@ import { SettingsComponent }      from './components/settings/settings.component
 import { ErrorMessageComponent }  from './components/error-message/error-message.component';
 import { CommentComponent }       from './components/comment/comment.component';
 import { FileGroupComponent }     from './components/file-group/file-group.component';
+import { VideoSessionComponent }  from './components/video-session/video-session.component';
 
 import { AuthenticationService }  from './services/authentication.service';
 import { CourseService }          from './services/course.service';
@@ -55,6 +57,7 @@ import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
     DashboardComponent,
     CourseDetailsComponent,
     NavbarComponent,
+    FooterComponent,
     LoginModalComponent,
     SettingsComponent,
     ErrorMessageComponent,
@@ -64,6 +67,7 @@ import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
     TimeAgoPipe,
     FileSelectDirective,
     FileDropDirective,
+    VideoSessionComponent,
   ],
   providers: [
     AuthenticationService,
