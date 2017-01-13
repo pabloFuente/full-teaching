@@ -120,7 +120,7 @@ export class LoginModalComponent {
 
     else {
 
-      let regex = new RegExp('^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})$');
+      let regex = new RegExp(this.CONSTANTS.PASS_REGEX);
 
       if (!(this.password.match(regex))){
         this.errorTitle = 'Your password does not have a valid format!';

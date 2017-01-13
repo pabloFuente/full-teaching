@@ -25,12 +25,6 @@ import { FileGroup }     from '../../classes/file-group';
 import { File }          from '../../classes/file';
 import { User }          from '../../classes/user';
 
-//ONLY ON PRODUCTION
-const URL_UPLOAD_PROD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/course/';
-
-//ONLY ON DEVELOPMENT
-const URL_UPLOAD_DEV = 'http://localhost:5000/load-files/upload/course/';
-
 @Component({
   selector: 'app-course-details',
   providers: [FilesEditionService],
@@ -130,13 +124,8 @@ export class CourseDetailsComponent implements OnInit {
     private dragulaService: DragulaService) {
 
     //URL for uploading files changes between development stage and production stage
-    if (environment.production) {
-      console.log("PRODUCTION!");
-      this.URL_UPLOAD = URL_UPLOAD_PROD;
-    } else {
-      console.log("DEVELOPMENT!");
-      this.URL_UPLOAD = URL_UPLOAD_DEV;
-    }
+    this.URL_UPLOAD = environment.URL_UPLOAD;
+    console.log(this.URL_UPLOAD);
 
     this.uploader = new FileUploader({url: this.URL_UPLOAD});
 

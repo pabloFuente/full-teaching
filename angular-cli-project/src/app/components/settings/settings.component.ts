@@ -8,12 +8,6 @@ import { UserService }             from '../../services/user.service';
 import { User }                    from '../../classes/user';
 import { Constants }               from '../../constants';
 
-//ONLY ON PRODUCTION
-const URL_PIC_UPLOAD_PROD = 'http://full-teaching-prod.eu-west-1.elasticbeanstalk.com/load-files/upload/picture/';
-
-//ONLY ON DEVELOPMENT
-const URL_PIC_UPLOAD_DEV = 'http://localhost:5000/load-files/upload/picture/';
-
 declare var Materialize : any;
 
 @Component({
@@ -49,13 +43,8 @@ export class SettingsComponent implements OnInit {
     private CONSTANTS: Constants) {
 
     //URL for uploading files changes between development stage and production stage
-    if (environment.production) {
-      console.log("SETTINGS PRODUCTION!");
-      this.URL_UPLOAD = URL_PIC_UPLOAD_PROD;
-    } else {
-      console.log("SETTINGS DEVELOPMENT!");
-      this.URL_UPLOAD = URL_PIC_UPLOAD_DEV;
-    }
+    this.URL_UPLOAD = environment.URL_PIC_UPLOAD;
+    console.log(this.URL_UPLOAD);
   }
 
   ngOnInit() {
@@ -86,7 +75,7 @@ export class SettingsComponent implements OnInit {
     }
     else{
 
-      let regex = new RegExp('^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})$');
+      let regex = new RegExp(this.CONSTANTS.PASS_REGEX);
 
       //The new password does not have a valid format
       if (!(this.inputNewPassword.match(regex))){
