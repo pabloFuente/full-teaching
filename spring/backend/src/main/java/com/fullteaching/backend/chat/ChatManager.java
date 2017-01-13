@@ -45,8 +45,11 @@ public class ChatManager {
 
 	public Chat newChat(String name, long timeout, TimeUnit unit) throws InterruptedException,
 			TimeoutException {
+		
+		System.out.println("NEW CHAT!");
 
 		if (!numChatsSem.tryAcquire(timeout, unit)) {
+			System.out.println("No capacity");
 			throw new TimeoutException("There is no enought capacity to create a new chat");
 		}
 		

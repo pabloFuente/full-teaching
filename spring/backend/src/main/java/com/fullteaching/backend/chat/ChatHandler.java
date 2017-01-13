@@ -67,17 +67,23 @@ public class ChatHandler extends TextWebSocketHandler {
 	}
 
 	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
-			throws Exception {
-
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		
+		if (session.isOpen()){
+			System.out.println("Session OPENED");
+		} else{
+			System.out.println("Session CLOSED");
+		}
+		
 		ChatUser user = (ChatUser) session.getAttributes().get("user");
 		Chat chat = (Chat) session.getAttributes().get("chat");
 		
-		chat.removeUser(user);
-		
-		if(chat.getUsers().isEmpty()){
-			System.out.println("Last user left the room. Closing chat " + chat.getName());
-			chat.close();
+		if(chat != null) {
+			chat.removeUser(user);
+			if(chat.getUsers().isEmpty()){
+				System.out.println("Last user left the room. Closing chat " + chat.getName());
+				chat.close();
+			}
 		}
 	}
 }

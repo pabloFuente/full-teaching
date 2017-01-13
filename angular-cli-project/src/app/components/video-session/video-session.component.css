@@ -23,20 +23,13 @@ video {
   padding-bottom: 7rem;
   margin-right: 10px;
   margin-left: 10px;
-  background: #CCCCCC;
-  border: 1px solid #999999;
 }
 
 .chat_wrapper .message_box {
   height: 100%;
-  background: #FFFFFF;
+  background: #f1f1f1;
   overflow: auto;
   padding: 10px;
-  border: 1px solid #999999;
-}
-
-.chat_wrapper .panel input {
-  padding: 2px 2px 2px 5px;
 }
 
 .system_msg {

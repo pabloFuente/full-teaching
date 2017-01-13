@@ -23,7 +23,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 
 @SpringBootApplication
 @EnableWebSocket
-public class Application  implements WebSocketConfigurer 
+public class Application implements WebSocketConfigurer 
 {
     public static void main( String[] args )
     {
