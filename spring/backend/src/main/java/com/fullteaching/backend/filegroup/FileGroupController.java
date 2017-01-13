@@ -93,45 +93,6 @@ public class FileGroupController {
 	}
 	
 	
-	/*@RequestMapping(value = "/file-group/{fileGroupId}/course/{courseDetailsId}", method = RequestMethod.POST)
-	public ResponseEntity<FileGroup> newFile(
-			@RequestBody File file, 
-			@PathVariable(value="fileGroupId") String fileGroupId,
-			@PathVariable(value="courseDetailsId") String courseDetailsId) {
-		
-		checkBackendLogged();
-		
-		long id_fileGroup = -1;
-		long id_courseDetails = -1;
-		try {
-			id_fileGroup = Long.parseLong(fileGroupId);
-			id_courseDetails = Long.parseLong(courseDetailsId);
-		} catch(NumberFormatException e){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		CourseDetails cd = courseDetailsRepository.findOne(id_courseDetails);
-		
-		checkAuthorization(cd, cd.getCourse().getTeacher());
-		
-		FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
-		
-		if (fg != null){
-			
-			fg.getFiles().add(file);
-			fg.updateFileIndexOrder();
-			
-			fileGroupRepository.save(fg);
-			
-			//Returning the root FileGroup of the added file
-			return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.CREATED);
-		}
-		else{
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}*/
-	
-	
 	@RequestMapping(value = "/edit/file-group/course/{courseId}", method = RequestMethod.PUT)
 	public ResponseEntity<FileGroup> modifyFileGroup(@RequestBody FileGroup fileGroup, @PathVariable(value="courseId") String courseId) {
 		this.checkBackendLogged();

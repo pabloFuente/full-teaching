@@ -23,6 +23,18 @@ export class UserService {
     .catch(error => this.handleError(error));
   }
 
+  changePassword(oldPassword: string, newPassword: string){
+    let body = JSON.stringify([oldPassword, newPassword]);
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    });
+    let options = new RequestOptions({ headers });
+    return this.http.put(this.url + "/changePassword", body, options)
+    .map(response => response.json() as boolean)
+    .catch(error => this.handleError(error));
+  }
+
   // private helper methods
 
  private jwt() {

@@ -34,7 +34,6 @@ export class LoginModalComponent {
   private errorTitle: string;
   private errorContent: string;
   private customClass: string;
-
   private toastMessage: string;
 
 

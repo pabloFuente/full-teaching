@@ -31,17 +31,6 @@ export class FileService {
       .catch(error => this.handleError(error));
   }
 
-  /*//POST new File. Requires the File, the FileGroup id that owns it and their courseDetails id
-  //On success returns the root FileGroup that owns the created file or the descendant FileGroup that owns it
-  public newFile(file: File, fileGroupId: number, courseDetailsId: number){
-    let body = JSON.stringify(file);
-    let headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-    let options = new RequestOptions({ headers });
-    return this.http.post(this.url + "/file-group/" + fileGroupId + "/course/" + courseDetailsId, body, options)
-      .map(response => response.json() as FileGroup)
-      .catch(error => this.handleError(error));
-  }*/
-
   //DELETE existing FileGroup. Requires the fileGroup id and its course's id
   //On succes returns the deleted FileGroup
   public deleteFileGroup(fileGroupId: number, courseId: number) {
