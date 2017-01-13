@@ -2,11 +2,16 @@ package com.fullteaching.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
+import com.fullteaching.backend.chat.ChatHandler;
 
 //ONLY ON PRODUCTION
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -17,12 +22,23 @@ import com.amazonaws.services.s3.AmazonS3Client;
 //ONLY ON PRODUCTION 
 
 @SpringBootApplication
-public class Application 
+@EnableWebSocket
+public class Application  implements WebSocketConfigurer 
 {
     public static void main( String[] args )
     {
     	SpringApplication.run(Application.class, args);
     }
+    
+	@Bean
+	public ChatHandler chatHandler() {
+		return new ChatHandler();
+	}
+
+	@Override
+	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+		registry.addHandler(chatHandler(), "/chat");		
+	}
     
     //ONLY ON PRODUCTION
     @Value("${aws_access_key_id}")

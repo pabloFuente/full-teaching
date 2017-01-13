@@ -1,0 +1,107 @@
+package com.fullteaching.backend.chat;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
+
+public class ChatManager {
+
+	private static final int STATISTICS_INTERVAL = 10;
+
+	private ConcurrentMap<String, Chat> chats = new ConcurrentHashMap<>();
+	private ConcurrentMap<String, ChatUser> users = new ConcurrentHashMap<>();
+
+	private ExecutorService executor = Executors.newFixedThreadPool(20);
+
+	private ScheduledExecutorService scheduledExecutor = Executors.newScheduledThreadPool(1);
+
+	private Semaphore numChatsSem;
+
+	public ChatManager(int maxChats) {
+		this(maxChats, new StatisticCalculator());
+	}
+
+	public ChatManager(int maxChats, StatisticCalculator calculator) {
+		numChatsSem = new Semaphore(maxChats);
+		scheduledExecutor.scheduleAtFixedRate(() -> calculator.calculateStatistics(this),
+				STATISTICS_INTERVAL, STATISTICS_INTERVAL, TimeUnit.SECONDS);
+	}
+
+	public void newUser(ChatUser user) {
+		ChatUser oldUser = users.putIfAbsent(user.getName(), user);
+		if (oldUser != null) {
+			throw new IllegalArgumentException("There is already a user with name \'"
+					+ user.getName() + "\'");
+		}
+	}
+
+	public Chat newChat(String name, long timeout, TimeUnit unit) throws InterruptedException,
+			TimeoutException {
+
+		if (!numChatsSem.tryAcquire(timeout, unit)) {
+			throw new TimeoutException("There is no enought capacity to create a new chat");
+		}
+		
+		Chat oldChat = chats.computeIfAbsent(name, n -> new Chat(this, name, executor));
+		if (oldChat != null) {
+			return oldChat;
+		}
+
+		Chat newChat = chats.get(name);
+		forEachUser(u -> u.newChat(newChat));
+
+		return newChat;
+	}
+
+	public void closeChat(Chat chat) {
+		Chat removedChat = chats.remove(chat.getName());
+		if (removedChat == null) {
+			throw new IllegalArgumentException("Trying to remove an unknown chat with name \'"
+					+ chat.getName() + "\'");
+		}
+
+		forEachUser(u -> u.chatClosed(removedChat));
+
+		numChatsSem.release();
+	}
+
+	public Collection<Chat> getChats() {
+		return Collections.unmodifiableCollection(chats.values());
+	}
+
+	public Chat getChat(String chatName) {
+		return chats.get(chatName);
+	}
+
+	public Collection<ChatUser> getUsers() {
+		return Collections.unmodifiableCollection(users.values());
+	}
+
+	public ChatUser getUser(String userName) {
+		return users.get(userName);
+	}
+
+	private void forEachUser(Consumer<ChatUser> userAction) {
+		users.values().stream().forEach(u -> {
+			executor.submit(() -> {
+				synchronized (u) {
+					userAction.accept(u);
+				}
+			});
+		});
+	}
+
+	public void close() {
+		this.executor.shutdown();
+		this.scheduledExecutor.shutdown();
+	}
+
+}

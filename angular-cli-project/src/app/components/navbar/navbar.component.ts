@@ -26,7 +26,7 @@ export class NavbarComponent {
 
   logout(){
     this.authenticationService.logOut().subscribe(
-  		response => {},
+  		response => { $("div.drag-target").remove(); }, //This deletes the draggable element for the side menu (external to the menu itself in the DOM)
   		error => console.log("Error when trying to log out: " + error)
   	);
   }

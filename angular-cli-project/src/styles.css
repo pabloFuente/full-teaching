@@ -40,6 +40,10 @@ i {
   user-select: none;
 }
 
+#sidenav-overlay{
+  display: none;
+}
+
 .app-title-header {
   font-family: 'Molle', cursive;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.71);
@@ -182,6 +186,7 @@ i {
   }
 
   #sidenav-overlay{
+    display: block !important;
     z-index: 995;
   }
 

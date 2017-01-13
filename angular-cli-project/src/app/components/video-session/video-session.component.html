@@ -1,3 +1,20 @@
-<p>
-  video-lesson works!
-</p>
+<div>
+
+  <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i class="material-icons">menu</i></a>
+
+  <video poster="http://www.drodd.com/images14/black16.jpg" controls muted autoplay>
+    <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4">
+  </video>
+
+  <ul id="slide-out" class="side-nav">
+    <div class="chat_wrapper">
+      <div class="message_box" id="message_box"></div>
+      <div class="panel">
+        <input type="text" name="name" id="name" placeholder="Your Name" maxlength="10" style="width: 20%" />
+        <input type="text" name="message" id="message" placeholder="Message" maxlength="80" style="width: 60%" />
+        <button id="send-btn" (click)="sendMessage()">Send</button>
+      </div>
+    </div>
+  </ul>
+
+</div>
