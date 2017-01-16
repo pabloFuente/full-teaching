@@ -44,7 +44,6 @@ export class SettingsComponent implements OnInit {
 
     //URL for uploading files changes between development stage and production stage
     this.URL_UPLOAD = environment.URL_PIC_UPLOAD;
-    console.log(this.URL_UPLOAD);
   }
 
   ngOnInit() {

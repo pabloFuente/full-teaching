@@ -7,10 +7,10 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.coursedetails.CourseDetails;
@@ -46,6 +50,17 @@ public class FileGroupController {
 	
 	@Autowired
 	private UserComponent user;
+	
+	@Value("${profile_stage}")
+    private String profileStage;
+	
+	//ONLY ON PRODUCTION
+	@Autowired
+	private AmazonS3 amazonS3;
+	
+    @Value("${aws_namecard_bucket}")
+    private String bucketAWS;
+    //ONLY ON PRODUCTION
 	
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
 	
@@ -243,11 +258,20 @@ public class FileGroupController {
 		
 		if (fg != null){
 			
-			//Removing all stored files of the tree structure...
-			for (File f : fg.getFiles()){
-				this.deleteStoredFile(f);
+			if (this.isProductionStage()){
+				//Removing all the S3 stored files of the tree structure...
+				for (File f : fg.getFiles()){
+					this.productionFileDeletion(this.getFileNameFromURL(f.getLink()), "/files");
+				}
+				this.recursiveS3StoredFileDeletion(fg.getFileGroups());
 			}
-			this.recursiveStoredFileDeletion(fg.getFileGroups());
+			else {
+				//Removing all the locally stored files of the tree structure...
+				for (File f : fg.getFiles()){
+					this.deleteStoredFile(f);
+				}
+				this.recursiveLocallyStoredFileDeletion(fg.getFileGroups());
+			}
 			
 			//It is necessary to remove the FileGroup from the CourseDetails that owns it
 			CourseDetails cd = c.getCourseDetails();
@@ -299,14 +323,24 @@ public class FileGroupController {
 		    }
 			if (file != null){
 				
-				//Deleting stored file...
-				this.deleteStoredFile(file);
+				if (this.isProductionStage()){
+					//ONLY ON PRODUCTION
+					//Deleting S3 stored file...
+					this.productionFileDeletion(this.getFileNameFromURL(file.getLink()), "/files");
+					//ONLY ON PRODUCTION
+				} else {
+					//ONLY ON DEVELOPMENT
+					//Deleting locally stored file...
+					this.deleteStoredFile(file);
+					//ONLY ON DEVELOPMENT
+				}
 				
 				fg.getFiles().remove(file);
 				fg.updateFileIndexOrder();
 				
 				fileGroupRepository.save(fg);
 				return new ResponseEntity<>(file, HttpStatus.OK);
+				
 			}else{
 				//The file to delete does not exist or does not have a fileGroup parent
 				fileRepository.delete(id_file);
@@ -353,13 +387,26 @@ public class FileGroupController {
 	
 	
 	//Delets all the real stored files given a list of FileGroups
-	private void recursiveStoredFileDeletion(List<FileGroup> fileGroup){
+	private void recursiveLocallyStoredFileDeletion(List<FileGroup> fileGroup){
 		if (fileGroup != null){
 			for (FileGroup fg : fileGroup){
 				for (File f: fg.getFiles()){
 					this.deleteStoredFile(f);
 				}
-				this.recursiveStoredFileDeletion(fg.getFileGroups());
+				this.recursiveLocallyStoredFileDeletion(fg.getFileGroups());
+			}
+		}
+		return;
+	}
+	
+	//Delets all the real stored files given a list of FileGroups
+	private void recursiveS3StoredFileDeletion(List<FileGroup> fileGroup){
+		if (fileGroup != null){
+			for (FileGroup fg : fileGroup){
+				for (File f: fg.getFiles()){
+					this.productionFileDeletion(this.getFileNameFromURL(f.getLink()), "/files");
+				}
+				this.recursiveS3StoredFileDeletion(fg.getFileGroups());
 			}
 		}
 		return;
@@ -378,6 +425,33 @@ public class FileGroupController {
 		    // File permission problems are caught here.
 		    System.err.println(x);
 		}
+	}
+	
+	//ONLY ON PRODUCTION
+	private void productionFileDeletion (String fileName, String s3Folder){
+		String bucketName = this.bucketAWS + s3Folder;
+        try {
+        	this.amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        } catch (AmazonServiceException ase) {
+            System.out.println("Caught an AmazonServiceException.");
+            System.out.println("Error Message:    " + ase.getMessage());
+            System.out.println("HTTP Status Code: " + ase.getStatusCode());
+            System.out.println("AWS Error Code:   " + ase.getErrorCode());
+            System.out.println("Error Type:       " + ase.getErrorType());
+            System.out.println("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException ace) {
+            System.out.println("Caught an AmazonClientException.");
+            System.out.println("Error Message: " + ace.getMessage());
+        }
+	}
+	
+	private String getFileNameFromURL(String url){
+		return (url.substring(url.lastIndexOf('/') + 1));
+	}
+	//ONLY ON PRODUCTION
+	
+	private boolean isProductionStage(){
+		return this.profileStage.equals("prod");
 	}
 
 }

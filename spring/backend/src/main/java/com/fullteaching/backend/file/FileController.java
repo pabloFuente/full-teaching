@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.transfer.TransferManager;
@@ -127,9 +128,9 @@ public class FileController {
 					e.printStackTrace();
 				}
 				fg = fileGroupRepository.findOne(id_fileGroup);
-				fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
+				fg.getFiles().add(new com.fullteaching.backend.file.File(1, fileName, "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
 				fg.updateFileIndexOrder();
-				this.deleteStoredFile(uploadedFile, FILES_FOLDER);
+				this.deleteLocalFile(uploadedFile, FILES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
@@ -245,9 +246,10 @@ public class FileController {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
+				}
+				this.deleteLocalFile(uploadedPicture, PICTURES_FOLDER);
+				this.productionFileDeletion(this.getFileNameFromURL(u.getPicture()), "/pictures");
 				u.setPicture("http://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
-				this.deleteStoredFile(uploadedPicture, PICTURES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
@@ -336,16 +338,12 @@ public class FileController {
 	private void productionFileSaver(String keyName, String folderName, File f) throws InterruptedException {
 		String bucketName = this.bucketAWS + "/" + folderName;
 		TransferManager tm = new TransferManager(this.amazonS3);        
-        System.out.println("Hello");
-        // TransferManager processes all transfers asynchronously, 
-        // so this call will return immediately
+        // TransferManager processes all transfers asynchronously, so this call will return immediately
         Upload upload = tm.upload(bucketName, keyName, f);
-        System.out.println("Hello2");
-
         try {
         	// Or you can block and wait for the upload to finish
         	upload.waitForCompletion();
-        	System.out.println("Upload complete.");
+        	System.out.println("Upload completed.");
         } catch (AmazonClientException amazonClientException) {
         	System.out.println("Unable to upload file, upload was aborted.");
         	amazonClientException.printStackTrace();
@@ -392,8 +390,25 @@ public class FileController {
         }
     }
 	
-	private void deleteStoredFile(File file, Path folder){
-		System.out.println("Deleting stored file: ");
+	private void productionFileDeletion (String fileName, String s3Folder){
+		String bucketName = this.bucketAWS + s3Folder;
+        try {
+        	this.amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        } catch (AmazonServiceException ase) {
+            System.out.println("Caught an AmazonServiceException.");
+            System.out.println("Error Message:    " + ase.getMessage());
+            System.out.println("HTTP Status Code: " + ase.getStatusCode());
+            System.out.println("AWS Error Code:   " + ase.getErrorCode());
+            System.out.println("Error Type:       " + ase.getErrorType());
+            System.out.println("Request ID:       " + ase.getRequestId());
+        } catch (AmazonClientException ace) {
+            System.out.println("Caught an AmazonClientException.");
+            System.out.println("Error Message: " + ace.getMessage());
+        }
+	}
+	
+	private void deleteLocalFile(File file, Path folder){
+		System.out.println("Deleting stored file: " + Paths.get(folder.toString(), file.getName()));
 		//Deleting stored file...
 		try {
 			Path path = Paths.get(folder.toString(), file.getName());
@@ -408,9 +423,13 @@ public class FileController {
 		}
 	}
 	
+	private String getFileNameFromURL(String url){
+		return (url.substring(url.lastIndexOf('/') + 1));
+	}
+	//ONLY ON PRODUCTION
+	
 	private boolean isProductionStage(){
 		return this.profileStage.equals("prod");
 	}
-	//ONLY ON PRODUCTION
 
 }

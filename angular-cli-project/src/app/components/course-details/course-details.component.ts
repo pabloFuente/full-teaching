@@ -125,7 +125,6 @@ export class CourseDetailsComponent implements OnInit {
 
     //URL for uploading files changes between development stage and production stage
     this.URL_UPLOAD = environment.URL_UPLOAD;
-    console.log(this.URL_UPLOAD);
 
     this.uploader = new FileUploader({url: this.URL_UPLOAD});
 
