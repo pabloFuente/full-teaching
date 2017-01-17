@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { MaterializeAction } from 'angular2-materialize';
 import { FileUploader }      from 'ng2-file-upload';
 import { DragulaService }    from 'ng2-dragula/ng2-dragula';
+import { EditorModule }      from 'primeng/components/editor/editor';
 
 import { CommentComponent } from '../comment/comment.component';
 
@@ -46,24 +47,28 @@ import { User }          from '../../classes/user';
 export class CourseDetailsComponent implements OnInit {
 
   course: Course;
-
   selectedEntry: Entry;
+
+  updatedFileGroup: FileGroup;
+  updatedFile: File;
 
   fadeAnim = 'commentsHidden';
 
   //POST MODAL
-  inputTitle: string;
-  inputComment: string;
-  inputDate: Date;
-  inputTime: string;
-  //postModalMode: 0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file
-  postModalMode: number = 3;
+  postModalMode: number = 3; //0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file
   postModalTitle: string = "New session";
   postModalEntry: Entry;
   postModalCommentReplay: Comment;
   postModalFileGroup: FileGroup;
+  inputTitle: string;
+  inputComment: string;
+  inputDate: Date;
+  inputTime: string;
 
   //PUT-DELETE MODAL
+  putdeleteModalMode: number = 0; //0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file | 4 -> Add attenders
+  putdeleteModalTitle: string = "Modify session";
+    //Sessions
   inputSessionTitle: string;
   inputSessionDescription: string;
   inputSessionDate: Date;
@@ -71,31 +76,34 @@ export class CourseDetailsComponent implements OnInit {
   updatedSession: Session;
   updatedSessionDate: string;
   allowSessionDeletion: boolean = false;
-
+    //Forum
   allowForumEdition: boolean = false;
-
-  inputFileTitle: string;
-  updatedFileGroup: FileGroup;
-  updatedFile: File;
-  allowFilesEdition: boolean = false;
   checkboxForumEdition: string;
-  //putdeleteModalMode: 0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file | 4 -> Add attenders
-  putdeleteModalMode: number = 0;
-  putdeleteModalTitle: string = "Modify session";
-
-  allowAttendersEdition: boolean = false;
-
+    //Files
+  inputFileTitle: string;
+    //Attenders
   inputAttenderSimple: string;
   inputAttenderMultiple: string;
   inputAttenderSeparator: string = "";
   attenderTabSelected: number = 0;
 
+  //COURSE INFO TAB
+  welcomeText: string;
+  welcomeTextEdition: boolean = false;
+  welcomeTextPreview: boolean = false;
+  previewButton: string = 'preview';
+
+  //FILES TAB
+  allowFilesEdition: boolean = false;
+  filesEditionIcon: string = "mode_edit";
+
+  //ATTENDERS TAB
+  allowAttendersEdition: boolean = false;
   addAttendersError: boolean = false;
   attErrorTitle: string;
   attErrorContent: string;
-
-  filesEditionIcon: string = "mode_edit";
   attendersEditionIcon: string = "mode_edit";
+
 
   public uploader:FileUploader;
   public hasBaseDropZoneOver:boolean = false;
@@ -202,6 +210,7 @@ export class CourseDetailsComponent implements OnInit {
           this.selectedEntry = this.course.courseDetails.forum.entries[0]; //selectedEntry default to first entry
           if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]); //updatedSession default to first session
           this.updateCheckboxForumEdition(this.course.courseDetails.forum.activated);
+          this.welcomeText = this.course.courseDetails.info;
         },
         error => console.log(error));
     });
@@ -556,6 +565,30 @@ export class CourseDetailsComponent implements OnInit {
         if (this.course.attenders.length <= 1) this.changeModeAttenders(); //If there are no attenders, mode edit is closed
       },
       error => console.log(error));
+  }
+
+  //Updates the course info
+  updateCourseInfo(){
+    let c: Course = new Course(this.course.title, this.course.image, this.course.courseDetails);
+    c.courseDetails.info = this.welcomeText;
+    c.id = this.course.id;
+    console.log(c);
+    this.courseService.editCourse(c).subscribe(
+      response => {
+        console.log("Course info updated: ");
+        //Only on succesful put we locally update the modified course
+        this.course = response;
+        this.welcomeText = this.course.courseDetails.info;
+      },
+      error => console.log(error)
+    )
+  }
+
+  //Closes the course info editing mode
+  closeUpdateCourseInfo(){
+    this.welcomeTextEdition = false;
+    this.welcomeTextPreview = false;
+    this.previewButton = 'preview';
   }
 
 

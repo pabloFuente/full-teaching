@@ -227,6 +227,11 @@ i {
   .file-drop-zone {
     display: none !important;
   }
+
+  .ql-editor-custom img{
+    width: 100%;
+    height: auto;
+  }
 }
 /*End mobile phones*/
 
@@ -240,7 +245,7 @@ i {
 }
 
 div#tabs-course-details .md-tab-label {
-  min-width: 25% !important;
+  min-width: 20% !important;
   font-weight: normal !important;
 }
 
@@ -293,9 +298,15 @@ div.drag-target {
 }
 /*End Library Overwrite*/
 
+/*Text editor component*/
+.ql-color{
+  display: none !important;
+}
 
-
-
+.ql-background{
+  display: none !important;
+}
+/*Text editor component*/
 
 /*Calendar component*/
 h3.calendar-title {

@@ -269,7 +269,31 @@
   <div id="tabs-course-details" class="row">
     <md-tab-group [selectedIndex]="0">
 
-      <md-tab>
+      <md-tab><!--Course Info Tab-->
+        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
+        <template md-tab-content>
+            <div class="tab-template-content">
+              <div class="row row-no-margin">
+                <a *ngIf="this.authenticationService.isTeacher() && !this.welcomeTextEdition" (click)="this.welcomeTextEdition = true" class="right" [title]="'Edit info'">
+                  <i class="material-icons add-element-icon">edit</i>
+                </a>
+              </div>
+              <div *ngIf="!this.welcomeTextEdition && this.course.courseDetails.info" class="ql-editor ql-editor-custom" [innerHTML]="this.course.courseDetails.info"></div>
+              <div *ngIf="this.welcomeTextEdition">
+                <p-editor *ngIf="!this.welcomeTextPreview" [(ngModel)]="this.welcomeText" [style]="{'height':'320px'}"></p-editor>
+                <div *ngIf="this.welcomeTextPreview" class="ql-editor ql-editor-custom" [innerHTML]="this.welcomeText"></div>
+                <div id="textEditorRowButtons" class="row no-margin-bottom right-align">
+                  <a (click)="this.closeUpdateCourseInfo()" class="waves-effect btn-flat modal-footer-button">Cancel</a>
+                  <button (click)="this.updateCourseInfo(); this.closeUpdateCourseInfo()" class="waves-effect btn-flat modal-footer-button">Send</button>
+                  <a (click)="this.welcomeTextPreview = !this.welcomeTextPreview; this.previewButton = (this.welcomeTextPreview ? 'edit' : 'preview');" class="left waves-effect btn-flat modal-footer-button">{{this.previewButton}}</a>
+                </div>
+              </div>
+              <div *ngIf="!this.course.courseDetails.info && !this.welcomeTextEdition"><app-error-message [errorTitle]="'There is no info yet'" [errorContent]="''" [customClass]="'warning'" [closable]="false"></app-error-message></div>
+            </div>
+          </template>
+      </md-tab>
+
+      <md-tab><!--Sessions Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
         <template md-tab-content>
             <div class="tab-template-content">
@@ -312,7 +336,7 @@
           </template>
       </md-tab>-->
 
-      <md-tab>
+      <md-tab><!--Forum Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content-2 row row-no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
@@ -390,7 +414,7 @@
         </template>
       </md-tab>
 
-      <md-tab>
+      <md-tab><!--Files Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
@@ -409,7 +433,7 @@
         </template>
       </md-tab>
 
-      <md-tab>
+      <md-tab><!--Attenders Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content">

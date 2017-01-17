@@ -39,6 +39,7 @@ import { CalendarModule }         from 'angular-calendar';
 import { CalendarComponent }      from './components/calendar/calendar.component';
 import { TimeAgoPipe }            from 'time-ago-pipe';
 import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
+import { EditorModule }           from 'primeng/components/editor/editor';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
     routing,
     CalendarModule.forRoot(),
     DragulaModule,
+    EditorModule,
   ],
   declarations: [
     AppComponent,

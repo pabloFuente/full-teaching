@@ -2,6 +2,28 @@
   margin-bottom: 30px;
 }
 
+/*Text editor*/
+.ql-editor-custom {
+  box-sizing: initial;
+  cursor: initial;
+  line-height: initial;
+  height: initial;
+  outline: initial;
+  overflow-y: initial;
+  padding: 20px;
+  tab-size: initial;
+  -moz-tab-size: initial;
+  text-align: initial;
+  white-space: initial;
+  word-wrap: initial;
+}
+
+#textEditorRowButtons{
+  padding-top: 10px;
+  margin: 0;
+}
+/*Text editor*/
+
 .course-detail-div {
   padding-top: 30px;
 }

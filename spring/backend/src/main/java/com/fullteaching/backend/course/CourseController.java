@@ -111,9 +111,14 @@ public class CourseController {
 		//Modifying the course attributes
 		c.setImage(course.getImage());
 		c.setTitle(course.getTitle());
+		if (course.getCourseDetails() != null){
+			if (course.getCourseDetails().getInfo() != null){
+				c.getCourseDetails().setInfo(course.getCourseDetails().getInfo());
+			}
+		}
 		//Saving the modified course
 		courseRepository.save(c);
-		return new ResponseEntity<>(course, HttpStatus.OK);
+		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 	
 	

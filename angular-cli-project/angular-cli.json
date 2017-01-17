@@ -16,11 +16,14 @@
       "mobile": false,
       "styles": [
         "styles.css",
-        "color-palette.css"
+        "color-palette.css",
+        "../node_modules/quill/dist/quill.core.css",
+        "../node_modules/quill/dist/quill.snow.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "../node_modules/materialize-css/dist/js/materialize.js",
+        "../node_modules/quill/dist/quill.js",
         "./assets/scripts/navbar-script.js",
         "./assets/scripts/init-welcome-page.js"
       ],
