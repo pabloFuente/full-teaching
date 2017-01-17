@@ -1,6 +1,7 @@
 package com.fullteaching.backend;
 
 import java.util.List;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
@@ -206,16 +207,19 @@ public class DatabaseInitializer implements CommandLineRunner {
 		c2.getAttenders().add(user1);
 		c2.getAttenders().add(user3);
 		
+		Calendar calendar = Calendar.getInstance();
+		int milliSecondsInADay = 86400000;
+		
 		//Sample sessions
-		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", 1478202152681L);
+		Session s1 = new Session("Session 1: Introduction to Web", "This is a nice description about this session.", calendar.getTimeInMillis());
 		s1.setCourse(c1);
-		Session s2 = new Session("Nice examples", "This is a nice description about this session.", 1478374952681L);
+		Session s2 = new Session("Nice examples", "This is a nice description about this session.", calendar.getTimeInMillis() + milliSecondsInADay);
 		s2.setCourse(c1);
-		Session s3 = new Session("Project analisys", "This is a nice description about this session.", 1478367752681L);
+		Session s3 = new Session("Project analisys", "This is a nice description about this session.", calendar.getTimeInMillis() - 2*milliSecondsInADay);
 		s3.setCourse(c1);
-		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", 1478547752681L);
+		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", calendar.getTimeInMillis() + 4*milliSecondsInADay);
 		s4.setCourse(c2);
-		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", 1478634152681L);
+		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", calendar.getTimeInMillis() - 3*milliSecondsInADay);
 		s5.setCourse(c2);
 		
 		c1.getSessions().add(s1);
