@@ -214,11 +214,6 @@ public class FileGroupController {
 		if (fg != null){
 			for (int i = 0; i < fg.getFiles().size(); i++){
 				if (fg.getFiles().get(i).getId() == file.getId()){
-					
-					//Renaming the stored file...
-					java.io.File f = new java.io.File(FILES_FOLDER.toFile(), fg.getFiles().get(i).getName());
-					f.renameTo(new java.io.File(FILES_FOLDER.toFile(), file.getName()));
-					
 					fg.getFiles().get(i).setName(file.getName());
 					fileGroupRepository.save(fg);
 					//Returning the root FileGroup of the added file

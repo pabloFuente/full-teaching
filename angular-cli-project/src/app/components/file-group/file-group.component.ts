@@ -102,8 +102,8 @@ export class FileGroupComponent implements OnInit {
     );
   }
 
-  downloadFile(s: string){
-    this.fileService.downloadFile(this.courseId, s);
+  downloadFile(file: File){
+    this.fileService.downloadFile(this.courseId, file);
   }
 
 }

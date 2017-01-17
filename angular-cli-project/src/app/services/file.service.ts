@@ -83,7 +83,7 @@ export class FileService {
       .catch(error => this.handleError(error));
   }
 
-  public downloadFile(courseId: number, s: string) {
+  public downloadFile(courseId: number, file: File) {
 
     // Xhr creates new context so we need to create reference to this
     let self = this;
@@ -93,7 +93,7 @@ export class FileService {
 
     // Create the Xhr request object
     let xhr = new XMLHttpRequest();
-    let url = "/load-files/course/" + courseId + "/download/" + s;
+    let url = "/load-files/course/" + courseId + "/download/" + file.id;
     xhr.open('GET', url, true);
     xhr.responseType = 'blob';
 
@@ -108,7 +108,7 @@ export class FileService {
       if (xhr.readyState === 4 && xhr.status === 200) {
         console.log(this.response);
         var blob = new Blob([this.response], { type: this.response.type });
-        FileSaver.saveAs(blob, s);
+        FileSaver.saveAs(blob, file.name);
       }
     };
 

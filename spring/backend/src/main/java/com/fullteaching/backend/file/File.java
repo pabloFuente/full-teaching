@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fullteaching.backend.filegroup.FileGroup;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class File {
@@ -18,21 +18,32 @@ public class File {
 	
 	private String name;
 	
+	private String nameIdent;
+	
 	private String link;
 	
 	private int indexOrder;
 	
 	public File() {}
 	
+	public File(int type, String name) {
+		this.type = type; //0: web-link | 1: pdf | 2: video
+		this.name = name;
+		this.nameIdent = generateNameIdent(name);
+		this.link = "";
+	}
+	
 	public File(int type, String name, String link) {
 		this.type = type; //0: web-link | 1: pdf | 2: video
 		this.name = name;
+		this.nameIdent = generateNameIdent(name);
 		this.link = link;
 	}
 	
 	public File(int type, String name, String link, int indexOrder) {
 		this.type = type; //0: web-link | 1: pdf | 2: video
 		this.name = name;
+		this.nameIdent = generateNameIdent(name);
 		this.link = link;
 		this.indexOrder = indexOrder;
 	}
@@ -60,6 +71,14 @@ public class File {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getNameIdent() {
+		return nameIdent;
+	}
+
+	public void setNameIdent(String nameIdent) {
+		this.nameIdent = nameIdent;
+	}
 
 	public String getLink() {
 		return link;
@@ -84,6 +103,20 @@ public class File {
 	    if (!(other instanceof File))return false;
 	    File otherFile = (File)other;
 	    return (otherFile.id == this.id);
+	}
+	
+	public String getFileExtension(){
+		return this.nameIdent.substring(this.nameIdent.lastIndexOf('.') + 1);
+	}
+	
+	//Generates a string which acts as an identifier for the stored file in the system (local, S3...)
+	private String generateNameIdent(String originalName){
+		String s = originalName + (Math.random() * (Integer.MIN_VALUE - Integer.MAX_VALUE));
+		s = new BCryptPasswordEncoder().encode(s);
+		s = s.replaceAll("[^A-Za-z0-9\\$]", "");
+		int i = originalName.lastIndexOf('.');
+		if (i >= 0) s += originalName.substring(i);
+		return s;
 	}
 
 }

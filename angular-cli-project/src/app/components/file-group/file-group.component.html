@@ -11,7 +11,7 @@
 
   <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="drag-bag-editable" [dragula]='"drag-bag"' [dragulaModel]="fileGroup?.files" [attr.data-id]="fileGroup.id">
     <div *ngFor="let f of fileGroup?.files" [attr.data-id]="f.id">
-        <div class="chip chip-file truncate valign-wrapper disp-inline-flex" [class.draggable]="modeEditActive" (click)="this.downloadFile(f.name)">
+        <div class="chip chip-file truncate valign-wrapper disp-inline-flex" [class.draggable]="modeEditActive" (click)="this.downloadFile(f)">
           <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
         </div>
         <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="disp-inline-flex">
@@ -25,7 +25,7 @@
 
   <div *ngIf="this.authenticationService.isStudent() || (!this.modeEditActive && this.authenticationService.isTeacher())">
     <div *ngFor="let f of fileGroup?.files">
-        <div class="chip chip-file truncate valign-wrapper disp-inline-flex" (click)="this.downloadFile(f.name)">
+        <div class="chip chip-file truncate valign-wrapper disp-inline-flex" (click)="this.downloadFile(f)">
           <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
         </div>
         <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="disp-inline-flex">

@@ -56,6 +56,9 @@ public class FileController {
 	private FileGroupRepository fileGroupRepository;
 	
 	@Autowired
+	private FileRepository fileRepository;
+	
+	@Autowired
 	private CourseRepository courseRepository;
 	
 	@Autowired
@@ -116,29 +119,31 @@ public class FileController {
 			}
 	
 			String fileName = file.getOriginalFilename();
-			File uploadedFile = new File(FILES_FOLDER.toFile(), fileName);
+			
+			com.fullteaching.backend.file.File customFile = new com.fullteaching.backend.file.File(1, fileName);
+			File uploadedFile = new File(FILES_FOLDER.toFile(), customFile.getNameIdent());
+			
 			file.transferTo(uploadedFile);
 			
 			if (this.isProductionStage()){
 				//ONLY ON PRODUCTION
 				try {
-					this.productionFileSaver(fileName, "files", uploadedFile);
+					this.productionFileSaver(customFile.getNameIdent(), "files", uploadedFile);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				fg = fileGroupRepository.findOne(id_fileGroup);
-				fg.getFiles().add(new com.fullteaching.backend.file.File(1, fileName, "http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + fileName));
-				fg.updateFileIndexOrder();
+				customFile.setLink("http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
 				this.deleteLocalFile(uploadedFile, FILES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
-				fg = fileGroupRepository.findOne(id_fileGroup);
-				fg.getFiles().add(new com.fullteaching.backend.file.File(1, file.getOriginalFilename(), uploadedFile.getPath()));
-				fg.updateFileIndexOrder();
+				customFile.setLink(uploadedFile.getPath());
 				//ONLY ON DEVELOPMENT
 			}
+			fg = fileGroupRepository.findOne(id_fileGroup);
+			fg.getFiles().add(customFile);
+			fg.updateFileIndexOrder();
 			System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
 		}
 		
@@ -148,52 +153,55 @@ public class FileController {
 	}
 
 	
-	@RequestMapping("/course/{courseId}/download/{fileName:.+}")
+	@RequestMapping("/course/{courseId}/download/{fileId}")
 	public void handleFileDownload(
-			@PathVariable String fileName, 
+			@PathVariable String fileId,
 			@PathVariable(value="courseId") String courseId, 
 			HttpServletResponse response)
 		throws FileNotFoundException, IOException {
 		
 		long id_course = -1;
+		long id_file = -1;
 		try {
 			id_course = Long.parseLong(courseId);
+			id_file = Long.parseLong(fileId);
 		} catch(NumberFormatException e){
 			return;
 		}
 		
 		Course c = courseRepository.findOne(id_course);
-		
 		checkAuthorizationUsers(c, c.getAttenders());
 		
-		if (this.isProductionStage()){
-			//ONLY ON PRODUCTION
-			System.out.println("Production DOWNLOAD!");
-			this.productionFileDownloader(fileName, response);
-			//ONLY ON PRODUCTION
-		} else {
-			//ONLY ON DEVELOPMENT
-			System.out.println("Development DOWNLOAD!");
-			Path file = FILES_FOLDER.resolve(fileName);
-
-			if (Files.exists(file)) {
-				try {
-					String fileExt = this.getFileExtension(fileName);
-					response.setContentType(MimeTypes.getMimeType(fileExt));
-							
-					// get your file as InputStream
-					InputStream is = new FileInputStream(file.toString());
-					// copy it to response's OutputStream
-					IOUtils.copy(is, response.getOutputStream());
-					response.flushBuffer();
-				} catch (IOException ex) {
-					throw new RuntimeException("IOError writing file to output stream");
-				}
-				
+		com.fullteaching.backend.file.File f = fileRepository.findOne(id_file);
+		
+		if (f != null){
+			if (this.isProductionStage()){
+				//ONLY ON PRODUCTION
+				this.productionFileDownloader(f.getNameIdent(), response);
+				//ONLY ON PRODUCTION
 			} else {
-				response.sendError(404, "File" + fileName + "(" + file.toAbsolutePath() + ") does not exist");
+				//ONLY ON DEVELOPMENT
+				Path file = FILES_FOLDER.resolve(f.getNameIdent());
+	
+				if (Files.exists(file)) {
+					try {
+						String fileExt = f.getFileExtension();
+						response.setContentType(MimeTypes.getMimeType(fileExt));
+								
+						// get your file as InputStream
+						InputStream is = new FileInputStream(file.toString());
+						// copy it to response's OutputStream
+						IOUtils.copy(is, response.getOutputStream());
+						response.flushBuffer();
+					} catch (IOException ex) {
+						throw new RuntimeException("IOError writing file to output stream");
+					}
+					
+				} else {
+					response.sendError(404, "File" + f.getNameIdent() + "(" + file.toAbsolutePath() + ") does not exist");
+				}
+				//ONLY ON DEVELOPMENT
 			}
-			//ONLY ON DEVELOPMENT
 		}
 	}
 	
@@ -277,8 +285,7 @@ public class FileController {
 	}
 	
 	private String getFileExtension(String name){
-		String[] aux = name.split("\\.");
-		return aux[aux.length - 1];
+		return name.substring(name.lastIndexOf('.') + 1);
 	}
 	
 	private String getEncodedPictureName(String originalFileName){
@@ -289,7 +296,7 @@ public class FileController {
 		//Encoding original file name + random integer
 		originalFileName = new BCryptPasswordEncoder().encode(originalFileName);
 		//Deleting all non alphanumeric characters
-		originalFileName = originalFileName.replaceAll("[^A-Za-z0-9]", "");
+		originalFileName = originalFileName.replaceAll("[^A-Za-z0-9\\$]", "");
 		//Adding the extension
 		originalFileName += "." + picExtension;
 		return originalFileName;
