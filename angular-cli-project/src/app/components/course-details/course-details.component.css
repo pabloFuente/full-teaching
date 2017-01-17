@@ -262,3 +262,89 @@ a.btn-floating {
     height: 45px;
   }
 }
+
+/*Active Session*/
+.session-ready{
+  background-color: rgba(55, 86, 70, 0.15);
+  cursor: pointer;
+  animation: sessionReadyFrames ease-in-out 3s;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 50%;
+  animation-fill-mode:forwards; /*when the spec is finished*/
+  -webkit-animation: sessionReadyFrames ease-in-out 3s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-transform-origin: 50% 50%;
+  -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/
+  -moz-animation: sessionReadyFrames ease-in-out 3s;
+  -moz-animation-iteration-count: infinite;
+  -moz-transform-origin: 50% 50%;
+  -moz-animation-fill-mode:forwards; /*FF 5+*/
+  -o-animation: sessionReadyFrames ease-in-out 3s;
+  -o-animation-iteration-count: infinite;
+  -o-transform-origin: 50% 50%;
+  -o-animation-fill-mode:forwards; /*Not implemented yet*/
+  -ms-animation: sessionReadyFrames ease-in-out 3s;
+  -ms-animation-iteration-count: infinite;
+  -ms-transform-origin: 50% 50%;
+  -ms-animation-fill-mode:forwards; /*IE 10+*/
+}
+
+@keyframes sessionReadyFrames{
+  0% {
+    transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  50% {
+    transform:  scaleX(1.06) scaleY(1.06) ;
+  }
+  100% {
+    transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+}
+
+@-moz-keyframes sessionReadyFrames{
+  0% {
+    -moz-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  50% {
+    -moz-transform:  scaleX(1.06) scaleY(1.06) ;
+  }
+  100% {
+    -moz-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+}
+
+@-webkit-keyframes sessionReadyFrames {
+  0% {
+    -webkit-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  50% {
+    -webkit-transform:  scaleX(1.06) scaleY(1.06) ;
+  }
+  100% {
+    -webkit-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+}
+
+@-o-keyframes sessionReadyFrames {
+  0% {
+    -o-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  50% {
+    -o-transform:  scaleX(1.06) scaleY(1.06) ;
+  }
+  100% {
+    -o-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+}
+
+@-ms-keyframes sessionReadyFrames {
+  0% {
+    -ms-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  50% {
+    -ms-transform:  scaleX(1.06) scaleY(1.06) ;
+  }
+  100% {
+    -ms-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+}

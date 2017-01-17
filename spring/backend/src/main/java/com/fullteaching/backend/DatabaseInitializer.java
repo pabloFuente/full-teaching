@@ -215,11 +215,11 @@ public class DatabaseInitializer implements CommandLineRunner {
 		s1.setCourse(c1);
 		Session s2 = new Session("Nice examples", "This is a nice description about this session.", calendar.getTimeInMillis() + milliSecondsInADay);
 		s2.setCourse(c1);
-		Session s3 = new Session("Project analisys", "This is a nice description about this session.", calendar.getTimeInMillis() - 2*milliSecondsInADay);
+		Session s3 = new Session("Project analisys", "This is a nice description about this session.", calendar.getTimeInMillis() + milliSecondsInADay - 8000000);
 		s3.setCourse(c1);
 		Session s4 = new Session("Session 3: New Web Technologies", "This is a nice description about this session.", calendar.getTimeInMillis() + 4*milliSecondsInADay);
 		s4.setCourse(c2);
-		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", calendar.getTimeInMillis() - 3*milliSecondsInADay);
+		Session s5 = new Session("Session 2: Databse integration", "This is a nice description about this session.", calendar.getTimeInMillis() + 6*milliSecondsInADay);
 		s5.setCourse(c2);
 		
 		c1.getSessions().add(s1);

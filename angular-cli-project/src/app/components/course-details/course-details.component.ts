@@ -224,8 +224,8 @@ export class CourseDetailsComponent implements OnInit {
     this.subscription5.unsubscribe();
   }
 
-  goToSessionVideo(sessionId: number){
-    this.router.navigate(['/session', sessionId]);
+  goToSessionVideo(session: Session){
+    if (this.isSessionReady(session)) this.router.navigate(['/session', session.id]);
   }
 
   updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup) {
@@ -725,5 +725,10 @@ export class CourseDetailsComponent implements OnInit {
           return null;
       }
   }
+
+    isSessionReady(session: Session){
+      let d = new Date();
+      return (d.toDateString() === this.numberToDate(session.date).toDateString());
+    }
 
 }

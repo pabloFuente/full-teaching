@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params} from '@angular/router';
+import { Component, OnInit }      from '@angular/core';
+import { ActivatedRoute, Params}  from '@angular/router';
+import { Location }               from '@angular/common';
 
 import { User }                  from '../../classes/user';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -15,7 +16,7 @@ export class VideoSessionComponent implements OnInit {
   websocket: WebSocket;
   sessionId: number;
 
-  constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute) {
+  constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
 
     this.user = this.authenticationService.getCurrentUser();
 
@@ -97,6 +98,10 @@ export class VideoSessionComponent implements OnInit {
     };
     //convert and send data to server
     this.websocket.send(JSON.stringify(msg));
+  }
+
+  exitFromSession(){
+    this.location.back();
   }
 
 }
