@@ -728,7 +728,8 @@ export class CourseDetailsComponent implements OnInit {
 
     isSessionReady(session: Session){
       let d = new Date();
-      return (d.toDateString() === this.numberToDate(session.date).toDateString());
+      //return (d.toDateString() === this.numberToDate(session.date).toDateString());
+      return true;
     }
 
 }

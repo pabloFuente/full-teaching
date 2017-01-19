@@ -23,7 +23,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
+		System.out.println("Connection established..........");
 	}
 
 	@Override
@@ -51,6 +51,8 @@ public class ChatHandler extends TextWebSocketHandler {
 	private void newUser(WebSocketSession session, JsonNode jsonMsg)
 			throws InterruptedException, TimeoutException {
 		
+		System.out.println("(ChatHandler) newUser");
+		
 		String chatName = jsonMsg.get("chat").asText();
 		String userName = jsonMsg.get("user").asText();
 
@@ -60,20 +62,27 @@ public class ChatHandler extends TextWebSocketHandler {
 		session.getAttributes().put("user", user);	
 
 		chatManager.newUser(user);
-		Chat chat = chatManager.newChat(chatName, 5, TimeUnit.SECONDS);
-		session.getAttributes().put("chat", chat);
-
-		chat.addUser(user);
+		
+		if(!this.chatManager.chatExists(chatName)) {
+			//If the chat does not exist, it is created
+			System.out.println("CREATING new chat...");
+			Chat chat = chatManager.newChat(chatName, 5, TimeUnit.SECONDS);
+			session.getAttributes().put("chat", chat);
+			chat.addUser(user);
+		}
+		else {
+			//If the chat already exists, it is modified by adding the new user
+			System.out.println("UPDATING existing chat...");
+			Chat chat = this.chatManager.getChat(chatName);
+			session.getAttributes().put("chat", chat);
+			chat.addUser(user);
+		}
+		
+		
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		
-		if (session.isOpen()){
-			System.out.println("Session OPENED");
-		} else{
-			System.out.println("Session CLOSED");
-		}
 		
 		ChatUser user = (ChatUser) session.getAttributes().get("user");
 		Chat chat = (Chat) session.getAttributes().get("chat");

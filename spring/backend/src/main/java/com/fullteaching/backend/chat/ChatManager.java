@@ -36,8 +36,10 @@ public class ChatManager {
 	}
 
 	public void newUser(ChatUser user) {
+		System.out.println("(ChatManager) newUser");
 		ChatUser oldUser = users.putIfAbsent(user.getName(), user);
 		if (oldUser != null) {
+			System.out.println("Excepción (oldUser != null)");
 			throw new IllegalArgumentException("There is already a user with name \'"
 					+ user.getName() + "\'");
 		}
@@ -46,12 +48,14 @@ public class ChatManager {
 	public Chat newChat(String name, long timeout, TimeUnit unit) throws InterruptedException,
 			TimeoutException {
 		
-		System.out.println("NEW CHAT!");
+		System.out.println("(ChatManager) newChat");
 
 		if (!numChatsSem.tryAcquire(timeout, unit)) {
 			System.out.println("No capacity");
 			throw new TimeoutException("There is no enought capacity to create a new chat");
 		}
+		
+		System.out.println("There are still " + numChatsSem.availablePermits() + " permits for new chats");
 		
 		Chat oldChat = chats.computeIfAbsent(name, n -> new Chat(this, name, executor));
 		if (oldChat != null) {
@@ -65,6 +69,8 @@ public class ChatManager {
 	}
 
 	public void closeChat(Chat chat) {
+		System.out.println("(ChatManager) Closing chat " + chat.getName());
+		
 		Chat removedChat = chats.remove(chat.getName());
 		if (removedChat == null) {
 			throw new IllegalArgumentException("Trying to remove an unknown chat with name \'"
@@ -72,8 +78,13 @@ public class ChatManager {
 		}
 
 		forEachUser(u -> u.chatClosed(removedChat));
-
+		
+		System.out.println("Releasing a permit...");
+		
 		numChatsSem.release();
+		
+		System.out.println("There are still " + chats.size() + " chats opened");
+		
 	}
 
 	public Collection<Chat> getChats() {
@@ -90,6 +101,10 @@ public class ChatManager {
 
 	public ChatUser getUser(String userName) {
 		return users.get(userName);
+	}
+	
+	public boolean chatExists(String chatName){
+		return (this.chats.get(chatName) != null);
 	}
 
 	private void forEachUser(Consumer<ChatUser> userAction) {

@@ -17,22 +17,29 @@ export class VideoSessionComponent implements OnInit {
   sessionId: number;
 
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
-
     this.user = this.authenticationService.getCurrentUser();
+  }
+
+  ngOnInit() {
+    //Getting the session id from the url
+    this.route.params.forEach((params: Params) => {
+      let id = +params['id'];
+      this.sessionId = id;
+    });
 
     let wsUri = "ws://" + document.location.host + "/chat";
     this.websocket = new WebSocket(wsUri);
-    let _this = this;
+    let thisAux = this;
 
     this.websocket.onopen = function(event: Event) { // connection is open
       $('#message_box').append("<div class=\"system_msg\">Connected!</div>"); //notify user
       //prepare json data
       let msg = {
-        chat: 'Chat-Session-' + _this.sessionId,
-        user: _this.user.nickName
+        chat: 'Chat-Session-' + thisAux.sessionId,
+        user: thisAux.user.nickName
       };
       //convert and send data to server
-      _this.websocket.send(JSON.stringify(msg));
+      thisAux.websocket.send(JSON.stringify(msg));
     }
 
     this.websocket.onmessage = function(ev) {
@@ -65,14 +72,7 @@ export class VideoSessionComponent implements OnInit {
     this.websocket.onclose = function(ev) {
       $('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");
     };
-  }
 
-  ngOnInit() {
-    //Getting the session id from the url
-    this.route.params.forEach((params: Params) => {
-      let id = +params['id'];
-      this.sessionId = id;
-    });
     //Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
     $("div.drag-target").remove();
   }
