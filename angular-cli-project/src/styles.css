@@ -44,6 +44,10 @@ i {
   display: none;
 }
 
+.material-icons {
+  cursor: pointer;
+}
+
 .app-title-header {
   font-family: 'Molle', cursive;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.71);

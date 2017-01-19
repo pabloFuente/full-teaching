@@ -63,6 +63,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 		userRepository.save(user3);
 		
 		
+		User user4 = new User("student3@gmail.com", "pass", "New Student", defPicture, "ROLE_STUDENT");
+		setUsers.add(user4);
+		listUsers.add(user4);
+		setUsers.add(user4);
+		userRepository.save(user4);
+		
+		
 		//Sample comments
 		List<Comment> listComments = new LinkedList<>();
 		for (int i = 0; i < 30; i++){

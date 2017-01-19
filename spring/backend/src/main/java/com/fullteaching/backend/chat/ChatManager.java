@@ -2,6 +2,7 @@ package com.fullteaching.backend.chat;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -39,9 +40,9 @@ public class ChatManager {
 		System.out.println("(ChatManager) newUser");
 		ChatUser oldUser = users.putIfAbsent(user.getName(), user);
 		if (oldUser != null) {
-			System.out.println("Excepción (oldUser != null)");
-			throw new IllegalArgumentException("There is already a user with name \'"
-					+ user.getName() + "\'");
+			System.out.println("The user is already in at least one chat!");
+			/*throw new IllegalArgumentException("There is already a user with name \'"
+					+ user.getName() + "\'");*/
 		}
 	}
 
@@ -83,7 +84,10 @@ public class ChatManager {
 		
 		numChatsSem.release();
 		
-		System.out.println("There are still " + chats.size() + " chats opened");
+		System.out.println("There are still " + chats.size() + " chats opened: ");
+		for(Chat ch : this.getChats()){
+			System.out.println("  - " + ch.getName());
+		}
 		
 	}
 
@@ -103,9 +107,26 @@ public class ChatManager {
 		return users.get(userName);
 	}
 	
+	
+	public ChatUser removeUserFromChatManager(ChatUser u){
+		return this.users.remove(u.getName());
+	}
+	
 	public boolean chatExists(String chatName){
 		return (this.chats.get(chatName) != null);
 	}
+	
+	public boolean userAtLeastInOneChat(ChatUser u){
+		boolean present = false;
+		Iterator<Chat> i = this.chats.values().iterator();
+		while(i.hasNext() && !present){
+			Chat c = (Chat) i.next();
+			present = (c.getUser(u.getName()) != null);
+		}
+		return present;
+	}
+	
+	
 
 	private void forEachUser(Consumer<ChatUser> userAction) {
 		users.values().stream().forEach(u -> {

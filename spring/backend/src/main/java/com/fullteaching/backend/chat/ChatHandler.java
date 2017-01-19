@@ -42,6 +42,21 @@ public class ChatHandler extends TextWebSocketHandler {
 	}
 
 	private void newMessage(WebSocketSession session, JsonNode jsonMsg) {
+		
+		System.out.println("-----------------------------------------------------");
+		System.out.println("> Number of total users: " + this.chatManager.getUsers().size());
+		for (ChatUser us : this.chatManager.getUsers()){
+			System.out.println("   -  " + us.getName());
+		}
+		System.out.println("> Number of chats: " + this.chatManager.getChats().size());
+		for (Chat chatty : this.chatManager.getChats()){
+			System.out.println("   - Number of users in chat " + chatty.getName() + ": " + chatty.getUsers().size());
+			for (ChatUser u : chatty.getUsers()){
+				System.out.println("       - " + u.getName());
+			}
+		}
+		System.out.println("-----------------------------------------------------");
+		
 		ChatUser user = (ChatUser) session.getAttributes().get("user");
 		Chat chat = (Chat) session.getAttributes().get("chat");
 
@@ -89,7 +104,13 @@ public class ChatHandler extends TextWebSocketHandler {
 		
 		if(chat != null) {
 			chat.removeUser(user);
+			if(!this.chatManager.userAtLeastInOneChat(user)){
+				//If the user is not present in any other chat, it is removed from the collection of chat users
+				System.out.println("The user " + user.getName() + " is not present in any other chat. Removing user from Chats system... ");
+				this.chatManager.removeUserFromChatManager(user);
+			}
 			if(chat.getUsers().isEmpty()){
+				//If the chat has no users, it is closed
 				System.out.println("Last user left the room. Closing chat " + chat.getName());
 				chat.close();
 			}
