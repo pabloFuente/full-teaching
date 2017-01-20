@@ -21,6 +21,9 @@ export class SettingsComponent implements OnInit {
 
   private URL_UPLOAD: string;
 
+  private processingPic: boolean = false;
+  private processingPass: boolean = false;
+
   private submitProcessing: boolean;
   private fieldsIncorrect: boolean = false;
 
@@ -47,14 +50,19 @@ export class SettingsComponent implements OnInit {
     this.user = this.authenticationService.getCurrentUser();
   }
 
+  pictureUploadStarted(started: boolean){
+    this.processingPic = started;
+  }
+
   pictureUploadCompleted(response){
     console.log("Picture changed successfully: " + response);
     this.user.picture = response;
+    this.processingPic = false;
   }
 
   onPasswordSubmit(){
 
-    this.submitProcessing = true;
+    this.processingPass = true;
 
     //New passwords don't match
     if (this.inputNewPassword !== this.inputNewPassword2) {
@@ -120,7 +128,7 @@ export class SettingsComponent implements OnInit {
   }
 
   handleError(){
-    this.submitProcessing = false;
+    this.processingPass = false;
     if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
       Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
     } else { // On desktop error on error-message

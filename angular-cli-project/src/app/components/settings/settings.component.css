@@ -30,3 +30,7 @@
 #input-file {
   display: none;
 }
+
+div.loading.loading-pic{
+  position: relative !important;
+}

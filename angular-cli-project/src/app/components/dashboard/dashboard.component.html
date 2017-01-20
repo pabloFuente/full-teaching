@@ -4,7 +4,10 @@
 
   <!--POST COURSE DIALOG-->
   <div id="course-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions1">
-    <div class="modal-content">
+
+    <div *ngIf="processingPost" class="loading"></div>
+
+    <div class="modal-content" [class.filtered]="processingPost">
       <p class="p-bold-modal-header">New course</p>
       <div class="row row-no-margin">
 
@@ -41,7 +44,10 @@
 
   <!--PUT/DELETE COURSE DIALOG-->
   <div *ngIf="this.courses.length > 0 && this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" id="put-delete-course-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions4">
-    <div class="modal-content">
+
+    <div *ngIf="processingPut" class="loading"></div>
+
+    <div class="modal-content" [class.filtered]="processingPut">
       <p class="p-bold-modal-header">Modify course</p>
       <div class="row row-no-margin">
 

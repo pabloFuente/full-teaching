@@ -10,10 +10,6 @@
   float: none !important;
 }
 
-.filtered {
-  filter: blur(5px);
-}
-
 .signUpColor {
   background-color: #2196f3;
 }

@@ -23,9 +23,11 @@ export class DashboardComponent implements OnInit {
   courses: Course[];
 
   //POST MODAL
+  processingPost: boolean = false;
   inputPostCourseName: string;
 
   //PUT-DELETE MODAL
+  processingPut: boolean = false;
   inputPutCourseName: string;
   inputPutCourseImage: string;
   updatedCourse: Course;
@@ -80,6 +82,8 @@ export class DashboardComponent implements OnInit {
 
   //POST new Course
   onCourseSubmit() {
+    this.processingPost = true;
+
     let newForum = new Forum(true);
     let newCourseDetails = new CourseDetails(newForum, []);
     let newCourse = new Course(this.inputPostCourseName, this.authenticationService.getCurrentUser().picture, newCourseDetails);
@@ -89,14 +93,18 @@ export class DashboardComponent implements OnInit {
         console.log("New course added: ");
         console.log(course);
         this.courses.push(course);
+
+        this.processingPost = false;
         this.actions1.emit({action:"modal",params:['close']});
       },
-      error => console.log(error)
+      error => {console.log(error); this.processingPost = false;}
     )
   }
 
   //PUT existing Course
   onPutDeleteCourseSubmit(){
+    this.processingPut = true;
+
     let c: Course = new Course(this.inputPutCourseName, this.updatedCourse.image, this.updatedCourse.courseDetails);
     c.id = this.updatedCourse.id;
     console.log(c);
@@ -112,9 +120,11 @@ export class DashboardComponent implements OnInit {
             break;
           }
         }
+
+        this.processingPut = false;
         this.actions4.emit({action:"modal",params:['close']});
       },
-      error => console.log(error)
+      error => {console.log(error); this.processingPut = false;}
     )
   }
 

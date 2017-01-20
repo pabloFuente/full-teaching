@@ -26,7 +26,7 @@
               <span *ngIf="uploader.queue[0].isError"><i class="material-icons">clear</i></span>
             </td>
             <td nowrap class="table-td">
-              <button *ngIf="!(uploader.queue[0].isReady || uploader.queue[0].isUploading || uploader.queue[0].isSuccess)" type="button" class="btn button-small" (click)="uploader.queue[0].upload()">
+              <button *ngIf="!(uploader.queue[0].isReady || uploader.queue[0].isUploading || uploader.queue[0].isSuccess)" type="button" class="btn button-small" (click)="this.onUploadStarted.emit(true); uploader.queue[0].upload()">
                    Upload
                </button>
               <button *ngIf="uploader.queue[0].isUploading" type="button" class="btn button-small" (click)="uploader.queue[0].cancel()">

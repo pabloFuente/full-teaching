@@ -5,7 +5,10 @@
 
   <!--POST DIALOG-->
   <div id="course-details-modal" class="modal my-modal-class course-details-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions2">
-    <div class="modal-content">
+
+    <div *ngIf="processingPost" class="loading"></div>
+
+    <div class="modal-content" [class.filtered]="processingPost">
       <p class="p-bold-modal-header">{{this.postModalTitle}}</p>
       <h5 *ngIf="isCurrentPostMode(['1'])">{{this.postModalEntry?.title}}</h5>
       <p *ngIf="isCurrentPostMode(['1'])">{{this.postModalCommentReplay?.message}}</p>
@@ -145,7 +148,10 @@
 
   <!--PUT/DELETE DIALOG-->
   <div *ngIf="this.authenticationService.isTeacher()" id="put-delete-modal" class="modal my-modal-class course-details-modal" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="actions3">
-    <div class="modal-content">
+
+    <div *ngIf="processingPut" class="loading"></div>
+
+    <div class="modal-content" [class.filtered]="processingPut">
       <p class="p-bold-modal-header">{{this.putdeleteModalTitle}}</p>
       <div class="row row-no-margin">
 
@@ -234,7 +240,7 @@
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
                 <template md-tab-content>
                   <div class="row row-no-margin att-row-padding">
-                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
+                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
                   </div>
                 </template>
               </md-tab>
@@ -274,7 +280,10 @@
       <md-tab><!--Course Info Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
         <template md-tab-content>
-            <div class="tab-template-content">
+
+            <div *ngIf="processingCourseInfo" class="loading"></div>
+
+            <div class="tab-template-content" [class.filtered]="processingCourseInfo">
               <div class="row row-no-margin">
                 <a *ngIf="this.authenticationService.isTeacher() && !this.welcomeTextEdition" (click)="this.welcomeTextEdition = true" class="right" [title]="'Edit info'">
                   <i class="material-icons add-element-icon">edit</i>
@@ -445,7 +454,10 @@
               </a>
               <i *ngIf="this.course.attenders.length > 1" (click)="this.changeModeAttenders()" class="material-icons add-element-icon right" [title]="'Modify attenders'">{{this.attendersEditionIcon}}</i>
             </div>
+
+            <app-error-message *ngIf="addAttendersCorrect" (eventShowable)="addAttendersCorrect = false" [errorTitle]="attCorrectTitle" [errorContent]="attCorrectContent" [customClass]="'correct'" [closable]="true"></app-error-message>
             <app-error-message *ngIf="addAttendersError" (eventShowable)="addAttendersError = false" [errorTitle]="attErrorTitle" [errorContent]="attErrorContent" [customClass]="'fail'" [closable]="true"></app-error-message>
+
             <div class="row row-no-margin valign-wrapper user-attender-row">
               <div class="col l2 m2 s3 valign attender-col">
                 <img materialize="materialbox" class="circle materialboxed userImage" src={{this.authenticationService.getCurrentUser().picture}}>

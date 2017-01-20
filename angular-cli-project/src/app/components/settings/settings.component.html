@@ -3,13 +3,13 @@
   <!--CHANGE PASSWORD DIALOG-->
   <div id="password-modal" class="modal my-modal-class course-modal" materialize="modal" [materializeParams]="[{dismissible: false}]">
 
-    <div *ngIf="submitProcessing" class="loading"></div>
+    <div *ngIf="processingPass" class="loading"></div>
 
-    <div class="modal-content">
+    <div class="modal-content" [class.filtered]="processingPass">
       <p class="p-bold-modal-header">Change password</p>
       <div class="row row-no-margin">
 
-        <form materialize #passwordForm class="col s12" (ngSubmit)="onPasswordSubmit();">
+        <form materialize #passwordForm class="col s12" (ngSubmit)="onPasswordSubmit()">
           <div class="row row-no-margin">
 
             <div class="row">
@@ -56,14 +56,17 @@
   <div class="row profile-row">
 
     <div class="col l4 m6 s12">
-      <div class="row no-margin">
+
+      <div *ngIf="processingPic" class="loading loading-pic"></div>
+
+      <div class="row no-margin" [class.filtered]="processingPic">
         <div class="col s12">
           <img class="circle profile-pic" src="{{this.user.picture}}">
         </div>
         <div class="col s12">
           <div class="row">
 
-            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
+            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" (onUploadStarted)="pictureUploadStarted($event)" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
 
           </div>
         </div>

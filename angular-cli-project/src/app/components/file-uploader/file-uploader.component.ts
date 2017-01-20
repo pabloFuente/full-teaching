@@ -21,7 +21,10 @@ export class FileUploaderComponent implements OnInit {
   @Input()
   private buttonText: string;
 
-  @Output() onCompleteFileUpload = new EventEmitter<any>();
+  @Output()
+  onCompleteFileUpload = new EventEmitter<any>();
+  @Output()
+  onUploadStarted = new EventEmitter<boolean>();
 
   constructor() {}
 

@@ -171,6 +171,10 @@ i {
   border-top-color: #375646;
   animation: spinLoader 0.4s infinite linear;
 }
+
+.filtered {
+  filter: blur(5px);
+}
 /*End Loader*/
 
 @media only screen and (min-width: 993px) {

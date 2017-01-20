@@ -55,6 +55,7 @@ export class CourseDetailsComponent implements OnInit {
   fadeAnim = 'commentsHidden';
 
   //POST MODAL
+  processingPost: boolean = false;
   postModalMode: number = 3; //0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file
   postModalTitle: string = "New session";
   postModalEntry: Entry;
@@ -66,6 +67,7 @@ export class CourseDetailsComponent implements OnInit {
   inputTime: string;
 
   //PUT-DELETE MODAL
+  processingPut: boolean = false;
   putdeleteModalMode: number = 0; //0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file | 4 -> Add attenders
   putdeleteModalTitle: string = "Modify session";
     //Sessions
@@ -88,6 +90,7 @@ export class CourseDetailsComponent implements OnInit {
   attenderTabSelected: number = 0;
 
   //COURSE INFO TAB
+  processingCourseInfo: boolean = false;
   welcomeText: string;
   welcomeTextEdition: boolean = false;
   welcomeTextPreview: boolean = false;
@@ -100,8 +103,11 @@ export class CourseDetailsComponent implements OnInit {
   //ATTENDERS TAB
   allowAttendersEdition: boolean = false;
   addAttendersError: boolean = false;
+  addAttendersCorrect: boolean = false;
   attErrorTitle: string;
   attErrorContent: string;
+  attCorrectTitle: string;
+  attCorrectContent: string;
   attendersEditionIcon: string = "mode_edit";
 
 
@@ -306,6 +312,8 @@ export class CourseDetailsComponent implements OnInit {
   //POST new Entry, Comment or Session
   onCourseDetailsSubmit() {
 
+    this.processingPost = true;
+
     //If modal is opened in "New Entry" mode
     if (this.postModalMode === 0) {
       console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
@@ -315,9 +323,11 @@ export class CourseDetailsComponent implements OnInit {
         response  => {
           console.log(response);
           this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
+
+          this.processingPost = false;
           this.actions2.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPost = false;}
       );
     }
 
@@ -333,9 +343,11 @@ export class CourseDetailsComponent implements OnInit {
           console.log(response);
           this.sortSessionsByDate(response.sessions);
           this.course = response;
+
+          this.processingPost = false;
           this.actions2.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPost = false;}
       );
     }
 
@@ -355,9 +367,11 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
+
+          this.processingPost = false;
           this.actions2.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPost = false;}
       );
     }
 
@@ -371,9 +385,10 @@ export class CourseDetailsComponent implements OnInit {
           //Only on succesful post we locally update the entire course details
           this.course.courseDetails = response;
 
+          this.processingPost = false;
           this.actions2.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPost = false;}
       );
     }
 
@@ -402,6 +417,8 @@ export class CourseDetailsComponent implements OnInit {
   //PUT existing Session or Forum
   onPutDeleteSubmit(){
 
+    this.processingPut = true;
+
     //If modal is opened in PUT existing Session
     if(this.putdeleteModalMode === 0){
       let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
@@ -418,9 +435,10 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
+          this.processingPut = false;
           this.actions3.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPut = false;}
       );
     }
 
@@ -433,9 +451,11 @@ export class CourseDetailsComponent implements OnInit {
           this.course.courseDetails.forum.activated = response;
           this.allowForumEdition = false;
           this.updateCheckboxForumEdition(response);
+
+          this.processingPut = false;
           this.actions3.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPut = false;}
       );
     }
 
@@ -454,9 +474,11 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
+
+          this.processingPut = false;
           this.actions3.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPut = false;}
       );
     }
 
@@ -475,9 +497,11 @@ export class CourseDetailsComponent implements OnInit {
               break;
             }
           }
+
+          this.processingPut = false;
           this.actions3.emit({action:"modal",params:['close']});
         },
-        error => console.log(error)
+        error => {console.log(error); this.processingPut = false;}
       );
     }
 
@@ -494,9 +518,12 @@ export class CourseDetailsComponent implements OnInit {
             let newAttenders = response.attendersAdded as User[];
             this.course.attenders = this.course.attenders.concat(newAttenders);
             this.handleAttendersMessage(response);
+
+            this.processingPut = false;
             this.actions3.emit({action:"modal",params:['close']});
           },
-          error => console.log(error));
+          error => {console.log(error); this.processingPut = false;}
+        );
       }
       //If the attenders are being added in the MULTIPLE tab
       else if (this.attenderTabSelected === 1){
@@ -517,19 +544,25 @@ export class CourseDetailsComponent implements OnInit {
             let newAttenders = response.attendersAdded as User[];
             this.course.attenders = this.course.attenders.concat(newAttenders);
             this.handleAttendersMessage(response);
+
+            this.processingPut = false;
             this.actions3.emit({action:"modal",params:['close']});
           },
-          error => console.log(error));
+          error => {console.log(error); this.processingPut = false;}
+        );
       }
       //If the attenders are being added in the FILE UPLOAD tab
       else if (this.attenderTabSelected === 2){
         console.log("Adding attenders by file upload in the FILE UPLOAD tab");
+        this.processingPut = false;
       }
     }
   }
 
   //DELETE existing Session
   deleteSession(){
+    this.processingPut = true;
+
     this.sessionService.deleteSession(this.updatedSession.id).subscribe(
       response => {
         console.log("Session deleted");
@@ -542,9 +575,11 @@ export class CourseDetailsComponent implements OnInit {
             break;
           }
         }
+
+        this.processingPut = false;
         this.actions3.emit({action:"modal",params:['close']});
       },
-      error => console.log(error)
+      error => {console.log(error); this.processingPut = false;}
     );
   }
 
@@ -571,6 +606,8 @@ export class CourseDetailsComponent implements OnInit {
 
   //Updates the course info
   updateCourseInfo(){
+    this.processingCourseInfo = true;
+
     let c: Course = new Course(this.course.title, this.course.image, this.course.courseDetails);
     c.courseDetails.info = this.welcomeText;
     c.id = this.course.id;
@@ -581,16 +618,24 @@ export class CourseDetailsComponent implements OnInit {
         //Only on succesful put we locally update the modified course
         this.course = response;
         this.welcomeText = this.course.courseDetails.info;
+
+        this.processingCourseInfo = false;
       },
-      error => console.log(error)
+      error => {console.log(error); this.processingCourseInfo = false;}
     )
   }
 
   //Closes the course info editing mode
   closeUpdateCourseInfo(){
+    this.welcomeText = this.course.courseDetails.info;
     this.welcomeTextEdition = false;
     this.welcomeTextPreview = false;
     this.previewButton = 'preview';
+  }
+
+
+  fileReaderUploadStarted(started: boolean){
+    this.processingPut = started;
   }
 
   fileReaderUploadCompleted(response){
@@ -604,8 +649,11 @@ export class CourseDetailsComponent implements OnInit {
 
       this.course.attenders = this.course.attenders.concat(newAttenders);
       this.handleAttendersMessage(objResponse);
+
+      this.processingPut = false;
       this.actions3.emit({action:"modal",params:['close']});
     } else {
+      this.processingPut = false;
       console.log("There has been an error: " + response);
     }
   }
@@ -658,9 +706,19 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   //Creates an error message when there is some problem when adding Attenders to a Course
+  //It also generates a correct feedback message when any student has been correctly added to the Course
   handleAttendersMessage(response) {
     let isError: boolean = false;
+    let isCorrect: boolean = false;
     this.attErrorContent = "";
+    this.attCorrectContent = "";
+
+    if (response.attendersAdded.length > 0){
+      for (let user of response.attendersAdded){
+        this.attCorrectContent += "<br/> - " + user.name;
+      }
+      isCorrect = true;
+    }
     if (response.attendersAlreadyAdded.length > 0){
       this.attErrorContent += "The following users were already added to the course:";
       for (let user of response.attendersAlreadyAdded){
@@ -690,6 +748,10 @@ export class CourseDetailsComponent implements OnInit {
     } else if(response.attendersAdded.length == 0){
       this.attErrorTitle = "No emails there!";
       this.addAttendersError = true;
+    }
+    if (isCorrect) {
+      this.attCorrectTitle = "The following users where properly added";
+      this.addAttendersCorrect = true;
     }
   }
 
