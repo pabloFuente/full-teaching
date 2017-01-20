@@ -230,12 +230,14 @@
                   </div>
                 </template>
               </md-tab>
-              <!--<md-tab>
+              <md-tab>
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
                 <template md-tab-content>
-
+                  <div class="row row-no-margin att-row-padding">
+                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
+                  </div>
                 </template>
-              </md-tab>-->
+              </md-tab>
             </md-tab-group>
           </div>
 
@@ -248,7 +250,7 @@
               </div>
             </div>
             <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
-            <button type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
+            <button *ngIf="!((this.putdeleteModalMode === 4) && (this.attenderTabSelected === 2))" type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
           </div>
         </form>
 

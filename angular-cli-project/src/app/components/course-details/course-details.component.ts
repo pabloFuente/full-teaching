@@ -118,6 +118,7 @@ export class CourseDetailsComponent implements OnInit {
   subscription5: Subscription; //Subscription to Drag and Drop 'drop' event
 
   private URL_UPLOAD: string;
+  private URL_FILE_READER_UPLOAD: string;
 
   constructor(
     private courseService: CourseService,
@@ -133,6 +134,7 @@ export class CourseDetailsComponent implements OnInit {
 
     //URL for uploading files changes between development stage and production stage
     this.URL_UPLOAD = environment.URL_UPLOAD;
+    this.URL_FILE_READER_UPLOAD = environment.URL_EMAIL_FILE_UPLOAD;
 
     this.uploader = new FileUploader({url: this.URL_UPLOAD});
 
@@ -591,6 +593,23 @@ export class CourseDetailsComponent implements OnInit {
     this.previewButton = 'preview';
   }
 
+  fileReaderUploadCompleted(response){
+    console.log("File uploaded succesfully. Waiting for the system to add all students...  ");
+    let objResponse = JSON.parse(response);
+    if ("attendersAdded" in objResponse) {
+      let newAttenders = objResponse.attendersAdded as User[];
+
+      console.log("New attenders added:");
+      console.log(newAttenders);
+
+      this.course.attenders = this.course.attenders.concat(newAttenders);
+      this.handleAttendersMessage(objResponse);
+      this.actions3.emit({action:"modal",params:['close']});
+    } else {
+      console.log("There has been an error: " + response);
+    }
+  }
+
 
 //INTERNAL AUXILIAR METHODS
 //Sorts an array of Session by their 'date' attribute (the first are the erliest)
@@ -656,18 +675,20 @@ export class CourseDetailsComponent implements OnInit {
       }
       isError = true;
     }
-    if (response.emailsInvalid.length > 0){
-      this.attErrorContent += "<br/><br/>These are not valid emails:";
-      for (let email of response.emailsInvalid){
-        this.attErrorContent += "<br/> - " + email;
+    if (response.emailsInvalid){
+      if (response.emailsInvalid.length > 0){
+        this.attErrorContent += "<br/><br/>These are not valid emails:";
+        for (let email of response.emailsInvalid){
+          this.attErrorContent += "<br/> - " + email;
+        }
+        isError = true;
       }
-      isError = true;
     }
     if (isError) {
       this.attErrorTitle = "There have been some problems";
       this.addAttendersError = true;
     } else if(response.attendersAdded.length == 0){
-      this.attErrorTitle = "No email has been sent!";
+      this.attErrorTitle = "No emails there!";
       this.addAttendersError = true;
     }
   }

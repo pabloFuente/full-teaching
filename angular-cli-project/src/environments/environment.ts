@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   URL_UPLOAD: 'http://localhost:5000/load-files/upload/course/',
-  URL_PIC_UPLOAD: 'http://localhost:5000/load-files/upload/picture/'
+  URL_PIC_UPLOAD: 'http://localhost:5000/load-files/upload/picture/',
+  URL_EMAIL_FILE_UPLOAD: 'http://localhost:5000/file-reader/upload/course/'
 };

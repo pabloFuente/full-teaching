@@ -221,9 +221,7 @@ public class FileController {
 		
 		User u = userRepository.findOne(id_user);
 		
-		if (!u.equals(this.user.getLoggedUser())){
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
+		checkAuthorization(u, u);
 		
 		Iterator<String> i = request.getFileNames();
 		while (i.hasNext()) {

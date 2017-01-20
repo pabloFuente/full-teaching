@@ -181,8 +181,10 @@ public class CourseController {
 		//Strings with a valid email format but no registered in the application
 		Set<String> attenderEmailsNotRegistered = new HashSet<>();
 		
+		EmailValidator emailValidator = EmailValidator.getInstance();
+		
 		for (int i = 0; i < attenderEmails.length; i++){
-			if (EmailValidator.getInstance().isValid(attenderEmails[i])) {
+			if (emailValidator.isValid(attenderEmails[i])) {
 				attenderEmailsValid.add(attenderEmails[i]);
 			} else {
 				attenderEmailsInvalid.add(attenderEmails[i]);

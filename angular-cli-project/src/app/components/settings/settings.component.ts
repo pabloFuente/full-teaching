@@ -19,9 +19,6 @@ export class SettingsComponent implements OnInit {
 
   private user: User;
 
-  public picUploader:FileUploader;
-  public hasBaseDropZoneOverPic:boolean = false;
-
   private URL_UPLOAD: string;
 
   private submitProcessing: boolean;
@@ -48,16 +45,11 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authenticationService.getCurrentUser();
-    this.picUploader = new FileUploader({url: this.URL_UPLOAD + this.user.id});
-    this.picUploader.onCompleteItem = (item:any, response:string, status:number, headers:any)=> {
-      console.log("Picture changed successfully" + response);
-      this.user.picture = response;
-      this.picUploader.clearQueue();
-    }
   }
 
-  fileOverBase(e:any):void {
-    this.hasBaseDropZoneOverPic = e;
+  pictureUploadCompleted(response){
+    console.log("Picture changed successfully: " + response);
+    this.user.picture = response;
   }
 
   onPasswordSubmit(){
