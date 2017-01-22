@@ -92,10 +92,10 @@ public class FileReaderController {
 			
 			try {
 				AddAttendersByFileResponse response = this.addAttendersFromFile(c, this.fileReader.parseToPlainText(uploadedFile));
-				this.deleteLocalFile(uploadedFile, FILES_FOLDER);
+				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			} catch (Exception e) {
-				this.deleteLocalFile(uploadedFile, FILES_FOLDER);
+				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 				e.printStackTrace();
 			}
 		}
@@ -164,18 +164,18 @@ public class FileReaderController {
 		return isContained;
 	}
 	
-	private void deleteLocalFile(File file, Path folder){
-		System.out.println("Deleting stored file: " + Paths.get(folder.toString(), file.getName()));
+	private void deleteLocalFile(String fileName, Path folder){
+		System.out.println("Deleting stored file: " + Paths.get(folder.toString(), fileName));
 		//Deleting stored file...
 		try {
-			Path path = Paths.get(folder.toString(), file.getName());
+			Path path = Paths.get(folder.toString(), fileName);
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), file.getName()));
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), fileName));
 		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", Paths.get(folder.toString(), file.getName()));
+		    System.err.format("%s not empty%n", Paths.get(folder.toString(), fileName));
 		} catch (IOException x) {
-		    // File permission problems are caught here.
+		    // File permission problems are caught here
 		    System.err.println(x);
 		}
 	}

@@ -130,6 +130,7 @@ public class FileController {
 					this.productionFileSaver(customFile.getNameIdent(), "files", uploadedFile);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
+					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 					e.printStackTrace();
 				}
 				customFile.setLink("http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
@@ -250,6 +251,7 @@ public class FileController {
 					this.productionFileSaver(encodedName, "pictures", uploadedPicture);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
+					this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
 					e.printStackTrace();
 				}
 				this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);

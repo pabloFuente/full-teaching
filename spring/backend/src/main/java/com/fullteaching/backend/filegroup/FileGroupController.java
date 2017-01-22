@@ -256,7 +256,7 @@ public class FileGroupController {
 			if (this.isProductionStage()){
 				//Removing all the S3 stored files of the tree structure...
 				for (File f : fg.getFiles()){
-					this.productionFileDeletion(this.getFileNameFromURL(f.getLink()), "/files");
+					this.productionFileDeletion(f.getNameIdent(), "/files");
 				}
 				this.recursiveS3StoredFileDeletion(fg.getFileGroups());
 			}
@@ -321,7 +321,7 @@ public class FileGroupController {
 				if (this.isProductionStage()){
 					//ONLY ON PRODUCTION
 					//Deleting S3 stored file...
-					this.productionFileDeletion(this.getFileNameFromURL(file.getLink()), "/files");
+					this.productionFileDeletion(file.getNameIdent(), "/files");
 					//ONLY ON PRODUCTION
 				} else {
 					//ONLY ON DEVELOPMENT
@@ -381,7 +381,7 @@ public class FileGroupController {
 	}
 	
 	
-	//Delets all the real stored files given a list of FileGroups
+	//Delets all the real locally stored files given a list of FileGroups
 	private void recursiveLocallyStoredFileDeletion(List<FileGroup> fileGroup){
 		if (fileGroup != null){
 			for (FileGroup fg : fileGroup){
@@ -389,19 +389,6 @@ public class FileGroupController {
 					this.deleteStoredFile(f.getNameIdent());
 				}
 				this.recursiveLocallyStoredFileDeletion(fg.getFileGroups());
-			}
-		}
-		return;
-	}
-	
-	//Delets all the real stored files given a list of FileGroups
-	private void recursiveS3StoredFileDeletion(List<FileGroup> fileGroup){
-		if (fileGroup != null){
-			for (FileGroup fg : fileGroup){
-				for (File f: fg.getFiles()){
-					this.productionFileDeletion(this.getFileNameFromURL(f.getLink()), "/files");
-				}
-				this.recursiveS3StoredFileDeletion(fg.getFileGroups());
 			}
 		}
 		return;
@@ -440,8 +427,17 @@ public class FileGroupController {
         }
 	}
 	
-	private String getFileNameFromURL(String url){
-		return (url.substring(url.lastIndexOf('/') + 1));
+	//Delets all the real S3 stored files given a list of FileGroups
+	private void recursiveS3StoredFileDeletion(List<FileGroup> fileGroup){
+		if (fileGroup != null){
+			for (FileGroup fg : fileGroup){
+				for (File f: fg.getFiles()){
+					this.productionFileDeletion(f.getNameIdent(), "/files");
+				}
+				this.recursiveS3StoredFileDeletion(fg.getFileGroups());
+			}
+		}
+		return;
 	}
 	//ONLY ON PRODUCTION
 	
