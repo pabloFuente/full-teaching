@@ -146,6 +146,13 @@ export class CourseDetailsComponent implements OnInit {
 
     this.uploader = new FileUploader({url: this.URL_UPLOAD});
 
+    //Activating handles for drag and drop files
+    this.dragulaService.setOptions('drag-bag', {
+      moves: function (el, container, handle) {
+        return handle.className === 'drag-handle material-icons action-file-icon';
+      }
+    });
+
     //Subscription for receiving POST modal dialog changes
     this.subscription1 = this.courseDetailsModalDataService.postModeAnnounced$.subscribe(
       objs => {
@@ -232,6 +239,7 @@ export class CourseDetailsComponent implements OnInit {
     this.subscription3.unsubscribe();
     this.subscription4.unsubscribe();
     this.subscription5.unsubscribe();
+    this.dragulaService.destroy('drag-bag');
   }
 
   goToSessionVideo(session: Session){

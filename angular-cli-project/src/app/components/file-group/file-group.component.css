@@ -8,7 +8,7 @@
   margin-bottom: 20px !important;
 }
 
-.file-group-title h5{
+.file-group-title h5 {
   font-size: 1.1rem;
   font-weight: 300;
   margin: 1.5rem 0 1.5rem 0;
@@ -36,44 +36,46 @@
   border: 3px solid #e0e0e0;
 }
 
- h5 {
-   display: inline-block;
- }
+h5 {
+  display: inline-block;
+}
 
- .disp-inline-flex {
-   display: inline-flex;
- }
+.disp-inline-flex {
+  display: inline-flex;
+}
 
- .button-add-file {
-   padding-left: 20px;
-   padding-right: 20px;
-   font-size: smaller;
-   margin-left: 5px;
-   margin-right: 2.5px;
-   border: 1px solid #e4e4e4;
- }
+.button-add-file {
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: smaller;
+  margin-left: 5px;
+  margin-right: 2.5px;
+  border: 1px solid #e4e4e4;
+}
 
- .del-file-icon {
-   cursor: pointer;
-   margin-left: 3px;
-   margin-right: 3px;
- }
+.action-file-icon {
+  cursor: pointer;
+  margin-left: 3px;
+  margin-right: 3px;
+}
 
- .del-file-icon:hover {
-   color: #91a59b;
- }
+.action-file-icon:hover {
+  color: #91a59b;
+}
 
- .draggable {
-   cursor: move;
-   cursor: grab;
-   cursor: -moz-grab;
-   cursor: -webkit-grab;
- }
+.drag-bag-editable {
+  min-height: 35px;
+}
 
- .draggable:hover{
-   background-color: #cccccc;
- }
+.drag-handle {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
 
- .drag-bag-editable {
-   min-height: 35px;
- }
+.drag-handle:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
