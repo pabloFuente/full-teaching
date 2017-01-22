@@ -170,6 +170,7 @@ public class FileReaderController {
 		try {
 			Path path = Paths.get(folder.toString(), fileName);
 		    Files.delete(path);
+		    System.out.println("LOCAL DELETION: File " + fileName + " deleted successfully");
 		} catch (NoSuchFileException x) {
 		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), fileName));
 		} catch (DirectoryNotEmptyException x) {

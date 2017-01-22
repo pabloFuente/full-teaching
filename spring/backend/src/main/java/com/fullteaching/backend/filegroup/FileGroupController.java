@@ -414,6 +414,7 @@ public class FileGroupController {
 		String bucketName = this.bucketAWS + s3Folder;
         try {
         	this.amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        	System.out.println("S3 DELETION: File " + fileName + " deleted successfully");
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException.");
             System.out.println("Error Message:    " + ase.getMessage());
