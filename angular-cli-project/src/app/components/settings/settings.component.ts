@@ -5,6 +5,7 @@ import { FileUploader }      from 'ng2-file-upload';
 
 import { AuthenticationService }   from '../../services/authentication.service';
 import { UserService }             from '../../services/user.service';
+import { AnimationService }        from '../../services/animation.service';
 import { User }                    from '../../classes/user';
 import { Constants }               from '../../constants';
 
@@ -40,6 +41,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private userService: UserService,
+    private animationService: AnimationService,
     private CONSTANTS: Constants) {
 
     //URL for uploading files changes between development stage and production stage

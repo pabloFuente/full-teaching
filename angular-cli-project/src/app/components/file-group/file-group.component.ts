@@ -9,6 +9,7 @@ import { FileService }           from '../../services/file.service';
 import { FilesEditionService }   from '../../services/files-edition.service';
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { AnimationService }      from '../../services/animation.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class FileGroupComponent implements OnInit {
     private fileService: FileService,
     private filesEditionService: FilesEditionService,
     private courseDetailsModalDataService: CourseDetailsModalDataService,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService,
+    private animationService: AnimationService) {
 
     this.subscription = filesEditionService.modeEditAnnounced$.subscribe(
       active => {

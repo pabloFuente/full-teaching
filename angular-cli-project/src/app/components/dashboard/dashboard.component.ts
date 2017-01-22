@@ -12,6 +12,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
 
 import { CourseService }            from '../../services/course.service';
 import { AuthenticationService }    from '../../services/authentication.service';
+import { AnimationService }      from '../../services/animation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private authenticationService: AuthenticationService,
+    private animationService: AnimationService,
     private router: Router,
   ) { }
 

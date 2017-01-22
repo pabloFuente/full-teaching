@@ -17,6 +17,7 @@ import { SessionService }        from '../../services/session.service';
 import { ForumService }          from '../../services/forum.service';
 import { FileService }           from '../../services/file.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { AnimationService }      from '../../services/animation.service';
 
 import { Session }       from '../../classes/session';
 import { Course }        from '../../classes/course';
@@ -131,6 +132,7 @@ export class CourseDetailsComponent implements OnInit {
     private forumService: ForumService,
     private fileService: FileService,
     private sessionService: SessionService,
+    private animationService: AnimationService,
     private authenticationService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,

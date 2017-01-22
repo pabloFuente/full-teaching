@@ -94,7 +94,7 @@
 
       <div class="col l6 m5 s12 dashboard-col">
         <div class="dashboard-title">MY COURSES
-          <a href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" [title]="'Add new course'">
+          <a href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.animationService.animateIfSmall()" [title]="'Add new course'">
             <i class="material-icons add-element-icon">add_circle_outline</i>
           </a>
         </div>
@@ -113,7 +113,7 @@
               </div>
 
               <div class="col l2 m2 s2 right-align no-padding-lateral">
-                <a href="#put-delete-course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedCourse(course)" [title]="'Modify course'">
+                <a href="#put-delete-course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" (click)="this.changeUpdatedCourse(course); this.animationService.animateIfSmall()" [title]="'Modify course'">
                   <i class="material-icons course-put-icon">mode_edit</i>
                 </a>
               </div>

@@ -5,6 +5,7 @@ import { Entry }      from '../../classes/entry';
 import { FileGroup }  from '../../classes/file-group';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
+import { AnimationService }      from '../../services/animation.service';
 
 @Component({
   selector: 'app-comment',
@@ -16,7 +17,7 @@ export class CommentComponent implements OnInit {
   @Input()
   public comment: Comment;
 
-  constructor(private courseDetailsModalDataService: CourseDetailsModalDataService) {}
+  constructor(private courseDetailsModalDataService: CourseDetailsModalDataService, private animationService: AnimationService) {}
 
   ngOnInit() {}
 

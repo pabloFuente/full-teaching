@@ -1,9 +1,9 @@
 <div [class.file-group-root]="this.depth === 0" [class.file-group-child]="this.depth > 0">
   <div class="file-group-title valign-wrapper">
     <h5>{{fileGroup?.title}}</h5>
-    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.courseDetailsModalDataService.animateIfSmall()">Add file</a>
-    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.courseDetailsModalDataService.animateIfSmall()">Add subgroup</a>
-    <a href="#put-delete-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file group'">
+    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()">Add file</a>
+    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.animationService.animateIfSmall()">Add subgroup</a>
+    <a href="#put-delete-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()" [title]="'Modify file group'">
       <i class="material-icons del-file-icon">mode_edit</i>
     </a>
     <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons del-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
@@ -15,7 +15,7 @@
           <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
         </div>
         <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="disp-inline-flex">
-          <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file'">
+          <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.animationService.animateIfSmall()" [title]="'Modify file'">
             <i class="material-icons del-file-icon">mode_edit</i>
           </a>
           <i (click)="deleteFile(f)" class="material-icons del-file-icon" [title]="'Delete file'">clear</i>
@@ -29,7 +29,7 @@
           <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
         </div>
         <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="disp-inline-flex">
-          <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify file'">
+          <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.animationService.animateIfSmall()" [title]="'Modify file'">
             <i class="material-icons del-file-icon">mode_edit</i>
           </a>
           <i (click)="deleteFile(f)" class="material-icons del-file-icon" [title]="'Delete file'">clear</i>

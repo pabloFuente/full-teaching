@@ -310,7 +310,7 @@
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row row-no-margin">
-                <a href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'New session'">
+                <a href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New session'">
                   <i class="material-icons add-element-icon">add_circle_outline</i>
                 </a>
               </div>
@@ -326,7 +326,7 @@
                         {{numberToDate(session.date) | date}} - {{numberToDate(session.date) | date:'H:mm' }}
                       </div>
                       <div class="col l1 m1 s1 right-align no-padding-lateral">
-                        <a href="#put-delete-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(0, 'Modify session'); this.changeUpdatedSession(session); this.courseDetailsModalDataService.animateIfSmall()" [title]="'Modify session'">
+                        <a href="#put-delete-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(0, 'Modify session'); this.changeUpdatedSession(session); this.animationService.animateIfSmall()" [title]="'Modify session'">
                           <i class="material-icons forum-icon">mode_edit</i>
                         </a>
                       </div>
@@ -381,11 +381,11 @@
                 </div>
               </div>
               <div class="center-align div-entry-icon">
-                <a href="#course-details-modal" *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" [title]="'New entry'">
+                <a href="#course-details-modal" *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null, null); this.animationService.animateIfSmall()" [title]="'New entry'">
                   <i class="material-icons forum-icon">chat</i>
                 </a>
 
-                <a href="#put-delete-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.courseDetailsModalDataService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum">
+                <a href="#put-delete-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.animationService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum">
                     <i class="material-icons forum-icon">mode_edit</i>
                 </a>
 
@@ -407,7 +407,7 @@
                   </div>
                 </div>
                 <div class="col l1 m1 s1 no-padding-lateral right-align">
-                  <a href="#course-details-modal" [title]="'New comment'" (click)="updatePostModalMode(1, 'New comment', selectedEntry, null, null); this.postModalCommentReplay = null; this.courseDetailsModalDataService.animateIfSmall()">
+                  <a href="#course-details-modal" [title]="'New comment'" (click)="updatePostModalMode(1, 'New comment', selectedEntry, null, null); this.postModalCommentReplay = null; this.animationService.animateIfSmall()">
                     <i class="material-icons forum-icon">chat</i>
                   </a>
                 </div>
@@ -431,7 +431,7 @@
         <template md-tab-content>
           <div class="tab-template-content row row-no-margin">
             <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
-              <a href="#course-details-modal" *ngIf="!allowFilesEdition" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'New file group'">
+              <a href="#course-details-modal" *ngIf="!allowFilesEdition" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New file group'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
               <i *ngIf="this.course.courseDetails.files.length > 0" (click)="this.changeModeEdition()" class="material-icons add-element-icon right" [title]="'Modify file groups'">{{this.filesEditionIcon}}</i>
@@ -450,7 +450,7 @@
         <template md-tab-content>
           <div class="tab-template-content">
             <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
-              <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.courseDetailsModalDataService.animateIfSmall()" class="right" [title]="'Add attenders'">
+              <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.animationService.animateIfSmall()" class="right" [title]="'Add attenders'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
               <i *ngIf="this.course.attenders.length > 1" (click)="this.changeModeAttenders()" class="material-icons add-element-icon right" [title]="'Modify attenders'">{{this.attendersEditionIcon}}</i>
