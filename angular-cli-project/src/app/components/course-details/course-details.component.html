@@ -224,11 +224,11 @@
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">MULTIPLE</div></template>
                 <template md-tab-content>
                   <div class="row row-no-margin att-row-padding">
+                    <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by <b>WHITE SPACES</b><br>and <b>NEW LINES</b>. If there's any other<br>combination of characters that should<br>be taken into account as separator,<br>include it here</p>">info</i>
                     <div class="input-field col l4 m4 s6">
                       <input [(ngModel)]="inputAttenderSeparator" name="inputAttenderSeparator" id="inputAttenderSeparator" type="text" class="validate">
                       <label for="inputAttenderSeparator">SEPARATOR</label>
                     </div>
-                    <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by WHITE SPACES and NEW LINES<br/>If there's any other combination of characters that<br/>should be taken into account as separator, include it here</p>">info</i>
                     <div class="input-field col s12">
                       <textarea maxlength="1500" [(ngModel)]="inputAttenderMultiple" name="inputAttenderMultiple" id="inputAttenderMultiple" class="materialize-textarea validate" required></textarea>
                       <label for="inputAttenderMultiple">Attender emails</label>
@@ -239,6 +239,7 @@
               <md-tab>
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
                 <template md-tab-content>
+                  <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
                   <div class="row row-no-margin att-row-padding">
                     <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
                   </div>

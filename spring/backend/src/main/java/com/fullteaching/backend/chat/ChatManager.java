@@ -53,7 +53,7 @@ public class ChatManager {
 
 		if (!numChatsSem.tryAcquire(timeout, unit)) {
 			System.out.println("No capacity");
-			throw new TimeoutException("There is no enought capacity to create a new chat");
+			throw new TimeoutException("There is no enough capacity to create a new chat");
 		}
 		
 		System.out.println("There are still " + numChatsSem.availablePermits() + " permits for new chats");

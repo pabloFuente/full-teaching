@@ -11,8 +11,10 @@
     <div class="chat_wrapper">
       <div class="message_box" id="message_box"></div>
       <div class="panel">
-        <input type="text" name="message" id="message" placeholder="Message" maxlength="80"/>
-        <div id="send-btn" class="btn waves-effect button-small" (click)="sendMessage()">Send</div>
+        <form (ngSubmit)="sendMessage()">
+          <input type="text" name="message" id="message" placeholder="Message" maxlength="80"/>
+          <input type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
+        </form>
       </div>
     </div>
   </ul>

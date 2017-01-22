@@ -94,7 +94,7 @@
 
       <div class="col l6 m5 s12 dashboard-col">
         <div class="dashboard-title">MY COURSES
-          <a href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()">
+          <a href="#course-modal" *ngIf="this.authenticationService.isLoggedIn() && this.authenticationService.isTeacher()" [title]="'Add new course'">
             <i class="material-icons add-element-icon">add_circle_outline</i>
           </a>
         </div>
