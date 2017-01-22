@@ -51,6 +51,10 @@ export class FileGroupComponent implements OnInit {
     this.modeEditActive = this.filesEditionService.currentModeEdit;
   }
 
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
+
   updatePostModalMode(mode: number, title: string) {
     let objs = [mode, title, null, null, this.fileGroup];
     this.courseDetailsModalDataService.announcePostMode(objs);

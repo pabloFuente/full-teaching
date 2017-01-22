@@ -36,11 +36,18 @@
           </div>
         </div>
 
+        <div class="recaptcha-div-outer" [class.hide]="loginView">
+          <div class="recaptcha-div-inner">
+            <re-captcha (captchaResponse)="handleCorrectCaptcha($event)" site_key="{{this.captchaPublicKey}}"></re-captcha>
+          </div>
+        </div>
+
         <app-error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="this.errorTitle" [errorContent]="this.errorContent" [customClass]="this.customClass" [closable]="true"></app-error-message>
 
         <div class="row center">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
-          <button type="submit" *ngIf="!loginView" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
+          <a *ngIf="!loginView && !this.captchaValidated" id="disabled-signup-btn" materialize="tooltip" data-position="bottom" data-delay="65" data-html="true" data-tooltip="Click on <b><i>I'm not a robot</i></b> above" class="btn-flat">Sign up</a>
+          <button type="submit" *ngIf="!loginView && this.captchaValidated" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
           <a (click)="setLoginView(true); myForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
 

@@ -263,7 +263,7 @@ public class FileGroupController {
 			else {
 				//Removing all the locally stored files of the tree structure...
 				for (File f : fg.getFiles()){
-					this.deleteStoredFile(f);
+					this.deleteStoredFile(f.getNameIdent());
 				}
 				this.recursiveLocallyStoredFileDeletion(fg.getFileGroups());
 			}
@@ -326,7 +326,7 @@ public class FileGroupController {
 				} else {
 					//ONLY ON DEVELOPMENT
 					//Deleting locally stored file...
-					this.deleteStoredFile(file);
+					this.deleteStoredFile(file.getNameIdent());
 					//ONLY ON DEVELOPMENT
 				}
 				
@@ -386,7 +386,7 @@ public class FileGroupController {
 		if (fileGroup != null){
 			for (FileGroup fg : fileGroup){
 				for (File f: fg.getFiles()){
-					this.deleteStoredFile(f);
+					this.deleteStoredFile(f.getNameIdent());
 				}
 				this.recursiveLocallyStoredFileDeletion(fg.getFileGroups());
 			}
@@ -407,15 +407,15 @@ public class FileGroupController {
 		return;
 	}
 	
-	private void deleteStoredFile(File file){
+	private void deleteStoredFile(String fileName){
 		//Deleting stored file...
 		try {
-			Path path = Paths.get(FILES_FOLDER.toString(), file.getName());
+			Path path = Paths.get(FILES_FOLDER.toString(), fileName);
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(FILES_FOLDER.toString(), fileName));
 		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", Paths.get(FILES_FOLDER.toString(), file.getName()));
+		    System.err.format("%s not empty%n", Paths.get(FILES_FOLDER.toString(), fileName));
 		} catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);

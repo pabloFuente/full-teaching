@@ -42,6 +42,7 @@ import { CalendarComponent }      from './components/calendar/calendar.component
 import { TimeAgoPipe }            from 'time-ago-pipe';
 import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
 import { EditorModule }           from 'primeng/components/editor/editor';
+import { ReCaptchaModule }        from 'angular2-recaptcha';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { EditorModule }           from 'primeng/components/editor/editor';
     CalendarModule.forRoot(),
     DragulaModule,
     EditorModule,
+    ReCaptchaModule,
   ],
   declarations: [
     AppComponent,

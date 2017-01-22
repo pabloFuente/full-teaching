@@ -11,8 +11,8 @@ export class UserService {
 
   constructor(private http: Http) { }
 
-  newUser(name: string, pass: string, nickName: string) {
-    let body = JSON.stringify([name, pass, nickName]);
+  newUser(name: string, pass: string, nickName: string, captchaToken: string) {
+    let body = JSON.stringify([name, pass, nickName, captchaToken]);
     let headers = new Headers({
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest'

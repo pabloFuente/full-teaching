@@ -107,8 +107,9 @@ public class FileController {
 			String name = i.next();
 			System.out.println("X - " + name);
 			MultipartFile file = request.getFile(name);
+			String fileName = file.getOriginalFilename();
 		
-			System.out.println("FILE: " + file.getOriginalFilename());
+			System.out.println("FILE: " + fileName);
 		
 			if (file.isEmpty()) {
 				throw new RuntimeException("The file is empty");
@@ -117,8 +118,6 @@ public class FileController {
 			if (!Files.exists(FILES_FOLDER)) {
 				Files.createDirectories(FILES_FOLDER);
 			}
-	
-			String fileName = file.getOriginalFilename();
 			
 			com.fullteaching.backend.file.File customFile = new com.fullteaching.backend.file.File(1, fileName);
 			File uploadedFile = new File(FILES_FOLDER.toFile(), customFile.getNameIdent());
@@ -134,7 +133,7 @@ public class FileController {
 					e.printStackTrace();
 				}
 				customFile.setLink("http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
-				this.deleteLocalFile(uploadedFile, FILES_FOLDER);
+				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
@@ -253,13 +252,14 @@ public class FileController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				this.deleteLocalFile(uploadedPicture, PICTURES_FOLDER);
+				this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
 				this.productionFileDeletion(this.getFileNameFromURL(u.getPicture()), "/pictures");
 				u.setPicture("http://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
-				u.setPicture(this.developingImageSaver(file));
+				this.deleteLocalFile(this.getFileNameFromURL(u.getPicture()), PICTURES_FOLDER);
+				u.setPicture("/assets/pictures/" + uploadedPicture.getName());
 				//ONLY ON DEVELOPMENT
 			}
 
@@ -327,7 +327,7 @@ public class FileController {
 	}
 	
 	//ONLY ON DEVELOPMENT
-	private String developingImageSaver(MultipartFile file) throws IllegalStateException, IOException{
+	/*private String developingImageSaver(File file) throws IllegalStateException, IOException{
 		Path DEV_PIC_FOLDER = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/assets/pictures");
 		if (!Files.exists(DEV_PIC_FOLDER)) {			
 			Files.createDirectories(DEV_PIC_FOLDER);
@@ -336,7 +336,7 @@ public class FileController {
 		File uploadedPicture = new File(DEV_PIC_FOLDER.toFile(), encodedName);
 		file.transferTo(uploadedPicture);
 		return "/assets/pictures/" + encodedName;
-	}
+	}*/
 	//ONLY ON DEVELOPMENT
 	
 	//ONLY ON PRODUCTION
@@ -412,16 +412,16 @@ public class FileController {
         }
 	}
 	
-	private void deleteLocalFile(File file, Path folder){
-		System.out.println("Deleting stored file: " + Paths.get(folder.toString(), file.getName()));
+	private void deleteLocalFile(String fileName, Path folder){
+		System.out.println("Deleting stored file: " + Paths.get(folder.toString(), fileName));
 		//Deleting stored file...
 		try {
-			Path path = Paths.get(folder.toString(), file.getName());
+			Path path = Paths.get(folder.toString(), fileName);
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), file.getName()));
+		    System.err.format("%s: no such" + " file or directory%n", Paths.get(folder.toString(), fileName));
 		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", Paths.get(folder.toString(), file.getName()));
+		    System.err.format("%s not empty%n", Paths.get(folder.toString(), fileName));
 		} catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);

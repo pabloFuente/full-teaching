@@ -33,3 +33,17 @@
 .cancelColor-back:hover {
   background-color: rgba(167, 56, 65, 0.7);
 }
+
+.recaptcha-div-outer{
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.recaptcha-div-inner{
+  display: inline-block;
+}
+
+#disabled-signup-btn{
+  background-color: #dadada;
+  color: #9e9e9e !important;
+}
