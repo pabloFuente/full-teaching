@@ -32,7 +32,7 @@
         <li><a class="waves-effect">Contact</a></li>
         <li><a class="waves-effect" (click)="logout()">Logout</a></li>
       </ul>
-      <a *ngIf="this.authenticationService.isLoggedIn()" class="button-collapse" materialize="sideNav" data-activates="nav-mobile" [materializeParams]="[{closeOnClick: true}]"><i class="material-icons">menu</i></a>
+      <a *ngIf="this.authenticationService.isLoggedIn()" class="button-collapse" materialize="sideNav" data-activates="nav-mobile" [materializeParams]="[{closeOnClick: true}, {draggable: true}]"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 </div>

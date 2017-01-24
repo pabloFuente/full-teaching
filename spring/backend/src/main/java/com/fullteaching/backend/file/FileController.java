@@ -249,6 +249,7 @@ public class FileController {
 				//ONLY ON PRODUCTION
 				try {
 					this.productionFileSaver(encodedName, "pictures", uploadedPicture);
+					System.out.println("PICTURE SUCCESFULLY UPLOADED  TO S3");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
@@ -262,12 +263,12 @@ public class FileController {
 				//ONLY ON DEVELOPMENT
 				this.deleteLocalFile(this.getFileNameFromURL(u.getPicture()), PICTURES_FOLDER);
 				u.setPicture("/assets/pictures/" + uploadedPicture.getName());
+				
+				System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
 				//ONLY ON DEVELOPMENT
 			}
 
 			userRepository.save(u);
-			
-			System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
 		}
 		
 		return new ResponseEntity<>(u.getPicture(), HttpStatus.CREATED);
@@ -350,7 +351,7 @@ public class FileController {
         try {
         	// Or you can block and wait for the upload to finish
         	upload.waitForCompletion();
-        	System.out.println("Upload completed.");
+        	System.out.println("Upload completed");
         } catch (AmazonClientException amazonClientException) {
         	System.out.println("Unable to upload file, upload was aborted.");
         	amazonClientException.printStackTrace();
@@ -401,6 +402,7 @@ public class FileController {
 		String bucketName = this.bucketAWS + s3Folder;
         try {
         	this.amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+        	System.out.println("S3 DELETION: File " + fileName + " deleted successfully");
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException.");
             System.out.println("Error Message:    " + ase.getMessage());

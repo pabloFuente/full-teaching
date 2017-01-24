@@ -12,10 +12,10 @@
       <p class="p-bold-modal-header">{{this.postModalTitle}}</p>
       <h5 *ngIf="isCurrentPostMode(['1'])">{{this.postModalEntry?.title}}</h5>
       <p *ngIf="isCurrentPostMode(['1'])">{{this.postModalCommentReplay?.message}}</p>
-      <div class="row row-no-margin">
+      <div class="row no-margin">
 
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
-          <div class="row row-no-margin">
+          <div class="row no-margin">
 
             <div *ngIf="isCurrentPostMode(['0', '2', '4'])" class="row">
               <div class="input-field col s12">
@@ -34,7 +34,7 @@
               </div>
             </div>
 
-            <div class="row row-no-margin">
+            <div class="row no-margin">
               <div class="col l6 m6 s6">
                 <div *ngIf="isCurrentPostMode(['2'])" class="row">
                   <label for="inputDate">Date</label>
@@ -55,7 +55,7 @@
 
             <div *ngIf="isCurrentPostMode(['5'])" class="row">
 
-              <div class="row row-no-margin  valign-wrapper">
+              <div class="row no-margin  valign-wrapper">
                 <div class="col l4 m4 s12">
                   <label class="label-input-file waves-effect btn" for="input-file">Select files</label>
                   <input type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" multiple/>
@@ -69,7 +69,7 @@
                 </div>
               </div>
 
-              <div class="row row-no-margin">
+              <div class="row no-margin">
                 <div *ngIf="uploader.queue.length > 0" class="col s12 table-header">
                   <h5 class="table-title">Files to upload</h5>
                   <p class="table-subtitle">You have {{ uploader?.queue?.length }} files in the queue</p>
@@ -153,11 +153,11 @@
 
     <div class="modal-content" [class.filtered]="processingPut">
       <p class="p-bold-modal-header">{{this.putdeleteModalTitle}}</p>
-      <div class="row row-no-margin">
+      <div class="row no-margin">
 
         <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowSessionDeletion = false;">
 
-          <div *ngIf="isCurrentPutdeleteMode(['0'])" class="row row-no-margin">
+          <div *ngIf="isCurrentPutdeleteMode(['0'])" class="row no-margin">
             <div class="row">
               <label for="inputSessionTitle">Session title</label>
               <div class="input-field col s12">
@@ -172,7 +172,7 @@
               </div>
             </div>
 
-            <div class="row row-no-margin">
+            <div class="row no-margin">
               <div class="col l6 m6 s6">
                 <div class="row">
                   <label for="inputSessionDate">Date</label>
@@ -192,12 +192,12 @@
             </div>
           </div>
 
-          <div *ngIf="isCurrentPutdeleteMode(['1'])" class="row row-no-margin">
+          <div *ngIf="isCurrentPutdeleteMode(['1'])" class="row no-margin">
             <input #forumCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowForumEdition = forumCheckbox.checked"/>
             <label for="delete-checkbox">Allow forum {{this.checkboxForumEdition}}?</label>
           </div>
 
-          <div *ngIf="isCurrentPutdeleteMode(['2', '3'])" class="row row-no-margin">
+          <div *ngIf="isCurrentPutdeleteMode(['2', '3'])" class="row no-margin">
             <div class="row">
               <label *ngIf="isCurrentPutdeleteMode(['2'])" for="inputFileTitle">File group title</label>
               <label *ngIf="isCurrentPutdeleteMode(['3'])" for="inputFileTitle">File name</label>
@@ -207,12 +207,12 @@
             </div>
           </div>
 
-          <div *ngIf="isCurrentPutdeleteMode(['4'])" id="tabs-attenders" class="row row-no-margin">
+          <div *ngIf="isCurrentPutdeleteMode(['4'])" id="tabs-attenders" class="row no-margin">
             <md-tab-group [(selectedIndex)]="this.attenderTabSelected">
               <md-tab>
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">SIMPLE</div></template>
                 <template md-tab-content>
-                  <div class="row row-no-margin att-row-padding">
+                  <div class="row no-margin att-row-padding">
                     <div class="input-field col s12">
                       <input [(ngModel)]="inputAttenderSimple" name="inputAttenderSimple" id="inputAttenderSimple" type="email" class="validate" required>
                       <label for="inputAttenderSimple">Attender email</label>
@@ -223,7 +223,7 @@
               <md-tab>
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">MULTIPLE</div></template>
                 <template md-tab-content>
-                  <div class="row row-no-margin att-row-padding">
+                  <div class="row no-margin att-row-padding">
                     <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by <b>WHITE SPACES</b><br>and <b>NEW LINES</b>. If there's any other<br>combination of characters that should<br>be taken into account as separator,<br>include it here</p>">info</i>
                     <div class="input-field col l4 m4 s6">
                       <input [(ngModel)]="inputAttenderSeparator" name="inputAttenderSeparator" id="inputAttenderSeparator" type="text" class="validate">
@@ -240,7 +240,7 @@
                 <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
                 <template md-tab-content>
                   <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
-                  <div class="row row-no-margin att-row-padding">
+                  <div class="row no-margin att-row-padding">
                     <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
                   </div>
                 </template>
@@ -285,7 +285,7 @@
             <div *ngIf="processingCourseInfo" class="loading"></div>
 
             <div class="tab-template-content" [class.filtered]="processingCourseInfo">
-              <div class="row row-no-margin">
+              <div class="row no-margin">
                 <a *ngIf="this.authenticationService.isTeacher() && !this.welcomeTextEdition" (click)="this.welcomeTextEdition = true" class="right" [title]="'Edit info'">
                   <i class="material-icons add-element-icon">edit</i>
                 </a>
@@ -309,7 +309,7 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
         <template md-tab-content>
             <div class="tab-template-content">
-              <div class="row row-no-margin">
+              <div class="row no-margin">
                 <a href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New session'">
                   <i class="material-icons add-element-icon">add_circle_outline</i>
                 </a>
@@ -317,7 +317,7 @@
               <ul>
                 <div *ngFor="let session of this.course.sessions; let last1 = last">
                   <li class="session-data">
-                    <div class="row row-no-margin">
+                    <div class="row no-margin">
                       <div (click)="goToSessionVideo(session)" [class.session-ready]="this.isSessionReady(session)" class="col l7 m6 s6">
                         <div class="session-title">{{session.title}}</div>
                         <div class="session-description">{{session.description}}</div>
@@ -351,29 +351,29 @@
       <md-tab><!--Forum Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
-          <div class="tab-template-content-2 row row-no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
+          <div class="tab-template-content-2 row no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
 
             <!--Forum view-->
-            <ul class="entries-side-view row row-no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
+            <ul class="entries-side-view row no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
               <div *ngIf="this.course.courseDetails?.forum.activated">
                 <div *ngFor="let entry of this.course.courseDetails?.forum.entries; let last2 = last">
                   <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
-                    <div class="row row-no-margin entry-row-sep">
+                    <div class="row no-margin entry-row-sep">
                       <div class="col l6 m6 s6">
                         <a [title]="entry.title">{{entry.title}}</a>
                       </div>
                       <div class="col l6 m6 s6 user-date-column">
-                        <div class="row row-no-margin">
+                        <div class="row no-margin">
                           <div class="col l6 m6 s6 user-name">{{entry?.user?.nickName}}</div>
                           <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
                         </div>
                       </div>
                     </div>
-                    <div *ngIf="entry.comments.length > 0" class="row row-no-margin last-comment-row">
+                    <div *ngIf="entry.comments.length > 0" class="row no-margin last-comment-row">
                       <div class="col">Last comment:</div>
                       <div class="col">{{getLastEntryComment(entry)?.user?.nickName}}, {{getLastEntryComment(entry)?.date | timeAgo}}</div>
                     </div>
-                    <div *ngIf="entry.comments.length === 0" class="row row-no-margin last-comment-row">
+                    <div *ngIf="entry.comments.length === 0" class="row no-margin last-comment-row">
                       <div class="col">No comments</div>
                     </div>
                   </li>
@@ -392,14 +392,14 @@
               </div>
             </ul>
 
-            <div *ngIf="this.course.courseDetails?.forum.activated" id="row-of-comments" class="row row-no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
-              <div class="row zero-lateral-margin">
+            <div *ngIf="this.course.courseDetails?.forum.activated" id="row-of-comments" class="row no-margin" [@fadeAnim]="this.fadeAnim" [class.hide]="this.fadeAnim === 'commentsHidden'">
+              <div class="row no-margin-lateral">
                 <a><i id="entries-sml-btn" class="material-icons center-align col l1 m1 s1 no-padding-lateral" (click)="this.fadeAnim = 'commentsHidden'">arrow_back</i></a>
                 <div class="col l10 m10 s10 no-padding-lateral">
-                  <div class="row row-no-margin comment-section-title">
+                  <div class="row no-margin comment-section-title">
                     <div class="col l6 m6 s6">{{selectedEntry?.title}}</div>
                     <div class="col l6 m6 s6 user-date-column">
-                      <div class="row row-no-margin">
+                      <div class="row no-margin">
                         <div class="col l6 m6 s6 user-name">{{selectedEntry?.user.nickName}}</div>
                         <div class="col l6 m6 s6 user-name">{{selectedEntry?.date | date}} - {{selectedEntry?.date | date:'H:mm' }}</div>
                       </div>
@@ -412,7 +412,7 @@
                   </a>
                 </div>
               </div>
-              <div class="row row-no-margin comments-col">
+              <div class="row no-margin comments-col">
                 <div *ngFor="let comment of this.selectedEntry?.comments; let last3 = last" class="comment-block" [class.comment-divider]="!last3">
                   <app-comment [comment]="comment"></app-comment>
                 </div>
@@ -429,8 +429,8 @@
       <md-tab><!--Files Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
-          <div class="tab-template-content row row-no-margin">
-            <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
+          <div class="tab-template-content row no-margin">
+            <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a href="#course-details-modal" *ngIf="!allowFilesEdition" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New file group'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
@@ -449,7 +449,7 @@
         <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content">
-            <div *ngIf="this.authenticationService.isTeacher()" class="row row-no-margin">
+            <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.animationService.animateIfSmall()" class="right" [title]="'Add attenders'">
                 <i class="material-icons add-element-icon">add_circle_outline</i>
               </a>
@@ -459,7 +459,7 @@
             <app-error-message *ngIf="addAttendersCorrect" (eventShowable)="addAttendersCorrect = false" [errorTitle]="attCorrectTitle" [errorContent]="attCorrectContent" [customClass]="'correct'" [closable]="true"></app-error-message>
             <app-error-message *ngIf="addAttendersError" (eventShowable)="addAttendersError = false" [errorTitle]="attErrorTitle" [errorContent]="attErrorContent" [customClass]="'fail'" [closable]="true"></app-error-message>
 
-            <div class="row row-no-margin valign-wrapper user-attender-row">
+            <div class="row no-margin valign-wrapper user-attender-row">
               <div class="col l2 m2 s3 valign attender-col">
                 <img materialize="materialbox" class="circle materialboxed userImage" src={{this.authenticationService.getCurrentUser().picture}}>
               </div>
@@ -468,12 +468,19 @@
               </div>
             </div>
             <div *ngFor="let attender of this.course.attenders">
-              <div *ngIf="attender.id != this.authenticationService.getCurrentUser().id" class="row row-no-margin valign-wrapper">
+              <div *ngIf="attender.id != this.authenticationService.getCurrentUser().id" class="row no-margin valign-wrapper">
                 <div class="col l2 m2 s3 valign attender-col">
                   <img materialize="materialbox" class="circle materialboxed userImage" src={{attender.picture}}>
                 </div>
-                <div class="col l5 m5 s9 valign attender-col">
-                  <p>{{attender?.nickName}}</p>
+                <div class="col l9 l9 s7 no-margin-left">
+                  <div class="row no-margin">
+                    <div class="col l6 m6 s12 no-padding-lateral valign attender-col">
+                      <p class="p-nickName">{{attender?.nickName}}</p>
+                    </div>
+                    <div class="col l6 m6 s12 no-padding-lateral valign attender-col">
+                      <p class="p-name">{{attender?.name}}</p>
+                    </div>
+                  </div>
                 </div>
                 <i *ngIf="this.allowAttendersEdition && this.authenticationService.isTeacher()" (click)="deleteAttender(attender)" class="material-icons del-attender-icon" [title]="'Remove ' + attender.nickName">clear</i>
               </div>

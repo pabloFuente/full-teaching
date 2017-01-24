@@ -255,6 +255,23 @@ a.btn-floating {
   margin: inherit !important;
 }
 
+.p-name{
+  font-size: small;
+  color: #828282;
+}
+
+@media only screen and (max-width: 600px) and (orientation: portrait), screen and (max-width: 992px) and (orientation: landscape) {
+  .p-nickName {
+    margin: 0;
+  }
+
+  .p-name {
+    font-size: small;
+    color: #828282;
+    margin: 0;
+  }
+}
+
 @media only screen and (min-width: 993px) {
   .userImage {
     width: 70px;

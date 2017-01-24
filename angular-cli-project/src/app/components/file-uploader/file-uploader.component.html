@@ -1,6 +1,6 @@
-<div class="row row-no-margin">
+<div class="row no-margin">
 
-  <div *ngIf="uploader.queue.length == 0" class="row row-no-margin text-centered">
+  <div *ngIf="uploader.queue.length == 0" class="row no-margin text-centered">
     <div class="col l12 m12 s12">
       <label class="label-input-file waves-effect btn" for="input-file">{{buttonText}}</label>
       <input type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" />
@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div *ngIf="uploader.queue.length > 0" class="row row-no-margin">
+  <div *ngIf="uploader.queue.length > 0" class="row no-margin">
     <div class="col s12 table-header">
       <table class="table">
         <tbody>

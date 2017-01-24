@@ -9,10 +9,10 @@
 
     <div class="modal-content" [class.filtered]="processingPost">
       <p class="p-bold-modal-header">New course</p>
-      <div class="row row-no-margin">
+      <div class="row no-margin">
 
         <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
-          <div class="row row-no-margin">
+          <div class="row no-margin">
 
             <div class="row">
               <div class="input-field col s12">
@@ -49,10 +49,10 @@
 
     <div class="modal-content" [class.filtered]="processingPut">
       <p class="p-bold-modal-header">Modify course</p>
-      <div class="row row-no-margin">
+      <div class="row no-margin">
 
         <form materialize #putDeleteCourseForm class="col s12" (ngSubmit)="onPutDeleteCourseSubmit(); putDeleteCourseForm.reset(); this.allowCourseDeletion = false;">
-          <div class="row row-no-margin">
+          <div class="row no-margin">
 
             <div class="row">
               <label for="inputPutCourseName">Course name</label>
@@ -90,7 +90,7 @@
   <!--PUT/DELETE COURSE DIALOG-->
 
   <div class="container container-ul margins-top-bottom">
-    <div class="row row-no-margin">
+    <div class="row no-margin">
 
       <div class="col l6 m5 s12 dashboard-col">
         <div class="dashboard-title">MY COURSES
