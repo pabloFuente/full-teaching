@@ -276,10 +276,10 @@
 
   <!--TABS-->
   <div id="tabs-course-details" class="row">
-    <md-tab-group [selectedIndex]="0">
+    <md-tab-group [selectedIndex]="this.tabId">
 
       <md-tab><!--Course Info Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
+        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(0)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
         <template md-tab-content>
 
             <div *ngIf="processingCourseInfo" class="loading"></div>
@@ -306,7 +306,7 @@
       </md-tab>
 
       <md-tab><!--Sessions Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
+        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(1)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
         <template md-tab-content>
             <div class="tab-template-content">
               <div class="row no-margin">
@@ -349,7 +349,7 @@
       </md-tab>-->
 
       <md-tab><!--Forum Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
+        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(2)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content-2 row no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
 
@@ -357,14 +357,14 @@
             <ul class="entries-side-view row no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
               <div *ngIf="this.course.courseDetails?.forum.activated">
                 <div *ngFor="let entry of this.course.courseDetails?.forum.entries; let last2 = last">
-                  <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect">
+                  <li (mousedown)="this.fadeAnim = 'commentsHidden';" (click)="this.selectedEntry = entry; this.fadeAnim = 'commentsShown';" class="entry-title waves-effect" [class.teacher-forum]="isEntryTeacher(entry)">
                     <div class="row no-margin entry-row-sep">
                       <div class="col l6 m6 s6">
                         <a [title]="entry.title">{{entry.title}}</a>
                       </div>
                       <div class="col l6 m6 s6 user-date-column">
                         <div class="row no-margin">
-                          <div class="col l6 m6 s6 user-name">{{entry?.user?.nickName}}</div>
+                          <div class="col l6 m6 s6 user-name" [class.teacher-name]="isEntryTeacher(entry)">{{entry?.user?.nickName}}</div>
                           <div class="col l6 m6 s6 user-name">{{entry?.date | timeAgo}}</div>
                         </div>
                       </div>
@@ -427,7 +427,7 @@
       </md-tab>
 
       <md-tab><!--Files Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
+        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(3)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content row no-margin">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
@@ -446,7 +446,7 @@
       </md-tab>
 
       <md-tab><!--Attenders Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
+        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(4)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
         <template md-tab-content>
           <div class="tab-template-content">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">

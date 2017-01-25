@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   }
 
   goToCourseDetail(id): void {
-    this.router.navigate(['/courses', id]);
+    this.router.navigate(['/courses', id, 0]);
   }
 
   logout() {

@@ -11,7 +11,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class SessionService {
 
-  private urlSessions = '/sessions';
+  private urlSessions = '/api-sessions';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 

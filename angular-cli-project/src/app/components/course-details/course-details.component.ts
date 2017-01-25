@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, animate, transition, style } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router, Params }   from '@angular/router';
 import { Subscription }             from 'rxjs/Subscription';
 import { environment } from '../../../environments/environment';
@@ -54,6 +55,7 @@ export class CourseDetailsComponent implements OnInit {
   updatedFile: File;
 
   fadeAnim = 'commentsHidden';
+  tabId: number = 0;
 
   //POST MODAL
   processingPost: boolean = false;
@@ -136,6 +138,7 @@ export class CourseDetailsComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute,
+    private location: Location,
     private courseDetailsModalDataService: CourseDetailsModalDataService,
     private filesEditionService: FilesEditionService,
     private dragulaService: DragulaService) {
@@ -218,6 +221,7 @@ export class CourseDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
+      this.tabId = +params['tabId'];
       this.courseService.getCourse(id).subscribe(
         course => {
           console.log("Course " + course.id + ":");
@@ -641,6 +645,14 @@ export class CourseDetailsComponent implements OnInit {
     this.welcomeTextEdition = false;
     this.welcomeTextPreview = false;
     this.previewButton = 'preview';
+  }
+
+  changeUrlTab(tab:number){
+    this.location.replaceState("/courses/" + this.course.id + "/" + tab);
+  }
+
+  isEntryTeacher(entry: Entry){
+    return (entry.user.roles.indexOf('ROLE_TEACHER') > -1);
   }
 
 

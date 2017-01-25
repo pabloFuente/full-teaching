@@ -33,7 +33,7 @@ import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
 
 @RestController
-@RequestMapping("/file-reader")
+@RequestMapping("/api-file-reader")
 public class FileReaderController {
 	
 	private class AddAttendersByFileResponse {

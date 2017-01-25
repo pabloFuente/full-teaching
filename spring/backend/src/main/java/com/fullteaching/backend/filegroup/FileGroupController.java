@@ -33,7 +33,7 @@ import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserComponent;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/api-files")
 public class FileGroupController {
 	
 	@Autowired

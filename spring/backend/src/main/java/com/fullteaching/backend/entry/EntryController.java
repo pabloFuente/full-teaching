@@ -19,7 +19,7 @@ import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserComponent;
 
 @RestController
-@RequestMapping("/entries")
+@RequestMapping("/api-entries")
 public class EntryController {
 	
 	@Autowired

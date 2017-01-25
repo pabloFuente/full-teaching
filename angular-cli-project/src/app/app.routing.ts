@@ -20,7 +20,7 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'courses/:id',
+    path: 'courses/:id/:tabId',
     component: CourseDetailsComponent,
     canActivate: [AuthGuard]
   },

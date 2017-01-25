@@ -27,7 +27,7 @@ import com.fullteaching.backend.user.User;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api-users")
 public class UserController {
 	
 	@Autowired

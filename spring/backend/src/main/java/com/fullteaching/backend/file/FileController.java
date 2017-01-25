@@ -49,7 +49,7 @@ import com.fullteaching.backend.user.UserRepository;
 import com.fullteaching.backend.user.UserComponent;
 
 @RestController
-@RequestMapping("/load-files")
+@RequestMapping("/api-load-files")
 public class FileController {
 	
 	@Autowired

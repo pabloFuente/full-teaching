@@ -15,7 +15,7 @@ import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
 import com.fullteaching.backend.user.User;
 
 @RestController
-@RequestMapping("/forum")
+@RequestMapping("/api-forum")
 public class ForumController {
 	
 	@Autowired

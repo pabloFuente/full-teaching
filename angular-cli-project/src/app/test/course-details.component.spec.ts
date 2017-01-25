@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { CourseDetailsComponent } from './course-details.component';
+import { CourseDetailsComponent } from '../components/course-details/course-details.component';
 
 describe('Component: CourseDetails', () => {
   it('should create an instance', () => {

@@ -16,6 +16,8 @@ export class VideoSessionComponent implements OnInit {
   websocket: WebSocket;
   sessionId: number;
 
+  myMessage: string;
+
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
   }
@@ -32,7 +34,7 @@ export class VideoSessionComponent implements OnInit {
     let thisAux = this;
 
     this.websocket.onopen = function(event: Event) { // connection is open
-      $('#message_box').append("<div class=\"system_msg\">Connected!</div>"); //notify user
+      $('#message_box').append("<div class='system_msg'>Connected!</div>"); //notify user
       //prepare json data
       let msg = {
         chat: 'Chat-Session-' + thisAux.sessionId,
@@ -51,26 +53,23 @@ export class VideoSessionComponent implements OnInit {
 
       if (type == 'system') {
         $('#message_box').append(
-          "<div class=\"system_msg\">" + umsg
-          + "</div>");
+          "<div class='system_msg'>" + umsg + "</div>");
       } else {
         $('#message_box').append(
-          "<div><span class=\"user_name\" style=\"color:#" + ucolor + "\">"
+          "<div><span class='user_name' style='color:#" + ucolor + "'>"
           + uname
-          + "</span> : <span class=\"user_message\">"
+          + "</span> : <span class='user_message'>"
           + umsg
           + "</span></div>");
       }
-
-      $('#message').val(''); //reset text
     };
 
     this.websocket.onerror = function(ev) {
-      $('#message_box').append("<div class=\"system_error\">Error Occurred - " + ev.message + "</div>");
+      $('#message_box').append("<div class='system_error'>Error Occurred - " + ev.message + "</div>");
     };
 
     this.websocket.onclose = function(ev) {
-      $('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");
+      $('#message_box').append("<div class='system_msg'>Connection Closed</div>");
     };
 
     //Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
@@ -79,25 +78,20 @@ export class VideoSessionComponent implements OnInit {
 
   ngOnDestroy() {
     //Closing the Chat websocket
-    this.websocket.close()
+    this.websocket.close();
     //Delets the dark overlay (if side menu opened) when the component is destroyed
     $("#sidenav-overlay").remove();
   }
 
   sendMessage(){
-    var mymessage = $('#message').val(); //get message text
-    //var myname = $('#name').val(); //get user name
-    if (mymessage == "") { //emtpy message?
-      alert("Enter Some message Please!");
-      return;
-    }
     //prepare json data
-    var msg = {
-      message: mymessage,
+    let msg = {
+      message: this.myMessage,
       user: this.user.nickName
     };
     //convert and send data to server
     this.websocket.send(JSON.stringify(msg));
+    this.myMessage = "";
   }
 
   exitFromSession(){

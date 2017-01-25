@@ -1,8 +1,8 @@
 <div class="comment-div">
   <div class="row row-margin-bottom">
-    <div class="col l11 m11 s11">
+    <div class="col l11 m11 s11" [class.teacher-forum]="isCommentTeacher(this.comment)">
       <div class="message-itself">{{comment.message}}</div>
-      <div class="user-name">{{comment.user.nickName}}</div>
+      <div class="user-name" [class.teacher-name]="isCommentTeacher(comment)">{{comment.user.nickName}}</div>
       <div class="user-date-separator">-</div>
       <div class="user-name">{{comment.date | date}} - {{comment.date | date:'H:mm' }}</div>
     </div>

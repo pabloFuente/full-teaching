@@ -9,6 +9,9 @@ import { User } from '../classes/user';
 @Injectable()
 export class AuthenticationService {
 
+  private urlLogIn = '/api-logIn';
+  private urlLogOut = '/api-logOut';
+
   public token: string;
   private user: User;
   private role: string;
@@ -31,7 +34,7 @@ export class AuthenticationService {
   			'X-Requested-With': 'XMLHttpRequest'});
     let options = new RequestOptions({headers});
 
-    return this.http.get('logIn', options)
+    return this.http.get(this.urlLogIn, options)
       .map(response => {
         this.processLogInResponse(response);
         return this.user;
@@ -64,7 +67,7 @@ export class AuthenticationService {
 
     console.log("Logging out...");
 
-    return this.http.get('logOut').map(
+    return this.http.get(this.urlLogOut).map(
 			response => {
 
         console.log("Logout succesful!");
@@ -113,7 +116,7 @@ export class AuthenticationService {
   		});
   		let options = new RequestOptions({headers});
 
-  		this.http.get('logIn', options).subscribe(
+  		this.http.get(this.urlLogIn, options).subscribe(
   			response => this.processLogInResponse(response),
   			error => {
   				if(error.status != 401){

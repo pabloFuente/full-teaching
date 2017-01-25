@@ -27,7 +27,7 @@ public class LoginController {
 	@Autowired
 	private UserComponent userComponent;
 
-	@RequestMapping("/logIn")
+	@RequestMapping("/api-logIn")
 	public ResponseEntity<User> logIn() {
 		
 		System.out.println("Logging in...");
@@ -48,7 +48,7 @@ public class LoginController {
 		}
 	}
 
-	@RequestMapping("/logOut")
+	@RequestMapping("/api-logOut")
 	public ResponseEntity<Boolean> logOut(HttpSession session) {
 		
 		System.out.println("Logging out...");

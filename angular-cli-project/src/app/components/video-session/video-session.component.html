@@ -12,8 +12,9 @@
       <div class="message_box" id="message_box"></div>
       <div class="panel">
         <form (ngSubmit)="sendMessage()">
-          <input type="text" name="message" id="message" placeholder="Message" maxlength="80"/>
-          <input type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
+          <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="80" autocomplete="off"/>
+          <input *ngIf="this.myMessage" type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
+          <a *ngIf="!this.myMessage" id="fake-send-btn" class="btn waves-effect button-small disabled">Send</a>
         </form>
       </div>
     </div>

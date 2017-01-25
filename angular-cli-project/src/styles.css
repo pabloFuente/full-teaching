@@ -172,6 +172,16 @@ i {
   line-height: 27px;
 }
 
+
+.teacher-forum{
+  background-color: rgba(149, 165, 157, 0.3);
+}
+
+.teacher-name{
+  font-weight: 500 !important;
+  color: #375646 !important;
+}
+
 /*Loader*/
 @keyframes spinLoader {
   0% {
@@ -338,6 +348,23 @@ div.drag-target {
   display: none !important;
 }
 /*Text editor component*/
+
+/*Chat global styles*/
+.system_msg {
+  color: #b1b1b1;
+  font-style: italic;
+}
+
+.user_name {
+  font-size: small;
+  font-weight: 600;
+}
+
+.user_message {
+  font-size: 14px;
+  color: #5f5f5f;
+}
+/*Chat global styles*/
 
 /*Calendar component*/
 h3.calendar-title {

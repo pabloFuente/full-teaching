@@ -16,6 +16,6 @@ export class PresentationComponent implements OnInit{
 
   //If the user is loggedIn, navigates to dashboard
   ngAfterViewChecked() {
-    if (this.authenticationService.isLoggedIn()) this.router.navigateByUrl('/courses');
+    if (this.authenticationService.isLoggedIn()) this.router.navigate(['/courses']);
   }
 }

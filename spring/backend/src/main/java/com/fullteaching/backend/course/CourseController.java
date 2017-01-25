@@ -21,7 +21,7 @@ import com.fullteaching.backend.course.Course.SimpleCourseList;
 import com.fullteaching.backend.user.User;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/api-courses")
 public class CourseController {
 	
 	@Autowired

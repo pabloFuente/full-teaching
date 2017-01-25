@@ -15,7 +15,7 @@ import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserComponent;
 
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping("/api-sessions")
 public class SessionController {
 	
 	@Autowired

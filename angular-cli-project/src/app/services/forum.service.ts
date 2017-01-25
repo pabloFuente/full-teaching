@@ -17,9 +17,9 @@ export class ForumService {
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  private urlNewEntry = "/entries";
-  private urlNewComment = "/comments";
-  private urlEditForum = "/forum"
+  private urlNewEntry = "/api-entries";
+  private urlNewComment = "/api-comments";
+  private urlEditForum = "/api-forum"
 
   //POST new Entry. Requires an Entry and the id of the CourseDetails that owns the Forum
   //On success returns the updated Forum that owns the posted entry

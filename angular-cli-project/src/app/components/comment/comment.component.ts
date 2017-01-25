@@ -26,4 +26,8 @@ export class CommentComponent implements OnInit {
     this.courseDetailsModalDataService.announcePostMode(objs);
   }
 
+  isCommentTeacher(comment: Comment){
+    return (comment.user.roles.indexOf('ROLE_TEACHER') > -1);
+  }
+
 }

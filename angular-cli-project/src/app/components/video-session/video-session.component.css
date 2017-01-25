@@ -23,8 +23,15 @@ video {
   margin: 10px;
 }
 
-#slide-out {
-
+#fake-send-btn{
+  font-size: 11px;
+  font-weight: 600;
+  padding-left: 12px;
+  padding-right: 12px;
+  height: 27px;
+  line-height: 27px;
+  display: inline-block;
+  margin: 0;
 }
 
 .chat_wrapper {
@@ -50,9 +57,11 @@ video {
 }
 
 .user_name {
-  font-weight: bold;
+  font-size: small;
+  font-weight: 600;
 }
 
 .user_message {
+  font-size: small;
   color: #88B6E0;
 }

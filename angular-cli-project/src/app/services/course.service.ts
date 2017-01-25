@@ -12,7 +12,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class CourseService {
 
-  private url = '/courses';
+  private url = '/api-courses';
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 

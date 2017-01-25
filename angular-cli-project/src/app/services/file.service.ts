@@ -16,7 +16,7 @@ export class FileService {
 
   constructor(private http: Http, private authenticationService: AuthenticationService) { }
 
-  private url = "/files";
+  private url = "/api-files";
 
   private pendingDownload: boolean = false;
 
@@ -93,7 +93,7 @@ export class FileService {
 
     // Create the Xhr request object
     let xhr = new XMLHttpRequest();
-    let url = "/load-files/course/" + courseId + "/download/" + file.id;
+    let url = "/api-load-files/course/" + courseId + "/download/" + file.id;
     xhr.open('GET', url, true);
     xhr.responseType = 'blob';
 

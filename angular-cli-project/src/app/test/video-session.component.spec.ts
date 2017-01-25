@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { VideoSessionComponent } from './video-session.component';
+import { VideoSessionComponent } from '../components/video-session/video-session.component';
 
 describe('VideoSessionComponent', () => {
   let component: VideoSessionComponent;
