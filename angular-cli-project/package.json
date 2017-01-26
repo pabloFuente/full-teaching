@@ -1,6 +1,6 @@
 {
   "name": "angular-cli-project",
-  "version": "0.5",
+  "version": "0.5.0",
   "author": "Pablo Fuente",
   "license": "MIT",
   "repository": {
@@ -17,17 +17,17 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "2.1.2",
-    "@angular/compiler": "2.1.2",
-    "@angular/core": "2.1.2",
-    "@angular/forms": "2.1.2",
-    "@angular/http": "2.1.2",
-    "@angular/material": "~2.0.0-alpha.9-3",
-    "@angular/platform-browser": "2.1.2",
-    "@angular/platform-browser-dynamic": "2.1.2",
-    "@angular/router": "3.0.0",
-    "angular-calendar": "~0.4.0",
-    "angular2-materialize": "~6.2.0",
+    "@angular/common": "2.4.4",
+    "@angular/compiler": "2.4.4",
+    "@angular/core": "2.4.4",
+    "@angular/forms": "2.4.4",
+    "@angular/http": "2.4.4",
+    "@angular/material": "2.0.0-alpha.9-3",
+    "@angular/platform-browser": "2.4.4",
+    "@angular/platform-browser-dynamic": "2.4.4",
+    "@angular/router": "3.4.5",
+    "angular-calendar": "0.6.2",
+    "angular2-materialize": "~6.6.0",
     "angular2-recaptcha": "^0.3.7",
     "core-js": "^2.4.1",
     "dragula": "^3.7.2",
@@ -35,7 +35,7 @@
     "jquery": "^2.2.4",
     "materialize-css": "~0.97.8",
     "ng2-dragula": "~1.2.1",
-    "ng2-file-upload": "~1.1.4-2",
+    "ng2-file-upload": "1.2.0",
     "primeng": "~1.1.4",
     "quill": "~1.1.10",
     "rxjs": "5.0.0-beta.12",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/jasmine": "^2.2.34",
-    "angular-cli": "1.0.0-beta.19-3",
+    "angular-cli": "1.0.0-beta.21",
     "codelyzer": "~0.0.26",
     "jasmine-core": "2.4.1",
     "jasmine-expect": "^3.0.1",
@@ -60,6 +60,6 @@
     "protractor": "4.0.5",
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
-    "typescript": "2.0.3"
+    "typescript": "2.1.1"
   }
 }
