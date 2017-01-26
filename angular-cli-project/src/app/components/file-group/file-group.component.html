@@ -1,12 +1,16 @@
 <div [class.file-group-root]="this.depth === 0" [class.file-group-child]="this.depth > 0">
-  <div class="file-group-title valign-wrapper">
-    <h5>{{fileGroup?.title}}</h5>
-    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()">Add file</a>
-    <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.animationService.animateIfSmall()">Add subgroup</a>
-    <a href="#put-delete-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()" [title]="'Modify file group'">
-      <i class="material-icons action-file-icon">mode_edit</i>
-    </a>
-    <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons action-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
+  <div class="file-group-title-div" [class.title-edit]="this.modeEditActive">
+    <div class="file-group-title valign-wrapper">
+      <h5>{{fileGroup?.title}}</h5>
+    </div>
+    <div class="buttons-container-div valign-wrapper">
+      <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()">Add file</a>
+      <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.animationService.animateIfSmall()">Add subgroup</a>
+      <a href="#put-delete-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="mode-edit-icon" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()" [title]="'Modify file group'">
+        <i class="material-icons action-file-icon">mode_edit</i>
+      </a>
+      <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons action-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
+    </div>
   </div>
 
   <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="drag-bag-editable" [dragula]='"drag-bag"' [dragulaModel]="fileGroup?.files" [attr.data-id]="fileGroup.id">

@@ -1,3 +1,9 @@
+#video-session-div {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
 video {
   width: 100%;
   height: 100%;
@@ -17,6 +23,14 @@ video {
   z-index: 1000;
   margin-left: 10px;
   margin-top: 10px;
+}
+
+#fullscreen-button {
+  position: fixed;
+  z-index: 1000;
+  margin-right: 10px;
+  margin-top: 10px;
+  right: 0;
 }
 
 #exit-icon {

@@ -11,7 +11,21 @@
 .file-group-title h5 {
   font-size: 1.1rem;
   font-weight: 300;
-  margin: 1.5rem 0 1.5rem 0;
+}
+
+.file-group-title-div {
+  padding-left: 0.656em;
+  margin-top: 20px;
+}
+
+.buttons-container-div {
+  padding-bottom: 0.656rem;
+  margin-bottom: 0.656em;
+}
+
+.mode-edit-icon {
+  max-height: 24px;
+  margin-left: 10px;
 }
 
 .chip-file {
@@ -45,12 +59,13 @@ h5 {
 }
 
 .button-add-file {
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: smaller;
   margin-left: 5px;
   margin-right: 2.5px;
   border: 1px solid #e4e4e4;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: x-small;
+  font-weight: 500;
 }
 
 .action-file-icon {
@@ -78,4 +93,8 @@ h5 {
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+.title-edit {
+  background-color: rgb(243, 243, 243);
 }

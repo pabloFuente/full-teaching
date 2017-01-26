@@ -5,6 +5,12 @@ import { Location }               from '@angular/common';
 import { User }                  from '../../classes/user';
 import { AuthenticationService } from '../../services/authentication.service';
 
+/*
+angular-cli-project/node_modules/typescript
+webkitExitFullscreen(): void;
+webkitExitFullscreen(): void; mozCancelFullScreen(): void;
+*/
+
 @Component({
   selector: 'app-video-session',
   templateUrl: './video-session.component.html',
@@ -17,6 +23,7 @@ export class VideoSessionComponent implements OnInit {
   sessionId: number;
 
   myMessage: string;
+  fullscreenIcon: string = "fullscreen";
 
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
@@ -96,6 +103,40 @@ export class VideoSessionComponent implements OnInit {
 
   exitFromSession(){
     this.location.back();
+  }
+
+  toggleFullScreen(){
+    console.log("FULLSCREEN click");
+    let fs = $('#video-session-div').get(0);
+    var document:any = window.document;
+    if (!document.fullscreenElement &&
+        !document.mozFullScreenElement &&
+        !document.webkitFullscreenElement &&
+        !document.msFullscreenElement) {
+          console.log("enter FULLSCREEN!");
+          this.fullscreenIcon = 'fullscreen_exit';
+        if (fs.requestFullscreen) {
+            fs.requestFullscreen();
+        } else if (fs.msRequestFullscreen) {
+            fs.msRequestFullscreen();
+        } else if (fs.mozRequestFullScreen) {
+            fs.mozRequestFullScreen();
+        } else if (fs.webkitRequestFullscreen) {
+            fs.webkitRequestFullscreen();
+        }
+    } else {
+      console.log("exit FULLSCREEN!");
+      this.fullscreenIcon = 'fullscreen';
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
   }
 
 }
