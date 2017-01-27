@@ -14,7 +14,7 @@
         <form materialize #courseForm class="col s12" (ngSubmit)="onCourseSubmit(); courseForm.reset();">
           <div class="row no-margin">
 
-            <div class="row">
+            <div class="row row-mobile">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputPostCourseName" name="inputPostCourseName" id="inputPostCourseName" type="text" class="validate" required>
                 <label for="inputPostCourseName">Course name</label>
@@ -31,8 +31,8 @@
             </div>
 
           </div>
-          <div class="row right-align">
-            <a (click)="courseForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+          <div class="row right-align row-mobile">
+            <a (click)="courseForm.reset();" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>
@@ -54,7 +54,7 @@
         <form materialize #putDeleteCourseForm class="col s12" (ngSubmit)="onPutDeleteCourseSubmit(); putDeleteCourseForm.reset(); this.allowCourseDeletion = false;">
           <div class="row no-margin">
 
-            <div class="row">
+            <div class="row row-mobile">
               <label for="inputPutCourseName">Course name</label>
               <div class="input-field col s12">
                 <input [(ngModel)]="inputPutCourseName" name="inputPutCourseName" id="inputPutCourseName" type="text" class="validate" required>
@@ -79,7 +79,7 @@
                 <label for="delete-checkbox">Allow deletion?</label>
               </div>
             </div>
-            <a (click)="putDeleteCourseForm.reset(); this.allowCourseDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <a (click)="putDeleteCourseForm.reset(); this.allowCourseDeletion = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>

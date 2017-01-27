@@ -5,12 +5,6 @@ import { Location }               from '@angular/common';
 import { User }                  from '../../classes/user';
 import { AuthenticationService } from '../../services/authentication.service';
 
-/*
-angular-cli-project/node_modules/typescript
-webkitExitFullscreen(): void;
-webkitExitFullscreen(): void; mozCancelFullScreen(): void;
-*/
-
 @Component({
   selector: 'app-video-session',
   templateUrl: './video-session.component.html',

@@ -8,21 +8,21 @@
 
       <form materialize #myForm class="col s12" (ngSubmit)="onSubmit()">
 
-        <div class="row">
+        <div class="row row-mobile">
           <div class="input-field col s12">
             <input [(ngModel)]="email" name="email" id="email" type="email" class="validate" required>
             <label for="email" data-error="Not an e-mail format!">Email</label>
           </div>
         </div>
 
-        <div *ngIf="!loginView" class="row">
+        <div *ngIf="!loginView" class="row row-mobile">
           <div class="input-field col s12">
             <input [(ngModel)]="nickName" name="nickName" id="nickName" type="text" class="validate" required>
             <label for="nickName">Name</label>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row row-mobile">
           <div class="input-field col s12">
             <input [(ngModel)]="password" name="password" id="password" type="password" class="validate" required>
             <label for="password">Password</label>
@@ -44,7 +44,7 @@
 
         <app-error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="this.errorTitle" [errorContent]="this.errorContent" [customClass]="this.customClass" [closable]="true"></app-error-message>
 
-        <div class="row center">
+        <div class="row center margin-top-buttons">
           <button type="submit" *ngIf="loginView" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
           <a *ngIf="!loginView && !this.captchaValidated" id="disabled-signup-btn" materialize="tooltip" data-position="bottom" data-delay="65" data-html="true" data-tooltip="Click on <b><i>I'm not a robot</i></b> above" class="btn-flat">Sign up</a>
           <button type="submit" *ngIf="!loginView && this.captchaValidated" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>

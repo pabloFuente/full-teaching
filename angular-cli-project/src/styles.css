@@ -274,6 +274,20 @@ i {
     width: 100%;
     height: auto;
   }
+
+  .cancel-modal-btn {
+    float: left !important;
+  }
+
+  .row-mobile {
+    margin-bottom: 0 !important;
+  }
+
+  .delete-div {
+    width: 100%;
+    float: left;
+    margin-bottom: 20px;
+  }
 }
 /*End mobile phones*/
 

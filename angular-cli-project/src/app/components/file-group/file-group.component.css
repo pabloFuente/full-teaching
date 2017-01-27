@@ -54,8 +54,12 @@ h5 {
   display: inline-block;
 }
 
-.disp-inline-flex {
+.disp-inline-flex{
   display: inline-flex;
+}
+
+.file-controls {
+  display: inline-block;
 }
 
 .button-add-file {
@@ -97,4 +101,16 @@ h5 {
 
 .title-edit {
   background-color: rgb(243, 243, 243);
+}
+
+/*Mobile phones*/
+@media only screen and (max-width: 600px) and (orientation: portrait), screen and (max-width: 992px) and (orientation: landscape) {
+  .chip-file{
+    min-width: 230px !important;
+    margin-bottom: 0px !important;
+    margin-top: 5px !important;
+  }
+  .file-controls{
+    display: block !important;
+  }
 }

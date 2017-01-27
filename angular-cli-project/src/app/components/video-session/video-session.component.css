@@ -25,6 +25,10 @@ video {
   margin-top: 10px;
 }
 
+#fixed-icon {
+  font-size: 42px;
+}
+
 #fullscreen-button {
   position: fixed;
   z-index: 1000;
@@ -37,7 +41,7 @@ video {
   margin: 10px;
 }
 
-#fake-send-btn{
+#fake-send-btn {
   font-size: 11px;
   font-weight: 600;
   padding-left: 12px;

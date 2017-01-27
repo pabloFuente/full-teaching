@@ -1,7 +1,7 @@
 <div id="video-session-div">
 
-  <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i class="material-icons video-icon">menu</i></a>
-  <a id="fullscreen-button" (click)="toggleFullScreen()"><i class="material-icons video-icon">{{this.fullscreenIcon}}</i></a>
+  <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i id="fixed-icon" class="material-icons video-icon">menu</i></a>
+  <a class="btn-floating btn-large waves-effect waves-light red" id="fullscreen-button" (click)="toggleFullScreen()"><i class="material-icons">{{this.fullscreenIcon}}</i></a>
 
   <video poster="http://www.drodd.com/images14/black16.jpg" controls muted autoplay>
     <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4">

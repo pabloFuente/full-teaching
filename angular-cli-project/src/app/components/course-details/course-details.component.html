@@ -17,7 +17,7 @@
         <form materialize #courseDetailsForm class="col s12" (ngSubmit)="onCourseDetailsSubmit(); courseDetailsForm.reset();">
           <div class="row no-margin">
 
-            <div *ngIf="isCurrentPostMode(['0', '2', '4'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '2', '4'])" class="row row-mobile">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
                 <label *ngIf="isCurrentPostMode(['0'])" for="inputTitle">Entry title</label>
@@ -26,7 +26,7 @@
               </div>
             </div>
 
-            <div *ngIf="isCurrentPostMode(['0', '1', '2'])" class="row">
+            <div *ngIf="isCurrentPostMode(['0', '1', '2'])" class="row row-mobile">
               <div class="input-field col s12">
                 <textarea maxlength="2500" [(ngModel)]="inputComment" name="inputComment" id="inputComment" class="materialize-textarea validate" required></textarea>
                 <label *ngIf="isCurrentPostMode(['0', '1'])" for="inputComment">Write your comment here</label>
@@ -133,7 +133,7 @@
 
           </div>
           <div class="row no-margin-bottom right-align">
-            <a *ngIf="!isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset()" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <a *ngIf="!isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset()" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <a *ngIf="isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset(); uploader.clearQueue()" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Close</a>
             <button *ngIf="!isCurrentPostMode(['5'])" type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
@@ -158,23 +158,23 @@
         <form materialize #putDeleteForm class="col s12" (ngSubmit)="onPutDeleteSubmit(); putDeleteForm.reset(); this.allowSessionDeletion = false;">
 
           <div *ngIf="isCurrentPutdeleteMode(['0'])" class="row no-margin">
-            <div class="row">
+            <div class="row row-mobile">
               <label for="inputSessionTitle">Session title</label>
               <div class="input-field col s12">
                 <input [(ngModel)]="inputSessionTitle" name="inputSessionTitle" id="inputSessionTitle" type="text" class="validate" required>
               </div>
             </div>
 
-            <div class="row">
+            <div class="row row-mobile">
               <label for="inputSessionDescription">Description</label>
               <div class="input-field col s12">
                 <textarea [(ngModel)]="inputSessionDescription" name="inputSessionDescription" id="inputSessionDescription" class="materialize-textarea validate" required></textarea>
               </div>
             </div>
 
-            <div class="row no-margin">
+            <div class="row">
               <div class="col l6 m6 s6">
-                <div class="row">
+                <div class="row row-mobile">
                   <label for="inputSessionDate">Date</label>
                   <div class="input-field col s12">
                     <input [(ngModel)]="this.updatedSessionDate" name="inputSessionDate" id="inputSessionDate" type="date" [value]="this.updatedSessionDate" required>
@@ -182,7 +182,7 @@
                 </div>
               </div>
               <div class="col l6 m6 s6">
-                <div class="row">
+                <div class="row row-mobile">
                   <label for="inputSessionTime">Time</label>
                   <div class="input-field col s12">
                     <input [(ngModel)]="this.inputSessionTime" type="time" id="inputSessionTime" name="inputSessionTime" class="validate" [value]="this.inputSessionTime" required>
@@ -192,7 +192,7 @@
             </div>
           </div>
 
-          <div *ngIf="isCurrentPutdeleteMode(['1'])" class="row no-margin">
+          <div *ngIf="isCurrentPutdeleteMode(['1'])" class="row no-margin-lateral">
             <input #forumCheckbox type="checkbox" class="filled-in" id="delete-checkbox" name="delete-checkbox" (change)="this.allowForumEdition = forumCheckbox.checked"/>
             <label for="delete-checkbox">Allow forum {{this.checkboxForumEdition}}?</label>
           </div>
@@ -256,7 +256,7 @@
                 <label for="delete-checkbox">Allow deletion?</label>
               </div>
             </div>
-            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Cancel</a>
+            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <button *ngIf="!((this.putdeleteModalMode === 4) && (this.attenderTabSelected === 2))" type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
           </div>
         </form>
