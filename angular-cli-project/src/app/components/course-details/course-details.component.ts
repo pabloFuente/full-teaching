@@ -12,6 +12,7 @@ import { EditorModule }      from 'primeng/components/editor/editor';
 import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
+import { UploaderModalService }  from '../../services/uploader-modal.service';
 import { FilesEditionService }   from '../../services/files-edition.service';
 import { CourseService }         from '../../services/course.service';
 import { SessionService }        from '../../services/session.service';
@@ -113,10 +114,6 @@ export class CourseDetailsComponent implements OnInit {
   attCorrectContent: string;
   attendersEditionIcon: string = "mode_edit";
 
-
-  public uploader:FileUploader;
-  public hasBaseDropZoneOver:boolean = false;
-
   private actions2 = new EventEmitter<string|MaterializeAction>();
   private actions3 = new EventEmitter<string|MaterializeAction>();
 
@@ -129,6 +126,8 @@ export class CourseDetailsComponent implements OnInit {
   private URL_UPLOAD: string;
   private URL_FILE_READER_UPLOAD: string;
 
+  private url_file_upload: string;
+
   constructor(
     private courseService: CourseService,
     private forumService: ForumService,
@@ -140,14 +139,13 @@ export class CourseDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private courseDetailsModalDataService: CourseDetailsModalDataService,
+    private uploaderModalService: UploaderModalService,
     private filesEditionService: FilesEditionService,
     private dragulaService: DragulaService) {
 
     //URL for uploading files changes between development stage and production stage
     this.URL_UPLOAD = environment.URL_UPLOAD;
     this.URL_FILE_READER_UPLOAD = environment.URL_EMAIL_FILE_UPLOAD;
-
-    this.uploader = new FileUploader({url: this.URL_UPLOAD});
 
     //Activating handles for drag and drop files
     this.dragulaService.setOptions('drag-bag', {
@@ -192,20 +190,7 @@ export class CourseDetailsComponent implements OnInit {
         if (objs[0]) {
           this.updatedFileGroup = objs[0];
           this.inputFileTitle = this.updatedFileGroup.title;
-          this.uploader.destroy();
-          this.uploader = new FileUploader({url: (this.URL_UPLOAD + this.course.id + "/file-group/" + this.updatedFileGroup.id)});
-          this.uploader.onCompleteItem = (item:any, response:string, status:number, headers:any)=> {
-            console.log("Item uploaded successfully" + response);
-            let fg = JSON.parse(response) as FileGroup;
-            console.log(fg);
-            for (let i = 0; i < this.course.courseDetails.files.length; i++){
-              if (this.course.courseDetails.files[i].id == fg.id){
-                this.course.courseDetails.files[i] = fg;
-                this.updatedFileGroup = fg;
-                break;
-              }
-            }
-          }
+          this.url_file_upload = this.URL_UPLOAD + this.course.id + "/file-group/" + this.updatedFileGroup.id;
         }
         if (objs[1]) {
           this.updatedFile = objs[1];
@@ -319,8 +304,23 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
-  public fileOverBase(e:any):void {
-    this.hasBaseDropZoneOver = e;
+  filesUploadStarted(event){
+    console.log("Started...");
+  }
+
+  filesUploadCompleted(response){
+    console.log("Finished...");
+    console.log("Items uploaded successfully");
+    console.log(response);
+    let fg = JSON.parse(response) as FileGroup;
+    console.log(fg);
+    for (let i = 0; i < this.course.courseDetails.files.length; i++){
+      if (this.course.courseDetails.files[i].id == fg.id){
+        this.course.courseDetails.files[i] = fg;
+        this.updatedFileGroup = fg;
+        break;
+      }
+    }
   }
 
   //POST new Entry, Comment or Session
@@ -399,8 +399,9 @@ export class CourseDetailsComponent implements OnInit {
           //Only on succesful post we locally update the entire course details
           this.course.courseDetails = response;
 
-          this.processingPost = false;
-          this.actions2.emit({action:"modal",params:['close']});
+          this.processingPost = false; // Stop the loading animation
+          this.actions2.emit({action:"modal",params:['close']}); // CLose the modal
+          if (!this.allowFilesEdition) this.changeModeEdition(); // Activate file edition view if deactivated
         },
         error => {console.log(error); this.processingPost = false;}
       );
@@ -672,8 +673,9 @@ export class CourseDetailsComponent implements OnInit {
       this.course.attenders = this.course.attenders.concat(newAttenders);
       this.handleAttendersMessage(objResponse);
 
-      this.processingPut = false;
-      this.actions3.emit({action:"modal",params:['close']});
+      this.processingPut = false; // Stop the loading animation
+      this.uploaderModalService.announceUploaderClosed(true); // Clear the uploader file queue
+      this.actions3.emit({action:"modal",params:['close']}); // Close the modal
     } else {
       this.processingPut = false;
       console.log("There has been an error: " + response);

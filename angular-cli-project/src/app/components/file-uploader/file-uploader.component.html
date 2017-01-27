@@ -3,7 +3,8 @@
   <div *ngIf="uploader.queue.length == 0" class="row no-margin text-centered">
     <div class="col l12 m12 s12">
       <label class="label-input-file waves-effect btn" for="input-file">{{buttonText}}</label>
-      <input type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" />
+      <input *ngIf="!isMultiple" type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" />
+      <input *ngIf="isMultiple"  type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" multiple/>
     </div>
     <div class="col l12 m12">
       <div class="input-field">
@@ -14,32 +15,88 @@
     </div>
   </div>
 
-  <div *ngIf="uploader.queue.length > 0" class="row no-margin">
-    <div class="col s12 table-header">
+  <div class="row no-margin">
+    <div *ngIf="uploader.queue.length > 0" class="col s12 table-header">
+      <div *ngIf="isMultiple">
+        <h5 class="table-title">Files to upload</h5>
+        <p class="table-subtitle">You have <strong>{{ uploader?.getNotUploadedItems().length }}</strong> files waiting to be uploaded</p>
+      </div>
+
       <table class="table">
-        <tbody>
+        <thead *ngIf="isMultiple">
           <tr>
-            <td class="table-td"><strong>{{ uploader.queue[0]?.file?.name }}</strong></td>
-            <td class="text-center" class="table-td">
-              <span *ngIf="uploader.queue[0].isSuccess"><i class="material-icons">done</i></span>
-              <span *ngIf="uploader.queue[0].isCancel"><i class="material-icons">warning</i></span>
-              <span *ngIf="uploader.queue[0].isError"><i class="material-icons">clear</i></span>
-            </td>
-            <td nowrap class="table-td">
-              <button *ngIf="!(uploader.queue[0].isReady || uploader.queue[0].isUploading || uploader.queue[0].isSuccess)" type="button" class="btn button-small" (click)="this.onUploadStarted.emit(true); uploader.queue[0].upload()">
-                   Upload
-               </button>
-              <button *ngIf="uploader.queue[0].isUploading" type="button" class="btn button-small" (click)="uploader.queue[0].cancel()">
-                   Cancel
-               </button>
-              <button *ngIf="!uploader.queue[0].isSuccess && !uploader.queue[0].isUploading" type="button" class="btn button-small" (click)="uploader.queue[0].remove()">
-                   Cancel
-               </button>
-            </td>
+               <th width="50%">Name</th>
+               <th>Status</th>
+               <th>Actions</th>
           </tr>
-        </tbody>
+        </thead>
+
+        <tbody *ngIf="isMultiple">
+            <tr *ngFor="let item of uploader.queue">
+              <td class="table-td file-name-td mobile-file-td"><strong>{{ item?.file?.name }}</strong></td>
+              <td class="table-td text-center mobile-file-td">
+                <span *ngIf="item.isSuccess"><i class="material-icons">done</i></span>
+                <span *ngIf="item.isUploading"><i class="material-icons">cloud_upload</i></span>
+                <span *ngIf="item.isCancel"><i class="material-icons">warning</i></span>
+                <span *ngIf="item.isError"><i class="material-icons">clear</i></span>
+                <span *ngIf="!item.isSuccess && !item.isUploading && !item.isCancel && !item.isError"><i class="material-icons">schedule</i></span>
+              </td>
+              <td nowrap class="table-td mobile-file-td">
+                <button *ngIf="!(item.isReady || item.isUploading || item.isSuccess)" type="button" class="btn button-small btn-uploader" (click)="this.onUploadStarted.emit(true); item.upload()">
+                     Upload
+                 </button>
+                <button *ngIf="item.isUploading" type="button" class="btn button-small btn-uploader" (click)="item.cancel()">
+                     Cancel
+                 </button>
+                <button *ngIf="!item.isSuccess && !item.isUploading" type="button" class="btn button-small btn-uploader" (click)="item.remove()">
+                     Cancel
+                 </button>
+              </td>
+            </tr>
+          </tbody>
+
+          <tbody *ngIf="!isMultiple">
+            <tr>
+              <td class="table-td file-name-td"><strong>{{ uploader.queue[0]?.file?.name }}</strong></td>
+              <td class="text-center" class="table-td">
+                <span *ngIf="uploader.queue[0].isSuccess"><i class="material-icons">done</i></span>
+                <span *ngIf="uploader.queue[0].isCancel"><i class="material-icons">warning</i></span>
+                <span *ngIf="uploader.queue[0].isError"><i class="material-icons">clear</i></span>
+              </td>
+              <td nowrap class="table-td">
+                <button *ngIf="!(uploader.queue[0].isReady || uploader.queue[0].isUploading || uploader.queue[0].isSuccess)" type="button" class="btn button-small" (click)="this.onUploadStarted.emit(true); uploader.queue[0].upload()">
+                     Upload
+                 </button>
+                <button *ngIf="uploader.queue[0].isUploading" type="button" class="btn button-small" (click)="uploader.queue[0].cancel()">
+                     Cancel
+                 </button>
+                <button *ngIf="!uploader.queue[0].isSuccess && !uploader.queue[0].isUploading" type="button" class="btn button-small" (click)="uploader.queue[0].remove()">
+                     Cancel
+                 </button>
+              </td>
+            </tr>
+          </tbody>
+
       </table>
+
+      <div *ngIf="isMultiple" class="queue-progress">
+         <div>
+           <span class="left">Queue progress</span>
+           <div class="progress">
+               <div class="determinate" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+           </div>
+         </div>
+         <button *ngIf="uploader.getNotUploadedItems().length && !uploader.isUploading" type="button" class="btn btn-file-table" (click)="uploader.uploadAll()">
+             Upload all
+         </button>
+         <button *ngIf="uploader.isUploading" type="button" class="btn btn-file-table" (click)="uploader.cancelAll()">
+             Cancel all
+         </button>
+         <button *ngIf="uploader.getNotUploadedItems().length" type="button" class="btn btn-file-table" (click)="uploader.clearQueue()">
+             Remove all
+         </button>
+     </div>
+
     </div>
   </div>
-
 </div>

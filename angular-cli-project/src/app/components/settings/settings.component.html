@@ -12,14 +12,14 @@
         <form materialize #passwordForm class="col s12" (ngSubmit)="onPasswordSubmit()">
           <div class="row no-margin">
 
-            <div class="row">
+            <div class="row row-mobile">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputCurrentPassword" name="inputCurrentPassword" id="inputCurrentPassword" type="password" class="validate" required>
                 <label for="inputCurrentPassword">Current password</label>
               </div>
             </div>
 
-            <div class="row">
+            <div class="row row-mobile">
               <div class="input-field col s12">
                 <input [(ngModel)]="inputNewPassword" name="inputNewPassword" id="inputNewPassword" type="password" class="validate" required>
                 <label for="inputNewPassword">New password</label>
@@ -37,8 +37,8 @@
 
           <app-error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="this.errorTitle" [errorContent]="this.errorContent" [customClass]="this.customClass" [closable]="true"></app-error-message>
 
-          <div class="row right-align">
-            <a (click)="passwordForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Close</a>
+          <div class="row row-mobile right-align">
+            <a (click)="passwordForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Close</a>
             <button type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
 
@@ -66,7 +66,7 @@
         <div class="col s12">
           <div class="row">
 
-            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" (onUploadStarted)="pictureUploadStarted($event)" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
+            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" (onUploadStarted)="pictureUploadStarted($event)" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [isMultiple]="false" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
 
           </div>
         </div>

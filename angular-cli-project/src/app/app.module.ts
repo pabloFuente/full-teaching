@@ -32,6 +32,7 @@ import { ForumService }           from './services/forum.service';
 import { FileService }            from './services/file.service';
 import { CourseDetailsModalDataService }  from './services/course-details-modal-data.service';
 import { LoginModalService }      from './services/login-modal.service';
+import { UploaderModalService }   from './services/uploader-modal.service';
 import { UserService }            from './services/user.service';
 import { AnimationService }       from './services/animation.service';
 import { AuthGuard }              from './auth.guard';
@@ -84,6 +85,7 @@ import { ReCaptchaModule }        from 'angular2-recaptcha';
     FileService,
     CourseDetailsModalDataService,
     LoginModalService,
+    UploaderModalService,
     UserService,
     AnimationService,
     AuthGuard,

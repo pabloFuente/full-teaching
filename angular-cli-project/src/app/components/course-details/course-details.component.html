@@ -55,86 +55,14 @@
 
             <div *ngIf="isCurrentPostMode(['5'])" class="row">
 
-              <div class="row no-margin  valign-wrapper">
-                <div class="col l4 m4 s12">
-                  <label class="label-input-file waves-effect btn" for="input-file">Select files</label>
-                  <input type="file" name="input-file" id="input-file" ng2FileSelect [uploader]="uploader" multiple/>
-                </div>
-                <div class="col l8 m8">
-                  <div class="input-field col s12">
-                    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" class="file-drop-zone">
-                        Or drop your files here
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <app-file-uploader (onCompleteFileUpload)="filesUploadCompleted($event)" (onUploadStarted)="filesUploadStarted($event)" [isMultiple]="true" [URLUPLOAD]="this.url_file_upload" [typeOfFile]="'files'" [buttonText]="'Select files'"></app-file-uploader>
 
-              <div class="row no-margin">
-                <div *ngIf="uploader.queue.length > 0" class="col s12 table-header">
-                  <h5 class="table-title">Files to upload</h5>
-                  <p class="table-subtitle">You have {{ uploader?.queue?.length }} files in the queue</p>
-                  <table class="table">
-                    <thead>
-                    <tr>
-                         <th width="50%">Name</th>
-                         <th>Status</th>
-                         <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of uploader.queue">
-                         <td class="table-td"><strong>{{ item?.file?.name }}</strong></td>
-                         <td *ngIf="uploader.isHTML5" nowrap class="table-td">{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                         <td *ngIf="uploader.isHTML5" class="table-td">
-                             <div class="progress no-margin-bottom">
-                                 <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-                             </div>
-                         </td>
-                         <td class="text-center" class="table-td">
-                             <span *ngIf="item.isSuccess"><i class="material-icons">done</i></span>
-                             <span *ngIf="item.isCancel"><i class="material-icons">warning</i></span>
-                             <span *ngIf="item.isError"><i class="material-icons">clear</i></span>
-                         </td>
-                         <td nowrap class="table-td">
-                             <button *ngIf="!(item.isReady || item.isUploading || item.isSuccess)" type="button" class="btn button-small" (click)="item.upload()">
-                                 Upload
-                             </button>
-                             <button *ngIf="item.isUploading" type="button" class="btn button-small" (click)="item.cancel()">
-                                 Cancel
-                             </button>
-                             <button *ngIf="!item.isSuccess" type="button" class="btn button-small" (click)="item.remove()">
-                                 Remove
-                             </button>
-                         </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                 <div class="queue-progress">
-                     <div>Queue progress:
-                         <div class="progress">
-                             <div class="determinate" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                         </div>
-                     </div>
-                     <button *ngIf="uploader.getNotUploadedItems().length && !uploader.isUploading" type="button" class="btn btn-file-table" (click)="uploader.uploadAll()">
-                         Upload all
-                     </button>
-                     <button *ngIf="uploader.isUploading" type="button" class="btn btn-file-table" (click)="uploader.cancelAll()">
-                         Cancel all
-                     </button>
-                     <button *ngIf="uploader.getNotUploadedItems().length" type="button" class="btn btn-file-table" (click)="uploader.clearQueue()">
-                         Remove all
-                     </button>
-                 </div>
-
-               </div>
-              </div>
             </div>
 
           </div>
           <div class="row no-margin-bottom right-align">
             <a *ngIf="!isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset()" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
-            <a *ngIf="isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset(); uploader.clearQueue()" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Close</a>
+            <a *ngIf="isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset(); this.uploaderModalService.announceUploaderClosed(true);" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Close</a>
             <button *ngIf="!isCurrentPostMode(['5'])" type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>
@@ -241,7 +169,9 @@
                 <template md-tab-content>
                   <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
                   <div class="row no-margin att-row-padding">
-                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
+
+                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [isMultiple]="false" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
+
                   </div>
                 </template>
               </md-tab>
@@ -256,7 +186,7 @@
                 <label for="delete-checkbox">Allow deletion?</label>
               </div>
             </div>
-            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false;" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
+            <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false; this.uploaderModalService.announceUploaderClosed(true);" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <button *ngIf="!((this.putdeleteModalMode === 4) && (this.attenderTabSelected === 2))" type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
           </div>
         </form>
