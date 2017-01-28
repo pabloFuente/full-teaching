@@ -94,37 +94,6 @@ a.btn-floating {
   margin-top: 10px;
 }
 
-/*File uploader*/
-
-.label-input-file {
-  cursor: pointer;
-}
-
-#input-file {
-  display: none;
-}
-
-.table-header {
-  margin-top: 20px;
-}
-
-.table-title {
-  display: inline-block;
-}
-
-.table-subtitle {
-   display: inline-block;
-   padding-left: 20px;
-}
-
-.table-td {
-  padding: 7px 5px;
-}
-
-.queue-progress {
-  margin-top: 15px;
-}
-
 /*Forum view*/
 
 .entries-side-view {

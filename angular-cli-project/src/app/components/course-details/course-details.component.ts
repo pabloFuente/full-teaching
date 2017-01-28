@@ -744,29 +744,29 @@ export class CourseDetailsComponent implements OnInit {
 
     if (response.attendersAdded.length > 0){
       for (let user of response.attendersAdded){
-        this.attCorrectContent += "<br/> - " + user.name;
+        this.attCorrectContent += "<span class='feedback-list'>" + user.name + "</span>";
       }
       isCorrect = true;
     }
     if (response.attendersAlreadyAdded.length > 0){
-      this.attErrorContent += "The following users were already added to the course:";
+      this.attErrorContent += "<span class='feedback-span'>The following users were already added to the course</span>";
       for (let user of response.attendersAlreadyAdded){
-        this.attErrorContent += "<br/> - " + user.name;
+        this.attErrorContent += "<span class='feedback-list'>" + user.name + "</span>";
       }
       isError = true;
     }
     if (response.emailsValidNotRegistered.length > 0){
-      this.attErrorContent += "<br/><br/>The following users are not registered:";
+      this.attErrorContent += "<span class='feedback-span'>The following users are not registered</span>";
       for (let email of response.emailsValidNotRegistered){
-        this.attErrorContent += "<br/> - " + email;
+        this.attErrorContent += "<span class='feedback-list'>" + email + "</span>";
       }
       isError = true;
     }
     if (response.emailsInvalid){
       if (response.emailsInvalid.length > 0){
-        this.attErrorContent += "<br/><br/>These are not valid emails:";
+        this.attErrorContent += "<span class='feedback-span'>These are not valid emails</span>";
         for (let email of response.emailsInvalid){
-          this.attErrorContent += "<br/> - " + email;
+          this.attErrorContent += "<span class='feedback-list'>" + email + "</span>";
         }
         isError = true;
       }

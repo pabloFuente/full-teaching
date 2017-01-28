@@ -182,6 +182,21 @@ i {
   color: #375646 !important;
 }
 
+/*Attenders feedback*/
+.feedback-span{
+  font-size: initial;
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.feedback-list{
+  display: list-item;
+  font-weight: 500;
+  margin-left: 2em;
+}
+/*Attenders feedback*/
+
 /*Loader*/
 @keyframes spinLoader {
   0% {
@@ -405,6 +420,7 @@ div.drag-target {
 }
 
 .rounded{
+  margin-top: 2.5px;
   margin-bottom: 5px;
   width: 90%;
   display: inline-block;
