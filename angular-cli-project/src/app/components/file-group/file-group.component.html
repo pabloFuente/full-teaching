@@ -3,18 +3,19 @@
     <div class="file-group-title valign-wrapper">
       <h5>{{fileGroup?.title}}</h5>
     </div>
-    <div class="buttons-container-div valign-wrapper">
-      <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()">Add file</a>
-      <a href="#course-details-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.animationService.animateIfSmall()">Add subgroup</a>
-      <a href="#put-delete-modal" *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="mode-edit-icon" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()" [title]="'Modify file group'">
+    <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="buttons-container-div valign-wrapper">
+      <a href="#course-details-modal" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(5, 'Add files'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()">Add file</a>
+      <a href="#course-details-modal" class="button-add-file waves-effect btn-flat" (click)="updatePostModalMode(4, 'New subgroup'); this.animationService.animateIfSmall()">Add subgroup</a>
+      <a href="#put-delete-modal" class="mode-edit-icon" (click)="updatePutdeleteModalMode(2, 'Modify file group'); this.changeUpdatedFileGroup(); this.animationService.animateIfSmall()" [title]="'Modify file group'">
         <i class="material-icons action-file-icon">mode_edit</i>
       </a>
-      <i *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="material-icons action-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
+      <i *ngIf="!this.fileGroupDeletion" class="material-icons action-file-icon" (click)="deleteFileGroup()" [title]="'Delete file group'">clear</i>
+      <i *ngIf="this.fileGroupDeletion" class="material-icons action-file-icon rotating">cached</i>
     </div>
   </div>
 
   <div class="drag-bag-editable" [dragula]='"drag-bag"' [dragulaModel]="fileGroup?.files" [attr.data-id]="fileGroup.id">
-    <div *ngFor="let f of fileGroup?.files" [attr.data-id]="f.id">
+    <div *ngFor="let f of fileGroup?.files; let i = index" [attr.data-id]="f.id">
         <div class="chip chip-file truncate valign-wrapper disp-inline-flex" (click)="this.downloadFile(f)">
           <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
         </div>
@@ -22,7 +23,8 @@
           <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.animationService.animateIfSmall()" [title]="'Modify file'">
             <i class="material-icons action-file-icon">mode_edit</i>
           </a>
-          <i (click)="deleteFile(f)" class="material-icons action-file-icon" [title]="'Delete file'">clear</i>
+          <i *ngIf="!this.arrayOfDeletions[i]" (click)="deleteFile(f, i)" class="material-icons action-file-icon" [title]="'Delete file'">clear</i>
+          <i *ngIf="this.arrayOfDeletions[i]" class="material-icons action-file-icon rotating">cached</i>
           <i class="drag-handle material-icons action-file-icon" [title]="'Move file'">reorder</i>
         </div>
     </div>

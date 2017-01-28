@@ -66,7 +66,7 @@
         <div class="col s12">
           <div class="row">
 
-            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" (onUploadStarted)="pictureUploadStarted($event)" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [isMultiple]="false" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
+            <app-file-uploader (onCompleteFileUpload)="pictureUploadCompleted($event)" (onUploadStarted)="pictureUploadStarted($event)" [uniqueID]="0" [URLUPLOAD]="this.URL_UPLOAD + this.user.id" [isMultiple]="false" [typeOfFile]="'picture'" [buttonText]="'Change picture'"></app-file-uploader>
 
           </div>
         </div>

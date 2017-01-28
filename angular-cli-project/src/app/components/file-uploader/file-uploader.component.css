@@ -1,10 +1,14 @@
-#input-file {
+input[type="file"] {
   display: none;
 }
 
 .queue-progress {
   margin-top: 12px !important;
   text-align: center;
+}
+
+.error-div {
+  margin-top: 2em;
 }
 
 

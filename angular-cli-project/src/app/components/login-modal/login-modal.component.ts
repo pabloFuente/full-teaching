@@ -47,7 +47,6 @@ export class LoginModalComponent {
     private authenticationService: AuthenticationService,
     private userService: UserService,
     private router: Router,
-    private CONSTANTS: Constants,
     private loginModalService: LoginModalService) {
 
     this.loginView = true;
@@ -138,7 +137,7 @@ export class LoginModalComponent {
 
       else {
 
-        let regex = new RegExp(this.CONSTANTS.PASS_REGEX);
+        let regex = new RegExp(Constants.PASS_REGEX);
 
         if (!(this.password.match(regex))){
           this.errorTitle = 'Your password does not have a valid format!';
@@ -204,8 +203,8 @@ export class LoginModalComponent {
 
   handleError(){
     this.submitProcessing = false;
-    if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
-      Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
+    if (window.innerWidth <= Constants.PHONE_MAX_WIDTH) { // On mobile phones error on toast
+      Materialize.toast(this.toastMessage, Constants.TOAST_SHOW_TIME, 'rounded');
     } else { // On desktop error on error-message
       this.fieldsIncorrect = true;
     }

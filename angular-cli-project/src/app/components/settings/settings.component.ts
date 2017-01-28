@@ -41,8 +41,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private userService: UserService,
-    private animationService: AnimationService,
-    private CONSTANTS: Constants) {
+    private animationService: AnimationService) {
 
     //URL for uploading files changes between development stage and production stage
     this.URL_UPLOAD = environment.URL_PIC_UPLOAD;
@@ -76,7 +75,7 @@ export class SettingsComponent implements OnInit {
     }
     else{
 
-      let regex = new RegExp(this.CONSTANTS.PASS_REGEX);
+      let regex = new RegExp(Constants.PASS_REGEX);
 
       //The new password does not have a valid format
       if (!(this.inputNewPassword.match(regex))){
@@ -131,8 +130,8 @@ export class SettingsComponent implements OnInit {
 
   handleError(){
     this.processingPass = false;
-    if (window.innerWidth <= this.CONSTANTS.PHONE_MAX_WIDTH) { // On mobile phones error on toast
-      Materialize.toast(this.toastMessage, this.CONSTANTS.TOAST_SHOW_TIME);
+    if (window.innerWidth <= Constants.PHONE_MAX_WIDTH) { // On mobile phones error on toast
+      Materialize.toast(this.toastMessage, Constants.TOAST_SHOW_TIME, 'rounded');
     } else { // On desktop error on error-message
       this.fieldsIncorrect = true;
     }

@@ -113,6 +113,7 @@ export class CourseDetailsComponent implements OnInit {
   attCorrectTitle: string;
   attCorrectContent: string;
   attendersEditionIcon: string = "mode_edit";
+  arrayOfAttDels = [];
 
   private actions2 = new EventEmitter<string|MaterializeAction>();
   private actions3 = new EventEmitter<string|MaterializeAction>();
@@ -599,7 +600,9 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   //Remove attender from course
-  deleteAttender(attender: User){
+  deleteAttender(attender: User, j: number){
+    this.arrayOfAttDels[j] = true; // Start deleting animation
+
     let c = new Course(this.course.title, this.course.image, this.course.courseDetails);
     c.id = this.course.id;
     for (let i = 0; i < this.course.attenders.length; i++){
@@ -614,9 +617,11 @@ export class CourseDetailsComponent implements OnInit {
         console.log("Course attenders modified (one attender deleted)");
         console.log(response);
         this.course.attenders = response;
+        this.arrayOfAttDels[j] = false;
         if (this.course.attenders.length <= 1) this.changeModeAttenders(); //If there are no attenders, mode edit is closed
       },
-      error => console.log(error));
+      error => {console.log(error); this.arrayOfAttDels[j] = false;}
+    );
   }
 
   //Updates the course info

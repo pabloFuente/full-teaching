@@ -30,6 +30,9 @@ export class FileGroupComponent implements OnInit {
 
   modeEditActive: boolean = false;
 
+  fileGroupDeletion: boolean = false;
+  arrayOfDeletions = [];
+
   subscription: Subscription;
 
   typeOfFile = ['language', 'picture_as_pdf', 'videocam'];
@@ -78,20 +81,25 @@ export class FileGroupComponent implements OnInit {
   deleteFileGroup(){
     console.log(this.fileGroup);
     console.log(this.fileGroup.id, this.courseId);
+
+    this.fileGroupDeletion = true;
     this.fileService.deleteFileGroup(this.fileGroup.id, this.courseId).subscribe(
       response => {
         console.log("FileGroup deleted");
         console.log(response);
         //Only on succesful DELETE we locally delete the fileGroup sending an event to the suscribed parent component (CourseDetailsComponent)
         this.filesEditionService.announceFileGroupDeleted(response.id);
+        this.fileGroupDeletion = false;
       },
-      error => console.log(error)
+      error => {console.log(error); this.fileGroupDeletion = false;}
     );
   }
 
-  deleteFile(file: File){
+  deleteFile(file: File, i: number){
     console.log(file);
     console.log(file.id, this.fileGroup.id, this.courseId);
+
+    this.arrayOfDeletions[i] = true;
     this.fileService.deleteFile(file.id, this.fileGroup.id, this.courseId).subscribe(
       response => {
         console.log("File deleted");
@@ -103,8 +111,9 @@ export class FileGroupComponent implements OnInit {
             break;
           }
         }
+        this.arrayOfDeletions[i] = false;
       },
-      error => console.log(error)
+      error => {console.log(error); this.arrayOfDeletions[i] = false;}
     );
   }
 

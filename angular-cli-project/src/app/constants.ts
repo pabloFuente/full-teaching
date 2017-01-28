@@ -1,15 +1,6 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
-export class Constants {
-
-  PHONE_MAX_WIDTH: number;
-  TOAST_SHOW_TIME: number;
-  PASS_REGEX: string;
-
-  constructor() {
-    this.PHONE_MAX_WIDTH = 500;
-    this.TOAST_SHOW_TIME = 4000;
-    this.PASS_REGEX = '^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})$';
-  }
-}
+export const Constants = Object.freeze({
+  PHONE_MAX_WIDTH: 500,
+  TOAST_SHOW_TIME: 5000,
+  PASS_REGEX: '^((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})$',
+  FILE_SIZE_LIMIT: 5*1024*1024 //5MB
+});

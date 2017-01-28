@@ -55,7 +55,7 @@
 
             <div *ngIf="isCurrentPostMode(['5'])" class="row">
 
-              <app-file-uploader (onCompleteFileUpload)="filesUploadCompleted($event)" (onUploadStarted)="filesUploadStarted($event)" [isMultiple]="true" [URLUPLOAD]="this.url_file_upload" [typeOfFile]="'files'" [buttonText]="'Select files'"></app-file-uploader>
+              <app-file-uploader (onCompleteFileUpload)="filesUploadCompleted($event)" (onUploadStarted)="filesUploadStarted($event)" [uniqueID]="1" [isMultiple]="true" [URLUPLOAD]="this.url_file_upload" [typeOfFile]="'files'" [buttonText]="'Select files'"></app-file-uploader>
 
             </div>
 
@@ -170,7 +170,7 @@
                   <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
                   <div class="row no-margin att-row-padding">
 
-                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [isMultiple]="false" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
+                    <app-file-uploader (onCompleteFileUpload)="fileReaderUploadCompleted($event)" (onUploadStarted)="fileReaderUploadStarted($event)" [uniqueID]="2" [URLUPLOAD]="this.URL_FILE_READER_UPLOAD + this.course.id" [isMultiple]="false" [typeOfFile]="'file'" [buttonText]="'Upload file'"></app-file-uploader>
 
                   </div>
                 </template>
@@ -397,7 +397,7 @@
                 <p>{{this.authenticationService.getCurrentUser().nickName}}</p>
               </div>
             </div>
-            <div *ngFor="let attender of this.course.attenders">
+            <div *ngFor="let attender of this.course.attenders; let j = index">
               <div *ngIf="attender.id != this.authenticationService.getCurrentUser().id" class="row no-margin valign-wrapper">
                 <div class="col l2 m2 s3 valign attender-col">
                   <img materialize="materialbox" class="circle materialboxed userImage" src={{attender.picture}}>
@@ -412,7 +412,8 @@
                     </div>
                   </div>
                 </div>
-                <i *ngIf="this.allowAttendersEdition && this.authenticationService.isTeacher()" (click)="deleteAttender(attender)" class="material-icons del-attender-icon" [title]="'Remove ' + attender.nickName">clear</i>
+                <i *ngIf="this.allowAttendersEdition && this.authenticationService.isTeacher() && !this.arrayOfAttDels[j]" (click)="deleteAttender(attender, j)" class="material-icons del-attender-icon" [title]="'Remove ' + attender.nickName">clear</i>
+                <i *ngIf="this.allowAttendersEdition && this.authenticationService.isTeacher() && this.arrayOfAttDels[j]" class="material-icons del-attender-icon rotating">cached</i>
               </div>
             </div>
         </div>
