@@ -16,10 +16,11 @@ module.exports = function(config) {
       require('karma-remap-istanbul'),
       require('angular-cli/plugins/karma'),
     ],
-    files: [{
-      pattern: './src/test.ts',
-      watched: false
-    }],
+    files: [
+      { pattern: 'node_modules/jquery/dist/jquery.js', watched: false},
+      { pattern: 'node_modules/materialize-css/dist/js/materialize.js', watched: false},
+      { pattern: './src/test.ts', watched: false}
+    ],
     preprocessors: {
       './src/test.ts': ['angular-cli']
     },
@@ -32,6 +33,9 @@ module.exports = function(config) {
     angularCli: {
       config: './angular-cli.json',
       environment: 'dev'
+    },
+    mime: {
+      'text/x-typescript': ['ts','tsx']
     },
     reporters: ['progress', 'karma-remap-istanbul'],
     port: 9876,
