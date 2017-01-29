@@ -39,7 +39,7 @@ install:
   - docker-compose version
 
 before_script:
-  - docker-compose up
+  - docker-compose up --build -d
   - cd angular-cli-project
   - npm install -g angular-cli
   - npm install -g karma
