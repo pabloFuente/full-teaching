@@ -45,9 +45,9 @@
         <app-error-message *ngIf="fieldsIncorrect" (eventShowable)="fieldsIncorrect = false" [errorTitle]="this.errorTitle" [errorContent]="this.errorContent" [customClass]="this.customClass" [closable]="true"></app-error-message>
 
         <div class="row center margin-top-buttons">
-          <button type="submit" *ngIf="loginView" id ="log-in-btn" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
+          <button type="submit" *ngIf="loginView" id="log-in-btn" class="waves-effect waves-light btn-flat white-text acceptColor-back">Log in</button>
           <a *ngIf="!loginView && !this.captchaValidated" id="disabled-signup-btn" materialize="tooltip" data-position="bottom" data-delay="65" data-html="true" data-tooltip="Click on <b><i>I'm not a robot</i></b> above" class="btn-flat">Sign up</a>
-          <button type="submit" *ngIf="!loginView && this.captchaValidated" id ="sign-up-btn" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
+          <button type="submit" *ngIf="!loginView && this.captchaValidated" id="sign-up-btn" class="waves-effect waves-light btn-flat white-text signUpColor">Sign up</button>
           <a (click)="setLoginView(true); myForm.reset(); this.fieldsIncorrect = false;" class="modal-action modal-close waves-effect waves-light btn-flat white-text cancelColor-back">Close</a>
         </div>
 

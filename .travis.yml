@@ -42,12 +42,11 @@ before_script:
   - docker-compose up --build -d
   - cd angular-cli-project
   - npm install -g angular-cli
-  - npm install -g karma
   - npm install
   - ng build
-  - sleep 5
+  - sleep 3
 
-script: karma start karma.conf.js --single-run && ng e2e
+script: ng test --watch=false && ng e2e
 
 after_script:
   - docker-compose down
