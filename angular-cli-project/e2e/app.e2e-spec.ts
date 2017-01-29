@@ -7,8 +7,8 @@ describe('angular-cli-project App', function() {
     page = new AngularCliProjectPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display title in the navbar', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('FullTeaching');
   });
 });
