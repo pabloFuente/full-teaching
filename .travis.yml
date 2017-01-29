@@ -47,7 +47,7 @@ before_script:
   - ng build
   - sleep 5
 
-script: karma start angular-cli-project/karma.conf.js --single-run && ng e2e
+script: karma start karma.conf.js --single-run && ng e2e
 
 after_script:
   - docker-compose down
