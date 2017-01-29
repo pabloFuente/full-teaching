@@ -5,7 +5,7 @@ export class AngularCliProjectPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
+  getLogoText() {
     return element(by.css('#logo-container')).getText();
   }
 }
