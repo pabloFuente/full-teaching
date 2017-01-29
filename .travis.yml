@@ -49,15 +49,5 @@ before_script:
 
 script: karma start angular-cli-project/karma.conf.js --single-run && ng e2e
 
-
-
-
-before_script:
-  - docker-compose up --build -d
-
-script:
-  - ./test.sh
-
 after_script:
   - docker-compose down
-...
