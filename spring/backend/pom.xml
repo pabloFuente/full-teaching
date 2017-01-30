@@ -49,6 +49,9 @@
 		    <version>0.4.13</version>
 		    <configuration>
 		        <imageName>pablofuente/${project.artifactId}</imageName>
+		        <imageTags>
+		           <imageTag>latest</imageTag>
+		        </imageTags>
 		        <serverId>docker-hub</serverId>
 		        <dockerDirectory>src/main/docker</dockerDirectory>
 		        <resources>
