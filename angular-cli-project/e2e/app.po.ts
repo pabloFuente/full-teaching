@@ -8,4 +8,8 @@ export class AngularCliProjectPage {
   getLogoText() {
     return element(by.css('#logo-container')).getText();
   }
+
+  waitForAnimation(){
+    browser.sleep(500);
+  }
 }
