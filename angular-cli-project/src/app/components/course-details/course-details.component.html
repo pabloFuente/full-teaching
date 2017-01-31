@@ -217,7 +217,7 @@
             <div class="tab-template-content" [class.filtered]="processingCourseInfo">
               <div class="row no-margin">
                 <a *ngIf="this.authenticationService.isTeacher() && !this.welcomeTextEdition" (click)="this.welcomeTextEdition = true" class="right" [title]="'Edit info'">
-                  <i class="material-icons add-element-icon">edit</i>
+                  <i id="edit-course-info" class="material-icons add-element-icon">edit</i>
                 </a>
               </div>
               <div *ngIf="!this.welcomeTextEdition && this.course.courseDetails.info" class="ql-editor ql-editor-custom" [innerHTML]="this.course.courseDetails.info"></div>
@@ -226,7 +226,7 @@
                 <div *ngIf="this.welcomeTextPreview" class="ql-editor ql-editor-custom" [innerHTML]="this.welcomeText"></div>
                 <div id="textEditorRowButtons" class="row no-margin-bottom right-align">
                   <a (click)="this.closeUpdateCourseInfo()" class="waves-effect btn-flat modal-footer-button">Cancel</a>
-                  <button (click)="this.updateCourseInfo(); this.closeUpdateCourseInfo()" class="waves-effect btn-flat modal-footer-button">Send</button>
+                  <button id="send-info-btn" (click)="this.updateCourseInfo(); this.closeUpdateCourseInfo()" class="waves-effect btn-flat modal-footer-button">Send</button>
                   <a (click)="this.welcomeTextPreview = !this.welcomeTextPreview; this.previewButton = (this.welcomeTextPreview ? 'edit' : 'preview');" class="left waves-effect btn-flat modal-footer-button">{{this.previewButton}}</a>
                 </div>
               </div>
