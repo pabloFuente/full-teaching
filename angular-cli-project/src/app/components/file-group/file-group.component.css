@@ -42,19 +42,24 @@
   user-select: none;
 }
 
-.file-image {
+.file-extension {
   background-color: #FFFFFF;
   border-radius: 15px;
-  padding: 2px;
-  font-size: 22px;
+  padding: 1px 3px 1px 3px;
+  margin-right: 2px;
+  font-size: 13px;
   border: 3px solid #e0e0e0;
+  height: 32px;
+  line-height: 23px;
+  min-width: 32px;
+  text-align: center;
 }
 
 h5 {
   display: inline-block;
 }
 
-.disp-inline-flex{
+.disp-inline-flex {
   display: inline-flex;
 }
 
@@ -105,12 +110,12 @@ h5 {
 
 /*Mobile phones*/
 @media only screen and (max-width: 600px) and (orientation: portrait), screen and (max-width: 992px) and (orientation: landscape) {
-  .chip-file{
+  .chip-file {
     min-width: 230px !important;
     margin-bottom: 0px !important;
     margin-top: 5px !important;
   }
-  .file-controls{
+  .file-controls {
     display: block !important;
   }
 }

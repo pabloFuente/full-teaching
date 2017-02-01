@@ -54,7 +54,7 @@ export class FileGroupComponent implements OnInit {
     this.modeEditActive = this.filesEditionService.currentModeEdit;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
@@ -68,17 +68,17 @@ export class FileGroupComponent implements OnInit {
     this.courseDetailsModalDataService.announcePutdeleteMode(objs);
   }
 
-  changeUpdatedFileGroup(){
+  changeUpdatedFileGroup() {
     let objs = [this.fileGroup, null];
     this.filesEditionService.announceFileFilegroupUpdated(objs);
   }
 
-  changeUpdatedFile(file: File){
+  changeUpdatedFile(file: File) {
     let objs = [this.fileGroup, file];
     this.filesEditionService.announceFileFilegroupUpdated(objs);
   }
 
-  deleteFileGroup(){
+  deleteFileGroup() {
     console.log(this.fileGroup);
     console.log(this.fileGroup.id, this.courseId);
 
@@ -91,11 +91,11 @@ export class FileGroupComponent implements OnInit {
         this.filesEditionService.announceFileGroupDeleted(response.id);
         this.fileGroupDeletion = false;
       },
-      error => {console.log(error); this.fileGroupDeletion = false;}
+      error => { console.log(error); this.fileGroupDeletion = false; }
     );
   }
 
-  deleteFile(file: File, i: number){
+  deleteFile(file: File, i: number) {
     console.log(file);
     console.log(file.id, this.fileGroup.id, this.courseId);
 
@@ -113,12 +113,49 @@ export class FileGroupComponent implements OnInit {
         }
         this.arrayOfDeletions[i] = false;
       },
-      error => {console.log(error); this.arrayOfDeletions[i] = false;}
+      error => { console.log(error); this.arrayOfDeletions[i] = false; }
     );
   }
 
-  downloadFile(file: File){
+  downloadFile(file: File) {
     this.fileService.downloadFile(this.courseId, file);
+  }
+
+  getFileExtension(fileLink: string) {
+    let lastIndex = fileLink.lastIndexOf(".");
+    if (lastIndex < 1) return "";
+    return fileLink.substr(lastIndex + 1);
+  }
+
+  getColorByFile(fileLink: string) {
+    let ext = this.getFileExtension(fileLink);
+    switch (ext) {
+      case 'docx':
+        return 'rgba(41, 84, 151, 0.46)';
+      case 'doc':
+        return 'rgba(41, 84, 151, 0.46)';
+      case 'xlsx':
+        return 'rgba(32, 115, 71, 0.46)';
+      case 'xls':
+        return 'rgba(32, 115, 71, 0.46)';
+      case 'ppt':
+        return 'rgba(208, 71, 39, 0.46)';
+      case 'pptx':
+        return 'rgba(208, 71, 39, 0.46)';
+      case 'pdf':
+        return 'rgba(239, 15, 17, 0.5)';
+      case 'jpg':
+        return 'rgba(231, 136, 60, 0.6)';
+      case 'png':
+        return 'rgba(231, 136, 60, 0.6)';
+      case 'rar':
+        return 'rgba(116, 0, 109, 0.46)';
+      case 'zip':
+        return 'rgba(116, 0, 109, 0.46)';
+      case 'txt':
+        return 'rgba(136, 136, 136, 0.46)';
+      default: '#ffffff';
+    }
   }
 
 }

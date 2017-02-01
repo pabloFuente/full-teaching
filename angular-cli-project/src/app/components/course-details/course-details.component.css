@@ -39,6 +39,8 @@
 }
 
 .tab-template-content-2 {
+  width: inherit !important;
+  height: inherit !important;
   padding: 15px 15px 15px 15px;
 }
 

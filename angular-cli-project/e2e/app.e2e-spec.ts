@@ -13,6 +13,7 @@ describe('angular-cli-project App', function() {
 
   beforeEach(() => {
     page = new AngularCliProjectPage();
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
   });
 
 
@@ -142,6 +143,7 @@ describe('angular-cli-project App', function() {
 
     // Get and click the button to edit the last one of the courses
     var lastEditCoursesIcon = element.all(by.className('course-put-icon')).last();
+    page.waitForAnimation();
     lastEditCoursesIcon.click();
     page.waitForAnimation();
 
@@ -256,8 +258,10 @@ describe('angular-cli-project App', function() {
 
     // Get all tab bodies
     var tabBodies = element.all(by.css('.md-tab-body-wrapper .md-tab-body'));
+    expect(tabBodies.count()).toEqual(5);
     // Get all tab buttos
     var tabButtons = element.all(by.css('.md-tab-label-aux'));
+    expect(tabButtons.count()).toEqual(5);
 
     // For each tab: check the url, check if the active tab-body is the expected and
     // check if the proper *ngIf has been activated ('div.tab-template-content' should be present)

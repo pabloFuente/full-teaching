@@ -270,18 +270,10 @@
           </template>
       </md-tab>
 
-      <!--<md-tab>
-        <template md-tab-label><div class="md-tab-label-aux waves-effect"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Lessons">local_library</i></div></template>
-        <template md-tab-content>
-            <div class="tab-template-content">
-            </div>
-          </template>
-      </md-tab>-->
-
       <md-tab><!--Forum Tab-->
         <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(2)"><i materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
         <template md-tab-content>
-          <div class="tab-template-content-2 row no-margin" [class.tab-template-content]="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length > 0">
+          <div class="tab-template-content row no-margin" [class.tab-template-content-2]="!this.course.courseDetails?.forum.activated || !this.course.courseDetails?.forum.entries.length > 0">
 
             <!--Forum view-->
             <ul class="entries-side-view row no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">

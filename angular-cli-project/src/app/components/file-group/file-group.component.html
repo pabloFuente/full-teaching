@@ -17,7 +17,7 @@
   <div class="drag-bag-editable" [dragula]='"drag-bag"' [dragulaModel]="fileGroup?.files" [attr.data-id]="fileGroup.id">
     <div *ngFor="let f of fileGroup?.files; let i = index" [attr.data-id]="f.id">
         <div class="chip chip-file truncate valign-wrapper disp-inline-flex" (click)="this.downloadFile(f)">
-          <i class="file-image material-icons">{{this.typeOfFile[f.type]}}</i><div class="valign">{{f.name}}</div>
+          <span class="file-extension" [style.background-color]="getColorByFile(f.link)">{{getFileExtension(f.link)}}</span><div class="valign">{{f.name}}</div>
         </div>
         <div *ngIf="this.modeEditActive && this.authenticationService.isTeacher()" class="file-controls">
           <a href="#put-delete-modal" (click)="updatePutdeleteModalMode(3, 'Modify file'); this.changeUpdatedFile(f); this.animationService.animateIfSmall()" [title]="'Modify file'">
