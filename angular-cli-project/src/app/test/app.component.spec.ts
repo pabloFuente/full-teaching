@@ -26,6 +26,7 @@ import { CommentComponent }       from '../components/comment/comment.component'
 import { FileGroupComponent }     from '../components/file-group/file-group.component';
 import { VideoSessionComponent }  from '../components/video-session/video-session.component';
 import { FileUploaderComponent }  from '../components/file-uploader/file-uploader.component';
+import { StreamComponent }        from '../components/video-session/stream.component';
 
 import { AuthenticationService }  from '../services/authentication.service';
 import { CourseService }          from '../services/course.service';
@@ -80,6 +81,7 @@ describe('App: Ejemplo', () => {
         FileDropDirective,
         VideoSessionComponent,
         FileUploaderComponent,
+        StreamComponent,
       ],
     });
   });
