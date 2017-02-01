@@ -1,6 +1,7 @@
 import { Component, OnInit }      from '@angular/core';
 import { ActivatedRoute, Params}  from '@angular/router';
 import { Location }               from '@angular/common';
+import { OpenVidu, Session, Stream } from 'openvidu-browser';
 
 import { User }                  from '../../classes/user';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -14,10 +15,20 @@ export class VideoSessionComponent implements OnInit {
 
   user: User;
   websocket: WebSocket;
-  sessionId: number;
+  mySessionId: number;
 
   myMessage: string;
   fullscreenIcon: string = "fullscreen";
+
+  private openVidu: OpenVidu;
+
+  //Join form
+  sessionId: string;
+  participantId: string;
+
+  //Session
+  currentSession: Session;
+  streams: Stream[] = [];
 
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
@@ -27,8 +38,14 @@ export class VideoSessionComponent implements OnInit {
     //Getting the session id from the url
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
-      this.sessionId = id;
+      this.mySessionId = id;
     });
+
+    //Stablishing OpenVidu session
+    this.generateParticipantInfo();
+    window.onbeforeunload = () => {
+      this.openVidu.close(true);
+    }
 
     let wsUri = "ws://" + document.location.host + "/chat";
     this.websocket = new WebSocket(wsUri);
@@ -38,7 +55,7 @@ export class VideoSessionComponent implements OnInit {
       $('#message_box').append("<div class='system_msg'>Connected!</div>"); //notify user
       //prepare json data
       let msg = {
-        chat: 'Chat-Session-' + thisAux.sessionId,
+        chat: 'Chat-Session-' + thisAux.mySessionId,
         user: thisAux.user.nickName
       };
       //convert and send data to server
@@ -80,6 +97,8 @@ export class VideoSessionComponent implements OnInit {
   ngOnDestroy() {
     //Closing the Chat websocket
     this.websocket.close();
+    //Closing the OpenVidu sesion
+    this.leaveSession();
     //Delets the dark overlay (if side menu opened) when the component is destroyed
     $("#sidenav-overlay").remove();
   }
@@ -96,6 +115,7 @@ export class VideoSessionComponent implements OnInit {
   }
 
   exitFromSession(){
+    this.leaveSession();
     this.location.back();
   }
 
@@ -132,5 +152,77 @@ export class VideoSessionComponent implements OnInit {
         }
     }
   }
+
+
+  /* OpenVidu */
+
+  private generateParticipantInfo() {
+    this.sessionId = "Session" + this.mySessionId;
+    this.participantId = this.user.nickName;
+  }
+
+  private addVideoTag(stream: Stream) {
+    console.log("Stream added");
+    this.streams.push(stream);
+  }
+
+  private removeVideoTag(stream: Stream) {
+    console.log("Stream removed");
+    this.streams.slice(this.streams.indexOf(stream), 1);
+  }
+
+  joinSession() {
+
+    this.openVidu = new OpenVidu("wss://127.0.0.1:8443/");
+
+    this.openVidu.connect((error, openVidu) => {
+
+      if (error)
+        return console.log(error);
+
+      let camera = openVidu.getCamera();
+
+      camera.requestCameraAccess((error, camera) => {
+
+        if (error)
+          return console.log(error);
+
+        var sessionOptions = {
+          sessionId: this.sessionId,
+          participantId: this.participantId
+        }
+
+        openVidu.joinSession(sessionOptions, (error, currentSession) => {
+
+          if (error)
+            return console.log(error);
+
+          this.currentSession = currentSession;
+
+          this.addVideoTag(camera);
+
+          camera.publish();
+
+          currentSession.addEventListener("stream-added", streamEvent => {
+            this.addVideoTag(streamEvent.stream);
+          });
+
+          currentSession.addEventListener("stream-removed", streamEvent => {
+            this.removeVideoTag(streamEvent.stream);
+          });
+
+        });
+      });
+    });
+  }
+
+  leaveSession() {
+    this.currentSession = null;
+    this.streams = [];
+    if (this.openVidu) this.openVidu.close(true);
+    this.generateParticipantInfo();
+  }
+
+  /* OpenVidu */
 
 }

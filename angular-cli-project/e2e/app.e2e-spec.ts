@@ -315,18 +315,19 @@ describe('angular-cli-project App', function() {
         element(by.css('#fixed-icon')).click().then(function(){
           browser.driver.findElement(by.css('input#message')).then(function(inputChat){
             // Fill input field
-            inputChat.sendKeys(chatMessage);
-            // Ensure field contain what has been entered
-            expect(inputChat.getAttribute('value')).toEqual(chatMessage);
-            browser.driver.findElement(by.css('input#send-btn')).then(function(sendBtn){
-              sendBtn.click().then(function(){
-                page.waitSeconds(1);
-                element.all(by.css(".user_message")).getText().then(function(userMessages) {
-                  expect(userMessages.indexOf(chatMessage) >= 0);
+            inputChat.sendKeys(chatMessage).then(function() {
+              // Ensure field contain what has been entered
+              expect(inputChat.getAttribute('value')).toEqual(chatMessage);
+              browser.driver.findElement(by.css('input#send-btn')).then(function(sendBtn){
+                sendBtn.click().then(function(){
+                  page.waitSeconds(1);
+                  element.all(by.css(".user_message")).getText().then(function(userMessages) {
+                    expect(userMessages.indexOf(chatMessage) >= 0);
 
-                  element(by.css('#exit-icon')).click().then(function(){
-                    browser.waitForAngular();
-                    expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
+                    element(by.css('#exit-icon')).click().then(function(){
+                      browser.waitForAngular();
+                      expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
+                    });
                   });
                 });
               });
