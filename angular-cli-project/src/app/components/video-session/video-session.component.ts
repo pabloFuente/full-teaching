@@ -3,6 +3,8 @@ import { ActivatedRoute, Params}  from '@angular/router';
 import { Location }               from '@angular/common';
 import { OpenVidu, Session, Stream } from 'openvidu-browser';
 
+import { environment } from '../../../environments/environment';
+
 import { User }                  from '../../classes/user';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -173,7 +175,7 @@ export class VideoSessionComponent implements OnInit {
 
   joinSession() {
 
-    this.openVidu = new OpenVidu("wss://127.0.0.1:8443/");
+    this.openVidu = new OpenVidu(environment.OPENVIDU_URL);
 
     this.openVidu.connect((error, openVidu) => {
 

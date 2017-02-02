@@ -5,7 +5,7 @@
   <groupId>com.fullteaching</groupId>
   <artifactId>full-teaching</artifactId>
   <version>0.5-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>backend</name>
   <url>http://maven.apache.org</url>
@@ -58,7 +58,7 @@
 		            <resource>
 		                <targetPath>/</targetPath>
 		                <directory>${project.build.directory}</directory>
-		                <include>${project.build.finalName}.jar</include>
+		                <include>${project.build.finalName}.war</include>
 		            </resource>
 		            <resource>
 			        	<targetPath>/</targetPath>
@@ -68,6 +68,19 @@
 		        </resources>
 		    </configuration>
 		</plugin>
+		
+		<plugin>
+	        <artifactId>maven-war-plugin</artifactId>
+	        <configuration>
+	            <webResources>
+	                <resource>
+	                    <directory>src/main/ebextensions</directory>
+	                    <targetPath>.ebextensions</targetPath>
+	                    <filtering>true</filtering>
+	                </resource>
+	            </webResources>
+	        </configuration>
+	    </plugin>
 	    
    	</plugins>
    </build>
