@@ -300,7 +300,7 @@ describe('angular-cli-project App', function() {
   });
 
 
-  it('should navigate to video-session page and chat should work', () => {
+  /*it('should navigate to video-session page and chat should work', () => {
     // Check browser url (course-details, tab 1)
     expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
 
@@ -336,7 +336,7 @@ describe('angular-cli-project App', function() {
         });
       });
     });
-  });
+  });*/
 
 
   it('should be possible to navigate to settings page', () => {
