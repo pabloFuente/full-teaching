@@ -34,9 +34,7 @@ export class VideoSessionComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
-  }
 
-  ngOnInit() {
     //Getting the session id from the url
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
@@ -48,6 +46,10 @@ export class VideoSessionComponent implements OnInit {
     window.onbeforeunload = () => {
       this.openVidu.close(true);
     }
+  }
+
+  ngOnInit() {
+    this.joinSession();
 
     let wsUri = "ws://" + document.location.host + "/chat";
     this.websocket = new WebSocket(wsUri);
@@ -92,26 +94,26 @@ export class VideoSessionComponent implements OnInit {
       $('#message_box').append("<div class='system_msg'>Connection Closed</div>");
     };
 
-    //Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
+    // Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
     $("div.drag-target").remove();
   }
 
   ngOnDestroy() {
-    //Closing the Chat websocket
+    // Close the Chat websocket
     this.websocket.close();
-    //Closing the OpenVidu sesion
+    // Close the OpenVidu sesion
     this.leaveSession();
-    //Delets the dark overlay (if side menu opened) when the component is destroyed
+    // Delete the dark overlay (if side menu opened) when the component is destroyed
     $("#sidenav-overlay").remove();
   }
 
   sendMessage(){
-    //prepare json data
+    // Prepare JSON data
     let msg = {
       message: this.myMessage,
       user: this.user.nickName
     };
-    //convert and send data to server
+    // Convert and send data to server
     this.websocket.send(JSON.stringify(msg));
     this.myMessage = "";
   }
@@ -159,7 +161,7 @@ export class VideoSessionComponent implements OnInit {
   /* OpenVidu */
 
   private generateParticipantInfo() {
-    this.sessionId = "Session" + this.mySessionId;
+    this.sessionId = "Session-" + this.mySessionId;
     this.participantId = this.user.nickName;
   }
 
@@ -179,16 +181,11 @@ export class VideoSessionComponent implements OnInit {
 
     this.openVidu.connect((error, openVidu) => {
 
-      if (error)
-        return console.log(error);
+      if (error) {console.log("Connect error"); return console.log(error);}
 
       let camera = openVidu.getCamera();
-
       camera.requestCameraAccess((error, camera) => {
-
-        if (error)
-          return console.log(error);
-
+        if (error) return console.log(error);
         var sessionOptions = {
           sessionId: this.sessionId,
           participantId: this.participantId
@@ -196,13 +193,10 @@ export class VideoSessionComponent implements OnInit {
 
         openVidu.joinSession(sessionOptions, (error, currentSession) => {
 
-          if (error)
-            return console.log(error);
+          if (error) return console.log(error);
 
           this.currentSession = currentSession;
-
           this.addVideoTag(camera);
-
           camera.publish();
 
           currentSession.addEventListener("stream-added", streamEvent => {
@@ -212,10 +206,14 @@ export class VideoSessionComponent implements OnInit {
           currentSession.addEventListener("stream-removed", streamEvent => {
             this.removeVideoTag(streamEvent.stream);
           });
-
         });
       });
     });
+  }
+
+  reconnect(){
+    console.log("RECONNECTING!!");
+    this.joinSession();
   }
 
   leaveSession() {

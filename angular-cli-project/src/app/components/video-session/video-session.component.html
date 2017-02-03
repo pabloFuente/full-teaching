@@ -7,25 +7,10 @@
     <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4">
   </video>-->
 
-  <div *ngIf="!currentSession">
-    <h1>Join a video session</h1>
-    <form (submit)="joinSession()" accept-charset="UTF-8">
-      <p>
-        <label>Participant:</label>
-        <input type="text" name="participantId" [(ngModel)]="participantId" required>
-      </p>
-      <p>
-        <label>Session:</label>
-        <input type="text" name="sessionId" [(ngModel)]="sessionId" required>
-      </p>
-      <p>
-        <input type="submit" name="commit" value="Join!">
-      </p>
-    </form>
-  </div>
-
   <div *ngIf="currentSession">
-    <h2>{{sessionId}}</h2>
+    <div class="session-title-div">
+      <h2 id="session-title">{{sessionId}}</h2>
+    </div>
     <div>
       <stream *ngFor="let s of streams" [stream]="s"></stream>
     </div>

@@ -6,9 +6,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   selector: 'stream',
   styles: [`
         .participant {
-	        float: left;
-	        width: 20%;
-	        margin: 10px;
+          width: 100%;
+          margin: 0;
         }
         .participant video {
 	        width: 100%;
@@ -16,7 +15,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
         }`],
   template: `
         <div class='participant'>
-          <p>{{stream.getId()}}</p>
+          <!--<p>{{stream.getId()}}</p>-->
           <video autoplay="true" [src]="videoSrc"></video>
         </div>`
 })

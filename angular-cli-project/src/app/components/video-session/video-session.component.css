@@ -82,3 +82,16 @@ video {
   font-size: small;
   color: #88B6E0;
 }
+
+.session-title-div {
+  text-align: center;
+  position: fixed;
+  width: 100%;
+}
+
+#session-title {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-weight: 200;
+  font-size: 3rem;
+}
