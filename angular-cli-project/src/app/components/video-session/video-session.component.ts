@@ -51,7 +51,7 @@ export class VideoSessionComponent implements OnInit {
   ngOnInit() {
     this.joinSession();
 
-    let wsUri = "ws://" + document.location.host + "/chat";
+    let wsUri = "wss://" + document.location.host + "/chat";
     this.websocket = new WebSocket(wsUri);
     let thisAux = this;
 
