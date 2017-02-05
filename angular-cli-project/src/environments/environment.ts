@@ -9,5 +9,6 @@ export const environment = {
   URL_PIC_UPLOAD: 'http://localhost:5000/api-load-files/upload/picture/',
   URL_EMAIL_FILE_UPLOAD: 'http://localhost:5000/api-file-reader/upload/course/',
   PUBLIC_RECAPTCHA_KEY: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-  OPENVIDU_URL: 'wss://127.0.0.1:8443/'
+  OPENVIDU_URL: 'wss://127.0.0.1:8443/',
+  CHAT_URL: 'ws://127.0.0.1:5000/chat'
 };

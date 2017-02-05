@@ -95,3 +95,36 @@ video {
   font-weight: 200;
   font-size: 3rem;
 }
+
+.session-bottom-div {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  height: 80px;
+}
+
+#div-video-control {
+  text-align: center;
+  width: 100%;
+}
+
+.video-control {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: none;
+}
+
+.video-control-icon {
+  color: #ffffff;
+  font-size: 32px;
+}
+
+#div-video-control {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.session-bottom-div:hover > #div-video-control {
+  visibility: visible;
+  opacity: 1;
+}

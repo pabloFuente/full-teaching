@@ -21,6 +21,10 @@ export class VideoSessionComponent implements OnInit {
 
   myMessage: string;
   fullscreenIcon: string = "fullscreen";
+  playPauseIcon: string = "pause";
+  volumeMuteIcon: string = "volume_up";
+  volumeLevel: number;
+  storedVolumeLevel: number;
 
   private openVidu: OpenVidu;
 
@@ -51,7 +55,7 @@ export class VideoSessionComponent implements OnInit {
   ngOnInit() {
     this.joinSession();
 
-    let wsUri = "wss://" + document.location.host + "/chat";
+    let wsUri = environment.CHAT_URL;
     this.websocket = new WebSocket(wsUri);
     let thisAux = this;
 
@@ -96,6 +100,7 @@ export class VideoSessionComponent implements OnInit {
 
     // Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
     $("div.drag-target").remove();
+    this.volumeLevel = 1;
   }
 
   ngOnDestroy() {
@@ -155,6 +160,47 @@ export class VideoSessionComponent implements OnInit {
             document.webkitExitFullscreen();
         }
     }
+  }
+
+  togglePlayPause(){
+    let video = $('video')[0];
+    if (video.paused) {
+      this.playPauseIcon = 'pause';
+      video.play();
+    }
+    else {
+      this.playPauseIcon = 'play_arrow';
+      video.pause();
+    }
+  }
+
+  toggleMute(){
+    console.log(this.volumeLevel);
+    let video = $('video')[0];
+    if (video.volume == 0.0) {
+      video.volume = this.storedVolumeLevel;
+      this.volumeLevel = this.storedVolumeLevel;
+      this.changeVolumeIcon(video);
+    }
+    else {
+      this.storedVolumeLevel = video.volume;
+      video.volume = 0.0;
+      this.volumeLevel = 0.0;
+      this.changeVolumeIcon(video);
+    }
+  }
+
+  changeVolume(event){
+    let video = $('video')[0];
+    console.log(this.volumeLevel);
+    video.volume = this.volumeLevel;
+    this.changeVolumeIcon(video);
+  }
+
+  changeVolumeIcon(video){
+    if (video.volume > 0.65) this.volumeMuteIcon = "volume_up";
+    else if (video.volume == 0.0) this.volumeMuteIcon = "volume_off";
+    else this.volumeMuteIcon = "volume_down";
   }
 
 

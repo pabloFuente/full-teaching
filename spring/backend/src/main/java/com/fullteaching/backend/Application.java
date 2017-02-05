@@ -41,7 +41,7 @@ public class Application implements WebSocketConfigurer
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(chatHandler(), "/chat");		
+		registry.addHandler(chatHandler(), "/chat").setAllowedOrigins("*");		
 	}
     
     //ONLY ON PRODUCTION

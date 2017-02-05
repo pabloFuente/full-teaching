@@ -426,6 +426,113 @@ div.drag-target {
   display: inline-block;
   line-height: inherit;
 }
+
+input[type=range] + span.thumb {
+  display: none !important;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 110px;
+  margin: 0;
+  border: none !important;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 110px;
+  height: 4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6.8px  !important;
+  border: 0px solid #010101  !important;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0.1px solid rgba(0, 0, 0, 0.34)  !important;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5.5px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: rgba(3, 3, 3, 0.3)  !important;
+}
+input[type=range]::-moz-range-track {
+  width: 110px;
+  height: 4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+  background: rgba(0, 0, 0, 0.3)  !important;
+  border-radius: 6.8px;
+  border: 0px solid #010101  !important;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0.1px solid rgba(0, 0, 0, 0.34)  !important;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 110px;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.3)  !important;
+  border: 0px solid #010101  !important;
+  border-radius: 13.6px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+}
+input[type=range]::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.3)  !important;
+  border: 0px solid #010101  !important;
+  border-radius: 13.6px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0px 0px 1px rgba(13, 13, 13, 0);
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  border: 0.1px solid rgba(0, 0, 0, 0.34)  !important;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 4px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.3);
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: rgba(3, 3, 3, 0.3);
+}
+
+select:-moz-focusring {
+    color: transparent !important;
+    text-shadow: 0 0 0 #000 !important;
+}
+
+input[type="range"]:-moz-focusring {
+  color: transparent !important;
+  text-shadow: 0 0 0 #000 !important;
+  outline: none !important;
+  outline-offset: none !important;
+}
+
+input::-moz-focus-inner {
+  border: 0;
+}
 /*End Library Overwrite*/
 
 /*Text editor component*/
