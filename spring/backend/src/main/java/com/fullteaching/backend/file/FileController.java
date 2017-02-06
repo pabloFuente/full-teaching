@@ -133,7 +133,7 @@ public class FileController {
 					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 					e.printStackTrace();
 				}
-				customFile.setLink("http://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
+				customFile.setLink("https://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
 				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
 				//ONLY ON PRODUCTION
 			} else {
@@ -257,7 +257,7 @@ public class FileController {
 				}
 				this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
 				this.productionFileDeletion(this.getFileNameFromURL(u.getPicture()), "/pictures");
-				u.setPicture("http://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
+				u.setPicture("https://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
 				//ONLY ON PRODUCTION
 			} else {
 				//ONLY ON DEVELOPMENT
