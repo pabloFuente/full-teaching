@@ -30,6 +30,7 @@ import { FileGroupComponent }     from '../components/file-group/file-group.comp
 import { VideoSessionComponent }  from '../components/video-session/video-session.component';
 import { FileUploaderComponent }  from '../components/file-uploader/file-uploader.component';
 import { StreamComponent }        from '../components/video-session/stream.component';
+import { ChatLineComponent }      from '../components/chat-line/chat-line.component';
 
 import { AuthenticationService }  from '../services/authentication.service';
 import { CourseService }          from '../services/course.service';
@@ -117,6 +118,7 @@ describe('NavbarComponent Test', () => {
         VideoSessionComponent,
         FileUploaderComponent,
         StreamComponent,
+        ChatLineComponent,
       ],
       providers: [
         { provide: AuthenticationService, useClass: MockAuthenticationService },
