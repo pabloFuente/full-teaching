@@ -25,6 +25,7 @@ import { FileGroupComponent }     from './components/file-group/file-group.compo
 import { VideoSessionComponent }  from './components/video-session/video-session.component';
 import { FileUploaderComponent }  from './components/file-uploader/file-uploader.component';
 import { StreamComponent }        from './components/video-session/stream.component';
+import { ChatLineComponent }      from './components/chat-line/chat-line.component';
 
 import { AuthenticationService }  from './services/authentication.service';
 import { CourseService }          from './services/course.service';
@@ -77,6 +78,7 @@ import { ReCaptchaModule }        from 'angular2-recaptcha';
     VideoSessionComponent,
     FileUploaderComponent,
     StreamComponent,
+    ChatLineComponent,
   ],
   providers: [
     AuthenticationService,

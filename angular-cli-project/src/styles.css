@@ -545,23 +545,6 @@ input::-moz-focus-inner {
 }
 /*Text editor component*/
 
-/*Chat global styles*/
-.system_msg {
-  color: #b1b1b1;
-  font-style: italic;
-}
-
-.user_name {
-  font-size: small;
-  font-weight: 600;
-}
-
-.user_message {
-  font-size: 14px;
-  color: #5f5f5f;
-}
-/*Chat global styles*/
-
 /*Calendar component*/
 h3.calendar-title {
   margin: 0;

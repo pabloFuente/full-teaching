@@ -63,24 +63,9 @@ video {
 
 .chat_wrapper .message_box {
   height: 100%;
-  background: #f1f1f1;
+  background: #f3f3f3;
   overflow: auto;
   padding: 10px;
-}
-
-.system_msg {
-  color: #BDBDBD;
-  font-style: italic;
-}
-
-.user_name {
-  font-size: small;
-  font-weight: 600;
-}
-
-.user_message {
-  font-size: small;
-  color: #88B6E0;
 }
 
 .session-title-div {
@@ -103,14 +88,13 @@ video {
   height: 80px;
 }
 
-#div-video-control {
-  text-align: center;
-  width: 100%;
-}
-
 .video-control {
   background-color: rgba(255, 255, 255, 0.4) !important;
   box-shadow: none;
+}
+
+.video-control:hover {
+  background-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .video-control-icon {
@@ -119,12 +103,30 @@ video {
 }
 
 #div-video-control {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.5s linear;
+  text-align: center;
+  width: 100%;
 }
 
-.session-bottom-div:hover > #div-video-control {
+.div-video-control-shown {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.box-video-control {
+  display: inline-block;
+  border-radius: 2px;
+  padding: 10px 20px 10px 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.fade-in-controls {
   visibility: visible;
   opacity: 1;
+  transition: opacity 0.5s linear;
+}
+
+.fade-out-controls {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 5s, opacity 3s cubic-bezier(1, 0.01, 0.9, 0.26);
 }

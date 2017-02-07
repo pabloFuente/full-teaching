@@ -19,7 +19,7 @@
 
             <div *ngIf="isCurrentPostMode(['0', '2', '4'])" class="row row-mobile">
               <div class="input-field col s12">
-                <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" required>
+                <input [(ngModel)]="inputTitle" name="inputTitle" id="inputTitle" type="text" class="validate" autocomplete="off" required>
                 <label *ngIf="isCurrentPostMode(['0'])" for="inputTitle">Entry title</label>
                 <label *ngIf="isCurrentPostMode(['2'])" for="inputTitle">Session title</label>
                 <label *ngIf="isCurrentPostMode(['4'])" for="inputTitle">File group title</label>

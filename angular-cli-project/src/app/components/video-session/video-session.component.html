@@ -3,10 +3,6 @@
   <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i id="fixed-icon" class="material-icons video-icon">menu</i></a>
   <a class="btn-floating btn-large waves-effect waves-light red" id="fullscreen-button" (click)="toggleFullScreen()"><i class="material-icons">{{this.fullscreenIcon}}</i></a>
 
-  <!--<video poster="http://www.drodd.com/images14/black16.jpg" controls muted autoplay>
-    <source src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" type="video/mp4">
-  </video>-->
-
   <div *ngIf="currentSession">
     <div class="session-title-div">
       <h2 id="session-title">{{sessionId}}</h2>
@@ -14,15 +10,17 @@
     <div>
       <stream *ngFor="let s of streams" [stream]="s"></stream>
     </div>
-    <div class="session-bottom-div valign-wrapper">
-      <div id="div-video-control">
-        <a class="btn-floating waves-effect video-control" (click)="togglePlayPause()">
-          <i class="material-icons video-control-icon">{{this.playPauseIcon}}</i>
-        </a>
-        <a class="btn-floating waves-effect video-control" (click)="toggleMute()">
-          <i class="material-icons video-control-icon">{{this.volumeMuteIcon}}</i>
-        </a>
-        <input id="slider-volume" name="slider-volume" type="range" min="0" max="1" step="0.01" [(ngModel)]="this.volumeLevel" (ngModelChange)="changeVolume($event)"/>
+    <div class="session-bottom-div valign-wrapper" (mouseenter)="this.controlsShown = true"  (mouseleave)="this.controlsShown = false">
+      <div id="div-video-control" [class.div-video-control-shown]="this.playPauseIcon==='play_arrow'" [class.fade-in-controls]="this.controlsShown" [class.fade-out-controls]="!this.controlsShown">
+        <div class="box-video-control">
+          <a class="btn-floating waves-effect video-control" (click)="togglePlayPause()">
+            <i class="material-icons video-control-icon">{{this.playPauseIcon}}</i>
+          </a>
+          <a class="btn-floating waves-effect video-control" (click)="toggleMute()">
+            <i class="material-icons video-control-icon">{{this.volumeMuteIcon}}</i>
+          </a>
+          <input id="slider-volume" name="slider-volume" type="range" min="0" max="1" step="0.01" [(ngModel)]="this.volumeLevel" (ngModelChange)="changeVolume($event)"/>
+        </div>
       </div>
     </div>
   </div>
@@ -30,10 +28,14 @@
   <ul id="slide-out" class="side-nav">
     <i (click)="this.exitFromSession()" id="exit-icon" class="right material-icons video-icon" [title]="'Exit'">exit_to_app</i>
     <div class="chat_wrapper">
-      <div class="message_box" id="message_box"></div>
+      <div class="message_box" id="message_box">
+        <div *ngFor="let chatline of this.chatLines">
+          <app-chat-line [chatLine]="chatline"></app-chat-line>
+        </div>
+      </div>
       <div class="panel">
         <form (ngSubmit)="sendMessage()">
-          <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="80" autocomplete="off" />
+          <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="256" autocomplete="off"/>
           <input *ngIf="this.myMessage" type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
           <a *ngIf="!this.myMessage" id="fake-send-btn" class="btn waves-effect button-small disabled">Send</a>
         </form>

@@ -5,7 +5,9 @@ import { OpenVidu, Session, Stream } from 'openvidu-browser';
 
 import { environment } from '../../../environments/environment';
 
-import { User }                  from '../../classes/user';
+import { User }     from '../../classes/user';
+import { Chatline } from '../../classes/chatline';
+
 import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
@@ -19,6 +21,8 @@ export class VideoSessionComponent implements OnInit {
   websocket: WebSocket;
   mySessionId: number;
 
+  chatLines: Chatline[] = [];
+
   myMessage: string;
   fullscreenIcon: string = "fullscreen";
   playPauseIcon: string = "pause";
@@ -26,26 +30,28 @@ export class VideoSessionComponent implements OnInit {
   volumeLevel: number;
   storedVolumeLevel: number;
 
+  controlsShown: boolean;
+
   private openVidu: OpenVidu;
 
-  //Join form
+  // Join form
   sessionId: string;
   participantId: string;
 
-  //Session
+  // Session
   currentSession: Session;
   streams: Stream[] = [];
 
   constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
 
-    //Getting the session id from the url
+    // Getting the session id from the url
     this.route.params.forEach((params: Params) => {
       let id = +params['id'];
       this.mySessionId = id;
     });
 
-    //Stablishing OpenVidu session
+    // Stablishing OpenVidu session
     this.generateParticipantInfo();
     window.onbeforeunload = () => {
       this.openVidu.close(true);
@@ -59,43 +65,44 @@ export class VideoSessionComponent implements OnInit {
     this.websocket = new WebSocket(wsUri);
     let thisAux = this;
 
-    this.websocket.onopen = function(event: Event) { // connection is open
-      $('#message_box').append("<div class='system_msg'>Connected!</div>"); //notify user
-      //prepare json data
+    this.websocket.onopen = function(event: Event) { // Connection is open
+      // New welcome chat line
+      thisAux.chatLines.push(new Chatline('system-msg', null, "Connected!", null)); // Notify user
+
+      // Prepare json data
       let msg = {
         chat: 'Chat-Session-' + thisAux.mySessionId,
         user: thisAux.user.nickName
       };
-      //convert and send data to server
+      // Convert and send data to server
       thisAux.websocket.send(JSON.stringify(msg));
     }
 
     this.websocket.onmessage = function(ev) {
-      var msg = JSON.parse(ev.data); //PHP sends Json data
-      var type = msg.type; //message type
-      var umsg = msg.message; //message text
-      var uname = msg.name; //user name
-      var ucolor = msg.color; //color
+      var msg = JSON.parse(ev.data); // PHP sends Json data
+      var type = msg.type; // Message type
+      var umsg = msg.message; // Message text
+      var uname = msg.name; // User name
+      var ucolor = msg.color; // Color
 
       if (type == 'system') {
-        $('#message_box').append(
-          "<div class='system_msg'>" + umsg + "</div>");
+        // New system chat line
+        thisAux.chatLines.push(new Chatline('system-msg', null, umsg, null));
       } else {
-        $('#message_box').append(
-          "<div><span class='user_name' style='color:#" + ucolor + "'>"
-          + uname
-          + "</span> : <span class='user_message'>"
-          + umsg
-          + "</span></div>");
+        let classUserMsg = (uname === thisAux.user.nickName ? "own-msg" : "stranger-msg");
+        // New user chat line
+        thisAux.chatLines.push(new Chatline(classUserMsg, uname, umsg, ucolor));
       }
     };
 
     this.websocket.onerror = function(ev) {
-      $('#message_box').append("<div class='system_error'>Error Occurred - " + ev.message + "</div>");
+      // New system error chat line
+      thisAux.chatLines.push(new Chatline('system-err', null, 'Error Occurred - ' + ev.message, null));
     };
 
     this.websocket.onclose = function(ev) {
-      $('#message_box').append("<div class='system_msg'>Connection Closed</div>");
+      // New system close chat line
+      thisAux.chatLines.push(new Chatline('system-msg', null, 'Connection Closed', null));
     };
 
     // Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak

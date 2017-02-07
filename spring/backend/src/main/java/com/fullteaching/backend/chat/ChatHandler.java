@@ -17,7 +17,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
 	private ChatManager chatManager = new ChatManager(10);
 
-	private String[] colors = {"007AFF", "FF7000", "15E25F", "CFC700", "CFC700", "CF1100", "CF00BE", "F00"};
+	private String[] colors = {"#2C3539", "#7D0552", "#2B1B17", "#25383C", "#CD7F32", "#151B54", "#625D5D", "#DAB51B", "#3CB4C7", "#461B7E", "#C12267", "#438D80", "#657383", "#E56717", "#667C26", "#E42217", "#FFA62F", "#254117", "#321640", "#321640", "#173180", "#8C001A", "#4863A0" };
 	
 	private volatile int colorIndex = 0;
 

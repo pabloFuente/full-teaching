@@ -1,0 +1,9 @@
+<div class="outer-message">
+  <div *ngIf="(this.chatLine.type === 'own-msg') || (this.chatLine.type === 'stranger-msg')" [ngClass]="[this.chatLine.type]">
+    <span class='user-name' [style.color]="this.chatLine.color">{{this.chatLine.author}}</span> :
+    <span class='user-message'>{{this.chatLine.message}}</span>
+  </div>
+  <div *ngIf="(this.chatLine.type === 'system-msg') || (this.chatLine.type === 'system-err')" [ngClass]="[this.chatLine.type]">
+    {{this.chatLine.message}}
+  </div>
+</div>

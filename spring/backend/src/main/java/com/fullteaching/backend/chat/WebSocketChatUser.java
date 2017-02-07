@@ -55,7 +55,7 @@ public class WebSocketChatUser implements ChatUser {
 	public void newUserInChat(Chat chat, ChatUser user) {
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("type", "system");
-		msg.put("message", "<b>" + user.getName() + "</b> has connected");
+		msg.put("message", user.getName() + " has connected");
 
 		send(msg);
 	}
@@ -64,7 +64,7 @@ public class WebSocketChatUser implements ChatUser {
 	public void userExitedFromChat(Chat chat, ChatUser user) {
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("type", "system");
-		msg.put("message", "<b>" + user.getName() + "</b> exited from chat");
+		msg.put("message", user.getName() + " exited from chat");
 
 		send(msg);
 	}
