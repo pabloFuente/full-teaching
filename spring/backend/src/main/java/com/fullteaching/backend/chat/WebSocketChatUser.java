@@ -2,6 +2,9 @@ package com.fullteaching.backend.chat;
 
 import java.io.IOException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -56,8 +59,9 @@ public class WebSocketChatUser implements ChatUser {
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("type", "system");
 		msg.put("message", user.getName() + " has connected");
-
 		send(msg);
+		
+		this.sendConnectedUsers(chat);
 	}
 
 	@Override
@@ -85,6 +89,33 @@ public class WebSocketChatUser implements ChatUser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void sendConnectedUsers(Chat chat){
+		ObjectNode msgUsers = mapper.createObjectNode();
+		msgUsers.put("type", "system-users");
+		
+		JSONObject jObject = new JSONObject();
+		try
+		{
+		    JSONArray jArray = new JSONArray();
+		    for (ChatUser u : chat.getUsers())
+		    {
+		    	JSONObject userNameJSON = new JSONObject();
+				userNameJSON.put("userName", u.getName());
+				userNameJSON.put("userColor", u.getColor());
+		        jArray.put(userNameJSON);
+		    }
+		    jObject.put("UserNameList", jArray);
+		} catch (JSONException jse) {
+		    jse.printStackTrace();
+		}
+		
+		System.out.println(jObject.toString());
+		
+		msgUsers.put("message", jObject.toString());	
+		send(msgUsers);
 	}
 
 }

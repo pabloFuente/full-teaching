@@ -139,3 +139,26 @@ video {
   opacity: 0;
   transition: visibility 0s 5s, opacity 3s cubic-bezier(1, 0.01, 0.9, 0.26);
 }
+
+.num-attenders-div {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: right;
+  font-weight: 300;
+}
+
+.num-connected {
+  font-size: large;
+  font-weight: bold;
+  color: green;
+}
+
+.num-total {
+  font-size: large;
+  font-weight: bold;
+  color: #c78100;
+}
+
+.attender-name{
+  font-weight: 600;
+}

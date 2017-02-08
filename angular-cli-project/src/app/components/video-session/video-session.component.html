@@ -46,8 +46,14 @@
       </div>
 
       <div *ngIf="!showChat">
-        <div *ngFor="let s of streams">
-          {{s.participant.id}}
+        <div class="num-attenders-div">
+          <span class="num-connected">{{this.usersConnected.length}}</span>
+           of
+           <span class="num-total">{{this.courseAttenders.length}}</span>
+            attenders connected
+        </div>
+        <div *ngFor="let userObject of this.usersConnected" class="attender-name" [style.color]="userObject.userColor">
+          {{userObject.userName}}
         </div>
       </div>
 

@@ -21,6 +21,8 @@ export class VideoSessionComponent implements OnInit {
 
   user: User;
   mySession: MySession;
+  courseAttenders: User[] = [];
+  usersConnected = [];
   websocket: WebSocket;
   mySessionId: number;
 
@@ -54,6 +56,7 @@ export class VideoSessionComponent implements OnInit {
   {
     this.user = this.authenticationService.getCurrentUser();
     this.mySession = this.videoSessionService.session;
+    this.courseAttenders = this.videoSessionService.courseAttenders;
 
     // Getting the session id from the url
     this.route.params.forEach((params: Params) => {
@@ -98,6 +101,20 @@ export class VideoSessionComponent implements OnInit {
       if (type == 'system') {
         // New system chat line
         thisAux.chatLines.push(new Chatline('system-msg', null, umsg, null));
+      } else if (type == 'system-users') {
+        // Users connected message received
+        let jsonObject = JSON.parse(umsg);
+        console.log("USERS CONNECTED:");
+        console.log(jsonObject);
+        thisAux.usersConnected  = [];
+        if (jsonObject.hasOwnProperty('UserNameList')){
+          let objectY: any;
+          for (var j = 0; j < jsonObject.UserNameList.length; j++){
+            objectY = jsonObject.UserNameList[j];
+            console.log(objectY);
+            thisAux.usersConnected.push(objectY);
+          }
+        }
       } else {
         let classUserMsg = (uname === thisAux.user.nickName ? "own-msg" : "stranger-msg");
         // New user chat line

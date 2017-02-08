@@ -15,5 +15,7 @@ public interface ChatUser {
 	public void userExitedFromChat(Chat chat, ChatUser user);
 
 	public void newMessage(Chat chat, ChatUser user, String message);
+	
+	public void sendConnectedUsers(Chat chat);
 
 }

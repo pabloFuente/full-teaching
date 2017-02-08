@@ -25,15 +25,23 @@ public class Chat {
 	public void addUser(ChatUser user) {
 		users.put(user.getName(), user);
 		forEachUser(u -> {
-			if (u != user) {
+			if (u != user) { // For all previous users
 				u.newUserInChat(this, user);
+			} else { // Just for the new user
+				u.sendConnectedUsers(this);
 			}
 		});
 	}
 
 	public void removeUser(ChatUser user) {
 		users.remove(user.getName());
-		forEachUser(u -> u.userExitedFromChat(this, user));
+		forEachUser(u -> {
+				u.userExitedFromChat(this, user);
+				if (u != user) { // For all previous users
+					u.sendConnectedUsers(this);
+				}
+			}
+		);
 	}
 
 	public void close() {
