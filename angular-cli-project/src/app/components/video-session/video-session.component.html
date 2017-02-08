@@ -27,19 +27,30 @@
 
   <ul id="slide-out" class="side-nav">
     <i (click)="this.exitFromSession()" id="exit-icon" class="right material-icons video-icon" [title]="'Exit'">exit_to_app</i>
+    <i (click)="changeShowChat()" id="show-chat-icon" class="left material-icons video-icon">{{this.showChatIcon}}</i>
     <div class="chat_wrapper">
-      <div class="message_box" id="message_box">
-        <div *ngFor="let chatline of this.chatLines">
-          <app-chat-line [chatLine]="chatline"></app-chat-line>
+
+      <div *ngIf="showChat" id="message-box-cont">
+        <div class="message_box" id="message_box">
+          <div *ngFor="let chatline of this.chatLines">
+            <app-chat-line [chatLine]="chatline"></app-chat-line>
+          </div>
+        </div>
+        <div class="panel">
+          <form (ngSubmit)="sendMessage()">
+            <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="256" autocomplete="off"/>
+            <input *ngIf="this.myMessage" type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
+            <a *ngIf="!this.myMessage" id="fake-send-btn" class="btn waves-effect button-small disabled">Send</a>
+          </form>
         </div>
       </div>
-      <div class="panel">
-        <form (ngSubmit)="sendMessage()">
-          <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="256" autocomplete="off"/>
-          <input *ngIf="this.myMessage" type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
-          <a *ngIf="!this.myMessage" id="fake-send-btn" class="btn waves-effect button-small disabled">Send</a>
-        </form>
+
+      <div *ngIf="!showChat">
+        <div *ngFor="let s of streams">
+          {{s.participant.id}}
+        </div>
       </div>
+
     </div>
   </ul>
 

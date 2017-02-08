@@ -40,6 +40,11 @@ video {
   margin: 10px;
 }
 
+#show-chat-icon {
+  margin: 10px;
+  margin-left: 90px;
+}
+
 #fake-send-btn {
   font-size: 11px;
   font-weight: 600;
@@ -61,7 +66,11 @@ video {
   margin-left: 10px;
 }
 
-.chat_wrapper .message_box {
+#message-box-cont {
+  height: 100%;
+}
+
+#message_box {
   height: 100%;
   background: #f3f3f3;
   overflow: auto;

@@ -19,6 +19,7 @@ import { SessionService }        from '../../services/session.service';
 import { ForumService }          from '../../services/forum.service';
 import { FileService }           from '../../services/file.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { VideoSessionService }   from '../../services/video-session.service';
 import { AnimationService }      from '../../services/animation.service';
 
 import { Session }       from '../../classes/session';
@@ -136,6 +137,7 @@ export class CourseDetailsComponent implements OnInit {
     private sessionService: SessionService,
     private animationService: AnimationService,
     private authenticationService: AuthenticationService,
+    private videoSessionService: VideoSessionService,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
@@ -233,6 +235,7 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   goToSessionVideo(session: Session){
+    this.videoSessionService.session = session;
     if (this.isSessionReady(session)) this.router.navigate(['/session', session.id]);
   }
 

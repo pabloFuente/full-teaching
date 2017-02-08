@@ -7,8 +7,10 @@ import { environment } from '../../../environments/environment';
 
 import { User }     from '../../classes/user';
 import { Chatline } from '../../classes/chatline';
+import { Session as MySession }  from '../../classes/session';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import { VideoSessionService }   from '../../services/video-session.service';
 
 @Component({
   selector: 'app-video-session',
@@ -18,9 +20,12 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class VideoSessionComponent implements OnInit {
 
   user: User;
+  mySession: MySession;
   websocket: WebSocket;
   mySessionId: number;
 
+  showChat: boolean = true;
+  showChatIcon: string = 'supervisor_account';
   chatLines: Chatline[] = [];
 
   myMessage: string;
@@ -42,8 +47,13 @@ export class VideoSessionComponent implements OnInit {
   currentSession: Session;
   streams: Stream[] = [];
 
-  constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute, private location: Location) {
+  constructor(private authenticationService: AuthenticationService,
+              private videoSessionService: VideoSessionService,
+              private route: ActivatedRoute,
+              private location: Location)
+  {
     this.user = this.authenticationService.getCurrentUser();
+    this.mySession = this.videoSessionService.session;
 
     // Getting the session id from the url
     this.route.params.forEach((params: Params) => {
@@ -135,6 +145,15 @@ export class VideoSessionComponent implements OnInit {
     this.location.back();
   }
 
+  changeShowChat(){
+    this.showChat = !this.showChat;
+    this.showChatIcon = (this.showChat ? 'supervisor_account' : 'chat');
+    console.log(this.streams);
+  }
+
+
+  /* Video controls */
+
   toggleFullScreen(){
     console.log("FULLSCREEN click");
     let fs = $('#video-session-div').get(0);
@@ -210,11 +229,13 @@ export class VideoSessionComponent implements OnInit {
     else this.volumeMuteIcon = "volume_down";
   }
 
+  /* Video controls */
+
 
   /* OpenVidu */
 
   private generateParticipantInfo() {
-    this.sessionId = "Session-" + this.mySessionId;
+    this.sessionId = this.mySession.title;
     this.participantId = this.user.nickName;
   }
 
@@ -236,37 +257,59 @@ export class VideoSessionComponent implements OnInit {
 
       if (error) {console.log("Connect error"); return console.log(error);}
 
-      let camera = openVidu.getCamera();
-      camera.requestCameraAccess((error, camera) => {
-        if (error) return console.log(error);
-        var sessionOptions = {
-          sessionId: this.sessionId,
-          participantId: this.participantId
-        }
-
-        openVidu.joinSession(sessionOptions, (error, currentSession) => {
-
+      if (this.authenticationService.isTeacher()) {
+        let camera = openVidu.getCamera();
+        camera.requestCameraAccess((error, camera) => {
           if (error) return console.log(error);
-
-          this.currentSession = currentSession;
-          this.addVideoTag(camera);
-          camera.publish();
-
-          currentSession.addEventListener("stream-added", streamEvent => {
-            this.addVideoTag(streamEvent.stream);
-          });
-
-          currentSession.addEventListener("stream-removed", streamEvent => {
-            this.removeVideoTag(streamEvent.stream);
-          });
+          this.joinSessionShared(this.openVidu, camera);
         });
+      }
+      else {
+        let options = {
+            audio: false,
+            video: false,
+            data: false
+        }
+        let camera = openVidu.getCamera(options);
+        camera.requestCameraAccess((error, camera) => {
+          if (error) return console.log(error);
+          this.joinSessionShared(this.openVidu, camera);
+        });
+      }
+    });
+  }
+
+  joinSessionShared(openVidu: OpenVidu, camera: Stream){
+    var sessionOptions = {
+      sessionId: this.sessionId,
+      participantId: this.participantId
+    }
+    openVidu.joinSession(sessionOptions, (error, currentSession) => {
+
+      if (error) return console.log(error);
+
+      this.currentSession = currentSession;
+
+      if (this.authenticationService.isTeacher()) {
+        this.addVideoTag(camera);
+        this.publishCamera(camera);
+      }
+      /*else{
+        this.publishCamera(camera);
+      }*/
+
+      currentSession.addEventListener("stream-added", streamEvent => {
+        this.addVideoTag(streamEvent.stream);
+      });
+
+      currentSession.addEventListener("stream-removed", streamEvent => {
+        this.removeVideoTag(streamEvent.stream);
       });
     });
   }
 
-  reconnect(){
-    console.log("RECONNECTING!!");
-    this.joinSession();
+  publishCamera(camera: Stream){
+    camera.publish();
   }
 
   leaveSession() {
