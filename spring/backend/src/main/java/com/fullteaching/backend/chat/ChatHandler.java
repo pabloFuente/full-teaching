@@ -34,9 +34,17 @@ public class ChatHandler extends TextWebSocketHandler {
 		String msg = message.getPayload();
 
 		JsonNode jsonMsg = mapper.readTree(msg);
-		if (jsonMsg.hasNonNull("chat")) {
+		if (jsonMsg.hasNonNull("chat")) { // New user message
 			newUser(session, jsonMsg);
-		} else {
+		}
+		else if (jsonMsg.hasNonNull("chatIntervention")){ // New intervention petition
+			Chat chat = (Chat) session.getAttributes().get("chat");
+			ChatUser user = (ChatUser) session.getAttributes().get("user");
+			
+			boolean petition = jsonMsg.get("petition").asBoolean();
+			chat.requestIntervention(user, petition);
+		}
+		else { // New standard message
 			newMessage(session, jsonMsg);
 		}
 	}
@@ -70,18 +78,19 @@ public class ChatHandler extends TextWebSocketHandler {
 		
 		String chatName = jsonMsg.get("chat").asText();
 		String userName = jsonMsg.get("user").asText();
+		String teacherName = jsonMsg.get("teacher").asText();
 
 		WebSocketChatUser user = new WebSocketChatUser(session, userName, colors[colorIndex]);
 		colorIndex = (colorIndex+1) % colors.length;
 		
-		session.getAttributes().put("user", user);	
+		session.getAttributes().put("user", user);
 
 		chatManager.newUser(user);
 		
 		if(!this.chatManager.chatExists(chatName)) {
-			//If the chat does not exist, it is created
+			// If the chat does not exist, it is created
 			System.out.println("CREATING new chat...");
-			Chat chat = chatManager.newChat(chatName, 5, TimeUnit.SECONDS);
+			Chat chat = chatManager.newChat(chatName, 5, TimeUnit.SECONDS, teacherName);
 			session.getAttributes().put("chat", chat);
 			chat.addUser(user);
 		}
@@ -92,8 +101,6 @@ public class ChatHandler extends TextWebSocketHandler {
 			session.getAttributes().put("chat", chat);
 			chat.addUser(user);
 		}
-		
-		
 	}
 
 	@Override

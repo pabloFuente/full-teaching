@@ -28,8 +28,8 @@ video {
   font-size: 42px;
 }
 
-#fullscreen-button {
-  position: fixed;
+.floating-button {
+  float: right;
   z-index: 1000;
   margin-right: 10px;
   margin-top: 10px;

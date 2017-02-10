@@ -236,7 +236,7 @@ export class CourseDetailsComponent implements OnInit {
 
   goToSessionVideo(session: Session){
     this.videoSessionService.session = session;
-    this.videoSessionService.courseAttenders = this.course.attenders;
+    this.videoSessionService.course = this.course;
     if (this.isSessionReady(session)) this.router.navigate(['/session', session.id]);
   }
 

@@ -18,4 +18,6 @@ public interface ChatUser {
 	
 	public void sendConnectedUsers(Chat chat);
 
+	public void sendInterventionPetition(Chat chat, ChatUser user, boolean petition);
+
 }

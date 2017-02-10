@@ -419,6 +419,10 @@ div.drag-target {
   text-align: center;
 }
 
+.material-tooltip {
+  z-index: 2147483647;
+}
+
 .rounded{
   margin-top: 2.5px;
   margin-bottom: 5px;

@@ -117,5 +117,26 @@ public class WebSocketChatUser implements ChatUser {
 		msgUsers.put("message", jObject.toString());	
 		send(msgUsers);
 	}
+	
+	@Override
+	public void sendInterventionPetition(Chat chat, ChatUser user, boolean petition){
+		ObjectNode msgIntervention = mapper.createObjectNode();
+		msgIntervention.put("type", "system-intervention");
+		
+		JSONObject jObject = new JSONObject();
+		try
+		{
+			jObject.put("user", user.getName());
+			jObject.put("color", user.getColor());
+			jObject.put("petition", petition);
+		} catch (JSONException jse) {
+			jse.printStackTrace();
+		}
+		System.out.println(jObject.toString());
+		
+		msgIntervention.put("message", jObject.toString());
+		
+		send(msgIntervention);
+	}
 
 }

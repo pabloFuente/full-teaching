@@ -11,15 +11,17 @@ public class Chat {
 
 	private ChatManager chatManager;
 	private String name;
+	private String teacher;
 	
 	private ConcurrentMap<String, ChatUser> users = new ConcurrentHashMap<>();
 
 	private ExecutorService executor;
 
-	public Chat(ChatManager chatManager, String name, ExecutorService executor) {
+	public Chat(ChatManager chatManager, String name, ExecutorService executor, String teacherName) {
 		this.chatManager = chatManager;
 		this.name = name;
 		this.executor = executor;
+		this.teacher = teacherName;
 	}
 
 	public void addUser(ChatUser user) {
@@ -40,6 +42,10 @@ public class Chat {
 				if (u != user) { // For all previous users
 					u.sendConnectedUsers(this);
 				}
+				if (u.getName().equals(this.teacher)){ // For the teacher
+					// Cancel possible remaining intervention petition from removed user 
+					users.get(this.teacher).sendInterventionPetition(this, user, false);
+				}
 			}
 		);
 	}
@@ -50,6 +56,10 @@ public class Chat {
 
 	public void sendMessage(ChatUser user, String message) {
 		forEachUser(u -> u.newMessage(this, user, message));
+	}
+	
+	public void requestIntervention(ChatUser user, boolean petition){
+		users.get(this.teacher).sendInterventionPetition(this, user, petition);
 	}
 
 	private void forEachUser(Consumer<ChatUser> userAction) {

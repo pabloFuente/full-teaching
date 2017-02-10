@@ -46,7 +46,7 @@ public class ChatManager {
 		}
 	}
 
-	public Chat newChat(String name, long timeout, TimeUnit unit) throws InterruptedException,
+	public Chat newChat(String name, long timeout, TimeUnit unit, String teacherName) throws InterruptedException,
 			TimeoutException {
 		
 		System.out.println("(ChatManager) newChat");
@@ -58,7 +58,7 @@ public class ChatManager {
 		
 		System.out.println("There are still " + numChatsSem.availablePermits() + " permits for new chats");
 		
-		Chat oldChat = chats.computeIfAbsent(name, n -> new Chat(this, name, executor));
+		Chat oldChat = chats.computeIfAbsent(name, n -> new Chat(this, name, executor, teacherName));
 		if (oldChat != null) {
 			return oldChat;
 		}

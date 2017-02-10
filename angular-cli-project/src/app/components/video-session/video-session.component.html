@@ -1,7 +1,17 @@
 <div id="video-session-div">
 
   <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i id="fixed-icon" class="material-icons video-icon">menu</i></a>
-  <a class="btn-floating btn-large waves-effect waves-light red" id="fullscreen-button" (click)="toggleFullScreen()"><i class="material-icons">{{this.fullscreenIcon}}</i></a>
+  <div class="row no-margin" style="position: fixed; width: 100%; z-index: 900;">
+    <div class="col s12 m12 l12 no-padding-right"><a class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="toggleFullScreen()"><i class="material-icons">{{fullscreenIcon}}</i></a></div>
+    <div class="col s12 m12 l12 no-padding-right"><a *ngIf="this.authenticationService.isStudent()" class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="askForIntervention()"><i class="material-icons">{{interventionIcon}}</i></a></div>
+    <div class="row no-margin" *ngIf="this.authenticationService.isTeacher()">
+      <div *ngFor="let userObject of this.usersIntervention" class="col s12 m12 l12 no-padding-right">
+        <a class="btn-floating btn-large waves-effect floating-button white" [style.border-color]="userObject.color" style="border: 7px;border-style: solid;">
+          <i [style.color]="userObject.color" style="margin-left: -7px;margin-top: -7px;" materialize="tooltip" class="material-icons" data-position="left" data-delay="65" [attr.data-tooltip]="userObject.user">person</i>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <div *ngIf="currentSession">
     <div class="session-title-div">
@@ -49,7 +59,7 @@
         <div class="num-attenders-div">
           <span class="num-connected">{{this.usersConnected.length}}</span>
            of
-           <span class="num-total">{{this.courseAttenders.length}}</span>
+           <span class="num-total">{{this.course.attenders.length}}</span>
             attenders connected
         </div>
         <div *ngFor="let userObject of this.usersConnected" class="attender-name" [style.color]="userObject.userColor">

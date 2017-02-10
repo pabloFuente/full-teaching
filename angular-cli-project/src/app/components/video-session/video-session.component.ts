@@ -6,6 +6,7 @@ import { OpenVidu, Session, Stream } from 'openvidu-browser';
 import { environment } from '../../../environments/environment';
 
 import { User }     from '../../classes/user';
+import { Course }   from '../../classes/course';
 import { Chatline } from '../../classes/chatline';
 import { Session as MySession }  from '../../classes/session';
 
@@ -21,8 +22,9 @@ export class VideoSessionComponent implements OnInit {
 
   user: User;
   mySession: MySession;
-  courseAttenders: User[] = [];
+  course: Course;
   usersConnected = [];
+  usersIntervention = [];
   websocket: WebSocket;
   mySessionId: number;
 
@@ -38,6 +40,9 @@ export class VideoSessionComponent implements OnInit {
   storedVolumeLevel: number;
 
   controlsShown: boolean;
+
+  interventionRequired: boolean = false;
+  interventionIcon: string = 'record_voice_over';
 
   private openVidu: OpenVidu;
 
@@ -56,7 +61,7 @@ export class VideoSessionComponent implements OnInit {
   {
     this.user = this.authenticationService.getCurrentUser();
     this.mySession = this.videoSessionService.session;
-    this.courseAttenders = this.videoSessionService.courseAttenders;
+    this.course = this.videoSessionService.course;
 
     // Getting the session id from the url
     this.route.params.forEach((params: Params) => {
@@ -85,7 +90,8 @@ export class VideoSessionComponent implements OnInit {
       // Prepare json data
       let msg = {
         chat: 'Chat-Session-' + thisAux.mySessionId,
-        user: thisAux.user.nickName
+        user: thisAux.user.nickName,
+        teacher: thisAux.course.teacher.nickName
       };
       // Convert and send data to server
       thisAux.websocket.send(JSON.stringify(msg));
@@ -115,7 +121,26 @@ export class VideoSessionComponent implements OnInit {
             thisAux.usersConnected.push(objectY);
           }
         }
-      } else {
+      } else if ((type == 'system-intervention') && (thisAux.authenticationService.isTeacher())){
+        // User's petition for intervention received
+        let jsonObject = JSON.parse(umsg);
+        console.log("USER PETITION:");
+        console.log(jsonObject);
+        if (jsonObject.hasOwnProperty('petition')){
+          if (jsonObject.petition) {
+            // Add new user's petition
+            thisAux.usersIntervention.push(jsonObject);
+          }
+          else {
+            // Remove user's petition
+            let index = thisAux.usersIntervention.map(function(u) { return u.user; }).indexOf(jsonObject.user);
+            if (index !== -1) {
+              thisAux.usersIntervention.splice(index, 1);
+            }
+          }
+        }
+      }
+      else {
         let classUserMsg = (uname === thisAux.user.nickName ? "own-msg" : "stranger-msg");
         // New user chat line
         thisAux.chatLines.push(new Chatline(classUserMsg, uname, umsg, ucolor));
@@ -146,7 +171,7 @@ export class VideoSessionComponent implements OnInit {
     $("#sidenav-overlay").remove();
   }
 
-  sendMessage(){
+  sendMessage() {
     // Prepare JSON data
     let msg = {
       message: this.myMessage,
@@ -157,7 +182,7 @@ export class VideoSessionComponent implements OnInit {
     this.myMessage = "";
   }
 
-  exitFromSession(){
+  exitFromSession() {
     this.leaveSession();
     this.location.back();
   }
@@ -166,6 +191,21 @@ export class VideoSessionComponent implements OnInit {
     this.showChat = !this.showChat;
     this.showChatIcon = (this.showChat ? 'supervisor_account' : 'chat');
     console.log(this.streams);
+  }
+
+  askForIntervention() {
+    // Prepare json data
+    let msg = {
+      chatIntervention: 'Chat-Session-' + this.mySessionId,
+      petition: !this.interventionRequired,
+      user: this.user.nickName
+    };
+    // Convert and send petition to server
+    this.websocket.send(JSON.stringify(msg));
+    // Invert intervention request
+    this.interventionRequired = !this.interventionRequired;
+    // Change intervention icon
+    this.interventionIcon = (this.interventionRequired ? 'cancel' : 'record_voice_over');
   }
 
 
@@ -207,29 +247,33 @@ export class VideoSessionComponent implements OnInit {
 
   togglePlayPause(){
     let video = $('video')[0];
-    if (video.paused) {
-      this.playPauseIcon = 'pause';
-      video.play();
-    }
-    else {
-      this.playPauseIcon = 'play_arrow';
-      video.pause();
+    if(video){
+      if (video.paused) {
+        this.playPauseIcon = 'pause';
+        video.play();
+      }
+      else {
+        this.playPauseIcon = 'play_arrow';
+        video.pause();
+      }
     }
   }
 
   toggleMute(){
     console.log(this.volumeLevel);
     let video = $('video')[0];
-    if (video.volume == 0.0) {
-      video.volume = this.storedVolumeLevel;
-      this.volumeLevel = this.storedVolumeLevel;
-      this.changeVolumeIcon(video);
-    }
-    else {
-      this.storedVolumeLevel = video.volume;
-      video.volume = 0.0;
-      this.volumeLevel = 0.0;
-      this.changeVolumeIcon(video);
+    if(video){
+      if (video.volume == 0.0) {
+        video.volume = this.storedVolumeLevel;
+        this.volumeLevel = this.storedVolumeLevel;
+        this.changeVolumeIcon(video);
+      }
+      else {
+        this.storedVolumeLevel = video.volume;
+        video.volume = 0.0;
+        this.volumeLevel = 0.0;
+        this.changeVolumeIcon(video);
+      }
     }
   }
 
@@ -282,16 +326,7 @@ export class VideoSessionComponent implements OnInit {
         });
       }
       else {
-        let options = {
-            audio: false,
-            video: false,
-            data: false
-        }
-        let camera = openVidu.getCamera(options);
-        camera.requestCameraAccess((error, camera) => {
-          if (error) return console.log(error);
-          this.joinSessionShared(this.openVidu, camera);
-        });
+        this.joinSessionShared(this.openVidu, null);
       }
     });
   }
