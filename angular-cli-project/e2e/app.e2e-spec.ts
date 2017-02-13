@@ -300,14 +300,16 @@ describe('angular-cli-project App', function() {
   });
 
 
-  /*it('should navigate to video-session page and chat should work', () => {
+  it('should navigate to video-session page and chat should work', () => {
     // Check browser url (course-details, tab 1)
     expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
 
     //Get and click on a ready session
     browser.driver.findElement(by.css('.session-ready')).then(function(sessionReady){
       sessionReady.click().then(function(){
-        browser.waitForAngular();
+        browser.ignoreSynchronization = true;
+        //browser.waitForAngular();
+        //page.waitSeconds(2);
 
         // Check browser url (course-details, tab 1)
         expect(browser.driver.getCurrentUrl()).toMatch(/\/session\/[0-9]+/);
@@ -321,8 +323,8 @@ describe('angular-cli-project App', function() {
               browser.driver.findElement(by.css('input#send-btn')).then(function(sendBtn){
                 sendBtn.click().then(function(){
                   page.waitSeconds(1);
-                  element.all(by.css(".user_message")).getText().then(function(userMessages) {
-                    expect(userMessages.indexOf(chatMessage) >= 0);
+                  element.all(by.css(".user-message")).getText().then(function(userMessages) {
+                    expect(userMessages.indexOf(chatMessage) >= 0).toBe(true);
 
                     element(by.css('#exit-icon')).click().then(function(){
                       browser.waitForAngular();
@@ -336,7 +338,7 @@ describe('angular-cli-project App', function() {
         });
       });
     });
-  });*/
+  });
 
 
   it('should be possible to navigate to settings page', () => {
@@ -366,6 +368,7 @@ describe('angular-cli-project App', function() {
       // Get and click the logout button inside the drop-down menu
       var logoutButton = browser.driver.findElement(by.css('#logout-button')).then(function(logoutBtn) {
         logoutBtn.click().then(function() {
+          browser.waitForAngular();
 
           // Check browser url (root)
           expect(browser.driver.getCurrentUrl()).toMatch('/');

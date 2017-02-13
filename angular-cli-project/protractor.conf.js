@@ -10,7 +10,10 @@ exports.config = {
     './e2e/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+     args: ['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream'],
+    }
   },
   directConnect: true,
   baseUrl: 'http://localhost:5000/',
