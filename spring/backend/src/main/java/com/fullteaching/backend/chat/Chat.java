@@ -61,6 +61,11 @@ public class Chat {
 	public void requestIntervention(ChatUser user, boolean petition){
 		users.get(this.teacher).sendInterventionPetition(this, user, petition);
 	}
+	
+	public void grantIntervention(String studentName, boolean accessGranted) {
+		ChatUser user = users.get(studentName);
+		forEachUser(u -> u.grantIntervention(this, user, accessGranted));
+	}
 
 	private void forEachUser(Consumer<ChatUser> userAction) {
 		users.values().stream().forEach(u -> executor.submit(() -> {

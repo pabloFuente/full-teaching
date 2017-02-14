@@ -138,5 +138,25 @@ public class WebSocketChatUser implements ChatUser {
 		
 		send(msgIntervention);
 	}
+	
+	@Override
+	public void grantIntervention(Chat chat, ChatUser user, boolean accessGranted){
+		ObjectNode msgGrantIntervention = mapper.createObjectNode();
+		msgGrantIntervention.put("type", "system-grant-intervention");
+		
+		JSONObject jObject = new JSONObject();
+		try
+		{
+			jObject.put("user", user.getName());
+			jObject.put("accessGranted", accessGranted);
+		} catch (JSONException jse) {
+			jse.printStackTrace();
+		}
+		System.out.println(jObject.toString());
+		
+		msgGrantIntervention.put("message", jObject.toString());
+		
+		send(msgGrantIntervention);
+	}
 
 }

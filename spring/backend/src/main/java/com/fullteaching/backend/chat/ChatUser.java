@@ -20,4 +20,6 @@ public interface ChatUser {
 
 	public void sendInterventionPetition(Chat chat, ChatUser user, boolean petition);
 
+	public void grantIntervention(Chat chat, ChatUser user, boolean accessGranted);
+
 }

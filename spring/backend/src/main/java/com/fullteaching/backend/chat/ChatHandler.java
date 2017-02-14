@@ -37,12 +37,19 @@ public class ChatHandler extends TextWebSocketHandler {
 		if (jsonMsg.hasNonNull("chat")) { // New user message
 			newUser(session, jsonMsg);
 		}
-		else if (jsonMsg.hasNonNull("chatIntervention")){ // New intervention petition
+		else if (jsonMsg.hasNonNull("petitionIntervention")){ // New intervention petition
 			Chat chat = (Chat) session.getAttributes().get("chat");
 			ChatUser user = (ChatUser) session.getAttributes().get("user");
 			
-			boolean petition = jsonMsg.get("petition").asBoolean();
+			boolean petition = jsonMsg.get("petitionIntervention").asBoolean();
 			chat.requestIntervention(user, petition);
+		}
+		else if (jsonMsg.hasNonNull("accessGranted")){ // New intervention petition granted
+			Chat chat = (Chat) session.getAttributes().get("chat");
+			
+			boolean accessGranted = jsonMsg.get("accessGranted").asBoolean();
+			String studentName = jsonMsg.get("user").asText();
+			chat.grantIntervention(studentName, accessGranted);
 		}
 		else { // New standard message
 			newMessage(session, jsonMsg);
