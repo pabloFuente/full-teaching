@@ -3,7 +3,7 @@
   <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i id="fixed-icon" class="material-icons video-icon">menu</i></a>
   <div class="row no-margin" style="position: fixed; width: 100%; z-index: 900;">
     <div class="col s12 m12 l12 no-padding-right"><a class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="toggleFullScreen()"><i class="material-icons">{{fullscreenIcon}}</i></a></div>
-    <div class="col s12 m12 l12 no-padding-right"><a *ngIf="this.authenticationService.isStudent() && !this.studentAccessGranted" class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="askForIntervention()"><i class="material-icons">{{interventionIcon}}</i></a></div>
+    <div class="col s12 m12 l12 no-padding-right"><a *ngIf="this.authenticationService.isStudent() && !this.myStudentAccessGranted" class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="askForIntervention()"><i class="material-icons">{{interventionIcon}}</i></a></div>
     <div class="row no-margin" *ngIf="this.authenticationService.isTeacher()">
       <div *ngFor="let userObject of this.usersIntervention; let i = index" class="col s12 m12 l12 no-padding-right">
         <a *ngIf="!studentAccessGranted || userObject.accessGranted" class="btn-floating btn-large waves-effect floating-button white" (click)="grantIntervention(!studentAccessGranted, userObject, i)" [style.border-color]="userObject.color" style="border: 7px;border-style: solid;">
@@ -18,7 +18,8 @@
       <h2 id="session-title">{{sessionId}}</h2>
     </div>
     <div *ngIf="this.streams.length > 0">
-      <stream [stream]="this.streams[this.streamIndex]"></stream>
+      <stream [stream]="this.streams[this.streamIndex]" [small]="false"></stream>
+      <stream *ngIf="studentAccessGranted" [stream]="this.streams[this.streamIndexSmall]" [small]="true"></stream>
     </div>
     <div class="session-bottom-div valign-wrapper" (mouseenter)="this.controlsShown = true"  (mouseleave)="this.controlsShown = false">
       <div id="div-video-control" [class.div-video-control-shown]="this.playPauseIcon==='play_arrow'" [class.fade-in-controls]="this.controlsShown" [class.fade-out-controls]="!this.controlsShown">

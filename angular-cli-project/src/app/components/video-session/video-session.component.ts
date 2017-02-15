@@ -23,27 +23,29 @@ export class VideoSessionComponent implements OnInit {
   user: User;
   mySession: MySession;
   course: Course;
+  teacherName: string;
   usersConnected = [];
   usersIntervention = [];
   websocket: WebSocket;
   mySessionId: number;
 
   showChat: boolean = true;
-  showChatIcon: string = 'supervisor_account';
   chatLines: Chatline[] = [];
-
   myMessage: string;
-  fullscreenIcon: string = "fullscreen";
-  playPauseIcon: string = "pause";
-  volumeMuteIcon: string = "volume_up";
+
   volumeLevel: number;
   storedVolumeLevel: number;
-
   controlsShown: boolean;
 
   interventionRequired: boolean = false;
-  interventionIcon: string = 'record_voice_over';
   studentAccessGranted: boolean = false;
+  myStudentAccessGranted: boolean = false;
+
+  showChatIcon: string = 'supervisor_account';
+  interventionIcon: string = 'record_voice_over';
+  fullscreenIcon: string = "fullscreen";
+  playPauseIcon: string = "pause";
+  volumeMuteIcon: string = "volume_up";
 
   private openVidu: OpenVidu;
 
@@ -55,6 +57,7 @@ export class VideoSessionComponent implements OnInit {
   currentSession: Session;
   streams: Stream[] = [];
   streamIndex: number = 0;
+  streamIndexSmall: number = 0;
 
   constructor(private authenticationService: AuthenticationService,
               private videoSessionService: VideoSessionService,
@@ -64,6 +67,7 @@ export class VideoSessionComponent implements OnInit {
     this.user = this.authenticationService.getCurrentUser();
     this.mySession = this.videoSessionService.session;
     this.course = this.videoSessionService.course;
+    this.teacherName = this.course.teacher.nickName;
 
     // Getting the session id from the url
     this.route.params.forEach((params: Params) => {
@@ -93,7 +97,7 @@ export class VideoSessionComponent implements OnInit {
       let msg = {
         chat: 'Chat-Session-' + thisAux.mySessionId,
         user: thisAux.user.nickName,
-        teacher: thisAux.course.teacher.nickName
+        teacher: thisAux.teacherName
       };
       // Convert and send data to server
       thisAux.websocket.send(JSON.stringify(msg));
@@ -159,11 +163,14 @@ export class VideoSessionComponent implements OnInit {
               if (jsonObject.accessGranted) {
                 // Publish camera
                   thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
+                  thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
                   thisAux.studentAccessGranted = true;
+                  thisAux.myStudentAccessGranted = true;
               }
               else {
-                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.course.teacher.nickName);
+                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
                 thisAux.studentAccessGranted = false;
+                thisAux.myStudentAccessGranted = false;
                 // Invert intervention request
                 thisAux.interventionRequired = !thisAux.interventionRequired;
                 // Change intervention icon
@@ -174,8 +181,11 @@ export class VideoSessionComponent implements OnInit {
             else {
               if (jsonObject.accessGranted) {
                 thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
+                thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
+                thisAux.studentAccessGranted = true;
               } else{
-                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.course.teacher.nickName);
+                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
+                thisAux.studentAccessGranted = false;
               }
             }
           }
@@ -184,8 +194,9 @@ export class VideoSessionComponent implements OnInit {
           // For the teacher
           if (jsonObject.accessGranted) {
             thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
+            thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
           } else {
-            thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.course.teacher.nickName);
+            thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
           }
         }
       }
@@ -271,13 +282,12 @@ export class VideoSessionComponent implements OnInit {
       // User connection terminated by teacher
       this.usersIntervention.splice(i, 1);
     }
-
   }
 
   getStreamIndexByName(name:string){
     for (var i = 0; i < this.streams.length; i++) {
         if(this.streams[i].getParticipant().getId() === name) {
-            return i;
+          return i;
         }
     }
     return -1;
@@ -378,8 +388,8 @@ export class VideoSessionComponent implements OnInit {
   private addVideoTag(stream: Stream) {
     console.log("Stream added");
     this.streams.push(stream);
-    if (stream.getParticipant().getId() === this.course.teacher.nickName){
-      this.streamIndex = this.getStreamIndexByName(this.course.teacher.nickName);
+    if (stream.getParticipant().getId() === this.teacherName){
+      this.streamIndex = this.getStreamIndexByName(this.teacherName);
     }
   }
 
@@ -390,14 +400,14 @@ export class VideoSessionComponent implements OnInit {
 
     let ind = this.streams.indexOf(stream);
     this.streams.splice(ind, 1);
-    if (stream.getParticipant().getId() === this.course.teacher.nickName){
+    if (stream.getParticipant().getId() === this.teacherName){
       // Removing all streams if the teacher leaves the room
       this.streams = [];
       this.streamIndex = 0;
     } else{
       if (this.streamIndex === ind) {
         // Back to teacher's stream if an active user leaves the room
-        this.streamIndex = this.getStreamIndexByName(this.course.teacher.nickName);
+        this.streamIndex = this.getStreamIndexByName(this.teacherName);
         this.studentAccessGranted = false;
       }
     }

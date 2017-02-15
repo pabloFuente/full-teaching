@@ -4,33 +4,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'stream',
-  styles: [`
-        .participant {
-          width: 100%;
-          margin: 0;
-        }
-        .participant video {
-	        width: 100%;
-	        height: auto;
-        }
-        .name-div {
-          position: fixed;
-          width: 100%;
-          bottom: 0;
-          color: white;
-          text-align: right;
-        }
-        .name-p {
-          display: inline-block;
-          margin-right: 20px;
-          background-color: #375646;
-          padding: 5px;
-          border-radius: 2px;
-          font-weight: bold;
-        }
-        `],
+  styleUrls: ['./stream.component.css'],
   template: `
-        <div class='participant'>
+        <div class='participant' [class.participant-small]="this.small">
           <div *ngIf="this.stream" class="name-div"><p class="name-p">{{stream.getParticipant().getId()}}</p></div>
           <video autoplay="true" [src]="videoSrc"></video>
         </div>`
@@ -39,6 +15,9 @@ export class StreamComponent {
 
   @Input()
   stream: Stream;
+
+  @Input()
+  small: boolean;
 
   videoSrc: SafeUrl;
 
