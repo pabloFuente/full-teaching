@@ -1,13 +1,14 @@
 <div id="video-session-div">
 
   <a id="side-menu-button" materialize="sideNav" data-activates="slide-out" [materializeParams]="[{draggable: false}]"><i id="fixed-icon" class="material-icons video-icon">menu</i></a>
-  <div class="row no-margin" style="position: fixed; width: 100%; z-index: 900;">
+  <div id="div-header-buttons" class="row no-margin">
     <div class="col s12 m12 l12 no-padding-right"><a class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="toggleFullScreen()"><i class="material-icons">{{fullscreenIcon}}</i></a></div>
     <div class="col s12 m12 l12 no-padding-right"><a *ngIf="this.authenticationService.isStudent() && !this.myStudentAccessGranted" class="btn-floating btn-large waves-effect waves-light red floating-button" (click)="askForIntervention()"><i class="material-icons">{{interventionIcon}}</i></a></div>
     <div class="row no-margin" *ngIf="this.authenticationService.isTeacher()">
       <div *ngFor="let userObject of this.usersIntervention; let i = index" class="col s12 m12 l12 no-padding-right">
-        <a *ngIf="!studentAccessGranted || userObject.accessGranted" class="btn-floating btn-large waves-effect floating-button white" (click)="grantIntervention(!studentAccessGranted, userObject, i)" [style.border-color]="userObject.color" style="border: 7px;border-style: solid;">
-          <i [style.color]="userObject.color" style="margin-left: -7px;margin-top: -7px;" materialize="tooltip" class="material-icons" data-position="left" data-delay="65" [attr.data-tooltip]="userObject.user">{{userObject.interventionIcon}}</i>
+        <a *ngIf="!studentAccessGranted || userObject.accessGranted"  materialize="tooltip" data-position="left" data-delay="65" [attr.data-tooltip]="userObject.user" class="btn-floating btn-large waves-effect floating-button white usr-btn" (click)="grantIntervention(!studentAccessGranted, userObject, i)" [style.border-color]="userObject.color">
+          <i *ngIf="this.studentAccessGranted" class="material-icons" [style.color]="userObject.color">cancel</i>
+          <img *ngIf="!this.studentAccessGranted" class="circle responsive-img" [src]="userObject.picture">
         </a>
       </div>
     </div>
@@ -49,7 +50,7 @@
         </div>
         <div class="panel">
           <form (ngSubmit)="sendMessage()">
-            <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="256" autocomplete="off"/>
+            <input [(ngModel)]="myMessage" type="text" name="message" id="message" placeholder="Message" maxlength="400" autocomplete="off"/>
             <input *ngIf="this.myMessage" type="submit" id="send-btn" class="btn waves-effect button-small" value="Send">
             <a *ngIf="!this.myMessage" id="fake-send-btn" class="btn waves-effect button-small disabled">Send</a>
           </form>

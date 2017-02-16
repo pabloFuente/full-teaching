@@ -12,6 +12,7 @@ import { Session as MySession }  from '../../classes/session';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { VideoSessionService }   from '../../services/video-session.service';
+import { AnimationService }      from '../../services/animation.service';
 
 @Component({
   selector: 'app-video-session',
@@ -61,6 +62,7 @@ export class VideoSessionComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private videoSessionService: VideoSessionService,
+              private animationService: AnimationService,
               private route: ActivatedRoute,
               private location: Location)
   {
@@ -91,7 +93,7 @@ export class VideoSessionComponent implements OnInit {
 
     this.websocket.onopen = function(event: Event) { // Connection is open
       // New welcome chat line
-      thisAux.chatLines.push(new Chatline('system-msg', null, "Connected!", null)); // Notify user
+      thisAux.chatLines.push(new Chatline('system-msg', null, null, "Connected!", null)); // Notify user
 
       // Prepare json data
       let msg = {
@@ -112,7 +114,9 @@ export class VideoSessionComponent implements OnInit {
 
       if (type == 'system') {
         // New system chat line
-        thisAux.chatLines.push(new Chatline('system-msg', null, umsg, null));
+        thisAux.chatLines.push(new Chatline('system-msg', null, null, umsg, null));
+        thisAux.animationService.animateToBottom('#message_box', 500);
+
       } else if (type == 'system-users') {
         // Users connected message received
         let jsonObject = JSON.parse(umsg);
@@ -123,6 +127,8 @@ export class VideoSessionComponent implements OnInit {
           let objectY: any;
           for (var j = 0; j < jsonObject.UserNameList.length; j++){
             objectY = jsonObject.UserNameList[j];
+            // Add the URL picture of the user
+            objectY["picture"] = thisAux.getPhotoByName(objectY.userName);
             console.log(objectY);
             thisAux.usersConnected.push(objectY);
           }
@@ -135,8 +141,8 @@ export class VideoSessionComponent implements OnInit {
         if (jsonObject.hasOwnProperty('petition')){
           if (jsonObject.petition) {
             // Add new user's petition
-            jsonObject["interventionIcon"] = "person";
             jsonObject["accessGranted"] = false;
+            jsonObject["picture"] = thisAux.getPhotoByName(jsonObject.user);
             thisAux.usersIntervention.push(jsonObject);
           }
           else {
@@ -203,18 +209,21 @@ export class VideoSessionComponent implements OnInit {
       else {
         let classUserMsg = (uname === thisAux.user.nickName ? "own-msg" : "stranger-msg");
         // New user chat line
-        thisAux.chatLines.push(new Chatline(classUserMsg, uname, umsg, ucolor));
+        thisAux.chatLines.push(new Chatline(classUserMsg, uname, thisAux.getPhotoByName(uname), umsg, ucolor));
+        thisAux.animationService.animateToBottom('#message_box', 500);
       }
     };
 
     this.websocket.onerror = function(ev) {
       // New system error chat line
-      thisAux.chatLines.push(new Chatline('system-err', null, 'Error Occurred - ' + ev.message, null));
+      thisAux.chatLines.push(new Chatline('system-err', null, null, 'Error Occurred - ' + ev.message, null));
+      thisAux.animationService.animateToBottom('#message_box', 500);
     };
 
     this.websocket.onclose = function(ev) {
       // New system close chat line
-      thisAux.chatLines.push(new Chatline('system-msg', null, 'Connection Closed', null));
+      thisAux.chatLines.push(new Chatline('system-msg', null, null, 'Connection Closed', null));
+      thisAux.animationService.animateToBottom('#message_box', 500);
     };
 
     // Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
@@ -276,7 +285,6 @@ export class VideoSessionComponent implements OnInit {
     // Change control variable and user granted icon
     this.usersIntervention[i].accessGranted = grant;
     this.studentAccessGranted = grant;
-    this.usersIntervention[i].interventionIcon = (this.usersIntervention[i].accessGranted ? 'cancel' : 'person');
 
     if (!this.studentAccessGranted) {
       // User connection terminated by teacher
@@ -291,6 +299,11 @@ export class VideoSessionComponent implements OnInit {
         }
     }
     return -1;
+  }
+
+  getPhotoByName(userName:string){
+    let user = (this.course.attenders.filter(function( u ) { return u.nickName == userName; }))[0];
+    return user.picture;
   }
 
 

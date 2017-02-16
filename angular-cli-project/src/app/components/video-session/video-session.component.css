@@ -17,6 +17,12 @@ video {
   color: rgb(133, 133, 133);
 }
 
+#div-header-buttons {
+  position: fixed;
+  width: 100%;
+  z-index: 900;
+}
+
 #side-menu-button {
   position: fixed;
   z-index: 1000;
@@ -34,6 +40,16 @@ video {
   margin-right: 10px;
   margin-top: 10px;
   right: 0;
+}
+
+.usr-btn {
+  border: 7px;
+  border-style: solid;
+}
+
+.usr-btn i {
+  margin-left: -7px;
+  margin-top: -7px;
 }
 
 #exit-icon {
@@ -159,6 +175,6 @@ video {
   color: #c78100;
 }
 
-.attender-name{
+.attender-name {
   font-weight: 600;
 }
