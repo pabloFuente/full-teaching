@@ -329,6 +329,7 @@ describe('angular-cli-project App', function() {
 
                     element(by.css('#exit-icon')).click().then(function() {
                       browser.waitForAngular();
+                      page.waitForAnimation();
                       expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
                     });
                   });
@@ -346,54 +347,56 @@ describe('angular-cli-project App', function() {
     expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
 
     // Get all tab buttos
-    var tabButtons = element.all(by.css('.md-tab-label-aux'));
-    expect(tabButtons.count()).toEqual(5);
+    browser.driver.findElements(by.css('.md-tab-label-aux')).then(function(tabButtons) {
 
-    tabButtons.get(2).click().then(function() {
-      expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/2/);
-      element(by.css('.card-panel.warning')).isPresent().then(function(pres) {
-        if (pres) {
-          element(by.css('#edit-forum-icon')).click().then(function() {
-            page.waitForAnimation();
-            // Get and click the checkbox to allow the forum's activation
-            browser.driver.findElement(by.css('label[for=delete-checkbox]')).then(function(activationAllowed) {
-              activationAllowed.click();
+      expect(tabButtons.length === 5).toBeTruthy();
 
-              // Get and click the button to activate the forum
-              browser.driver.findElement(by.css('#put-modal-btn')).then(function(activateButton) {
-                activateButton.click().then(function() {
-                  browser.waitForAngular();
-                  page.waitUntilElementPresent('#add-entry-icon');
-                  page.waitUntilElementNotVisible('#course-details-modal');
+      tabButtons[2].click().then(function() {
+        expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/2/);
+        element(by.css('.card-panel.warning')).isPresent().then(function(pres) {
+          if (pres) {
+            element(by.css('#edit-forum-icon')).click().then(function() {
+              page.waitForAnimation();
+              // Get and click the checkbox to allow the forum's activation
+              browser.driver.findElement(by.css('label[for=delete-checkbox]')).then(function(activationAllowed) {
+                activationAllowed.click();
+
+                // Get and click the button to activate the forum
+                browser.driver.findElement(by.css('#put-modal-btn')).then(function(activateButton) {
+                  activateButton.click().then(function() {
+                    browser.waitForAngular();
+                    page.waitForAnimation();
+                    page.waitUntilElementPresent('#add-entry-icon');
+                  });
                 });
               });
             });
-          });
-        }
-        browser.driver.findElement(by.css('#add-entry-icon')).then(function(btn) {
-          btn.click().then(function() {
-            page.waitUntilElementPresent('#course-details-modal');
+          }
+          browser.driver.findElement(by.css('#add-entry-icon')).then(function(btn) {
+            btn.click().then(function() {
+              page.waitUntilElementPresent('#course-details-modal');
 
-            // Find form elements
-            var entryTitleField = browser.driver.findElement(by.css('input#inputTitle'));
-            var entryCommentField = browser.driver.findElement(by.css('textarea#inputComment'));
-            // Fill input fields
-            entryTitleField.sendKeys('New testing entry title');
-            entryCommentField.sendKeys('New testing entry comment');
-            // Ensure fields contain what has been entered
-            expect(entryTitleField.getAttribute('value')).toEqual('New testing entry title');
-            expect(entryCommentField.getAttribute('value')).toEqual('New testing entry comment');
+              // Find form elements
+              var entryTitleField = browser.driver.findElement(by.css('input#inputTitle'));
+              var entryCommentField = browser.driver.findElement(by.css('textarea#inputComment'));
+              // Fill input fields
+              entryTitleField.sendKeys('New testing entry title');
+              entryCommentField.sendKeys('New testing entry comment');
+              // Ensure fields contain what has been entered
+              expect(entryTitleField.getAttribute('value')).toEqual('New testing entry title');
+              expect(entryCommentField.getAttribute('value')).toEqual('New testing entry comment');
 
-            // Send new entry
-            browser.driver.findElement(by.css('#post-modal-btn')).then(function(sendButton) {
-              sendButton.click().then(function() {
-                browser.waitForAngular();
-                page.waitUntilElementNotVisible('#course-details-modal');
+              // Send new entry
+              browser.driver.findElement(by.css('#post-modal-btn')).then(function(sendButton) {
+                sendButton.click().then(function() {
+                  browser.waitForAngular();
+                  page.waitUntilElementNotVisible('#course-details-modal');
 
-                // Get and check the title of last entry
-                var entries = element.all(by.css('li.entry-title div div a'));
-                expect(entries.last().getText()).toContain('New testing entry title');
+                  // Get and check the title of last entry
+                  var entries = element.all(by.css('li.entry-title div div a'));
+                  expect(entries.last().getText()).toContain('New testing entry title');
 
+                });
               });
             });
           });
