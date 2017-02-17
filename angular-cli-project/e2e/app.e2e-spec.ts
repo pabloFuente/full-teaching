@@ -33,8 +33,8 @@ describe('angular-cli-project App', function() {
     expect(browser.driver.getCurrentUrl()).toMatch('/');
 
     // Open login modal
-    browser.driver.findElement(by.id('download-button')).then(function(welcomeBtn){
-      welcomeBtn.click().then(function(){
+    browser.driver.findElement(by.id('download-button')).then(function(welcomeBtn) {
+      welcomeBtn.click().then(function() {
 
         // Find form elements
         var userNameField = browser.driver.findElement(by.id('email'));
@@ -48,7 +48,7 @@ describe('angular-cli-project App', function() {
         expect(userNameField.getAttribute('value')).toEqual('wrongemail@gmail.com');
         expect(userPassField.getAttribute('value')).toEqual('pass');
 
-        browser.driver.findElement(by.id('log-in-btn')).then(function(loginBtn){
+        browser.driver.findElement(by.id('log-in-btn')).then(function(loginBtn) {
           // Click to log in - waiting for Angular as it is manually bootstrapped.
           loginBtn.click().then(function() {
             browser.waitForAngular();
@@ -85,7 +85,7 @@ describe('angular-cli-project App', function() {
     expect(userNameField.getAttribute('value')).toEqual(userEmail);
     expect(userPassField.getAttribute('value')).toEqual(userPass);
 
-    browser.driver.findElement(by.id('log-in-btn')).then(function(loginBtn){
+    browser.driver.findElement(by.id('log-in-btn')).then(function(loginBtn) {
       // Click to log in - waiting for Angular as it is manually bootstrapped.
       loginBtn.click().then(function() {
         browser.waitForAngular();
@@ -102,34 +102,34 @@ describe('angular-cli-project App', function() {
     // Check browser url (dashboard)
     expect(browser.driver.getCurrentUrl()).toMatch('/courses');
 
-    page.securePresence('#add-course-icon');
+    page.waitUntilElementPresent('#add-course-icon');
 
     // Open modal for adding a course
-    browser.driver.findElement(by.css('#add-course-icon')).then(function(addCourseIcon){
+    browser.driver.findElement(by.css('#add-course-icon')).then(function(addCourseIcon) {
 
       addCourseIcon.click();
-      page.waitForAnimation();
+      page.waitSeconds(1);
 
       // Find form elements
-      var courseNameField = browser.driver.findElement(by.id('inputPostCourseName'));
+      browser.driver.findElement(by.id('inputPostCourseName')).then(function(courseNameField) {
+        // Fill input fields
+        courseNameField.sendKeys('New testing course').then(function() {
+          // Ensure fields contain what has been entered
+          expect(courseNameField.getAttribute('value')).toEqual('New testing course');
 
-      // Fill input fields
-      courseNameField.sendKeys('New testing course');
+          browser.driver.findElement(by.id('submit-post-course-btn')).then(function(submitNewCourseBtn) {
+            // Click submit form
+            submitNewCourseBtn.click().then(function() {
+              browser.waitForAngular();
 
-      // Ensure fields contain what has been entered
-      expect(courseNameField.getAttribute('value')).toEqual('New testing course');
+              // The last course should be the one that has been just added
+              var courses = element.all(by.className('course-title'));
+              expect(courses.last().getText()).toContain('New testing course');
 
-      browser.driver.findElement(by.id('submit-post-course-btn')).then(function(submitNewCourseBtn) {
-        // Click submit form
-        submitNewCourseBtn.click().then(function() {
-          browser.waitForAngular();
-
-          // The last course should be the one that has been just added
-          var courses = element.all(by.className('course-title'));
-          expect(courses.last().getText()).toContain('New testing course');
-
-          // Clear field inputs
-          courseNameField.clear();
+              // Clear field inputs
+              courseNameField.clear();
+            });
+          });
         });
       });
     });
@@ -143,9 +143,9 @@ describe('angular-cli-project App', function() {
 
     // Get and click the button to edit the last one of the courses
     var lastEditCoursesIcon = element.all(by.className('course-put-icon')).last();
-    page.waitForAnimation();
+    page.waitUntilElementNotVisible('#course-modal');
     lastEditCoursesIcon.click();
-    page.waitForAnimation();
+    page.waitUntilElementPresent('#put-delete-course-modal');
 
     // Get field inputs
     var courseNameField = browser.driver.findElement(by.id('inputPutCourseName'));
@@ -181,16 +181,16 @@ describe('angular-cli-project App', function() {
 
     // Get and click the button to edit the last one of the courses
     var lastEditCoursesIcon = element.all(by.className('course-put-icon')).last();
-    page.waitForAnimation();
+    page.waitUntilElementNotVisible('#put-delete-course-modal');
     lastEditCoursesIcon.click();
     page.waitForAnimation();
 
     // Get and click the checkbox to allow the course's deletion
-    browser.driver.findElement(by.css('label[for=delete-checkbox]')).then(function(deletionAllow){
+    browser.driver.findElement(by.css('label[for=delete-checkbox]')).then(function(deletionAllow) {
       deletionAllow.click();
 
       // Get and click the button to delete the course
-      browser.driver.findElement(by.css('div.delete-div a.btn-flat')).then(function(deleteButton){
+      browser.driver.findElement(by.css('div.delete-div a.btn-flat')).then(function(deleteButton) {
         deleteButton.click().then(function() {
           browser.waitForAngular();
 
@@ -213,8 +213,8 @@ describe('angular-cli-project App', function() {
 
     // Get and click the last one of the indicators of session inside the calendar view
     var lastSessionIndicatorOfMonth = element.all(by.css('.cal-in-month.cal-has-events .cal-day-badge')).last();
-    page.waitForAnimation();
-    lastSessionIndicatorOfMonth.click().then(function(){
+    page.waitUntilElementNotVisible('#put-delete-course-modal');
+    lastSessionIndicatorOfMonth.click().then(function() {
 
       // Get the text of the last of the opened session's shortcuts inside the calendar view
       element.all(by.css('a.cal-event-title')).last().getText().then(function(text) {
@@ -305,8 +305,8 @@ describe('angular-cli-project App', function() {
     expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
 
     //Get and click on a ready session
-    browser.driver.findElement(by.css('.session-ready')).then(function(sessionReady){
-      sessionReady.click().then(function(){
+    browser.driver.findElement(by.css('.session-ready')).then(function(sessionReady) {
+      sessionReady.click().then(function() {
         browser.ignoreSynchronization = true;
         //browser.waitForAngular();
         //page.waitSeconds(2);
@@ -314,19 +314,20 @@ describe('angular-cli-project App', function() {
         // Check browser url (course-details, tab 1)
         expect(browser.driver.getCurrentUrl()).toMatch(/\/session\/[0-9]+/);
 
-        element(by.css('#fixed-icon')).click().then(function(){
-          browser.driver.findElement(by.css('input#message')).then(function(inputChat){
+        element(by.css('#fixed-icon')).click().then(function() {
+          browser.driver.findElement(by.css('input#message')).then(function(inputChat) {
             // Fill input field
             inputChat.sendKeys(chatMessage).then(function() {
               // Ensure field contain what has been entered
               expect(inputChat.getAttribute('value')).toEqual(chatMessage);
-              browser.driver.findElement(by.css('input#send-btn')).then(function(sendBtn){
-                sendBtn.click().then(function(){
-                  page.waitSeconds(1);
+              page.waitUntilElementPresent('div.system-msg');
+              browser.driver.findElement(by.css('input#send-btn')).then(function(sendBtn) {
+                sendBtn.click().then(function() {
+                  page.waitUntilElementPresent("div.own-msg span.user-message");
                   element.all(by.css(".user-message")).getText().then(function(userMessages) {
                     expect(userMessages.indexOf(chatMessage) >= 0).toBe(true);
 
-                    element(by.css('#exit-icon')).click().then(function(){
+                    element(by.css('#exit-icon')).click().then(function() {
                       browser.waitForAngular();
                       expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
                     });
@@ -341,16 +342,77 @@ describe('angular-cli-project App', function() {
   });
 
 
+  it('should allow adding new entries to the forum', () => {
+    expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/1/);
+
+    // Get all tab buttos
+    var tabButtons = element.all(by.css('.md-tab-label-aux'));
+    expect(tabButtons.count()).toEqual(5);
+
+    tabButtons.get(2).click().then(function() {
+      expect(browser.driver.getCurrentUrl()).toMatch(/\/courses\/[0-9]+\/2/);
+      element(by.css('.card-panel.warning')).isPresent().then(function(pres) {
+        if (pres) {
+          element(by.css('#edit-forum-icon')).click().then(function() {
+            page.waitForAnimation();
+            // Get and click the checkbox to allow the forum's activation
+            browser.driver.findElement(by.css('label[for=delete-checkbox]')).then(function(activationAllowed) {
+              activationAllowed.click();
+
+              // Get and click the button to activate the forum
+              browser.driver.findElement(by.css('#put-modal-btn')).then(function(activateButton) {
+                activateButton.click().then(function() {
+                  browser.waitForAngular();
+                  page.waitUntilElementPresent('#add-entry-icon');
+                  page.waitUntilElementNotVisible('#course-details-modal');
+                });
+              });
+            });
+          });
+        }
+        browser.driver.findElement(by.css('#add-entry-icon')).then(function(btn) {
+          btn.click().then(function() {
+            page.waitUntilElementPresent('#course-details-modal');
+
+            // Find form elements
+            var entryTitleField = browser.driver.findElement(by.css('input#inputTitle'));
+            var entryCommentField = browser.driver.findElement(by.css('textarea#inputComment'));
+            // Fill input fields
+            entryTitleField.sendKeys('New testing entry title');
+            entryCommentField.sendKeys('New testing entry comment');
+            // Ensure fields contain what has been entered
+            expect(entryTitleField.getAttribute('value')).toEqual('New testing entry title');
+            expect(entryCommentField.getAttribute('value')).toEqual('New testing entry comment');
+
+            // Send new entry
+            browser.driver.findElement(by.css('#post-modal-btn')).then(function(sendButton) {
+              sendButton.click().then(function() {
+                browser.waitForAngular();
+                page.waitUntilElementNotVisible('#course-details-modal');
+
+                // Get and check the title of last entry
+                var entries = element.all(by.css('li.entry-title div div a'));
+                expect(entries.last().getText()).toContain('New testing entry title');
+
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+
   it('should be possible to navigate to settings page', () => {
     // Navigate to Settings page
-    browser.driver.findElement(by.css('#settings-button')).then(function(settingsButton){
+    browser.driver.findElement(by.css('#settings-button')).then(function(settingsButton) {
       settingsButton.click().then(function() {
         browser.waitForAngular();
 
         // Browser url must have changed (/settings)
         expect(browser.driver.getCurrentUrl()).toMatch('/settings');
         // Settings page should display the user email
-        browser.driver.findElement(by.css('div#stng-user-mail')).then(function(divMail){
+        browser.driver.findElement(by.css('div#stng-user-mail')).then(function(divMail) {
           expect(divMail.getText()).toEqual(userEmail);
         });
       });
@@ -361,9 +423,9 @@ describe('angular-cli-project App', function() {
   it('should log out', () => {
 
     // Get and click the drop down button in the navbar
-    var arrowBtn = browser.driver.findElement(by.css('#arrow-drop-down')).then(function(arrow){
+    var arrowBtn = browser.driver.findElement(by.css('#arrow-drop-down')).then(function(arrow) {
       arrow.click();
-      page.waitForAnimation();
+      page.waitUntilElementVisible('#dropdown1');
 
       // Get and click the logout button inside the drop-down menu
       var logoutButton = browser.driver.findElement(by.css('#logout-button')).then(function(logoutBtn) {

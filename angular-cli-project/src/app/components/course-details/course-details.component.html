@@ -63,7 +63,7 @@
           <div class="row no-margin-bottom right-align">
             <a *ngIf="!isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset()" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
             <a *ngIf="isCurrentPostMode(['5'])" (click)="courseDetailsForm.reset(); this.uploaderModalService.announceUploaderClosed(true);" class="modal-action modal-close waves-effect btn-flat modal-footer-button">Close</a>
-            <button *ngIf="!isCurrentPostMode(['5'])" type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
+            <button id="post-modal-btn" *ngIf="!isCurrentPostMode(['5'])" type="submit" class="waves-effect btn-flat modal-footer-button">Send</button>
           </div>
         </form>
 
@@ -187,7 +187,7 @@
               </div>
             </div>
             <a (click)="putDeleteForm.reset(); this.allowSessionDeletion = false; this.allowForumEdition = false; this.uploaderModalService.announceUploaderClosed(true);" class="modal-action modal-close waves-effect btn-flat modal-footer-button cancel-modal-btn">Cancel</a>
-            <button *ngIf="!((this.putdeleteModalMode === 4) && (this.attenderTabSelected === 2))" type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
+            <button id="put-modal-btn" *ngIf="!((this.putdeleteModalMode === 4) && (this.attenderTabSelected === 2))" type="submit" class="waves-effect btn-flat modal-footer-button" [class.disabled]="isCurrentPutdeleteMode(['1']) && (!this.allowForumEdition)">Send</button>
           </div>
         </form>
 
@@ -304,13 +304,11 @@
               </div>
               <div class="center-align div-entry-icon">
                 <a href="#course-details-modal" *ngIf="this.course.courseDetails?.forum.activated" (click)="updatePostModalMode(0, 'New entry', null, null, null); this.animationService.animateIfSmall()" [title]="'New entry'">
-                  <i class="material-icons forum-icon">chat</i>
+                  <i id="add-entry-icon" class="material-icons forum-icon">chat</i>
                 </a>
-
                 <a href="#put-delete-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePutDeleteModalMode(1, 'Activate/Deactivate forum'); this.animationService.animateIfSmall()" class="float-to-right" title="Activate/Deactivate forum">
-                    <i class="material-icons forum-icon">mode_edit</i>
+                    <i id="edit-forum-icon" class="material-icons forum-icon">mode_edit</i>
                 </a>
-
               </div>
             </ul>
 

@@ -417,7 +417,10 @@ export class VideoSessionComponent implements OnInit {
       // Removing all streams if the teacher leaves the room
       this.streams = [];
       this.streamIndex = 0;
-    } else{
+      this.studentAccessGranted = false;
+      this.myStudentAccessGranted = false;
+      this.interventionRequired = false;
+    } else {
       if (this.streamIndex === ind) {
         // Back to teacher's stream if an active user leaves the room
         this.streamIndex = this.getStreamIndexByName(this.teacherName);
