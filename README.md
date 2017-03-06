@@ -1,6 +1,6 @@
 # FullTeaching
 
-[![Build Status](https://travis-ci.org/pabloFuente/full-teaching.png?branch=master)](https://travis-ci.org/{pabloFuente}/full-teaching)
+[![Build Status](https://travis-ci.org/pabloFuente/full-teaching.png?branch=master)](https://travis-ci.org/pabloFuente/full-teaching)
 
 <p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/presentation.png?raw=true"/></p>
 
