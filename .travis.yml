@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - '6.9.4'
+  - '6.10.3'
 
 services:
   - docker
@@ -41,10 +41,10 @@ install:
 before_script:
   - docker-compose up --build -d
   - cd angular-cli-project
-  - npm install -g angular-cli
+  - npm install -g @angular/cli
   - npm install
   - ng build
-  - sleep 3
+  - sleep 5
 
 script: ng test --watch=false && ng e2e
 

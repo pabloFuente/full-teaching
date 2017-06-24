@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   styleUrls: ['./stream.component.css'],
   template: `
         <div class='participant' [class.participant-small]="this.small">
-          <div *ngIf="this.stream" class="name-div"><p class="name-p">{{stream.getParticipant().getId()}}</p></div>
+          <div *ngIf="this.stream" class="name-div"><p class="name-p">{{this.getName()}}</p></div>
           <video autoplay="true" [src]="videoSrc"></video>
         </div>`
 })
@@ -24,30 +24,30 @@ export class StreamComponent {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-
-    let int = setInterval(() => {
-      if (this.stream.getWrStream()) {
-        this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(
-          URL.createObjectURL(this.stream.getWrStream()));
-        console.log("Video tag src=" + this.videoSrc);
-        clearInterval(int);
-      }
-    }, 1000);
-
+    this.setInterval();
     //this.stream.addEventListener('src-added', () => {
     //    this.video.src = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.stream.getWrStream())).toString();
     //});
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
+    this.setInterval();
+  }
+
+  setInterval() {
     let int = setInterval(() => {
-      if (this.stream.getWrStream()) {
+      if (this.stream && this.stream.getWrStream()) {
         this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(
           URL.createObjectURL(this.stream.getWrStream()));
-        console.log("Video tag src=" + this.videoSrc);
+        console.warn("Video tag src = " + this.videoSrc);
+        console.warn(this.stream);
         clearInterval(int);
       }
     }, 1000);
+  }
+
+  getName() {
+    return ((JSON.parse(this.stream.connection.data))['name']);
   }
 
 }

@@ -1,18 +1,19 @@
-import { Component, OnInit }      from '@angular/core';
-import { ActivatedRoute, Params}  from '@angular/router';
-import { Location }               from '@angular/common';
-import { OpenVidu, Session, Stream } from 'openvidu-browser';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
+
+import { OpenVidu, Session, Stream, Publisher } from "openvidu-browser";
 
 import { environment } from '../../../environments/environment';
 
-import { User }     from '../../classes/user';
-import { Course }   from '../../classes/course';
+import { User } from '../../classes/user';
+import { Course } from '../../classes/course';
 import { Chatline } from '../../classes/chatline';
-import { Session as MySession }  from '../../classes/session';
+import { Session as MySession } from '../../classes/session';
 
 import { AuthenticationService } from '../../services/authentication.service';
-import { VideoSessionService }   from '../../services/video-session.service';
-import { AnimationService }      from '../../services/animation.service';
+import { VideoSessionService } from '../../services/video-session.service';
+import { AnimationService } from '../../services/animation.service';
 
 @Component({
   selector: 'app-video-session',
@@ -42,30 +43,34 @@ export class VideoSessionComponent implements OnInit {
   studentAccessGranted: boolean = false;
   myStudentAccessGranted: boolean = false;
 
+  // Icon names
   showChatIcon: string = 'supervisor_account';
   interventionIcon: string = 'record_voice_over';
   fullscreenIcon: string = "fullscreen";
   playPauseIcon: string = "pause";
   volumeMuteIcon: string = "volume_up";
 
-  private openVidu: OpenVidu;
+  // OpenVidu params
+  private OV: OpenVidu;
+  private OVSessionId: string;
+  private OVToken: string;
+  private OVPublisher: Publisher;
+  private OVSession: Session;
 
   // Join form
-  sessionId: string;
-  participantId: string;
+  sessionName: string;
+  participantName: string;
 
   // Session
-  currentSession: Session;
   streams: Stream[] = [];
   streamIndex: number = 0;
   streamIndexSmall: number = 0;
 
   constructor(private authenticationService: AuthenticationService,
-              private videoSessionService: VideoSessionService,
-              private animationService: AnimationService,
-              private route: ActivatedRoute,
-              private location: Location)
-  {
+    private videoSessionService: VideoSessionService,
+    private animationService: AnimationService,
+    private route: ActivatedRoute,
+    private location: Location) {
     this.user = this.authenticationService.getCurrentUser();
     this.mySession = this.videoSessionService.session;
     this.course = this.videoSessionService.course;
@@ -80,18 +85,20 @@ export class VideoSessionComponent implements OnInit {
     // Stablishing OpenVidu session
     this.generateParticipantInfo();
     window.onbeforeunload = () => {
-      this.openVidu.close(true);
+      this.removeUser();
+      this.leaveSession();
     }
   }
 
   ngOnInit() {
-    this.joinSession();
+
+    this.getParamsAndJoin();
 
     let wsUri = environment.CHAT_URL;
     this.websocket = new WebSocket(wsUri);
     let thisAux = this;
 
-    this.websocket.onopen = function(event: Event) { // Connection is open
+    this.websocket.onopen = function (event: Event) { // Connection is open
       // New welcome chat line
       thisAux.chatLines.push(new Chatline('system-msg', null, null, "Connected!", null)); // Notify user
 
@@ -105,7 +112,7 @@ export class VideoSessionComponent implements OnInit {
       thisAux.websocket.send(JSON.stringify(msg));
     }
 
-    this.websocket.onmessage = function(ev) {
+    this.websocket.onmessage = function (ev) {
       var msg = JSON.parse(ev.data); // PHP sends Json data
       var type = msg.type; // Message type
       var umsg = msg.message; // Message text
@@ -122,10 +129,10 @@ export class VideoSessionComponent implements OnInit {
         let jsonObject = JSON.parse(umsg);
         console.log("USERS CONNECTED:");
         console.log(jsonObject);
-        thisAux.usersConnected  = [];
-        if (jsonObject.hasOwnProperty('UserNameList')){
+        thisAux.usersConnected = [];
+        if (jsonObject.hasOwnProperty('UserNameList')) {
           let objectY: any;
-          for (var j = 0; j < jsonObject.UserNameList.length; j++){
+          for (var j = 0; j < jsonObject.UserNameList.length; j++) {
             objectY = jsonObject.UserNameList[j];
             // Add the URL picture of the user
             objectY["picture"] = thisAux.getPhotoByName(objectY.userName);
@@ -133,12 +140,12 @@ export class VideoSessionComponent implements OnInit {
             thisAux.usersConnected.push(objectY);
           }
         }
-      } else if ((type == 'system-intervention') && (thisAux.authenticationService.isTeacher())){
+      } else if ((type == 'system-intervention') && (thisAux.authenticationService.isTeacher())) {
         // User's petition for intervention received
         let jsonObject = JSON.parse(umsg);
         console.log("USER PETITION:");
         console.log(jsonObject);
-        if (jsonObject.hasOwnProperty('petition')){
+        if (jsonObject.hasOwnProperty('petition')) {
           if (jsonObject.petition) {
             // Add new user's petition
             jsonObject["accessGranted"] = false;
@@ -147,7 +154,7 @@ export class VideoSessionComponent implements OnInit {
           }
           else {
             // Remove user's petition
-            let index = thisAux.usersIntervention.map(function(u) { return u.user; }).indexOf(jsonObject.user);
+            let index = thisAux.usersIntervention.map(function (u) { return u.user; }).indexOf(jsonObject.user);
             if (index !== -1) {
               thisAux.usersIntervention.splice(index, 1);
             }
@@ -162,16 +169,16 @@ export class VideoSessionComponent implements OnInit {
         console.log("TEACHER INTERVENTION GRANTED:");
         console.log(jsonObject);
         if (thisAux.authenticationService.isStudent()) {
-          if (jsonObject.hasOwnProperty('accessGranted')){
+          if (jsonObject.hasOwnProperty('accessGranted')) {
             // For the granted student
-            if (thisAux.user.nickName == jsonObject.user){
+            if (thisAux.user.nickName == jsonObject.user) {
               console.log("ACCESS GRANTED FOR USER: " + jsonObject.user);
               if (jsonObject.accessGranted) {
                 // Publish camera
-                  thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
-                  thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
-                  thisAux.studentAccessGranted = true;
-                  thisAux.myStudentAccessGranted = true;
+                thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
+                thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
+                thisAux.studentAccessGranted = true;
+                thisAux.myStudentAccessGranted = true;
               }
               else {
                 thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
@@ -189,7 +196,7 @@ export class VideoSessionComponent implements OnInit {
                 thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
                 thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
                 thisAux.studentAccessGranted = true;
-              } else{
+              } else {
                 thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
                 thisAux.studentAccessGranted = false;
               }
@@ -214,13 +221,13 @@ export class VideoSessionComponent implements OnInit {
       }
     };
 
-    this.websocket.onerror = function(ev) {
+    this.websocket.onerror = function (ev) {
       // New system error chat line
-      thisAux.chatLines.push(new Chatline('system-err', null, null, 'Error Occurred - ' + ev.message, null));
+      thisAux.chatLines.push(new Chatline('system-err', null, null, 'Error Occurred - ' + ev.type, null));
       thisAux.animationService.animateToBottom('#message_box', 500);
     };
 
-    this.websocket.onclose = function(ev) {
+    this.websocket.onclose = function (ev) {
       // New system close chat line
       thisAux.chatLines.push(new Chatline('system-msg', null, null, 'Connection Closed', null));
       thisAux.animationService.animateToBottom('#message_box', 500);
@@ -232,8 +239,6 @@ export class VideoSessionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // Close the Chat websocket
-    this.websocket.close();
     // Close the OpenVidu sesion
     this.leaveSession();
     // Delete the dark overlay (if side menu opened) when the component is destroyed
@@ -252,11 +257,12 @@ export class VideoSessionComponent implements OnInit {
   }
 
   exitFromSession() {
+    this.removeUser();
     this.leaveSession();
     this.location.back();
   }
 
-  changeShowChat(){
+  changeShowChat() {
     this.showChat = !this.showChat;
     this.showChatIcon = (this.showChat ? 'supervisor_account' : 'chat');
   }
@@ -274,7 +280,7 @@ export class VideoSessionComponent implements OnInit {
     this.interventionIcon = (this.interventionRequired ? 'cancel' : 'record_voice_over');
   }
 
-  grantIntervention(grant:boolean, userObject, i:number){
+  grantIntervention(grant: boolean, userObject, i: number) {
     // Prepare json data
     let msg = {
       accessGranted: grant,
@@ -292,60 +298,64 @@ export class VideoSessionComponent implements OnInit {
     }
   }
 
-  getStreamIndexByName(name:string){
+  getJsonFromString(str: string) {
+    return JSON.parse(str);
+  }
+
+  getStreamIndexByName(name: string) {
     for (var i = 0; i < this.streams.length; i++) {
-        if(this.streams[i].getParticipant().getId() === name) {
-          return i;
-        }
+      if (this.getJsonFromString(this.streams[i].connection.data)['name'] === name) {
+        return i;
+      }
     }
     return -1;
   }
 
-  getPhotoByName(userName:string){
-    let user = (this.course.attenders.filter(function( u ) { return u.nickName == userName; }))[0];
+  getPhotoByName(userName: string) {
+    let user = (this.course.attenders.filter(function (u) { return u.nickName == userName; }))[0];
     return user.picture;
   }
 
 
   /* Video controls */
 
-  toggleFullScreen(){
+  toggleFullScreen() {
     console.log("FULLSCREEN click");
     let fs = $('#video-session-div').get(0);
-    var document:any = window.document;
+    var document: any = window.document;
     if (!document.fullscreenElement &&
-        !document.mozFullScreenElement &&
-        !document.webkitFullscreenElement &&
-        !document.msFullscreenElement) {
-          console.log("enter FULLSCREEN!");
-          this.fullscreenIcon = 'fullscreen_exit';
-        if (fs.requestFullscreen) {
-            fs.requestFullscreen();
-        } else if (fs.msRequestFullscreen) {
-            fs.msRequestFullscreen();
-        } else if (fs.mozRequestFullScreen) {
-            fs.mozRequestFullScreen();
-        } else if (fs.webkitRequestFullscreen) {
-            fs.webkitRequestFullscreen();
-        }
+      !document.mozFullScreenElement &&
+      !document.webkitFullscreenElement &&
+      !document.msFullscreenElement) {
+      console.log("enter FULLSCREEN!");
+      this.fullscreenIcon = 'fullscreen_exit';
+      if (fs.requestFullscreen) {
+        fs.requestFullscreen();
+      } else if (fs.msRequestFullscreen) {
+        fs.msRequestFullscreen();
+      } else if (fs.mozRequestFullScreen) {
+        fs.mozRequestFullScreen();
+      } else if (fs.webkitRequestFullscreen) {
+        fs.webkitRequestFullscreen();
+      }
     } else {
       console.log("exit FULLSCREEN!");
       this.fullscreenIcon = 'fullscreen';
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
     }
   }
 
-  togglePlayPause(){
+  togglePlayPause() {
     let video = $('video')[0];
-    if(video){
+    if (video) {
       if (video.paused) {
         this.playPauseIcon = 'pause';
         video.play();
@@ -357,10 +367,10 @@ export class VideoSessionComponent implements OnInit {
     }
   }
 
-  toggleMute(){
+  toggleMute() {
     console.log(this.volumeLevel);
     let video = $('video')[0];
-    if(video){
+    if (video) {
       if (video.volume == 0.0) {
         video.volume = this.storedVolumeLevel;
         this.volumeLevel = this.storedVolumeLevel;
@@ -375,14 +385,14 @@ export class VideoSessionComponent implements OnInit {
     }
   }
 
-  changeVolume(event){
+  changeVolume(event) {
     let video = $('video')[0];
     console.log(this.volumeLevel);
     video.volume = this.volumeLevel;
     this.changeVolumeIcon(video);
   }
 
-  changeVolumeIcon(video){
+  changeVolumeIcon(video) {
     if (video.volume > 0.65) this.volumeMuteIcon = "volume_up";
     else if (video.volume == 0.0) this.volumeMuteIcon = "volume_off";
     else this.volumeMuteIcon = "volume_down";
@@ -394,14 +404,14 @@ export class VideoSessionComponent implements OnInit {
   /* OpenVidu */
 
   private generateParticipantInfo() {
-    this.sessionId = this.mySession.title;
-    this.participantId = this.user.nickName;
+    this.sessionName = this.mySession.title;
+    this.participantName = this.user.nickName;
   }
 
   private addVideoTag(stream: Stream) {
     console.log("Stream added");
     this.streams.push(stream);
-    if (stream.getParticipant().getId() === this.teacherName){
+    if (this.getJsonFromString(stream.connection.data)['name'] === this.teacherName) {
       this.streamIndex = this.getStreamIndexByName(this.teacherName);
     }
   }
@@ -413,7 +423,7 @@ export class VideoSessionComponent implements OnInit {
 
     let ind = this.streams.indexOf(stream);
     this.streams.splice(ind, 1);
-    if (stream.getParticipant().getId() === this.teacherName){
+    if (this.getJsonFromString(stream.connection.data)['name'] === this.teacherName) {
       // Removing all streams if the teacher leaves the room
       this.streams = [];
       this.streamIndex = 0;
@@ -432,75 +442,88 @@ export class VideoSessionComponent implements OnInit {
   }
 
   joinSession() {
-    this.openVidu = new OpenVidu(environment.OPENVIDU_URL);
-    this.openVidu.connect((error, openVidu) => {
+    this.OV = new OpenVidu(environment.OPENVIDU_URL);
+    this.OVSession = this.OV.initSession(this.OVSessionId);
 
-      if (error) {console.log("Connect error"); return console.log(error);}
+    this.OVSession.on('streamCreated', (event) => {
+      console.warn("STREAM CREATED");
+      console.warn(event.stream);
+      this.addVideoTag(event.stream);
+      this.OVSession.subscribe(event.stream, 'nothing');
+    });
 
-      if (this.authenticationService.isTeacher()) {
-        let camera = openVidu.getCamera();
-        camera.requestCameraAccess((error, camera) => {
-          if (error) return console.log(error);
-          this.joinSessionShared(this.openVidu, camera);
-        });
-      }
-      else {
-        let camera = openVidu.getCamera();
-        camera.requestCameraAccess((error, camera) => {
-          if (error) return console.log(error);
-          this.joinSessionShared(this.openVidu, camera);
-        });
+    this.OVSession.on('streamDestroyed', (event) => {
+      console.warn("STREAM DESTROYED");
+      console.warn(event.stream);
+      this.removeVideoTag(event.stream);
+    });
+
+    this.OVSession.on('connectionCreated', (event) => {
+      console.warn("CONNECTION CREATED");
+      console.warn(event.connection);
+    });
+
+    this.OVSession.on('connectionDestroyed', (event) => {
+      console.warn("CONNECTION DESTROYED");
+      console.warn(event.connection);
+    });
+
+    this.OVSession.connect(this.OVToken, (error) => {
+      if (error) {
+        console.log("Connect error"); return console.log(error);
+      } else {
+        //if (this.authenticationService.isTeacher()) {
+          this.OVPublisher = this.OV.initPublisher('nothing');
+          this.OVPublisher.on('accessAllowed', (event) => {
+            console.warn("ACCESS ALLOWED");
+          });
+          this.OVPublisher.on('accessDenied', (event) => {
+            console.warn("ACCESS DENIED");
+          });
+          this.OVPublisher.on('streamCreated', (event) => {
+            console.warn("STREAM CREATED BY PUBLISHER");
+            console.warn(event.stream);
+            this.addVideoTag(event.stream);
+          });
+          this.OVPublisher.on('videoElementCreated', (event) => {
+            console.warn("VIDEO ELEMENT CREATED BY PUBLISHER");
+            console.warn(event.element);
+          });
+          this.OVSession.publish(this.OVPublisher);
+        //}
       }
     });
   }
 
-  joinSessionShared(openVidu: OpenVidu, camera: Stream){
-    var sessionOptions = {
-      sessionId: this.sessionId,
-      participantId: this.participantId
-    }
-
-    openVidu.joinSession(sessionOptions, (error, currentSession) => {
-
-      if (error) return console.log(error);
-
-      this.currentSession = currentSession;
-
-      //if (this.authenticationService.isTeacher()) {
-        this.addVideoTag(camera);
-        this.publishCamera(camera);
-      //}
-
-      currentSession.addEventListener("stream-added", streamEvent => {
-        this.addVideoTag(streamEvent.stream);
-      });
-
-      currentSession.addEventListener("stream-removed", streamEvent => {
-        this.removeVideoTag(streamEvent.stream);
-      });
-    });
-  }
-
-  publishCamera(camera: Stream){
-    camera.publish();
-  }
-
-  removeSessionByUser(userName: string){
-    let index = this.streams.map(function(s) { return s.getId(); }).indexOf(userName + "_webcam");
-    console.log("STREAM REMOVED: " + index);
-    if (index !== -1) {
-      console.log("STREAM REMOVED!");
-      this.streams.splice(index, 1);
-    }
+  getParamsAndJoin() {
+    this.videoSessionService.getSessionIdAndToken(this.mySession.id).subscribe(
+      sessionIdToken => {
+        this.OVSessionId = sessionIdToken[0];
+        this.OVToken = sessionIdToken[1];
+        console.log(this.OVSessionId + " - " + this.OVToken);
+        this.joinSession();
+      },
+      error => {
+        console.warn("Error getting sessionId and token: " + error);
+      }
+    );
   }
 
   leaveSession() {
-    this.currentSession = null;
-    this.streams = [];
-    if (this.openVidu) this.openVidu.close(true);
+    this.websocket.close();  // Close the Chat websocket
+    if (this.OVSession) this.OVSession.disconnect(); // Disconnect from Session
+    this.streams = []; // Empty Stream array
     this.generateParticipantInfo();
   }
 
-  /* OpenVidu */
-
+  removeUser() {
+    this.videoSessionService.removeUser(this.mySessionId).subscribe(
+        res => {
+          console.log("User left the session");
+        },
+        error => {
+          console.warn("Error removing user!");
+        }
+      );
+  }
 }

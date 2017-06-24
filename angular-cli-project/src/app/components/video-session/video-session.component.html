@@ -14,9 +14,9 @@
     </div>
   </div>
 
-  <div *ngIf="currentSession">
+  <div *ngIf="OVSession">
     <div class="session-title-div">
-      <h2 id="session-title">{{sessionId}}</h2>
+      <h2 id="session-title">{{this.sessionName}}</h2>
     </div>
     <div *ngIf="this.streams.length > 0">
       <stream [stream]="this.streams[this.streamIndex]" [small]="false"></stream>

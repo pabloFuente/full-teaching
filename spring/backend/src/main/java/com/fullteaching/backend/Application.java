@@ -55,7 +55,7 @@ public class Application implements WebSocketConfigurer
     public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
 	 	PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
 	 	ppc.setLocations(new Resource[] {
-	 		new ClassPathResource("/amazon.properties")
+	 		new ClassPathResource("/general.properties")
 	         });
 	 	return ppc;
     }

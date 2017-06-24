@@ -136,5 +136,10 @@ public class User {
 	    User otherUser = (User)other;
 	    return ((otherUser.id == this.id) && (otherUser.name.equals(this.name)));
 	}
+	
+	@Override
+	public int hashCode() {
+	    return name.hashCode();
+	}
 
 }
