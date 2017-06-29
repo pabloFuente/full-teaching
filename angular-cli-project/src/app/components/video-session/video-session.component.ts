@@ -96,23 +96,22 @@ export class VideoSessionComponent implements OnInit {
 
     let wsUri = environment.CHAT_URL;
     this.websocket = new WebSocket(wsUri);
-    let thisAux = this;
 
-    this.websocket.onopen = function (event: Event) { // Connection is open
+    this.websocket.onopen = (event: Event) => { // Connection is open
       // New welcome chat line
-      thisAux.chatLines.push(new Chatline('system-msg', null, null, "Connected!", null)); // Notify user
+      this.chatLines.push(new Chatline('system-msg', null, null, "Connected!", null)); // Notify user
 
       // Prepare json data
       let msg = {
-        chat: 'Chat-Session-' + thisAux.mySessionId,
-        user: thisAux.user.nickName,
-        teacher: thisAux.teacherName
+        chat: 'Chat-Session-' + this.mySessionId,
+        user: this.user.nickName,
+        teacher: this.teacherName
       };
       // Convert and send data to server
-      thisAux.websocket.send(JSON.stringify(msg));
+      this.websocket.send(JSON.stringify(msg));
     }
 
-    this.websocket.onmessage = function (ev) {
+    this.websocket.onmessage = (ev) => {
       var msg = JSON.parse(ev.data); // PHP sends Json data
       var type = msg.type; // Message type
       var umsg = msg.message; // Message text
@@ -121,26 +120,26 @@ export class VideoSessionComponent implements OnInit {
 
       if (type == 'system') {
         // New system chat line
-        thisAux.chatLines.push(new Chatline('system-msg', null, null, umsg, null));
-        thisAux.animationService.animateToBottom('#message_box', 500);
+        this.chatLines.push(new Chatline('system-msg', null, null, umsg, null));
+        this.animationService.animateToBottom('#message_box', 500);
 
       } else if (type == 'system-users') {
         // Users connected message received
         let jsonObject = JSON.parse(umsg);
         console.log("USERS CONNECTED:");
         console.log(jsonObject);
-        thisAux.usersConnected = [];
+        this.usersConnected = [];
         if (jsonObject.hasOwnProperty('UserNameList')) {
           let objectY: any;
           for (var j = 0; j < jsonObject.UserNameList.length; j++) {
             objectY = jsonObject.UserNameList[j];
             // Add the URL picture of the user
-            objectY["picture"] = thisAux.getPhotoByName(objectY.userName);
+            objectY["picture"] = this.getPhotoByName(objectY.userName);
             console.log(objectY);
-            thisAux.usersConnected.push(objectY);
+            this.usersConnected.push(objectY);
           }
         }
-      } else if ((type == 'system-intervention') && (thisAux.authenticationService.isTeacher())) {
+      } else if ((type == 'system-intervention') && (this.authenticationService.isTeacher())) {
         // User's petition for intervention received
         let jsonObject = JSON.parse(umsg);
         console.log("USER PETITION:");
@@ -149,14 +148,14 @@ export class VideoSessionComponent implements OnInit {
           if (jsonObject.petition) {
             // Add new user's petition
             jsonObject["accessGranted"] = false;
-            jsonObject["picture"] = thisAux.getPhotoByName(jsonObject.user);
-            thisAux.usersIntervention.push(jsonObject);
+            jsonObject["picture"] = this.getPhotoByName(jsonObject.user);
+            this.usersIntervention.push(jsonObject);
           }
           else {
             // Remove user's petition
-            let index = thisAux.usersIntervention.map(function (u) { return u.user; }).indexOf(jsonObject.user);
+            let index = this.usersIntervention.map(function (u) { return u.user; }).indexOf(jsonObject.user);
             if (index !== -1) {
-              thisAux.usersIntervention.splice(index, 1);
+              this.usersIntervention.splice(index, 1);
             }
           }
         }
@@ -168,69 +167,75 @@ export class VideoSessionComponent implements OnInit {
         let jsonObject = JSON.parse(umsg);
         console.log("TEACHER INTERVENTION GRANTED:");
         console.log(jsonObject);
-        if (thisAux.authenticationService.isStudent()) {
+        if (this.authenticationService.isStudent()) {
           if (jsonObject.hasOwnProperty('accessGranted')) {
             // For the granted student
-            if (thisAux.user.nickName == jsonObject.user) {
+            if (this.user.nickName == jsonObject.user) {
               console.log("ACCESS GRANTED FOR USER: " + jsonObject.user);
               if (jsonObject.accessGranted) {
                 // Publish camera
-                thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
-                thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
-                thisAux.studentAccessGranted = true;
-                thisAux.myStudentAccessGranted = true;
+                this.OVPublisher.publishVideo(true);
+                this.OVPublisher.publishAudio(true);
+
+                this.streamIndex = this.getStreamIndexByName(jsonObject.user);
+                this.streamIndexSmall = this.getStreamIndexByName(this.teacherName);
+                this.studentAccessGranted = true;
+                this.myStudentAccessGranted = true;
               }
               else {
-                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
-                thisAux.studentAccessGranted = false;
-                thisAux.myStudentAccessGranted = false;
+                this.OVPublisher.publishVideo(false);
+                this.OVPublisher.publishAudio(false);
+
+                this.streamIndex = this.getStreamIndexByName(this.teacherName);
+                this.studentAccessGranted = false;
+                this.myStudentAccessGranted = false;
                 // Invert intervention request
-                thisAux.interventionRequired = !thisAux.interventionRequired;
+                this.interventionRequired = !this.interventionRequired;
                 // Change intervention icon
-                thisAux.interventionIcon = (thisAux.interventionRequired ? 'cancel' : 'record_voice_over');
+                this.interventionIcon = (this.interventionRequired ? 'cancel' : 'record_voice_over');
               }
             }
             // For the rest of students
             else {
               if (jsonObject.accessGranted) {
-                thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
-                thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
-                thisAux.studentAccessGranted = true;
+                this.streamIndex = this.getStreamIndexByName(jsonObject.user);
+                this.streamIndexSmall = this.getStreamIndexByName(this.teacherName);
+                this.studentAccessGranted = true;
               } else {
-                thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
-                thisAux.studentAccessGranted = false;
+                this.streamIndex = this.getStreamIndexByName(this.teacherName);
+                this.studentAccessGranted = false;
               }
             }
           }
         }
-        else if (thisAux.authenticationService.isTeacher()) {
+        else if (this.authenticationService.isTeacher()) {
           // For the teacher
           if (jsonObject.accessGranted) {
-            thisAux.streamIndex = thisAux.getStreamIndexByName(jsonObject.user);
-            thisAux.streamIndexSmall = thisAux.getStreamIndexByName(thisAux.teacherName);
+            this.streamIndex = this.getStreamIndexByName(jsonObject.user);
+            this.streamIndexSmall = this.getStreamIndexByName(this.teacherName);
           } else {
-            thisAux.streamIndex = thisAux.getStreamIndexByName(thisAux.teacherName);
+            this.streamIndex = this.getStreamIndexByName(this.teacherName);
           }
         }
       }
       else {
-        let classUserMsg = (uname === thisAux.user.nickName ? "own-msg" : "stranger-msg");
+        let classUserMsg = (uname === this.user.nickName ? "own-msg" : "stranger-msg");
         // New user chat line
-        thisAux.chatLines.push(new Chatline(classUserMsg, uname, thisAux.getPhotoByName(uname), umsg, ucolor));
-        thisAux.animationService.animateToBottom('#message_box', 500);
+        this.chatLines.push(new Chatline(classUserMsg, uname, this.getPhotoByName(uname), umsg, ucolor));
+        this.animationService.animateToBottom('#message_box', 500);
       }
     };
 
-    this.websocket.onerror = function (ev) {
+    this.websocket.onerror = (ev) => {
       // New system error chat line
-      thisAux.chatLines.push(new Chatline('system-err', null, null, 'Error Occurred - ' + ev.type, null));
-      thisAux.animationService.animateToBottom('#message_box', 500);
+      this.chatLines.push(new Chatline('system-err', null, null, 'Error Occurred - ' + ev.type, null));
+      this.animationService.animateToBottom('#message_box', 500);
     };
 
-    this.websocket.onclose = function (ev) {
+    this.websocket.onclose = (ev) => {
       // New system close chat line
-      thisAux.chatLines.push(new Chatline('system-msg', null, null, 'Connection Closed', null));
-      thisAux.animationService.animateToBottom('#message_box', 500);
+      this.chatLines.push(new Chatline('system-msg', null, null, 'Connection Closed', null));
+      this.animationService.animateToBottom('#message_box', 500);
     };
 
     // Deletes the draggable element for the side menu (external to the menu itself in the DOM), avoiding memory leak
@@ -472,8 +477,11 @@ export class VideoSessionComponent implements OnInit {
       if (error) {
         console.log("Connect error"); return console.log(error);
       } else {
-        //if (this.authenticationService.isTeacher()) {
-          this.OVPublisher = this.OV.initPublisher('nothing');
+          if (this.authenticationService.isTeacher()) {
+            this.OVPublisher = this.OV.initPublisher('nothing');
+          } else {
+            this.OVPublisher = this.OV.initPublisher('nothing', {audio:false, video:false});
+          }
           this.OVPublisher.on('accessAllowed', (event) => {
             console.warn("ACCESS ALLOWED");
           });
@@ -490,9 +498,8 @@ export class VideoSessionComponent implements OnInit {
             console.warn(event.element);
           });
           this.OVSession.publish(this.OVPublisher);
-        //}
-      }
-    });
+        }
+      });
   }
 
   getParamsAndJoin() {

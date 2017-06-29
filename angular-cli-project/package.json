@@ -42,7 +42,7 @@
     "time-ago-pipe": "~1.1.1",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.6.23",
-    "openvidu-browser": "1.0.1"
+    "openvidu-browser": "1.0.2"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.41",
