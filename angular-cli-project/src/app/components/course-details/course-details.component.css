@@ -261,26 +261,6 @@ a.btn-floating {
 .session-ready{
   background-color: rgba(55, 86, 70, 0.15);
   cursor: pointer;
-  animation: sessionReadyFrames ease-in-out 3s;
-  animation-iteration-count: infinite;
-  transform-origin: 50% 50%;
-  animation-fill-mode:forwards; /*when the spec is finished*/
-  -webkit-animation: sessionReadyFrames ease-in-out 3s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-transform-origin: 50% 50%;
-  -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/
-  -moz-animation: sessionReadyFrames ease-in-out 3s;
-  -moz-animation-iteration-count: infinite;
-  -moz-transform-origin: 50% 50%;
-  -moz-animation-fill-mode:forwards; /*FF 5+*/
-  -o-animation: sessionReadyFrames ease-in-out 3s;
-  -o-animation-iteration-count: infinite;
-  -o-transform-origin: 50% 50%;
-  -o-animation-fill-mode:forwards; /*Not implemented yet*/
-  -ms-animation: sessionReadyFrames ease-in-out 3s;
-  -ms-animation-iteration-count: infinite;
-  -ms-transform-origin: 50% 50%;
-  -ms-animation-fill-mode:forwards; /*IE 10+*/
 }
 
 @keyframes sessionReadyFrames{

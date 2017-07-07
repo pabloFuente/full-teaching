@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
-import com.fullteaching.backend.user.User;
-import com.fullteaching.backend.user.UserComponent;
+import com.fullteaching.backend.security.AuthorizationService;
 
 @RestController
 @RequestMapping("/api-sessions")
@@ -25,11 +24,15 @@ public class SessionController {
 	private SessionRepository sessionRepository;
 	
 	@Autowired
-	private UserComponent user;
+	private AuthorizationService authorizationService;
 	
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.POST)
-	public ResponseEntity<Course> newSession(@RequestBody Session session, @PathVariable(value="id") String id) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> newSession(@RequestBody Session session, @PathVariable(value="id") String id) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_i = -1;
 		try {
@@ -40,40 +43,54 @@ public class SessionController {
 		
 		Course course = courseRepository.findOne(id_i);
 		
-		checkAuthorization(course, course.getTeacher());
-		
-		//Bi-directional saving
-		session.setCourse(course);
-		course.getSessions().add(session);
-		
-		//Saving the modified course: Cascade relationship between course and sessions
-		//will add the new session to SessionRepository
-		courseRepository.save(course);
-		//Entire course is returned
-		return new ResponseEntity<>(course, HttpStatus.CREATED);
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(course, course.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
+			//Bi-directional saving
+			session.setCourse(course);
+			course.getSessions().add(session);
+			
+			//Saving the modified course: Cascade relationship between course and sessions
+			//will add the new session to SessionRepository
+			courseRepository.save(course);
+			//Entire course is returned
+			return new ResponseEntity<>(course, HttpStatus.CREATED);
+		}
 	}
 	
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
-	public ResponseEntity<Session> modifySession(@RequestBody Session session) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> modifySession(@RequestBody Session session) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		Session s = sessionRepository.findOne(session.getId());
 		
-		checkAuthorization(s, s.getCourse().getTeacher());
-				
-		s.setTitle(session.getTitle());
-		s.setDescription(session.getDescription());
-		s.setDate(session.getDate());
-		//Saving the modified session
-		sessionRepository.save(s);
-		return new ResponseEntity<>(s, HttpStatus.OK);
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(s, s.getCourse().getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
+			s.setTitle(session.getTitle());
+			s.setDescription(session.getDescription());
+			s.setDate(session.getDate());
+			//Saving the modified session
+			sessionRepository.save(s);
+			return new ResponseEntity<>(s, HttpStatus.OK);
+		}
 	}
 	
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Session> deleteSession(@PathVariable(value="id") String id) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> deleteSession(@PathVariable(value="id") String id) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_i = -1;
 		try{
@@ -84,43 +101,25 @@ public class SessionController {
 		
 		Session session = sessionRepository.findOne(id_i);
 		
-		checkAuthorization(session, session.getCourse().getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(session, session.getCourse().getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		Course course = courseRepository.findOne(session.getCourse().getId());
-		if (course != null){
-			course.getSessions().remove(session);
-			sessionRepository.delete(id_i);
-			courseRepository.save(course);
-			return new ResponseEntity<>(session, HttpStatus.OK);
+			Course course = courseRepository.findOne(session.getCourse().getId());
+			if (course != null){
+				course.getSessions().remove(session);
+				sessionRepository.delete(id_i);
+				courseRepository.save(course);
+				return new ResponseEntity<>(session, HttpStatus.OK);
+			}
+			else {
+				//The Course that owns the deleted session does not exist
+				//This code is presumed to be unreachable, because of the Cascade.ALL relationship from Course to Session
+				sessionRepository.delete(session);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
 		}
-		else {
-			//The Course that owns the deleted session does not exist
-			//This code is presumed to be unreachable, because of the Cascade.ALL relationship from Course to Session
-			sessionRepository.delete(session);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	//Login checking method for the backend
-	private ResponseEntity<Object> checkBackendLogged(){
-		if (!user.isLoggedUser()) {
-			System.out.println("Not user logged");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return null; 
-	}
-	
-	//Authorization checking for adding, editing and deleting sessions (the teacher must own the Course)
-	private ResponseEntity<Object> checkAuthorization(Object o, User u){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
-		if(!this.user.getLoggedUser().equals(u)){
-			//The teacher is not authorized to edit it if he is not its owner
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 	
 }

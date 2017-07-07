@@ -12,6 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import org.springframework.http.HttpStatus;
 
 import com.fullteaching.backend.chat.ChatHandler;
+import com.fullteaching.backend.security.AuthorizationService;
 
 //ONLY ON PRODUCTION
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,11 @@ public class Application implements WebSocketConfigurer
 	@Bean
 	public ChatHandler chatHandler() {
 		return new ChatHandler();
+	}
+	
+	@Bean
+	public AuthorizationService authorizationService() {
+		return new AuthorizationService();
 	}
 
 	@Override
@@ -71,21 +77,5 @@ public class Application implements WebSocketConfigurer
     }
     //ONLY ON PRODUCTION
     
-    @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-       return (container -> {
-    	   // When not authorized, return custom html
-           //ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
-    	   
-    	   // When not found, return main page
-            ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/index.html");
-            
-           // When server error, return custom html
-           //ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
-            
-            container.addErrorPages(error404Page);
-            //container.addErrorPages(error401Page, error404Page, error500Page);
-       });
-    }
-    
+
 }

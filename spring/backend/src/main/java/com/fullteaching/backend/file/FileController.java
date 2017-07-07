@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +43,7 @@ import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
 import com.fullteaching.backend.filegroup.FileGroup;
 import com.fullteaching.backend.filegroup.FileGroupRepository;
+import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserRepository;
 import com.fullteaching.backend.user.UserComponent;
@@ -67,6 +67,9 @@ public class FileController {
 	@Autowired
 	private UserComponent user;
 	
+	@Autowired
+	private AuthorizationService authorizationService;
+	
 	@Value("${profile_stage}")
     private String profileStage;
 	
@@ -82,11 +85,16 @@ public class FileController {
 	private static final Path PICTURES_FOLDER = Paths.get(System.getProperty("user.dir"), "pictures");
 
 	@RequestMapping(value = "/upload/course/{courseId}/file-group/{fileGroupId}", method = RequestMethod.POST)
-	public ResponseEntity<FileGroup> handleFileUpload(
+	public ResponseEntity<Object> handleFileUpload(
 			MultipartHttpServletRequest request,
 			@PathVariable(value="courseId") String courseId,
 			@PathVariable(value="fileGroupId") String fileGroupId
 		) throws IOException {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_course = -1;
 		long id_fileGroup = -1;
@@ -99,57 +107,61 @@ public class FileController {
 		
 		Course c = courseRepository.findOne(id_course);
 		
-		checkAuthorization(c, c.getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		FileGroup fg = null;
-		Iterator<String> i = request.getFileNames();
-		while (i.hasNext()) {
-			String name = i.next();
-			System.out.println("X - " + name);
-			MultipartFile file = request.getFile(name);
-			String fileName = file.getOriginalFilename();
-		
-			System.out.println("FILE: " + fileName);
-		
-			if (file.isEmpty()) {
-				throw new RuntimeException("The file is empty");
-			}
-	
-			if (!Files.exists(FILES_FOLDER)) {
-				Files.createDirectories(FILES_FOLDER);
-			}
+			FileGroup fg = null;
+			Iterator<String> i = request.getFileNames();
+			while (i.hasNext()) {
+				String name = i.next();
+				System.out.println("X - " + name);
+				MultipartFile file = request.getFile(name);
+				String fileName = file.getOriginalFilename();
 			
-			com.fullteaching.backend.file.File customFile = new com.fullteaching.backend.file.File(1, fileName);
-			File uploadedFile = new File(FILES_FOLDER.toFile(), customFile.getNameIdent());
+				System.out.println("FILE: " + fileName);
 			
-			file.transferTo(uploadedFile);
-			
-			if (this.isProductionStage()){
-				//ONLY ON PRODUCTION
-				try {
-					this.productionFileSaver(customFile.getNameIdent(), "files", uploadedFile);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
-					e.printStackTrace();
+				if (file.isEmpty()) {
+					throw new RuntimeException("The file is empty");
 				}
-				customFile.setLink("https://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
-				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
-				//ONLY ON PRODUCTION
-			} else {
-				//ONLY ON DEVELOPMENT
-				customFile.setLink(uploadedFile.getPath());
-				//ONLY ON DEVELOPMENT
-			}
-			fg = fileGroupRepository.findOne(id_fileGroup);
-			fg.getFiles().add(customFile);
-			fg.updateFileIndexOrder();
-			System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
-		}
 		
-		fileGroupRepository.save(fg);
-		System.out.println("FINISHING METHOD!");
-		return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.CREATED);
+				if (!Files.exists(FILES_FOLDER)) {
+					Files.createDirectories(FILES_FOLDER);
+				}
+				
+				com.fullteaching.backend.file.File customFile = new com.fullteaching.backend.file.File(1, fileName);
+				File uploadedFile = new File(FILES_FOLDER.toFile(), customFile.getNameIdent());
+				
+				file.transferTo(uploadedFile);
+				
+				if (this.isProductionStage()){
+					//ONLY ON PRODUCTION
+					try {
+						this.productionFileSaver(customFile.getNameIdent(), "files", uploadedFile);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
+						e.printStackTrace();
+					}
+					customFile.setLink("https://"+ this.bucketAWS +".s3.amazonaws.com/files/" + customFile.getNameIdent());
+					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
+					//ONLY ON PRODUCTION
+				} else {
+					//ONLY ON DEVELOPMENT
+					customFile.setLink(uploadedFile.getPath());
+					//ONLY ON DEVELOPMENT
+				}
+				fg = fileGroupRepository.findOne(id_fileGroup);
+				fg.getFiles().add(customFile);
+				fg.updateFileIndexOrder();
+				System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
+			}
+			
+			fileGroupRepository.save(fg);
+			System.out.println("FINISHING METHOD!");
+			return new ResponseEntity<>(this.getRootFileGroup(fg), HttpStatus.CREATED);
+		}
 	}
 
 	
@@ -160,57 +172,75 @@ public class FileController {
 			HttpServletResponse response)
 		throws FileNotFoundException, IOException {
 		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			response.sendError(401, "Not logged");
+			return;
+		};
+		
 		long id_course = -1;
 		long id_file = -1;
 		try {
 			id_course = Long.parseLong(courseId);
 			id_file = Long.parseLong(fileId);
 		} catch(NumberFormatException e){
+			response.sendError(422, "Invalid format");
 			return;
 		}
 		
 		Course c = courseRepository.findOne(id_course);
-		checkAuthorizationUsers(c, c.getAttenders());
 		
-		com.fullteaching.backend.file.File f = fileRepository.findOne(id_file);
+		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorizationUsers(c, c.getAttenders());
+		if (userAuthorized != null) { // If the user is not an attender of the course
+			response.sendError(401, "Unauthorized");
+			return;
+		} else {
 		
-		if (f != null){
-			if (this.isProductionStage()){
-				//ONLY ON PRODUCTION
-				this.productionFileDownloader(f.getNameIdent(), response);
-				//ONLY ON PRODUCTION
-			} else {
-				//ONLY ON DEVELOPMENT
-				Path file = FILES_FOLDER.resolve(f.getNameIdent());
-	
-				if (Files.exists(file)) {
-					try {
-						String fileExt = f.getFileExtension();
-						response.setContentType(MimeTypes.getMimeType(fileExt));
-								
-						// get your file as InputStream
-						InputStream is = new FileInputStream(file.toString());
-						// copy it to response's OutputStream
-						IOUtils.copy(is, response.getOutputStream());
-						response.flushBuffer();
-					} catch (IOException ex) {
-						throw new RuntimeException("IOError writing file to output stream");
-					}
-					
+			com.fullteaching.backend.file.File f = fileRepository.findOne(id_file);
+			
+			if (f != null){
+				if (this.isProductionStage()){
+					//ONLY ON PRODUCTION
+					this.productionFileDownloader(f.getNameIdent(), response);
+					//ONLY ON PRODUCTION
 				} else {
-					response.sendError(404, "File" + f.getNameIdent() + "(" + file.toAbsolutePath() + ") does not exist");
+					//ONLY ON DEVELOPMENT
+					Path file = FILES_FOLDER.resolve(f.getNameIdent());
+		
+					if (Files.exists(file)) {
+						try {
+							String fileExt = f.getFileExtension();
+							response.setContentType(MimeTypes.getMimeType(fileExt));
+									
+							// get your file as InputStream
+							InputStream is = new FileInputStream(file.toString());
+							// copy it to response's OutputStream
+							IOUtils.copy(is, response.getOutputStream());
+							response.flushBuffer();
+						} catch (IOException ex) {
+							throw new RuntimeException("IOError writing file to output stream");
+						}
+						
+					} else {
+						response.sendError(404, "File" + f.getNameIdent() + "(" + file.toAbsolutePath() + ") does not exist");
+					}
+					//ONLY ON DEVELOPMENT
 				}
-				//ONLY ON DEVELOPMENT
 			}
 		}
 	}
 	
 	
 	@RequestMapping(value = "/upload/picture/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<String> handlePictureUpload(
+	public ResponseEntity<Object> handlePictureUpload(
 			MultipartHttpServletRequest request,
 			@PathVariable(value="userId") String userId
 		) throws IOException {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_user = -1;
 		try {
@@ -221,57 +251,61 @@ public class FileController {
 		
 		User u = userRepository.findOne(id_user);
 		
-		checkAuthorization(u, u);
+		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorization(u, this.user.getLoggedUser());
+		if (userAuthorized != null) { // If the user is not the teacher of the course
+			return userAuthorized;
+		} else {
 		
-		Iterator<String> i = request.getFileNames();
-		while (i.hasNext()) {
-			String name = i.next();
-			System.out.println("X - " + name);
-			MultipartFile file = request.getFile(name);
-			System.out.println("PICTURE: " + file.getOriginalFilename());
-			
-			if (file.isEmpty()) {
-				System.out.println("EXCEPTION!");	
-				throw new RuntimeException("The picture is empty");
-			}
-	
-			if (!Files.exists(PICTURES_FOLDER)) {			
-				System.out.println("PATH CREATED FOR PICTURE");
-				Files.createDirectories(PICTURES_FOLDER);
-			}
-			
-			String encodedName = getEncodedPictureName(file.getOriginalFilename());
-
-			File uploadedPicture = new File(PICTURES_FOLDER.toFile(), encodedName);
-			file.transferTo(uploadedPicture);
-			
-			if (this.isProductionStage()){
-				//ONLY ON PRODUCTION
-				try {
-					this.productionFileSaver(encodedName, "pictures", uploadedPicture);
-					System.out.println("PICTURE SUCCESFULLY UPLOADED  TO S3");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
-					e.printStackTrace();
-				}
-				this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
-				this.productionFileDeletion(this.getFileNameFromURL(u.getPicture()), "/pictures");
-				u.setPicture("https://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
-				//ONLY ON PRODUCTION
-			} else {
-				//ONLY ON DEVELOPMENT
-				this.deleteLocalFile(this.getFileNameFromURL(u.getPicture()), PICTURES_FOLDER);
-				u.setPicture("/assets/pictures/" + uploadedPicture.getName());
+			Iterator<String> i = request.getFileNames();
+			while (i.hasNext()) {
+				String name = i.next();
+				System.out.println("X - " + name);
+				MultipartFile file = request.getFile(name);
+				System.out.println("PICTURE: " + file.getOriginalFilename());
 				
-				System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
-				//ONLY ON DEVELOPMENT
-			}
-
-			userRepository.save(u);
-		}
+				if (file.isEmpty()) {
+					System.out.println("EXCEPTION!");	
+					throw new RuntimeException("The picture is empty");
+				}
 		
-		return new ResponseEntity<>(u.getPicture(), HttpStatus.CREATED);
+				if (!Files.exists(PICTURES_FOLDER)) {			
+					System.out.println("PATH CREATED FOR PICTURE");
+					Files.createDirectories(PICTURES_FOLDER);
+				}
+				
+				String encodedName = getEncodedPictureName(file.getOriginalFilename());
+	
+				File uploadedPicture = new File(PICTURES_FOLDER.toFile(), encodedName);
+				file.transferTo(uploadedPicture);
+				
+				if (this.isProductionStage()){
+					//ONLY ON PRODUCTION
+					try {
+						this.productionFileSaver(encodedName, "pictures", uploadedPicture);
+						System.out.println("PICTURE SUCCESFULLY UPLOADED  TO S3");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
+						e.printStackTrace();
+					}
+					this.deleteLocalFile(uploadedPicture.getName(), PICTURES_FOLDER);
+					this.productionFileDeletion(this.getFileNameFromURL(u.getPicture()), "/pictures");
+					u.setPicture("https://"+ this.bucketAWS +".s3.amazonaws.com/pictures/" + encodedName);
+					//ONLY ON PRODUCTION
+				} else {
+					//ONLY ON DEVELOPMENT
+					this.deleteLocalFile(this.getFileNameFromURL(u.getPicture()), PICTURES_FOLDER);
+					u.setPicture("/assets/pictures/" + uploadedPicture.getName());
+					
+					System.out.println("PICTURE SUCCESFULLY UPLOADED  TO " + uploadedPicture.getPath());
+					//ONLY ON DEVELOPMENT
+				}
+	
+				userRepository.save(u);
+			}
+			
+			return new ResponseEntity<>(u.getPicture(), HttpStatus.CREATED);
+		}
 	}
 	
 	
@@ -301,32 +335,6 @@ public class FileController {
 		//Adding the extension
 		originalFileName += "." + picExtension;
 		return originalFileName;
-	}
-	
-	//Authorization checking for uploading new files (the user must be an attender)
-	private ResponseEntity<Object> checkAuthorizationUsers(Object o, Collection<User> users){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		if(!users.contains(this.user.getLoggedUser())){
-			//The user is not authorized to edit if it is not an attender of the Course
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
-	}
-	
-	//Authorization checking for editing and deleting courses (the teacher must own the Course)
-	private ResponseEntity<Object> checkAuthorization(Object o, User u){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
-		if(!this.user.getLoggedUser().equals(u)){
-			//The teacher is not authorized to edit it if he is not its owner
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 	
 	//ONLY ON DEVELOPMENT

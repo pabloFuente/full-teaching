@@ -1,7 +1,5 @@
 package com.fullteaching.backend.comment;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fullteaching.backend.entry.Entry;
 import com.fullteaching.backend.entry.EntryRepository;
+import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.coursedetails.CourseDetails;
 import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
 import com.fullteaching.backend.user.User;
@@ -34,6 +33,9 @@ public class CommentController {
 	@Autowired
 	private UserComponent user;
 	
+	@Autowired
+	private AuthorizationService authorizationService;
+	
 	@RequestMapping(value = "/entry/{entryId}/forum/{courseDetailsId}", method = RequestMethod.POST)
 	public ResponseEntity<Object> newComment(
 			@RequestBody Comment comment, 
@@ -41,7 +43,10 @@ public class CommentController {
 			@PathVariable(value="courseDetailsId") String courseDetailsId
 	) {
 		
-		checkBackendLogged();
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_entry = -1;
 		long id_courseDetails = -1;
@@ -54,7 +59,7 @@ public class CommentController {
 		
 		CourseDetails cd = courseDetailsRepository.findOne(id_courseDetails);
 		
-		ResponseEntity<Object> userAuthorized = checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
+		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
 		if (userAuthorized != null) { // If the user is not an attender of the course
 			return userAuthorized;
 		} else {
@@ -96,30 +101,6 @@ public class CommentController {
 				}
 			}
 		}
-	}
-	
-	
-	
-	//Login checking method for the backend
-	private ResponseEntity<Object> checkBackendLogged(){
-		if (!user.isLoggedUser()) {
-			System.out.println("Not user logged");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return null; 
-	}
-	
-	//Authorization checking for adding new Entries (the user must be an attender)
-	private ResponseEntity<Object> checkAuthorizationUsers(Object o, Collection<User> users){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		if(!users.contains(this.user.getLoggedUser())){
-			//The user is not authorized to edit if it is not an attender of the Course
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 
 }

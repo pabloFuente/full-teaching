@@ -18,6 +18,7 @@ import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fullteaching.backend.course.Course.SimpleCourseList;
+import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.user.User;
 
 @RestController
@@ -33,6 +34,9 @@ public class CourseController {
 	@Autowired
 	private UserComponent user;
 	
+	@Autowired
+	private AuthorizationService authorizationService;
+	
 	private class AddAttendersResponse {
 		public Collection<User> attendersAdded;
 		public Collection<User> attendersAlreadyAdded;
@@ -43,8 +47,12 @@ public class CourseController {
 	
 	@JsonView(SimpleCourseList.class)
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Course>> getCourses(@PathVariable(value="id") String id){
-		this.checkBackendLogged();
+	public ResponseEntity<Object> getCourses(@PathVariable(value="id") String id){
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_i = -1;
 		try{
@@ -63,8 +71,12 @@ public class CourseController {
 	
 	
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Course> getCourse(@PathVariable(value="id") String id){
-		this.checkBackendLogged();
+	public ResponseEntity<Object> getCourse(@PathVariable(value="id") String id){
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_i = -1;
 		try{
@@ -79,8 +91,12 @@ public class CourseController {
 	
 	
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public ResponseEntity<Course> newCourse(@RequestBody Course course) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> newCourse(@RequestBody Course course) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		User userLogged = user.getLoggedUser();
 		
@@ -101,31 +117,42 @@ public class CourseController {
 	
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
-	public ResponseEntity<Course> modifyCourse(@RequestBody Course course) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> modifyCourse(@RequestBody Course course) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 
 		Course c = courseRepository.findOne(course.getId());
 		
-		checkAuthorization(c, c.getTeacher());
-		
-		//Modifying the course attributes
-		c.setImage(course.getImage());
-		c.setTitle(course.getTitle());
-		if (course.getCourseDetails() != null){
-			if (course.getCourseDetails().getInfo() != null){
-				c.getCourseDetails().setInfo(course.getCourseDetails().getInfo());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
+			//Modifying the course attributes
+			c.setImage(course.getImage());
+			c.setTitle(course.getTitle());
+			if (course.getCourseDetails() != null){
+				if (course.getCourseDetails().getInfo() != null){
+					c.getCourseDetails().setInfo(course.getCourseDetails().getInfo());
+				}
 			}
+			//Saving the modified course
+			courseRepository.save(c);
+			return new ResponseEntity<>(c, HttpStatus.OK);
 		}
-		//Saving the modified course
-		courseRepository.save(c);
-		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 	
 	
 	
 	@RequestMapping(value = "/delete/{courseId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Course> deleteCourse(@PathVariable(value="courseId") String courseId) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> deleteCourse(@PathVariable(value="courseId") String courseId) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_course = -1;
 		try{
@@ -136,32 +163,38 @@ public class CourseController {
 		
 		Course c = courseRepository.findOne(id_course);
 		
-		checkAuthorization(c, c.getTeacher());
-		
-		//Removing the deleted course from its attenders
-		Collection<Course> courses = new HashSet<>();
-		courses.add(c);
-		Collection<User> users = userRepository.findByCourses(courses);
-		for(User u: users){
-			u.getCourses().remove(c);
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
+			//Removing the deleted course from its attenders
+			Collection<Course> courses = new HashSet<>();
+			courses.add(c);
+			Collection<User> users = userRepository.findByCourses(courses);
+			for(User u: users){
+				u.getCourses().remove(c);
+			}
+			userRepository.save(users);
+			c.getAttenders().clear();
+			
+			
+			courseRepository.delete(c);
+			return new ResponseEntity<>(c, HttpStatus.OK);
 		}
-		userRepository.save(users);
-		c.getAttenders().clear();
-		
-		
-		courseRepository.delete(c);
-		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 	
 
 	
 	@RequestMapping(value = "/edit/add-attenders/course/{courseId}", method = RequestMethod.PUT)
-	public ResponseEntity<AddAttendersResponse> addAttenders(
+	public ResponseEntity<Object> addAttenders(
 			@RequestBody String[] attenderEmails, 
 			@PathVariable(value="courseId") String courseId) 
 	{
 		
-		this.checkBackendLogged();
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_course = -1;
 		try{
@@ -172,106 +205,95 @@ public class CourseController {
 
 		Course c = courseRepository.findOne(id_course);
 		
-		checkAuthorization(c, c.getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		//Strings with a valid email format
-		Set<String> attenderEmailsValid = new HashSet<>();
-		//Strings with an invalid email format
-		Set<String> attenderEmailsInvalid = new HashSet<>();
-		//Strings with a valid email format but no registered in the application
-		Set<String> attenderEmailsNotRegistered = new HashSet<>();
-		
-		EmailValidator emailValidator = EmailValidator.getInstance();
-		
-		for (int i = 0; i < attenderEmails.length; i++){
-			if (emailValidator.isValid(attenderEmails[i])) {
-				attenderEmailsValid.add(attenderEmails[i]);
-			} else {
-				attenderEmailsInvalid.add(attenderEmails[i]);
+			//Strings with a valid email format
+			Set<String> attenderEmailsValid = new HashSet<>();
+			//Strings with an invalid email format
+			Set<String> attenderEmailsInvalid = new HashSet<>();
+			//Strings with a valid email format but no registered in the application
+			Set<String> attenderEmailsNotRegistered = new HashSet<>();
+			
+			EmailValidator emailValidator = EmailValidator.getInstance();
+			
+			for (int i = 0; i < attenderEmails.length; i++){
+				if (emailValidator.isValid(attenderEmails[i])) {
+					attenderEmailsValid.add(attenderEmails[i]);
+				} else {
+					attenderEmailsInvalid.add(attenderEmails[i]);
+				}
 			}
-		}
-		
-		Collection<User> newPossibleAttenders = userRepository.findByNameIn(attenderEmailsValid);
-		Collection<User> newAddedAttenders = new HashSet<>();
-		Collection<User> alreadyAddedAttenders = new HashSet<>();
-		
-		for (String s : attenderEmailsValid){
-			if (!this.userListContainsEmail(newPossibleAttenders, s)){
-				attenderEmailsNotRegistered.add(s);
+			
+			Collection<User> newPossibleAttenders = userRepository.findByNameIn(attenderEmailsValid);
+			Collection<User> newAddedAttenders = new HashSet<>();
+			Collection<User> alreadyAddedAttenders = new HashSet<>();
+			
+			for (String s : attenderEmailsValid){
+				if (!this.userListContainsEmail(newPossibleAttenders, s)){
+					attenderEmailsNotRegistered.add(s);
+				}
 			}
+			
+			for (User attender : newPossibleAttenders){
+				boolean newAtt = true;
+				if (!attender.getCourses().contains(c)) attender.getCourses().add(c); else newAtt = false;
+				if (!c.getAttenders().contains(attender)) c.getAttenders().add(attender); else newAtt = false;
+				if (newAtt) newAddedAttenders.add(attender); else alreadyAddedAttenders.add(attender);
+			}
+			
+			//Saving the attenders (all of them, just in case a field of the bidirectional relationship is missing in a Course or a User)
+			userRepository.save(newPossibleAttenders);	
+			//Saving the modified course
+			courseRepository.save(c);
+			
+			AddAttendersResponse customResponse = new AddAttendersResponse();
+			customResponse.attendersAdded = newAddedAttenders;
+			customResponse.attendersAlreadyAdded = alreadyAddedAttenders;
+			customResponse.emailsInvalid = attenderEmailsInvalid;
+			customResponse.emailsValidNotRegistered = attenderEmailsNotRegistered;
+			
+			return new ResponseEntity<>(customResponse, HttpStatus.OK);
 		}
-		
-		for (User attender : newPossibleAttenders){
-			boolean newAtt = true;
-			if (!attender.getCourses().contains(c)) attender.getCourses().add(c); else newAtt = false;
-			if (!c.getAttenders().contains(attender)) c.getAttenders().add(attender); else newAtt = false;
-			if (newAtt) newAddedAttenders.add(attender); else alreadyAddedAttenders.add(attender);
-		}
-		
-		//Saving the attenders (all of them, just in case a field of the bidirectional relationship is missing in a Course or a User)
-		userRepository.save(newPossibleAttenders);	
-		//Saving the modified course
-		courseRepository.save(c);
-		
-		AddAttendersResponse customResponse = new AddAttendersResponse();
-		customResponse.attendersAdded = newAddedAttenders;
-		customResponse.attendersAlreadyAdded = alreadyAddedAttenders;
-		customResponse.emailsInvalid = attenderEmailsInvalid;
-		customResponse.emailsValidNotRegistered = attenderEmailsNotRegistered;
-		
-		return new ResponseEntity<>(customResponse, HttpStatus.OK);
 	}
 	
 	
 	
 	@RequestMapping(value = "/edit/delete-attenders", method = RequestMethod.PUT)
-	public ResponseEntity<Set<User>> deleteAttenders(@RequestBody Course course) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> deleteAttenders(@RequestBody Course course) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 
 		Course c = courseRepository.findOne(course.getId());
 		
-		checkAuthorization(c, c.getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		Set<Course> setCourse = new HashSet<>();
-		setCourse.add(c);
-		Collection<User> courseAttenders = userRepository.findByCourses(setCourse);
-		
-		for (User attender : courseAttenders){
-			if (!course.getAttenders().contains(attender)){
-				attender.getCourses().remove(c);
+			Set<Course> setCourse = new HashSet<>();
+			setCourse.add(c);
+			Collection<User> courseAttenders = userRepository.findByCourses(setCourse);
+			
+			for (User attender : courseAttenders){
+				if (!course.getAttenders().contains(attender)){
+					attender.getCourses().remove(c);
+				}
 			}
+			
+			userRepository.save(courseAttenders);
+			
+			//Modifying the course attenders
+			c.setAttenders(course.getAttenders());
+			//Saving the modified course
+			courseRepository.save(c);
+			return new ResponseEntity<>(c.getAttenders(), HttpStatus.OK);
 		}
-		
-		userRepository.save(courseAttenders);
-		
-		//Modifying the course attenders
-		c.setAttenders(course.getAttenders());
-		//Saving the modified course
-		courseRepository.save(c);
-		return new ResponseEntity<>(c.getAttenders(), HttpStatus.OK);
-	}
-	
-	
-	//Login checking method for the backend
-	private ResponseEntity<Object> checkBackendLogged(){
-		if (!user.isLoggedUser()) {
-			System.out.println("Not user logged");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return null; 
-	}
-	
-	//Authorization checking for editing and deleting courses (the teacher must own the Course)
-	private ResponseEntity<Object> checkAuthorization(Object o, User u){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
-		if(!this.user.getLoggedUser().equals(u)){
-			//The teacher is not authorized to edit it if he is not its owner
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 	
 	//Checks if a User collection contains a user with certain email

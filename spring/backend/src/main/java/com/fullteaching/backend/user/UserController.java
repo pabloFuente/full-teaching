@@ -23,6 +23,7 @@ import org.json.simple.parser.JSONParser;
 
 import com.fullteaching.backend.user.UserRepository;
 import com.fullteaching.backend.user.UserComponent;
+import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.user.User;
 
 
@@ -35,6 +36,9 @@ public class UserController {
 	
 	@Autowired
 	private UserComponent user;
+	
+	@Autowired
+	private AuthorizationService authorizationService;
 	
     @Value("${recaptcha_private_key}")
     private String recaptchaPrivateKey;
@@ -88,11 +92,14 @@ public class UserController {
 	
 	//userData: [oldPassword, newPassword]
 	@RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
-	public ResponseEntity<Boolean> changePassword(@RequestBody String[] userData) {
+	public ResponseEntity<Object> changePassword(@RequestBody String[] userData) {
 		
 		System.out.println("Changing password...");
 		
-		this.checkBackendLogged();
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -155,15 +162,6 @@ public class UserController {
 		JSONObject json = (JSONObject) parser.parse(response.toString());
 		
 		return (boolean) json.get("success");
-	}
-	
-	//Login checking method for the backend
-	private ResponseEntity<Object> checkBackendLogged(){
-		if (!user.isLoggedUser()) {
-			System.out.println("Not user logged");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		return null; 
 	}
 
 }

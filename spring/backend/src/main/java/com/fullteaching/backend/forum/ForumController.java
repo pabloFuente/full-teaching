@@ -9,24 +9,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.coursedetails.CourseDetails;
 import com.fullteaching.backend.coursedetails.CourseDetailsRepository;
-import com.fullteaching.backend.user.User;
+import com.fullteaching.backend.security.AuthorizationService;
 
 @RestController
 @RequestMapping("/api-forum")
 public class ForumController {
 	
 	@Autowired
-	private UserComponent user;
+	private AuthorizationService authorizationService;
 	
 	@Autowired
 	private CourseDetailsRepository courseDetailsRepository;
 	
 	@RequestMapping(value = "/edit/{courseDetailsId}", method = RequestMethod.PUT)
-	public ResponseEntity<Boolean> modifyForum(@RequestBody boolean activated, @PathVariable(value="courseDetailsId") String courseDetailsId) {
-		this.checkBackendLogged();
+	public ResponseEntity<Object> modifyForum(@RequestBody boolean activated, @PathVariable(value="courseDetailsId") String courseDetailsId) {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_i = -1;
 		try{
@@ -37,36 +40,17 @@ public class ForumController {
 
 		CourseDetails cd = courseDetailsRepository.findOne(id_i);
 		
-		checkAuthorization(cd, cd.getCourse().getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(cd, cd.getCourse().getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		//Modifying the forum
-		cd.getForum().setActivated(activated);
-		//Saving the modified course
-		courseDetailsRepository.save(cd);
-		return new ResponseEntity<>(new Boolean(activated), HttpStatus.OK);
-	}
-	
-	
-	//Login checking method for the backend
-	private ResponseEntity<Object> checkBackendLogged(){
-		if (!user.isLoggedUser()) {
-			System.out.println("Not user logged");
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			//Modifying the forum
+			cd.getForum().setActivated(activated);
+			//Saving the modified course
+			courseDetailsRepository.save(cd);
+			return new ResponseEntity<>(new Boolean(activated), HttpStatus.OK);
 		}
-		return null; 
-	}
-	
-	//Authorization checking for editing and deleting courses (the teacher must own the Course)
-	private ResponseEntity<Object> checkAuthorization(Object o, User u){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
-		if(!this.user.getLoggedUser().equals(u)){
-			//The teacher is not authorized to edit it if he is not its owner
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 
 }

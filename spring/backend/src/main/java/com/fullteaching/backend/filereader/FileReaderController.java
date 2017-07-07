@@ -28,8 +28,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.CourseRepository;
+import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.user.User;
-import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
 
 @RestController
@@ -49,17 +49,22 @@ public class FileReaderController {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private UserComponent user;
+	private AuthorizationService authorizationService;
 	
 	FileReader fileReader = new FileReader();
 	
 	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "files");
 
 	@RequestMapping(value = "/upload/course/{courseId}", method = RequestMethod.POST)
-	public ResponseEntity<AddAttendersByFileResponse> handleFileReaderUpload(
+	public ResponseEntity<Object> handleFileReaderUpload(
 			MultipartHttpServletRequest request,
 			@PathVariable(value="courseId") String courseId
 		) throws IOException {
+		
+		ResponseEntity<Object> authorized = authorizationService.checkBackendLogged();
+		if (authorized != null){
+			return authorized;
+		};
 		
 		long id_course = -1;
 		try {
@@ -70,36 +75,40 @@ public class FileReaderController {
 		
 		Course c = courseRepository.findOne(id_course);
 		
-		checkAuthorization(c, c.getTeacher());
+		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
+		if (teacherAuthorized != null) { // If the user is not the teacher of the course
+			return teacherAuthorized;
+		} else {
 		
-		Iterator<String> i = request.getFileNames();
-		while (i.hasNext()) {
-			String name = i.next();
-			MultipartFile file = request.getFile(name);
-			
-			if (file.isEmpty()) {
-				throw new RuntimeException("The file is empty");
+			Iterator<String> i = request.getFileNames();
+			while (i.hasNext()) {
+				String name = i.next();
+				MultipartFile file = request.getFile(name);
+				
+				if (file.isEmpty()) {
+					throw new RuntimeException("The file is empty");
+				}
+		
+				if (!Files.exists(FILES_FOLDER)) {
+					Files.createDirectories(FILES_FOLDER);
+				}
+				
+				String fileName = file.getOriginalFilename();
+				File uploadedFile = new File(FILES_FOLDER.toFile(), fileName);
+				
+				file.transferTo(uploadedFile);
+				
+				try {
+					AddAttendersByFileResponse response = this.addAttendersFromFile(c, this.fileReader.parseToPlainText(uploadedFile));
+					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
+					return new ResponseEntity<>(response, HttpStatus.OK);
+				} catch (Exception e) {
+					this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
+					e.printStackTrace();
+				}
 			}
-	
-			if (!Files.exists(FILES_FOLDER)) {
-				Files.createDirectories(FILES_FOLDER);
-			}
-			
-			String fileName = file.getOriginalFilename();
-			File uploadedFile = new File(FILES_FOLDER.toFile(), fileName);
-			
-			file.transferTo(uploadedFile);
-			
-			try {
-				AddAttendersByFileResponse response = this.addAttendersFromFile(c, this.fileReader.parseToPlainText(uploadedFile));
-				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
-				return new ResponseEntity<>(response, HttpStatus.OK);
-			} catch (Exception e) {
-				this.deleteLocalFile(uploadedFile.getName(), FILES_FOLDER);
-				e.printStackTrace();
-			}
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
 	private AddAttendersByFileResponse addAttendersFromFile(Course c, String s){
@@ -179,19 +188,6 @@ public class FileReaderController {
 		    // File permission problems are caught here
 		    System.err.println(x);
 		}
-	}
-	
-	//Authorization checking for editing and deleting courses (the teacher must own the Course)
-	private ResponseEntity<Object> checkAuthorization(Object o, User u){
-		if(o == null){
-			//The object does not exist
-			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-		}
-		if(!this.user.getLoggedUser().equals(u)){
-			//The teacher is not authorized to edit it if he is not its owner
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); 
-		}
-		return null;
 	}
 	
 }
