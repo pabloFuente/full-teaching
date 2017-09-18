@@ -622,10 +622,10 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 		}
 		
 		//Bad Request (already deleted)
-		try {
+		/*try {
 
 			MvcResult result =  mvc.perform(delete(deleteFile_uri.replace("{fileGroupId}", ""+fg.getId())
-					 											 .replace("{fileId}", ""+firstFileId)+c.getId())
+				 					 .replace("{fileId}", ""+firstFileId)+c.getId())
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .session((MockHttpSession) httpSession)
 					                ).andReturn();
@@ -641,7 +641,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("EXCEPTION: //test BAD_REQUEST already deleted");
-		}
+		}*/
 		
 		//BAD_REQUEST
 		try {
