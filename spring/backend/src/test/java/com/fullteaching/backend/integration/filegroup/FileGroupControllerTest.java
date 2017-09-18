@@ -640,7 +640,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("EXCEPTION: //test BAD_REQUEST");
+			fail("EXCEPTION: //test BAD_REQUEST already deleted");
 		}
 		
 		//BAD_REQUEST
@@ -682,7 +682,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("EXCEPTION: //test OK");
+			fail("EXCEPTION: //test UNAUTHORIZED");
 		}
 		
 	}
