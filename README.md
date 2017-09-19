@@ -1,32 +1,40 @@
-[![][ElasTest Logo]][ElasTest]
+# FullTeaching
 
-Copyright © 2017-2019 [ElasTest]. Licensed under [Apache 2.0 License].
+[![Build Status](https://travis-ci.org/pabloFuente/full-teaching.png?branch=master)](https://travis-ci.org/pabloFuente/full-teaching)
 
-FullTeaching - Demonstrator for ElasTest - WebRTC
-==============================
-
-What is ElasTest
------------------
-
-This repository is part of [ElasTest], which is an open source elastic platform
-aimed to simplify end-to-end testing. ElasTest platform is based on three
-principles: i) Test orchestration: Combining intelligently testing units for
-creating a more complete test suite following the “divide and conquer” principle.
-ii) Instrumentation and monitoring: Customizing the SuT (Subject under Test)
-infrastructure so that it reproduces real-world operational behavior and allowing
-to gather relevant information during testing. iii) Test recommendation: Using machine
-learning and cognitive computing for recommending testing actions and providing
-testers with friendly interactive facilities for decision taking.
-
-What is FullTeaching?
-----------------
-FullTeaching is an educational web application to make online classes easy for teachers as well as students. It has been developed by Pablo Fuente under [Apache 2.0 License]. You can find the complete description of the project in the original repository https://github.com/pabloFuente/full-teaching. 
-
-Why has been selected as a Demonstrator for the ElasTest project?
-----------------
-Fullteaching has been selected as a Demonstrator for the ElasTest project because of it usage of [OpenVidu] and completeness of its features.
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/presentation.png?raw=true"/></p>
 
 
+## What is FullTeaching?
+FullTeaching is an educational web application to make online classes easy for teachers as well as students. Its current main features are the following:
+
+- Teachers can create all the **courses** they want and easily invite their students. Every user will see their courses and sessions well ordered on their dashboards.
+
+- Teachers can stablish an unlimited number of **classes** for each course, indicating the content and date for each one of them.
+
+- A **calendar** view is provided in order to check all your classes at a glance.
+
+- Every course has a **forum** where the users can open entries, write comments and reply others so they can share doubts and knowledge.
+
+- Teachers have an advanced system for attaching **files** to a course. They can customize groups of files, name them as they want and reorder them at any moment. The uploading process has been greatly simplified.
+
+*Dashboard: all your courses and your calendar*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/dashboard.png?raw=true"/></p>
+
+*Calendar: here you have all your sessions, with direct access to their specific course*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/calendar.png?raw=true"/></p>
+
+*Classes: ordered by date, teachers can easily add new ones and modify existing ones*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/sessions.png?raw=true"/></p>
+
+*Forum: unlimited entries for posting all your questions*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/forum.png?raw=true"/></p>
+
+*Files: advanced tree structure to keep all the course's files clear and tidy*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/files.png?raw=true"/></p>
+
+*Adding students to the course is as simple as pasting their emails. FullTeaching will automatically do the rest*
+<p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/addattedners.png?raw=true"/></p>
 
 # Quick start guide
 
@@ -129,10 +137,3 @@ Go to `http://localhost:5000/` and there you have it! Every time you modify the 
   - You may have to change permissions in order to execute the scripts.
 
 *These instructions have been tested for Ubuntu 14.04*
-
-[Apache 2.0 License]: http://www.apache.org/licenses/LICENSE-2.0
-[ElasTest]: http://elastest.io/
-[ElasTest Logo]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[ElasTest Twitter]: https://twitter.com/elastestio
-[GitHub ElasTest Group]: https://github.com/elastest
-[OpenVidu]: http://openvidu.io/
