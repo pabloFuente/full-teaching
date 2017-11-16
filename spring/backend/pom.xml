@@ -1,174 +1,246 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.fullteaching</groupId>
-  <artifactId>full-teaching</artifactId>
-  <version>0.5-SNAPSHOT</version>
-  <packaging>war</packaging>
+	<groupId>com.fullteaching</groupId>
+	<artifactId>full-teaching</artifactId>
+	<version>0.5-SNAPSHOT</version>
+	<packaging>war</packaging>
 
-  <name>backend</name>
-  <url>http://maven.apache.org</url>
-  
-  <parent>
+	<name>backend</name>
+	<url>http://maven.apache.org</url>
+
+	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.1.RELEASE</version>
 	</parent>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-  </properties>
-  
-  <build>
-  
-  	<finalName>${project.artifactId}-${project.version}</finalName>
-  
-  	<plugins>
-  	
-	    <plugin>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-maven-plugin</artifactId>
-	        
-	        <!-- ONLY ON DEVELOPMENT -->
-	        <dependencies>
-            	<dependency>
-                	<groupId>org.springframework</groupId>
-                	<artifactId>springloaded</artifactId>
-                	<version>1.2.6.RELEASE</version>
-            	</dependency>
-        	</dependencies>
-        	<!-- ONLY ON DEVELOPMENT -->
-        	
-	    </plugin>
-	 
-	    <plugin>
-		    <groupId>com.spotify</groupId>
-		    <artifactId>docker-maven-plugin</artifactId>
-		    <version>0.4.13</version>
-		    <configuration>
-		        <imageName>pablofuente/${project.artifactId}</imageName>
-		        <imageTags>
-		           <imageTag>latest</imageTag>
-		        </imageTags>
-		        <serverId>docker-hub</serverId>
-		        <dockerDirectory>src/main/docker</dockerDirectory>
-		        <resources>
-		            <resource>
-		                <targetPath>/</targetPath>
-		                <directory>${project.build.directory}</directory>
-		                <include>${project.build.finalName}.war</include>
-		            </resource>
-		            <resource>
-			        	<targetPath>/</targetPath>
-			        	<directory>src/main/docker</directory>
-			        	<include>init.sh</include>
-			      	</resource>
-		        </resources>
-		    </configuration>
-		</plugin>
-		
-		<plugin>
-	        <artifactId>maven-war-plugin</artifactId>
-	        <configuration>
-	            <webResources>
-	                <resource>
-	                    <directory>src/main/ebextensions</directory>
-	                    <targetPath>.ebextensions</targetPath>
-	                    <filtering>true</filtering>
-	                </resource>
-	            </webResources>
-	        </configuration>
-	    </plugin>
-	    
-   	</plugins>
-   </build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
 
-  <dependencies>
-  
-  	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-data-jpa</artifactId>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-security</artifactId>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-devtools</artifactId>
-	</dependency>
- 
-	<!-- Tests dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<!-- Test dependencies version -->
+		<junit.jupiter.version>5.0.0</junit.jupiter.version>
+		<junit.platform.version>1.0.0</junit.platform.version>
+		<selenium-jupiter.version>1.1.2</selenium-jupiter.version>
+		<slf4j.version>1.7.25</slf4j.version>
+	</properties>
 
-    	<dependency>
-    		<groupId>mysql</groupId>
-	 	<artifactId>mysql-connector-java</artifactId>
-	</dependency>
-	
-	<dependency>
-	    <groupId>commons-validator</groupId>
-	    <artifactId>commons-validator</artifactId>
-	    <version>1.5.1</version>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-websocket</artifactId>
-	</dependency>
-	
-	
-    <!-- Read files -->
-    <dependency>
-	    <groupId>org.apache.tika</groupId>
-	    <artifactId>tika-core</artifactId>
-	    <version>1.14</version>
-	</dependency>
-	
-	<dependency>
-	    <groupId>org.apache.tika</groupId>
-	    <artifactId>tika-parsers</artifactId>
-	    <version>1.14</version>
-	</dependency>
-   	<!-- Read files -->
-   	
-   	
-	<!--ONLY ON PRODUCTION-->
-	<dependency>
-	    <groupId>com.amazonaws</groupId>
-	    <artifactId>aws-java-sdk</artifactId>
-	    <version>1.11.60</version>
-	</dependency>
-	<!--ONLY ON PRODUCTION-->
-	
-	<dependency>
-    	<groupId>io.openvidu</groupId>
-  		<artifactId>openvidu-java-client</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-		 
-  </dependencies>
+	<build>
+
+		<finalName>${project.artifactId}-${project.version}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+
+				<!-- ONLY ON DEVELOPMENT -->
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.6.RELEASE</version>
+					</dependency>
+				</dependencies>
+				<!-- ONLY ON DEVELOPMENT -->
+
+			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
+				<configuration>
+					<imageName>pablofuente/${project.artifactId}</imageName>
+					<imageTags>
+						<imageTag>latest</imageTag>
+					</imageTags>
+					<serverId>docker-hub</serverId>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.war</include>
+						</resource>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>src/main/docker</directory>
+							<include>init.sh</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/ebextensions</directory>
+							<targetPath>.ebextensions</targetPath>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+
+		<!-- Read files -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<!-- Read files -->
+
+
+		<!--ONLY ON PRODUCTION -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.60</version>
+		</dependency>
+		<!--ONLY ON PRODUCTION -->
+
+		<dependency>
+			<groupId>io.openvidu</groupId>
+			<artifactId>openvidu-java-client</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>selenium-jupiter</artifactId>
+			<version>${selenium-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>1.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-chrome-driver</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>21.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<version>1.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 </project>

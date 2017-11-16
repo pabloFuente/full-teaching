@@ -447,7 +447,7 @@ export class VideoSessionComponent implements OnInit {
   }
 
   joinSession() {
-    this.OV = new OpenVidu(environment.OPENVIDU_URL);
+    this.OV = new OpenVidu();
     this.OVSession = this.OV.initSession(this.OVSessionId);
 
     this.OVSession.on('streamCreated', (event) => {
