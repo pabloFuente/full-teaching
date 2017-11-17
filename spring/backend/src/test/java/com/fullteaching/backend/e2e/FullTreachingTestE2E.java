@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.junit.platform.runner.JUnitPlatform;
+import org.junit.After;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -53,7 +54,7 @@ import io.github.bonigarcia.wdm.FirefoxDriverManager;
 @DisplayName("E2E tests for OpenVidu TestApp")
 @ExtendWith(SeleniumExtension.class)
 @RunWith(JUnitPlatform.class)
-public class OpenViduTestAppE2eTest {
+public class FullTreachingTestE2E {
 
 	static String OPENVIDU_SECRET = "MY_SECRET";
 	static String OPENVIDU_URL = "https://localhost:8443/";

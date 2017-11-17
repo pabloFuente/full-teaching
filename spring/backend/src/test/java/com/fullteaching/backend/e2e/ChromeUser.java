@@ -17,7 +17,6 @@
 
 package com.fullteaching.backend.e2e;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.core.io.ClassPathResource;
 
 public class ChromeUser extends BrowserUser {
 
@@ -39,15 +37,7 @@ public class ChromeUser extends BrowserUser {
 		options.addArguments("--use-fake-device-for-media-stream");
 		// This flag selects the entire screen as video source when screen sharing
 		options.addArguments("--auto-select-desktop-capture-source=Entire screen");
-		
-		try {
-			// Add Screen Sharing extension
-			options.addExtensions(new ClassPathResource("ScreenCapturing.crx").getFile());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		
 		String eusApiURL = System.getenv("ET_EUS_API");
 		
 		if(eusApiURL == null) {
