@@ -39,11 +39,11 @@ public class VideoSessionController {
 	String SECRET;
 	String URL;
 	
-    @Autowired
-	public VideoSessionController(@Value("${openvidu.url}") String openviduUrl,	@Value("${openvidu.secret}") String secret){
-    	this.SECRET = secret;
-    	this.URL = openviduUrl;
-		this.openVidu = new OpenVidu(openviduUrl, secret);
+	public VideoSessionController() {
+    	this.SECRET = System.getenv("openvidu.secret") != null ? System.getenv("openvidu.secret") : "MY_SECRET";
+    	this.URL = System.getenv("openvidu.url") != null ? System.getenv("openvidu.url") : "https://localhost:8443/";
+    	System.out.println(" ------------ OPENVIDU_URL ---------------- : " + this.URL);
+		this.openVidu = new OpenVidu(this.URL, this.SECRET);
 	}
 	
 	@RequestMapping(value = "/get-sessionid-token/{id}", method = RequestMethod.GET)
