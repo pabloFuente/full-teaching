@@ -54,7 +54,7 @@ import io.github.bonigarcia.wdm.FirefoxDriverManager;
 @DisplayName("E2E tests for OpenVidu TestApp")
 @ExtendWith(SeleniumExtension.class)
 @RunWith(JUnitPlatform.class)
-public class FullTreachingTestE2E {
+public class FullTeachingTestE2E {
 
 	static String OPENVIDU_SECRET = "MY_SECRET";
 	static String OPENVIDU_URL = "https://localhost:8443/";
