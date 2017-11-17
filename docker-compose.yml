@@ -18,6 +18,7 @@ services:
       - KMS_STUN_IP=stun.l.google.com
       - KMS_STUN_PORT=19302
       - openvidu.secret=MY_SECRET
+      - openvidu.publicurl=https://full-teaching-openvidu-server-kms:8443
 
   full-teaching:
     image: pablofuente/full-teaching

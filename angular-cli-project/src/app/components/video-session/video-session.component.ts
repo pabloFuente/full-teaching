@@ -95,7 +95,8 @@ export class VideoSessionComponent implements OnInit {
     this.getParamsAndJoin();
 
     let wsUri = environment.CHAT_URL;
-    this.websocket = new WebSocket(wsUri);
+    //this.websocket = new WebSocket(wsUri);
+    this.websocket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/chat")
 
     this.websocket.onopen = (event: Event) => { // Connection is open
       // New welcome chat line
