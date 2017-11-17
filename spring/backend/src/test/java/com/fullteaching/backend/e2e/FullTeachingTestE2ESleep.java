@@ -277,6 +277,20 @@ public class FullTeachingTestE2ESleep {
 			e.printStackTrace();
 		}
 	    
+	    // Teacher removes user
+	    user.getWaiter().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'usr-btn')]")));
+	    user.getDriver().findElement(By.xpath("//a[contains(@class, 'usr-btn')]")).click();
+	    
+	    // Wait until only one video
+	    user.getWaiter().until(ExpectedConditions.not(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(("div.participant-small video")))));
+	    student.getWaiter().until(ExpectedConditions.not(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(("div.participant-small video")))));
+	    
+	    try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
 	    // Logout student
 	    this.logut(student);
 		student.dispose();
