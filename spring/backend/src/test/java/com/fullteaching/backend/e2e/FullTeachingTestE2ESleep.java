@@ -102,20 +102,22 @@ public class FullTeachingTestE2ESleep {
 		log.info("Using secret {} to connect to openvidu-server", OPENVIDU_SECRET);
 	}
 
-	void setupBrowser(String browser) {
+	BrowserUser setupBrowser(String browser) {
+		
+		BrowserUser u;
 		
 		switch (browser) {
 			case "chrome":
-				this.user = new ChromeUser("TestUser", 50);
+				u = new ChromeUser("TestUser", 50);
 				break;
 			case "firefox":
-				this.user = new FirefoxUser("TestUser", 50);
+				u = new FirefoxUser("TestUser", 50);
 				break;
 			default:
-				this.user = new ChromeUser("TestUser", 50);
+				u = new ChromeUser("TestUser", 50);
 		}
 
-		user.getDriver().get(APP_URL);
+		u.getDriver().get(APP_URL);
 		
 		final String GLOBAL_JS_FUNCTION = 
 				"var s = window.document.createElement('script');"
@@ -127,7 +129,9 @@ public class FullTeachingTestE2ESleep {
 				+ "console.error(\"ERRRRORRRR!!!!\")}';"
 				+ "window.document.head.appendChild(s);";
 		
-		user.runJavascript(GLOBAL_JS_FUNCTION);
+		u.runJavascript(GLOBAL_JS_FUNCTION);
+		
+		return u;
 	}
 
 	@AfterEach
@@ -142,10 +146,12 @@ public class FullTeachingTestE2ESleep {
 	@DisplayName("Test video session")
 	void oneToOneVideoAudioSessionChrome() throws Exception {
 		
+		// TEACHER
+		
 		final String userEmail = "teacher@gmail.com";
 		final String userPass = "pass";
 		
-		setupBrowser("chrome");
+		this.user = setupBrowser("chrome");
 
 		log.info("Test video session");
 		
@@ -192,6 +198,88 @@ public class FullTeachingTestE2ESleep {
 		}
 	    
 	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant video"))), "div.participant");
+	    
+	    
+	    // STUDENT
+	    
+		BrowserUser student = setupBrowser("chrome");
+		login(student, "student1@gmail.com", "pass");
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+		student.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("ul.collection li.collection-item:first-child div.course-title"))));
+		student.getDriver().findElement(By.cssSelector("ul.collection li.collection-item:first-child div.course-title")).click();
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    student.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("#md-tab-label-0-1"))));
+	    student.getDriver().findElement(By.cssSelector("#md-tab-label-0-1")).click();
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    student.getDriver().findElement(By.cssSelector("ul div:first-child li.session-data div.session-ready")).click();
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    student.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    checkVideoPlaying(student, student.getDriver().findElement(By.cssSelector(("div.participant video"))), "div.participant");
+	    
+	    
+	    // Student ask for intervention
+	    student.getWaiter().until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='div-header-buttons']//i[text() = 'record_voice_over']")));
+	    student.getDriver().findElement(By.xpath("//div[@id='div-header-buttons']//i[text() = 'record_voice_over']")).click();
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    // Teacher accepts intervention
+	    user.getWaiter().until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'usr-btn')]")));
+	    user.getDriver().findElement(By.xpath("//a[contains(@class, 'usr-btn')]")).click();
+	    
+	    // Check both videos
+	    student.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant-small video"))));
+	    checkVideoPlaying(student, student.getDriver().findElement(By.cssSelector(("div.participant-small video"))), "div.participant-small");
+	    checkVideoPlaying(student, student.getDriver().findElement(By.cssSelector(("div.participant-small video"))), "div.participant-small");
+	    
+	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant-small video"))));
+	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant-small video"))), "div.participant-small");
+	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant-small video"))), "div.participant-small");
+	    
+	    try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    // Logout student
+	    this.logut(student);
+		student.dispose();
 
 	}
 
