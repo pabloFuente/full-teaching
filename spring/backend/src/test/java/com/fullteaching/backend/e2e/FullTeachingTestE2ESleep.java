@@ -150,18 +150,46 @@ public class FullTeachingTestE2ESleep {
 		log.info("Test video session");
 		
 		this.login(user, userEmail, userPass);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    
 	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("ul.collection li.collection-item:first-child div.course-title"))));
 	    user.getDriver().findElement(By.cssSelector("ul.collection li.collection-item:first-child div.course-title")).click();
 	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
 	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("#md-tab-label-0-1"))));
 	    user.getDriver().findElement(By.cssSelector("#md-tab-label-0-1")).click();
 	    
-	    Thread.sleep(600000);
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    
 	    user.getDriver().findElement(By.cssSelector("ul div:first-child li.session-data div.session-ready")).click();
 	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
 	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	    
 	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant video"))), "div.participant");
 
@@ -250,7 +278,21 @@ public class FullTeachingTestE2ESleep {
 
 	    // Fill input fields
 	    userNameField.sendKeys(userEmail);
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	    
+	    
 	    userPassField.sendKeys(userPass);
+	    
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 	    // Ensure fields contain what has been entered
 	    Assert.assertEquals(userNameField.getAttribute("value"), userEmail);
@@ -284,6 +326,11 @@ public class FullTeachingTestE2ESleep {
 		    watiForAngularAnimations(250);
 		    user.getWaiter().until(ExpectedConditions.elementToBeClickable(By.xpath("//ul[@id='nav-mobile']//a[text() = 'Logout']")));
 		    user.getDriver().findElement(By.xpath("//ul[@id='nav-mobile']//a[text() = 'Logout']")).click();
+		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		user.getWaiter().until(ExpectedConditions.elementToBeClickable(By.id("download-button")));
 	}
