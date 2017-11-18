@@ -481,7 +481,7 @@ export class VideoSessionComponent implements OnInit {
           if (this.authenticationService.isTeacher()) {
             this.OVPublisher = this.OV.initPublisher('nothing');
           } else {
-            this.OVPublisher = this.OV.initPublisher('nothing', {audio:false, video:false});
+            this.OVPublisher = this.OV.initPublisher('nothing', {audioActive:false, videoActive:false});
           }
           this.OVPublisher.on('accessAllowed', (event) => {
             console.warn("ACCESS ALLOWED");
