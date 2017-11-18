@@ -11,7 +11,7 @@ services:
       - MYSQL_PASSWORD=pass
 
   full-teaching-openvidu-server-kms:
-    image: openvidu/openvidu-server-kms:1.1.0
+    image: openvidu/openvidu-server-kms:1.1.1
     expose:
       - 8443
     environment:
