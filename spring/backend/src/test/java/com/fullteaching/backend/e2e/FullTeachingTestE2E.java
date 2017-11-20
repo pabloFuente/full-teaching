@@ -71,13 +71,6 @@ public class FullTeachingTestE2E {
 			ChromeDriverManager.getInstance().setup();
 			FirefoxDriverManager.getInstance().setup();	
 		}
-
-		String appIp = System.getenv("APP_IP");
-		if (appIp != null) {
-			//Be sure that protocol is http
-			appIp = appIp.replace("http://", "https://");
-			APP_URL = appIp;
-		}
 		
 		String appUrl = getProperty("app.url");
 		if (appUrl != null) {
