@@ -145,7 +145,7 @@ public class FullTeachingTestE2E {
 
 		System.out.println("-------------------- WAITING ------------------------");
 
-		Thread.sleep(180000);
+		Thread.sleep(5000);
 	    
 	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
 	    
