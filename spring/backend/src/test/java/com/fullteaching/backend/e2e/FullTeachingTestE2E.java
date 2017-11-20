@@ -133,7 +133,7 @@ public class FullTeachingTestE2E {
 		
 		String brow = System.getenv("browser");
 		
-		if (brow.equals("chrome") || brow.equals("firefox")) {
+		if (brow != null && (brow.equals("chrome") || brow.equals("firefox"))) {
 			setupBrowser(brow);
 		} else {
 			setupBrowser("chrome");
