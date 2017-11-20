@@ -160,6 +160,8 @@ public class FullTeachingTestE2E {
 	    user.getDriver().findElement(By.cssSelector("ul div:first-child li.session-data div.session-ready")).click();
 	    
 	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
+
+		Thread.sleep(180000);
 	    
 	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant video"))), "div.participant");
 
