@@ -17,9 +17,15 @@
 
 package com.fullteaching.backend.e2e;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class FirefoxUser extends BrowserUser {
 
@@ -32,13 +38,27 @@ public class FirefoxUser extends BrowserUser {
 
 		// This flag avoids granting the access to the camera
 		profile.setPreference("media.navigator.permission.disabled", true);
-		// This flag force to use fake user media (synthetic video of multiple
-		// color)
+		// This flag force to use fake user media (synthetic video of multiple color)
 		profile.setPreference("media.navigator.streams.fake", true);
 
 		capabilities.setCapability(FirefoxDriver.PROFILE, profile);
-
-		this.driver = new FirefoxDriver(capabilities);
+		
+		String eusApiURL = System.getenv("ET_EUS_API");
+		
+		if(eusApiURL == null) {
+			this.driver = new FirefoxDriver(capabilities);
+		} else {
+			try {
+				capabilities.setBrowserName("firefox");
+				
+		        this.driver = new RemoteWebDriver(new URL(eusApiURL),  capabilities);
+		        				
+			} catch (MalformedURLException e) {
+				throw new RuntimeException("Exception creaing eusApiURL",e);
+			}
+		}
+		
+		this.driver.manage().timeouts().setScriptTimeout(this.timeOfWaitInSeconds, TimeUnit.SECONDS);
 		
 		this.configureDriver();
 	}
