@@ -56,9 +56,7 @@ import io.github.bonigarcia.wdm.FirefoxDriverManager;
 @RunWith(JUnitPlatform.class)
 public class FullTeachingTestE2E {
 
-	static String OPENVIDU_SECRET = "MY_SECRET";
-	static String OPENVIDU_URL = "https://localhost:8443/";
-	static String APP_URL = "https://localhost:5000/";
+	static String APP_URL = "https://172.17.0.1:5000/";
 	static Exception ex = null;
 	
 	final static Logger log = getLogger(lookup().lookupClass());
@@ -79,7 +77,6 @@ public class FullTeachingTestE2E {
 			//Be sure that protocol is http
 			appIp = appIp.replace("http://", "https://");
 			APP_URL = appIp;
-			OPENVIDU_URL = appIp;
 		}
 		
 		String appUrl = getProperty("app.url");
@@ -89,17 +86,6 @@ public class FullTeachingTestE2E {
 		
 		log.info("Using URL {} to connect to openvidu-testapp", APP_URL);
 
-		String openviduUrl = getProperty("openvidu.url");
-		if (openviduUrl != null) {
-			OPENVIDU_URL = openviduUrl;
-		}
-		log.info("Using URL {} to connect to openvidu-server", OPENVIDU_URL);
-
-		String openvidusecret = getProperty("openvidu.secret");
-		if (openvidusecret != null) {
-			OPENVIDU_SECRET = openvidusecret;
-		}
-		log.info("Using secret {} to connect to openvidu-server", OPENVIDU_SECRET);
 	}
 
 	void setupBrowser(String browser) {
@@ -145,7 +131,13 @@ public class FullTeachingTestE2E {
 		final String userEmail = "teacher@gmail.com";
 		final String userPass = "pass";
 		
-		setupBrowser("chrome");
+		String brow = System.getenv("browser");
+		
+		if (brow.equals("chrome") || brow.equals("firefox")) {
+			setupBrowser(brow);
+		} else {
+			setupBrowser("chrome");
+		}
 
 		log.info("Test video session");
 		
