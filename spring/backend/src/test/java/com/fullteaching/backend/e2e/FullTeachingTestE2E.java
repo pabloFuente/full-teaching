@@ -158,10 +158,12 @@ public class FullTeachingTestE2E {
 	    user.getDriver().findElement(By.cssSelector("#md-tab-label-0-1")).click();
 	    
 	    user.getDriver().findElement(By.cssSelector("ul div:first-child li.session-data div.session-ready")).click();
-	    
-	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
+
+		System.out.println("-------------------- WAITING ------------------------");
 
 		Thread.sleep(180000);
+	    
+	    user.getWaiter().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(("div.participant video"))));
 	    
 	    checkVideoPlaying(user, user.getDriver().findElement(By.cssSelector(("div.participant video"))), "div.participant");
 
