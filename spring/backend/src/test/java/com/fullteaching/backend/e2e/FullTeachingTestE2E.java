@@ -56,7 +56,7 @@ import io.github.bonigarcia.wdm.FirefoxDriverManager;
 @RunWith(JUnitPlatform.class)
 public class FullTeachingTestE2E {
 
-	static String APP_URL = "https://172.17.0.1:5000/";
+	static String APP_URL = "https://localhost:5000/";
 	static Exception ex = null;
 	
 	final static Logger log = getLogger(lookup().lookupClass());
@@ -72,9 +72,8 @@ public class FullTeachingTestE2E {
 			FirefoxDriverManager.getInstance().setup();	
 		}
 		
-		String appUrl = getProperty("app.url");
-		if (appUrl != null) {
-			APP_URL = appUrl;
+		if (System.getenv("ET_SUT_HOST") != null) {
+			APP_URL = "https://" + System.getenv("ET_SUT_HOST") + ":5000/";
 		}
 		
 		log.info("Using URL {} to connect to openvidu-testapp", APP_URL);
