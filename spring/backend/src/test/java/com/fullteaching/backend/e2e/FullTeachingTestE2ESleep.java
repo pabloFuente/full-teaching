@@ -179,7 +179,7 @@ public class FullTeachingTestE2ESleep {
 	    
 	    // STUDENT
 	    
-		BrowserUser student = setupBrowser("firefox");
+		BrowserUser student = setupBrowser("chrome");
 		login(student, "student1@gmail.com", "pass");
 		
 		try {
