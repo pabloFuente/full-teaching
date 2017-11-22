@@ -58,7 +58,7 @@ public class BrowserUser {
 	}
 
 	public void dispose() {
-		this.driver.close();
+		this.driver.quit();
 	}
 	
 	public Object runJavascript(String script, Object... args) {
