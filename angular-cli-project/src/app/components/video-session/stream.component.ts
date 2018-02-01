@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges, SimpleChange } from '@angular/core';
 import { Stream, Session } from 'openvidu-browser';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -8,10 +8,13 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   template: `
         <div class='participant' [class.participant-small]="this.small">
           <div *ngIf="this.stream" class="name-div"><p class="name-p">{{this.getName()}}</p></div>
-          <video autoplay="true" [src]="videoSrc"></video>
+          <video #videoElement autoplay="true" [muted]="this.muted"></video>
         </div>`
 })
 export class StreamComponent {
+
+  @ViewChild('videoElement') elementRef: ElementRef;
+  videoElement: HTMLVideoElement;
 
   @Input()
   stream: Stream;
@@ -19,31 +22,27 @@ export class StreamComponent {
   @Input()
   small: boolean;
 
-  videoSrc: SafeUrl;
+  @Input()
+  muted: boolean;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.setInterval();
-    //this.stream.addEventListener('src-added', () => {
-    //    this.video.src = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.stream.getWrStream())).toString();
-    //});
+  ngAfterViewInit() { // Get HTMLVideoElement from the view
+    this.videoElement = this.elementRef.nativeElement;
   }
 
-  ngOnChanges() {
-    this.setInterval();
+  ngOnChanges(changes: SimpleChanges) { // Listen to 'muted' property changes
+    if (changes['muted']) {
+      this.muted = changes['muted'].currentValue;
+      console.warn("Small: " + this.small + " | Muted: " + this.muted);
+    }
   }
 
-  setInterval() {
-    let int = setInterval(() => {
-      if (this.stream && this.stream.getWrStream()) {
-        this.videoSrc = this.sanitizer.bypassSecurityTrustUrl(
-          URL.createObjectURL(this.stream.getWrStream()));
-        console.warn("Video tag src = " + this.videoSrc);
-        console.warn(this.stream);
-        clearInterval(int);
-      }
-    }, 1000);
+  ngDoCheck() { // Detect any change in 'stream' property (specifically in its 'srcObject' property)
+    if (this.videoElement && this.stream && (this.videoElement.srcObject !== this.stream.getMediaStream())) {
+      this.videoElement.srcObject = this.stream.getMediaStream();
+      console.warn("Stream updated");
+    }
   }
 
   getName() {

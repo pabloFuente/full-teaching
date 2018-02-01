@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -84,10 +84,16 @@ export class VideoSessionComponent implements OnInit {
 
     // Stablishing OpenVidu session
     this.generateParticipantInfo();
-    window.onbeforeunload = () => {
-      this.removeUser();
-      this.leaveSession();
-    }
+  }
+
+  @HostListener('window:beforeunload')
+  beforeunloadHandler() {
+    this.removeUser();
+    this.leaveSession();
+  }
+
+  ngAfterViewInit() {
+    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
   }
 
   ngOnInit() {
@@ -216,6 +222,7 @@ export class VideoSessionComponent implements OnInit {
             this.streamIndexSmall = this.getStreamIndexByName(this.teacherName);
           } else {
             this.streamIndex = this.getStreamIndexByName(this.teacherName);
+            this.studentAccessGranted = false;
           }
         }
       }
@@ -249,6 +256,8 @@ export class VideoSessionComponent implements OnInit {
     this.leaveSession();
     // Delete the dark overlay (if side menu opened) when the component is destroyed
     $("#sidenav-overlay").remove();
+
+    document.getElementsByTagName('body')[0].style.overflowY = 'initial';
   }
 
   sendMessage() {

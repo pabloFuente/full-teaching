@@ -29,7 +29,7 @@ export class VideoSessionService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlSessions + "/remove-user", jsonBody, options)
-      .map(response => response.json())
+      .map(response => response.text())
       .catch(error => this.handleError(error));
   }
 

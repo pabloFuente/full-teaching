@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,7 +75,7 @@ public class VideoSessionController {
 
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": true}")
 							.build());
 					
 					responseJson.put(0, sessionId);
@@ -96,7 +95,7 @@ public class VideoSessionController {
 					io.openvidu.java.client.Session s = this.lessonIdSession.get(id_i);
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": false}")
 							.build());
 					
 					responseJson.put(0, sessionId);

@@ -2,7 +2,7 @@
 @import "../node_modules/dragula/dist/dragula.css";
 
 html {
-  overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
+  /*overflow-y: scroll !important; /*Never hide vertical scroll-bar*/
 }
 
 html, body {

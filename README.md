@@ -102,7 +102,6 @@ To get a full development version of the app just execute the following commands
         $ sudo apt-get update
         $ sudo apt-get install mysql-server
         $ sudo mysql_secure_installation
-        $ sudo mysql_install_db
 
 ### Installation and execution
 

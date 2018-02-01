@@ -11,22 +11,22 @@ services:
       - MYSQL_PASSWORD=pass
 
   full-teaching-openvidu-server-kms:
-    image: openvidu/openvidu-server-kms:1.1.1
-    expose:
-      - 8443
+    image: openvidu/openvidu-server-kms:1.7.0
+    ports:
+      - 8443:8443
     environment:
       - KMS_STUN_IP=stun.l.google.com
       - KMS_STUN_PORT=19302
       - openvidu.secret=MY_SECRET
-      - openvidu.publicurl=https://full-teaching-openvidu-server-kms:8443
+      - openvidu.publicurl=docker
 
   full-teaching:
     image: pablofuente/full-teaching
     links:
       - full-teaching-mysql
       - full-teaching-openvidu-server-kms
-    expose:
-      - 5000
+    ports:
+      - 5000:5000
     environment:
       - WAIT_HOSTS=full-teaching-mysql:3306
       - WAIT_HOSTS_TIMEOUT=120
