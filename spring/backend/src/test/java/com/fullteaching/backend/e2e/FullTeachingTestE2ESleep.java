@@ -419,9 +419,6 @@ public class FullTeachingTestE2ESleep {
 		// Video element should be in 'readyState'='HAVE_ENOUGH_DATA'
 		user.getWaiter().until(ExpectedConditions.attributeToBe(videoElement, "readyState", "4"));
 		
-		// Video should have a valid 'src' value
-		user.getWaiter().until(ExpectedConditions.attributeToBeNotEmpty(videoElement, "src"));
-		
 		// Video should have a srcObject (type MediaStream) with the attribute 'active' to true
 		Assert.assertTrue((boolean) user.runJavascript("return document.querySelector('" + containerQuerySelector
 				+ "').getElementsByTagName('video')[0].srcObject.active"));
@@ -431,7 +428,8 @@ public class FullTeachingTestE2ESleep {
 				+ "').getElementsByTagName('video')[0].addEventListener('playing', window.MY_FUNC('" + containerQuerySelector + "'));");
 		
 		user.getWaiter()
-				.until(ExpectedConditions.textToBePresentInElementLocated(By.id("video-playing-div"), "VIDEO PLAYING"));
+				.until(ExpectedConditions.attributeContains(By.id("video-playing-div"), "innerHTML", "VIDEO PLAYING"));
+		
 		user.runJavascript(
 				"document.body.removeChild(document.getElementById('video-playing-div'))");
 
