@@ -2,6 +2,12 @@
 
 [![Build Status](https://travis-ci.org/pabloFuente/full-teaching.png?branch=master)](https://travis-ci.org/pabloFuente/full-teaching)
 
+---
+
+> WARNING: the update version of this repo is now here [OpenVidu/full-teaching](https://github.com/OpenVidu/full-teaching)
+
+---
+
 <p align="center"><img src="https://github.com/pabloFuente/full-teaching/blob/master/ReadmeImages/presentation.png?raw=true"/></p>
 
 
