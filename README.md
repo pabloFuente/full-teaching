@@ -4,7 +4,7 @@
 
 ---
 
-> WARNING: the update version of this repo is now here [OpenVidu/full-teaching](https://github.com/OpenVidu/full-teaching)
+> WARNING: the updated version of this repo is now here [OpenVidu/full-teaching](https://github.com/OpenVidu/full-teaching)
 
 ---
 
